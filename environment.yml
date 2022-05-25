@@ -7,4 +7,6 @@ dependencies:
   - pip
   - pytest
   - pytest-xdist
+  - pytest-cov
+  - coverage
   - nbval
