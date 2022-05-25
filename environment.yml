@@ -1,0 +1,9 @@
+name: openfe-benchmarks
+channels:
+  - jaimergp/label/unsupported-cudatoolkit-shim
+  - conda-forge
+dependencies:
+  - openfe
+  - pip
+  - pytest
+  - pytest-xdist
