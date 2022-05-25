@@ -114,16 +114,16 @@ class RBFEBenchmarkSystem:
         self.scorer = scorer
 
         # Extract ligands
-        self.ligand_components = self.extract_ligands(self.systemname)
+        self.ligand_components = self.extract_ligands(self.system_name)
         self.ligand_network = generate_relative_network_from_names(
             self.ligand_components, connections=connections,
             mappers=mappers, scorer=scorer)
 
         # Extract protein
-        self.protein_component = self.extract_protein(self.systemname)
+        self.protein_component = self.extract_protein(self.system_name)
 
         # Create solvent component
-        self.solvent_component = self.SolventComponent(
+        self.solvent_component = SolventComponent(
             positive_ion='Na', negative_ion='Cl',
             neutralize=True, ion_concentration=0.15*unit.molar)
 
@@ -138,5 +138,5 @@ class RBFEBenchmarkSystem:
     def extract_protein(systemname: str):
         with resources.path('openfe_benchmarks.data',
                             f'{systemname}_protein.pdb') as fn:
-            protein = ProteinComponent.from_pdbfile(str(fn))
+            protein = ProteinComponent.from_pdbfile(str(fn), name=systemname)
         return protein
