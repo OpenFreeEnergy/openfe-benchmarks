@@ -10,3 +10,6 @@ dependencies:
   - pytest-cov
   - coverage
   - nbval
+  - notebook
+  - pip:
+      - py3dmol
