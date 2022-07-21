@@ -12,7 +12,7 @@ os.environ["CUDA_VISIBLE_DEVICES"]="0"
 # Get systems and extract edge
 tyk2_system = tyk2.get_system()
 
-target_edges = ("ligand_23", "ligand_55")
+target_edges = ("ligand_23", "ligand_27")
 
 for entry in tyk2_system.ligand_network.edges:
     if (entry.molA.name in target_edges and
