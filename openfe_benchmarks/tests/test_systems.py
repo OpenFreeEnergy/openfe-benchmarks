@@ -12,10 +12,10 @@ class TestTyk2System:
         return tyk2.get_system()
 
     def test_ligand_components(self, system):
-        assert len(system.ligand_components) == 16
+        assert len(system.ligand_components) == 13
 
     def test_edges(self, system):
-        assert len(system.ligand_network.edges) == 24
+        assert len(system.ligand_network.edges) == 12
 
     def test_protein_component(self, system):
         assert system.protein_component.name == "tyk2"

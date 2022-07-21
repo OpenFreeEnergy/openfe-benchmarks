@@ -4,10 +4,10 @@ from typing import Iterable, List, Tuple
 
 from rdkit import Chem
 from rdkit.Geometry.rdGeometry import Point3D
-from openfe.setup.lomap_mapper import LomapAtomMapper
+from openfe.setup.atom_mapping.lomap_mapper import LomapAtomMapper
+from openfe.setup.atom_mapping import LigandAtomMapper, LigandAtomMapping
 from openfe.setup import (
     Network, SmallMoleculeComponent, SolventComponent, ProteinComponent,
-    LigandAtomMapper, LigandAtomMapping,
 )
 from openff.units import unit
 
@@ -52,6 +52,7 @@ def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponen
 
     for entry in connections:
         nodes = [idx for idx, lig in enumerate(ligands) if lig.name in entry]
+        print(nodes)
 
         for mapping in itertools.chain.from_iterable(
             mapper.suggest_mappings(ligands[nodes[0]], ligands[nodes[1]])

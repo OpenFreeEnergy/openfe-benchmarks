@@ -1,5 +1,5 @@
 from rdkit import Chem
-from openfe.setup.lomap_mapper import LomapAtomMapper
+from openfe.setup.atom_mapping.lomap_mapper import LomapAtomMapper
 
 from openfe_benchmarks.utils import RBFEBenchmarkSystem
 

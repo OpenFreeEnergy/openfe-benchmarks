@@ -1,11 +1,11 @@
 from rdkit import Chem
-from openfe.setup.lomap_mapper import LomapAtomMapper
+from openfe.setup.atom_mapping.lomap_mapper import LomapAtomMapper
 
 from openfe_benchmarks.utils import RBFEBenchmarkSystem
 
 
 def get_system(
-    mappers=[LomapAtomMapper(time=20, threed=True, element_changes=False, max3d=1),],
+    mappers=[LomapAtomMapper(time=20, threed=True, element_change=False, max3d=1),],
     scorer=None
 ):
     """
