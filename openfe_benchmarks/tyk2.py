@@ -25,7 +25,7 @@ def get_system(
     -------
     system : RBFEBenchmarkSystem
         RBFEBenchmarkSystem defining the various components and the
-        ligand network of the TY2K benchmark system
+        ligand network of the TYK2 benchmark system
     """
 
     connections = [("lig_ejm_31", "lig_ejm_50"),

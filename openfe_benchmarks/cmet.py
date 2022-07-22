@@ -9,7 +9,7 @@ def get_system(
     scorer=None
 ):
     """
-    Returns a RBFEBenchmarkSystem describing the TYK2 benchmark system
+    Returns a RBFEBenchmarkSystem describing the CMET benchmark system
     with a network of ligand atom mappings defined by the input mappers
     and scorer.
 
@@ -25,7 +25,7 @@ def get_system(
     -------
     system : RBFEBenchmarkSystem
         RBFEBenchmarkSystem defining the various components and the
-        ligand network of the TY2K benchmark system
+        ligand network of the CMET benchmark system
     """
 
     connections = [
