@@ -1,6 +1,6 @@
 import pytest
 
-from openfe_benchmarks import tyk2, ptp1b
+from openfe_benchmarks import tyk2, ptp1b, cmet
 
 
 class TestTyk2System:
@@ -41,6 +41,28 @@ class TestPTP1BSystem:
 
     def test_protein_component(self, system):
         assert system.protein_component.name == "ptp1b"
+
+    def test_solvent_component(self, system):
+        # TODO use name once we bump up to the next gufe release
+        assert system.solvent_component.smiles == "O"
+
+
+class TestCMETSystem:
+    """
+    Tests to check that the cmet system is properly created
+    """
+    @pytest.fixture()
+    def system(self):
+        return cmet.get_system()
+
+    def test_ligand_components(self, system):
+        assert len(system.ligand_components) == 5
+
+    def test_edges(self, system):
+        assert len(system.ligand_network.edges) == 4
+
+    def test_protein_component(self, system):
+        assert system.protein_component.name == "cmet"
 
     def test_solvent_component(self, system):
         # TODO use name once we bump up to the next gufe release
