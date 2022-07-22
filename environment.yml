@@ -12,4 +12,6 @@ dependencies:
   - nbval
   - notebook
   - pip:
+      - git+https://github.com/OpenFreeEnergy/gufe@main
+      - git+https://github.com/OpenFreeEnergy/openfe@main
       - py3dmol
