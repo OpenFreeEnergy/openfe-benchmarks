@@ -66,5 +66,12 @@ def get_system(
                    ("lig_1", "lig_23"),
                    ("lig_41", "lig_42"),]
 
-    return RBFEBenchmarkSystem(system_name="hif2a", connections=connections,
-                               mappers=mappers, scorer=scorer)
+    system =  RBFEBenchmarkSystem(system_name="hif2a", connections=connections,
+                                  mappers=mappers, scorer=scorer)
+
+    for data in system.ligand_network.graph.edges.data():
+        if data[0].name == 'lig_30':
+            mapping = data[2]['object']
+            mapping.molA_to_molB[20] = 22
+
+    return system
