@@ -1,6 +1,6 @@
 import pytest
 
-from openfe_benchmarks import tyk2, ptp1b, cmet, tnsk2, mcl1, p38
+from openfe_benchmarks import tyk2, ptp1b, cmet, tnsk2, mcl1, p38, thrombin
 
 
 class TestTyk2System:
@@ -129,6 +129,28 @@ class TestP38System:
 
     def test_protein_component(self, system):
         assert system.protein_component.name == "p38"
+
+    def test_solvent_component(self, system):
+        # TODO use name once we bump up to the next gufe release
+        assert system.solvent_component.smiles == "O"
+
+
+class TestThrombinSystem:
+    """
+    Tests to check that the thrombin system is properly created
+    """
+    @pytest.fixture()
+    def system(self):
+        return thrombin.get_system()
+
+    def test_ligand_components(self, system):
+        assert len(system.ligand_components) == 11
+
+    def test_edges(self, system):
+        assert len(system.ligand_network.edges) == 10
+
+    def test_protein_component(self, system):
+        assert system.protein_component.name == "thrombin"
 
     def test_solvent_component(self, system):
         # TODO use name once we bump up to the next gufe release
