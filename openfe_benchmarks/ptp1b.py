@@ -4,7 +4,10 @@ from openfe.setup.atom_mapping.lomap_mapper import LomapAtomMapper
 from openfe_benchmarks.utils import RBFEBenchmarkSystem
 
 
-def get_system(mappers=[LomapAtomMapper(threed=True),], scorer=None):
+def get_system(
+    mappers=[LomapAtomMapper(time=20, threed=True, element_change=False, max3d=1),],
+    scorer=None
+):
     """
     Returns a RBFEBenchmarkSystem describing the PTP1B benchmark system
     with a network of ligand atom mappings defined by the input mappers
