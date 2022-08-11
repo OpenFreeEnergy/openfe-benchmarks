@@ -1,7 +1,7 @@
 import pytest
 
 from openfe_benchmarks import (
-        tyk2, ptp1b, cmet, tnsk2, mcl1, p38, thrombin, hif2a,
+        tyk2, ptp1b, cmet, tnsk2, mcl1, p38, thrombin, hif2a, syk
 )
 
 
@@ -175,6 +175,28 @@ class TestHIF2ASystem:
 
     def test_protein_component(self, system):
         assert system.protein_component.name == "hif2a"
+
+    def test_solvent_component(self, system):
+        # TODO use name once we bump up to the next gufe release
+        assert system.solvent_component.smiles == "O"
+
+
+class TestSykSystem:
+    """
+    Tests to check that the syk system is properly created
+    """
+    @pytest.fixture()
+    def system(self):
+        return syk.get_system()
+
+    def test_ligand_components(self, system):
+        assert len(system.ligand_components) == 43
+
+    def test_edges(self, system):
+        assert len(system.ligand_network.edges) == 42
+
+    def test_protein_component(self, system):
+        assert system.protein_component.name == "syk"
 
     def test_solvent_component(self, system):
         # TODO use name once we bump up to the next gufe release
