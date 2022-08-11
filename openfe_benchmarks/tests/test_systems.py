@@ -34,10 +34,10 @@ class TestPTP1BSystem:
         return ptp1b.get_system()
 
     def test_ligand_components(self, system):
-        assert len(system.ligand_components) == 23
+        assert len(system.ligand_components) == 22
 
     def test_edges(self, system):
-        assert len(system.ligand_network.edges) == 49
+        assert len(system.ligand_network.edges) == 21
 
     def test_protein_component(self, system):
         assert system.protein_component.name == "ptp1b"
