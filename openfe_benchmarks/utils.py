@@ -117,6 +117,7 @@ class RBFEBenchmarkSystem:
         self.system_name = system_name
         self.mappers = mappers
         self.scorer = scorer
+        self.connections = connections
 
         # Extract ligands
         self.ligand_components = self.extract_ligands(self.system_name)
