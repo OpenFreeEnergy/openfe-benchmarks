@@ -52,7 +52,6 @@ def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponen
 
     for entry in connections:
         nodes = [idx for idx, lig in enumerate(ligands) if lig.name in entry]
-        print(nodes)
 
         for mapping in itertools.chain.from_iterable(
             mapper.suggest_mappings(ligands[nodes[0]], ligands[nodes[1]])
