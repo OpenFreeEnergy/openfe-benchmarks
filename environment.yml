@@ -21,6 +21,7 @@ dependencies:
   - openff-units>=0.1.8
   - openmm
   - openmmtools
+  - openmmforcefields
   - plugcli
   - pymbar
   - pydantic
