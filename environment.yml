@@ -3,6 +3,7 @@ channels:
   - jaimergp/label/unsupported-cudatoolkit-shim
   - conda-forge
 dependencies:
+  - gufe
   - pip
   - pytest
   - pytest-xdist
@@ -10,7 +11,7 @@ dependencies:
   - coverage
   - nbval
   - notebook
+  - rdkit
   - pip:
-      - git+https://github.com/OpenFreeEnergy/gufe@main
       - git+https://github.com/OpenFreeEnergy/openfe@main
       - py3dmol
