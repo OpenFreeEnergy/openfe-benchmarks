@@ -117,6 +117,7 @@ class RBFEBenchmarkSystem:
         self.system_name = system_name
         self.mappers = mappers
         self.scorer = scorer
+        self.connections = connections
 
         # Extract ligands
         self.ligand_components = self.extract_ligands(self.system_name)
@@ -143,7 +144,7 @@ class RBFEBenchmarkSystem:
     def extract_protein(systemname: str):
         with resources.path('openfe_benchmarks.data',
                             f'{systemname}_protein.pdb') as fn:
-            protein = ProteinComponent.from_pdbfile(str(fn), name=systemname)
+            protein = ProteinComponent.from_pdb_file(str(fn), name=systemname)
         return protein
 
 
