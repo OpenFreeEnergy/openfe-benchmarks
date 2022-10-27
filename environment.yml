@@ -9,6 +9,7 @@ dependencies:
   - pytest-xdist
   - pytest-cov
   - coverage
+  - lomap2
   - nbval
   - notebook
   - rdkit
