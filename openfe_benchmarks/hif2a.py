@@ -72,6 +72,6 @@ def get_system(
     for data in system.ligand_network.graph.edges.data():
         if data[0].name == 'lig_30':
             mapping = data[2]['object']
-            mapping.molA_to_molB[20] = 22
+            mapping.componentA_to_componentB[20] = 22
 
     return system
