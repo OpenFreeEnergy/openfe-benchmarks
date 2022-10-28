@@ -48,7 +48,8 @@ def get_system(
                    ("lig_23467", "lig_23477"),
                    ("lig_20670_2qbs", "lig_23467"),
                    ("lig_23466", "lig_23471"),
-                   ("lig_20667_2qbp", "lig_23482"),]
+                   ("lig_20667_2qbp", "lig_23482"),
+                   ("lig_23467", "lig_23483"), ]
 
     return RBFEBenchmarkSystem(system_name="ptp1b", connections=connections,
                                mappers=mappers, scorer=scorer)
