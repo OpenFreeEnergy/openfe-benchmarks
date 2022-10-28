@@ -146,7 +146,7 @@ class TestP38OldSystem:
         return p38.get_old_system()
 
     def test_ligand_components(self, system):
-        assert len(system.ligand_components) == 29
+        assert len(system.ligand_components) == 34
 
     def test_edges(self, system):
         assert len(system.ligand_network.edges) == 56
