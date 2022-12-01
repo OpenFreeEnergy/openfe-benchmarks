@@ -74,7 +74,69 @@ def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponen
 
     return Network(edges)
 
+class RHFEBenchmarkSystem:
+    """
+    Class defining the components and alchemical network of a relative free
+    energy benchmark system.
 
+    Parameters
+    ----------
+    system_name : str
+        The name of the benchmark system
+    connections : List[Tuple[str, str]]
+        The list of edges to create with each node identified by its
+        SmallMoleculeComponent name.
+    mappers : Iterable[LigandAtomMapper]
+        Mappers to use. At least 1 is required.
+    scorer : scoring function, optional
+        A callable which returns a float for any LigandAtomMapping. Used to
+        assign score to potential mappings, higher scores indicate worse
+        mappings.
+
+    Attributes
+    ----------
+    system_name : str
+        The name / identifier of the benchmark system
+    mappers : Iterable[LigandAtomMapper]
+        Mappers used to create the ligand network
+    scorer : Union[Callable, None]
+        Scorer (if provided) used to create the ligand network
+    ligand_components : List[SmallMoleculeComponent]
+        List of SmallMoleculeComponent objects for each ligand in the benchmark
+        system.
+    ligand_network : Network
+        Network of SmallMoleculeComponent transformations.
+    protein_component : ProteinComponent
+        ProteinComponent defining the host molecule of the benchmark system
+    solvent_component : SolventComponent
+        SolventComponent defining the solvent used for the benchmark system
+    """
+    def __init__(self, system_name: str, connections: List[Tuple[str, str]],
+                 mappers=Iterable[LigandAtomMapper], scorer=None):
+        self.system_name = system_name
+        self.mappers = mappers
+        self.scorer = scorer
+        self.connections = connections
+
+        # Extract ligands
+        self.ligand_components = self.extract_ligands(self.system_name)
+        self.ligand_network = generate_relative_network_from_names(
+            self.ligand_components, connections=connections,
+            mappers=mappers, scorer=scorer)
+
+        # Create solvent component
+        self.solvent_component = SolventComponent(
+            positive_ion='Na', negative_ion='Cl',
+            neutralize=True, ion_concentration=0.15*unit.molar)
+
+    @staticmethod
+    def extract_ligands(systemname: str):
+        with resources.path('openfe_benchmarks.data',
+                            f'{systemname}_RHFE.sdf') as fn:
+            ligands_sdf = Chem.SDMolSupplier(str(fn), removeHs=False)
+        return [SmallMoleculeComponent(sdf) for sdf in ligands_sdf]
+    
+    
 class RBFEBenchmarkSystem:
     """
     Class defining the components and alchemical network of a relative free
