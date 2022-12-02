@@ -12,6 +12,7 @@ dependencies:
   - lomap2
   - nbval
   - notebook
+  - ipywidgets
   - rdkit
   # Stuff that should be in openfe
   - click
