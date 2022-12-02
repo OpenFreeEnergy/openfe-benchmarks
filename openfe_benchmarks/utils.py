@@ -255,8 +255,8 @@ def show_edge_3D(edge: LigandAtomMapping, spheres: bool=True,
             view.addSphere({"center": {"x":p2.x, "y": p2.y, "z": p2.z},
                             "radius": 0.6, "color": color, "alpha": 0.8})
 
-    molA = edge.molA.to_rdkit()
-    molB = edge.molB.to_rdkit()
+    molA = edge.componentA.to_rdkit()
+    molB = edge.componentB.to_rdkit()
 
     mblock1 = Chem.MolToMolBlock(molA)
     mblock2 = Chem.MolToMolBlock(translate(molB, shift))
@@ -266,7 +266,7 @@ def show_edge_3D(edge: LigandAtomMapping, spheres: bool=True,
     view.addModel(mblock2, 'molB')
 
     if spheres:
-        add_spheres(view, molA, molB, edge.molA_to_molB)
+        add_spheres(view, molA, molB, edge.componentA_to_componentB)
 
     view.setStyle({style:{}})
     view.zoomTo()

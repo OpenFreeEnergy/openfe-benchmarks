@@ -27,6 +27,50 @@ class TestTyk2System:
         assert system.solvent_component.smiles == "O"
 
 
+class TestOldTyk2System:
+    """
+    Tests to check that the "old" tyk2 system is properly created
+    """
+    @pytest.fixture()
+    def system(self):
+        return tyk2.get_old_system()
+
+    def test_ligand_components(self, system):
+        assert len(system.ligand_components) == 16
+
+    def test_edges(self, system):
+        assert len(system.ligand_network.edges) == 24
+
+    def test_protein_component(self, system):
+        assert system.protein_component.name == "tyk2_old"
+
+    def test_solvent_component(self, system):
+        # TODO use name once we bump up to the next gufe release
+        assert system.solvent_component.smiles == "O"
+
+
+class TestNewTyk2System:
+    """
+    Tests to check that the "old" tyk2 system is properly created
+    """
+    @pytest.fixture()
+    def system(self):
+        return tyk2.get_new_system()
+
+    def test_ligand_components(self, system):
+        assert len(system.ligand_components) == 14
+
+    def test_edges(self, system):
+        assert len(system.ligand_network.edges) == 13
+
+    def test_protein_component(self, system):
+        assert system.protein_component.name == "tyk2_new"
+
+    def test_solvent_component(self, system):
+        # TODO use name once we bump up to the next gufe release
+        assert system.solvent_component.smiles == "O"
+
+
 class TestPTP1BSystem:
     """
     Tests to check that the ptp1b system is properly created
@@ -115,6 +159,28 @@ class TestMCL1System:
         assert system.solvent_component.smiles == "O"
 
 
+class TestMCL1OldSystem:
+    """
+    Tests to check that the old MCL1 system is properly created
+    """
+    @pytest.fixture()
+    def system(self):
+        return mcl1.get_old_system()
+
+    def test_ligand_components(self, system):
+        assert len(system.ligand_components) == 42
+
+    def test_edges(self, system):
+        assert len(system.ligand_network.edges) == 71
+
+    def test_protein_component(self, system):
+        assert system.protein_component.name == "mcl1_old"
+
+    def test_solvent_component(self, system):
+        # TODO use name once we bump up to the next gufe release
+        assert system.solvent_component.smiles == "O"
+
+
 class TestP38System:
     """
     Tests to check that the p38 system is properly created
@@ -152,7 +218,7 @@ class TestP38OldSystem:
         assert len(system.ligand_network.edges) == 56
 
     def test_protein_component(self, system):
-        assert system.protein_component.name == "p38"
+        assert system.protein_component.name == "p38_old"
 
     def test_solvent_component(self, system):
         # TODO use name once we bump up to the next gufe release
