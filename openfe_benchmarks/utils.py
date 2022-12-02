@@ -74,6 +74,7 @@ def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponen
 
     return Network(edges)
 
+
 class RHFEBenchmarkSystem:
     """
     Class defining the components and alchemical network of a relative free

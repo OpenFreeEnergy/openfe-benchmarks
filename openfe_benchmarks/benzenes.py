@@ -9,7 +9,7 @@ def get_system(
     scorer=None
 ):
     """
-    Returns a RBFEBenchmarkSystem describing the CMET benchmark system
+    Returns a RHFEBenchmarkSystem describing the benzenes transformation benchmark system
     with a network of ligand atom mappings defined by the input mappers
     and scorer.
 
@@ -23,9 +23,9 @@ def get_system(
 
     Returns
     -------
-    system : RBFEBenchmarkSystem
-        RBFEBenchmarkSystem defining the various components and the
-        ligand network of the CMET benchmark system
+    system : RHFEBenchmarkSystem
+        RHFEBenchmarkSystem defining the various components and the
+        ligand network of the benzenes benchmark system
     """
 
     connections = [('lig_1', 'lig_12'),
