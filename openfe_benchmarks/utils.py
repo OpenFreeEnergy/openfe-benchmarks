@@ -6,7 +6,7 @@ from rdkit import Chem
 from rdkit.Geometry.rdGeometry import Point3D
 from openfe.setup.atom_mapping.lomap_mapper import LomapAtomMapper
 from openfe.setup.atom_mapping import LigandAtomMapper, LigandAtomMapping
-from openfe.setup import (
+from openfe import (
     LigandNetwork, SmallMoleculeComponent, SolventComponent, ProteinComponent,
 )
 from openff.units import unit
