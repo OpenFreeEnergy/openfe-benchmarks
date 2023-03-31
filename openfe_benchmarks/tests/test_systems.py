@@ -83,7 +83,7 @@ class TestPTP1BSystem:
         assert len(system.ligand_components) == 22
 
     def test_edges(self, system):
-        assert len(system.ligand_network.edges) == 21
+        assert len(system.ligand_network.edges) == 22
 
     def test_protein_component(self, system):
         assert system.protein_component.name == "ptp1b"
