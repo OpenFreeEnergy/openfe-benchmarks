@@ -6,8 +6,8 @@ from rdkit import Chem
 from rdkit.Geometry.rdGeometry import Point3D
 from openfe.setup.atom_mapping.lomap_mapper import LomapAtomMapper
 from openfe.setup.atom_mapping import LigandAtomMapper, LigandAtomMapping
-from openfe.setup import (
-    Network, SmallMoleculeComponent, SolventComponent, ProteinComponent,
+from openfe import (
+    LigandNetwork, SmallMoleculeComponent, SolventComponent, ProteinComponent,
 )
 from openff.units import unit
 
@@ -45,7 +45,7 @@ def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponen
 
     Returns
     -------
-    network : Network
+    network : LigandNetwork
         Network of SmallMoleculeComponent transformations.
     """
     edges = []
@@ -72,7 +72,7 @@ def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponen
             raise ValueError(f"No mapping for pair {entry}")
         edges.append(best_mapping)
 
-    return Network(edges)
+    return LigandNetwork(edges)
 
 
 class RHFEBenchmarkSystem:
@@ -105,7 +105,7 @@ class RHFEBenchmarkSystem:
     ligand_components : List[SmallMoleculeComponent]
         List of SmallMoleculeComponent objects for each ligand in the benchmark
         system.
-    ligand_network : Network
+    ligand_network : LigandNetwork
         Network of SmallMoleculeComponent transformations.
     protein_component : ProteinComponent
         ProteinComponent defining the host molecule of the benchmark system
@@ -168,7 +168,7 @@ class RBFEBenchmarkSystem:
     ligand_components : List[SmallMoleculeComponent]
         List of SmallMoleculeComponent objects for each ligand in the benchmark
         system.
-    ligand_network : Network
+    ligand_network : LigandNetwork
         Network of SmallMoleculeComponent transformations.
     protein_component : ProteinComponent
         ProteinComponent defining the host molecule of the benchmark system
