@@ -1,0 +1,13 @@
+Ligand1,Ligand2,calc_DDG,calc_dDDG(MBAR),calc_dDDG(additional)
+lig_ejm_31,lig_ejm_42,0.45,0,0.05
+lig_ejm_31,lig_ejm_46,-0.78,0,0.034641016
+lig_ejm_31,lig_ejm_47,0.14,0,0.117898261
+lig_ejm_31,lig_ejm_48,0.71,0,0.423202079
+lig_ejm_31,lig_ejm_50,0.82,0,0.135277493
+lig_ejm_31,lig_ejm_54,-1.253333333,0,0.1040833
+lig_ejm_31,lig_ejm_55,-0.516666667,0,0.170391706
+lig_ejm_42,lig_ejm_43,1.426666667,0,0.066583281
+lig_ejm_45,lig_ejm_55,-0.593333333,0,0.075718778
+lig_ejm_46,lig_jmc_23,-0.396666667,0,0.055075705
+lig_ejm_46,lig_jmc_27,-0.653333333,0,0.126622799
+lig_ejm_46,lig_jmc_28,-0.076666667,0,0.195021366
