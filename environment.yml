@@ -20,6 +20,7 @@ dependencies:
   - openff-forcefields
   - openff-toolkit>=0.11
   - openff-units>=0.1.8
+  - openff-models>=0.0.4
   - openmm
   - openmmtools
   - openmmforcefields
@@ -28,6 +29,6 @@ dependencies:
   - pydantic
   - typing_extensions
   - pip:
-      - git+https://github.com/OpenFreeEnergy/gufe
+      - git+https://github.com/OpenFreeEnergy/gufe@main
       - git+https://github.com/OpenFreeEnergy/openfe@main
       - py3dmol
