@@ -1,34 +1,16 @@
 name: openfe-benchmarks
 channels:
-  - jaimergp/label/unsupported-cudatoolkit-shim
   - conda-forge
 dependencies:
-  #- gufe
-  - pip
+  - gufe
+  - openfe
+  # testing
+  - nbval
   - pytest
   - pytest-xdist
   - pytest-cov
   - coverage
-  - lomap2
-  - nbval
-  - notebook
-  - ipywidgets
-  - rdkit
-  # Stuff that should be in openfe
-  - click
-  - mdtraj
-  - openff-forcefields
-  - openff-toolkit>=0.11
-  - openff-units>=0.1.8
-  - openff-models>=0.0.4
-  - openmm
-  - openmmtools
-  - openmmforcefields
-  - plugcli
-  - pymbar
-  - pydantic
-  - typing_extensions
+  # not sure why we don't install from conda-forge
+  - pip
   - pip:
-      - git+https://github.com/OpenFreeEnergy/gufe@main
-      - git+https://github.com/OpenFreeEnergy/openfe@main
       - py3dmol
