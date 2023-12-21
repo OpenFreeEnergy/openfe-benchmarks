@@ -58,7 +58,7 @@ jobs:
 
       - name: "run tests"
         run: |
-          pytest -v --nbval-lax --cov=openfe_benchmarks --cov-report=xml openfe_benchmarks/tests/
+          pytest -n auto -v --nbval-lax --cov=openfe_benchmarks --cov-report=xml openfe_benchmarks/tests/
 
       - name: "codecov"
         if: "github.event != 'schedule'"
