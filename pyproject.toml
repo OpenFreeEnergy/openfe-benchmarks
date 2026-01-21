@@ -1,9 +1,5 @@
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel",
-    "setuptools_scm[toml]>=6.0",
-]
+requires = ["setuptools>=61.2", "versioningit"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -12,7 +8,7 @@ description = ""
 readme = "README.md"
 requires-python = ">=3.9"
 license = { file = "LICENSE" }
-license-expression = "MIT"
+dynamic = ["version"]
 keywords = ["bioinformatics", "chemistry", "science"]
 authors = [
     { name = "The OpenFE developers", email = "openfe@omsf.io" }
@@ -28,6 +24,11 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Chemistry",
 ]
 urls = { "Homepage" = "https://github.com/OpenFreeEnergy/openfe-benchmarks" }
+dependencies = [
+    "gufe",
+    "py3dmol",
+    "loguru",
+]
 
 [project.optional-dependencies]
 test = [
@@ -35,15 +36,14 @@ test = [
     "pytest-xdist",
 ]
 
-[project.dependencies]
-gufe = "*"
-py3dmol = "*"
-
 [tool.mypy]
 files = "openfe_benchmarks"
 ignore_missing_imports = true
 
-[tool.versioneer]
-VCS = "git"
-style = "pep440-post"
-tag_prefix = ""
+[tool.versioningit]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"openfe_benchmarks" = ["data/*"]

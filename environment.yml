@@ -10,6 +10,8 @@ dependencies:
   - pytest-xdist
   - pytest-cov
   - coverage
+  - matplotlib
+  - loguru
   # not sure why we don't install from conda-forge
   - pip
   - pip:
