@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import itertools
 from importlib import resources
-from typing import Iterable, List, Tuple
+from typing import Iterable
 
 from rdkit import Chem
 from rdkit.Geometry.rdGeometry import Point3D
@@ -17,7 +19,7 @@ from matplotlib.colors import rgb2hex
 
 
 def generate_relative_network_from_names(ligands: Iterable[SmallMoleculeComponent],
-                                         connections: List[Tuple[str, str]],
+                                         connections: list[tuple[str, str]],
                                          mappers: Iterable[LigandAtomMapper],
                                          scorer=None):
     """
@@ -112,7 +114,7 @@ class RHFEBenchmarkSystem:
     solvent_component : SolventComponent
         SolventComponent defining the solvent used for the benchmark system
     """
-    def __init__(self, system_name: str, connections: List[Tuple[str, str]],
+    def __init__(self, system_name: str, connections: list[tuple[str, str]],
                  mappers=Iterable[LigandAtomMapper], scorer=None):
         self.system_name = system_name
         self.mappers = mappers
@@ -175,7 +177,7 @@ class RBFEBenchmarkSystem:
     solvent_component : SolventComponent
         SolventComponent defining the solvent used for the benchmark system
     """
-    def __init__(self, system_name: str, connections: List[Tuple[str, str]],
+    def __init__(self, system_name: str, connections: list[tuple[str, str]],
                  mappers=Iterable[LigandAtomMapper], scorer=None):
         self.system_name = system_name
         self.mappers = mappers
@@ -213,7 +215,7 @@ class RBFEBenchmarkSystem:
 
 def show_edge_3D(edge: LigandAtomMapping, spheres: bool=True,
                  style: str='stick',
-                 shift: Tuple[float, float, float]=(10, 0, 0)):
+                 shift: tuple[float, float, float]=(10, 0, 0)):
     """
     Render relative transformation edge in 3D using py3Dmol.
 
