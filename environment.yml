@@ -12,7 +12,5 @@ dependencies:
   - coverage
   - matplotlib
   - loguru
-  # not sure why we don't install from conda-forge
-  - pip
   - pip:
       - py3dmol

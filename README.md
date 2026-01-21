@@ -2,20 +2,42 @@
 
 A set of benchmark systems to validate the OpenFE components.
 
+## Free Energy Calculations
+
+This repository is meant to store the inputs and results of free energy calculations in a systematic way so that others can, view, repeat, or build off of previous work.
+
+There are three types of free energy calculations currently considered:
+1. Relative Binding Free Energy (RBFE)
+2. Absolute Binding Free Energy (ABFE)
+3. Solvation Free Energy (SFE)
+
 ## Contents
+### `submissions` Directory
 
-The `openfe_benchmark` repository contains:
-  * A file for each system in the benchmark set (e.g. `tyk2.py`). These hold
-    methods for creating the free energy network and the system components
-    necessary to calculate the benchmark.
-  * A `data` folder with a set of PDB files for each host system and SDF files
-    for each set of ligands for each system.
-  * `util.py` a set of utility methods and base classes used throughout this
-    repository.
-  * `examples` a directory with notebooks for example calculations and analyses
+Each benchmark record of any free energy calculation has three main components:
+1. `inputs`: 
+    - python modules / jupyter notebooks that create inputs
+    - json files for each transformation
+    - **Not** *.pdb, *.sdf, or *.graphml files, see [`data` directory](#data-directory) information.
+2. `transformation_outputs`:
+    - output json file for each input transformation json
+    - output directory of analysis for each input transformation
+3. `gathered_outputs`:
+    - python modules / jupyter notebooks that generate collective results (likely using cinnabar)
+    - openfe ddg, dg outputs and plots
+    - log files
+4. README.md
+    - Contains a description of the network
+    - Force field used (including partial charge scheme)
+5. env.yaml
+    - Fully specified environment used to create the network transformations.
 
-## Relative binding free energies
+If this description sounds foreign to you, consider starting with the [Open Free Energy Tutorials](https://docs.openfree.energy/en/latest/tutorials/index.html).
 
-The following systems are obtained from the [OpenFF Protein-Ligand Benchmarks](https://github.com/openforcefield/protein-ligand-benchmark):
-  * `TYK2`
-  * `PTP1B`
+### `scripts` Directory
+
+Example generate python modules / jupyter notebooks can be found in `???` and adapted to the particular needs of a calculation before including in the `inputs` and `gathered_outputs` of a directory.
+
+### `data` Directory
+
+Notice that the definition of the benchmark `inputs` directory above does not include *.pdb or *.sdf files. In order to reduce duplication information, all *.pdb, *.sdf, and *graphml files are cataloged in the `data` directory. For more information about the data organization and available structures, see [data/README.md](data/README.md).
