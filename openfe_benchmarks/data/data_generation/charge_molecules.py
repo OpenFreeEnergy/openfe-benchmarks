@@ -57,7 +57,7 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         # convert the charge method to the expected format for openff
         openff_charge_method = charge_method.replace("_at", "").replace("_oe", "")
 
-        # we need to generate conformers for am1bccelf10 or used the input conformer for other methods which is the None case
+        # we need to generate conformers for am1bccelf10 or use the input conformer for other methods which is the None case
         generate_n_conformers = None if charge_method != "am1bccelf10" else 500
 
         charged_ligands = bulk_assign_partial_charges(
