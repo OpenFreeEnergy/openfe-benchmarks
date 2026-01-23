@@ -8,6 +8,51 @@ from gufe import LigandNetwork, SmallMoleculeComponent
 import pandas as pd
 from rdkit import Chem
 
+# some ligands reported in the industry benchmarks have names that differ from those in the input sdf which were edited by the submitters to be more file-system friendly
+# we provide a mapping here to convert the names accordingly
+name_conversions = {
+    "41 flip": "41-flip",
+    "40 flip": "40-flip",
+    "38 flip": "38-flip",
+    "30 flip": "30-flip",
+    "43 flip": "43-flip",
+    "47 flip": "47-flip",
+    "48 flip": "48-flip",
+    "46 flip": "46-flip",
+    "36 out": "36o",
+    "37 out": "37o",
+    "38 out": "38o",
+    "39 out": "39o",
+    "28 out": "28o",
+    "CHEMBL3402756_2.7 redocked": "CHEMBL3402756_2.7_redocked",
+    "CHEMBL3402757_6.5 redocked" : "CHEMBL3402757_6.5_redocked",
+    "CHEMBL3402758_10 redocked": "CHEMBL3402758_10_redocked",
+    "CHEMBL3402760_1 redocked":"CHEMBL3402760_1_redocked",
+    "CHEMBL3402762_1 redocked": "CHEMBL3402762_1_redocked",
+    "CHEMBL3402759_5.7 redocked": "CHEMBL3402759_5.7_redocked",
+    "CHEMBL3402761_1 redocked": "CHEMBL3402761_1_redocked",
+    "Example 22":"Example-22",
+    "Example 23": "Example-23",
+    "Example 14": "Example-14",
+    "Example 9": "Example-9",
+    "SHP099-1 Example 7": "SHP099-1-Example-7",
+    "Example 28": "Example-28",
+    "Example 24": "Example-24",
+    "Example 26": "Example-26",
+    "Example 6": "Example-6",
+    "Example 1": "Example-1",
+    "Example 30": "Example-30",
+    "Example 8": "Example-8",
+    "Example 29": "Example-29",
+    "Example 2": "Example-2",
+    "Example 25": "Example-25",
+    "Example 4": "Example-4",
+    "Example 3": "Example-3",
+    "Example 27": "Example-27",
+    "Example 5": "Example-5",
+    "9 flip": "9-flip",
+}
+
 
 @click.command()
 @click.option("--system-group", type=str, required=True, help="The industry system group ie JACS/MERCK used to determine the edges.")
@@ -54,16 +99,37 @@ def main(system_group: str, system_name: str, input_sdf: pathlib.Path, out_dir: 
         raise ValueError(f"System name {system_name} not found in group {system_group}. Available names: {available_names}")
     # filter to the given system name
     system_edges = group_edges[group_edges["system name"] == system_name].reset_index(drop=True)
-    # load the ligands to generate the mappings
-    with Chem.SDMolSupplier(str(input_sdf), removeHs=False) as suppl:
-        ligands = [SmallMoleculeComponent(mol) for mol in suppl if mol is not None]
 
-    ligands_by_name = {ligand.name: ligand for ligand in ligands}
+    # load the ligands to generate the mappings and strip charges if present
+    with Chem.SDMolSupplier(str(input_sdf), removeHs=False) as suppl:
+        ligands = []
+        for mol in suppl:
+            if mol is not None:
+                smc = SmallMoleculeComponent(mol)
+
+                # check for charges and strip if present
+                off_mol = smc.to_openff()
+                if off_mol.partial_charges is not None:
+                    print("Stripping partial charges from ligand:", smc.name, smc.key)
+                    # set the charge to None
+                    off_mol.partial_charges = None
+                    # remove the provenance info
+                    _ = off_mol.properties.pop("charge_provenance")
+                    # remove the dprop info used for rdkit conversions
+                    _ = off_mol.properties.pop("atom.dprop.PartialCharge")
+                    smc = SmallMoleculeComponent.from_openff(off_mol)
+
+                ligands.append(smc)
+
+    # create a mapping of ligand name to ligand component, use the converted names to match the edges in the reference data
+    ligands_by_name = {name_conversions.get(ligand.name, ligand.name): ligand for ligand in ligands}
+
     # check that the ligands in the edges are present in the input sdf
     edge_ligand_names = set(system_edges["ligand_A"]).union(set(system_edges["ligand_B"]))
     input_ligand_names = set(ligands_by_name.keys())
     if edge_ligand_names != input_ligand_names:
         raise RuntimeError(f"Ligands in edges do not match ligands in input sdf. Edge ligands: {edge_ligand_names}, Input ligands: {input_ligand_names}")
+
     # generate the mappings using kartograf
     mapper = KartografAtomMapper(map_hydrogens_on_hydrogens_only=True)
     edges = []
