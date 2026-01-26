@@ -60,7 +60,7 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         backend = method_to_backend[charge_method]
 
         # convert the charge method to the expected format for openff
-        openff_charge_method = charge_method.replace("_at", "").replace("_oe", "")
+        openff_charge_method = charge_method.split("_")[0]
 
         # we need to generate conformers for am1bccelf10 or use the input conformer for other methods which is the None case
         generate_n_conformers = None if charge_method != "am1bccelf10" else 500
