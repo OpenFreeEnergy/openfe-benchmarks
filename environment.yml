@@ -14,5 +14,6 @@ dependencies:
   - openeye-toolkits
   # not sure why we don't install from conda-forge
   - pip
+  - matplotlib
   - pip:
       - py3dmol
