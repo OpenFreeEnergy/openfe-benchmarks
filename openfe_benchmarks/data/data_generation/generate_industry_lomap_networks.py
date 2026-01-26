@@ -79,7 +79,7 @@ def main(system_group: str, system_name: str, input_sdf: pathlib.Path, out_dir: 
     -----
     - The edges will be extracted from the industry benchmark results
     - New mappings will be generated using Kartograf with the same default settings as used in the industry benchmarks
-    - The generated LOMAP network will be saved to the given output directory as 'lomap_network.json'
+    - The generated LOMAP network will be saved to the given output directory as 'industry_benchmarks_network.json'
 
     Raises
     ------
