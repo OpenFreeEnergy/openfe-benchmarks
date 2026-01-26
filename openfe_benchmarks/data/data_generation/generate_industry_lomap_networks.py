@@ -7,6 +7,7 @@ from kartograf import KartografAtomMapper
 from gufe import LigandNetwork, SmallMoleculeComponent
 import pandas as pd
 from rdkit import Chem
+from importlib.metadata import version
 
 # some ligands reported in the industry benchmarks have names that differ from those in the input sdf which were edited by the submitters to be more file-system friendly
 # we provide a mapping here to convert the names accordingly
@@ -88,7 +89,7 @@ def main(system_group: str, system_name: str, input_sdf: pathlib.Path, out_dir: 
         If the ligands in the input SDF do not match the ligands in the reference edges, this is checked by name.
     """
     # load the ref data stored on github
-    all_edges = pd.read_csv("https://raw.githubusercontent.com/OpenFreeEnergy/IndustryBenchmarks2024/refs/heads/main/industry_benchmarks/analysis/processed_results/combined_pymbar3_edge_data.csv", dtype={"ligand_A": str, "ligand_B": str, "system group": str, "system name": str})
+    all_edges = pd.read_csv("https://raw.githubusercontent.com/OpenFreeEnergy/IndustryBenchmarks2024/refs/tags/v1.0.0/industry_benchmarks/analysis/processed_results/combined_pymbar3_edge_data.csv", dtype={"ligand_A": str, "ligand_B": str, "system group": str, "system name": str})
     available_groups = all_edges["system group"].unique().tolist()
     if system_group not in available_groups:
         raise ValueError(f"System group {system_group} not found. Available groups: {available_groups}")
@@ -132,13 +133,15 @@ def main(system_group: str, system_name: str, input_sdf: pathlib.Path, out_dir: 
 
     # generate the mappings using kartograf
     mapper = KartografAtomMapper(map_hydrogens_on_hydrogens_only=True)
+    # workaround missing __version__ attribute in kartograf
+    mapper_provenance = {"mapper_settings": mapper.to_dict(), "mapper_version": version("kartograf")}
     edges = []
     print(f"generating mappings for system group {system_group}, system name {system_name}...")
     for _, row in system_edges.iterrows():
         ligand_a = ligands_by_name[row["ligand_A"]]
         ligand_b = ligands_by_name[row["ligand_B"]]
         mapping = next(mapper.suggest_mappings(ligand_a, ligand_b))
-        edges.append(mapping)
+        edges.append(mapping.with_annotations(annotations=mapper_provenance))
 
     # create the LOMAP network
     network = LigandNetwork(edges=edges)
@@ -147,9 +150,9 @@ def main(system_group: str, system_name: str, input_sdf: pathlib.Path, out_dir: 
         raise RuntimeError(f"Generated network has {len(network.edges)} edges, but expected {len(system_edges)} edges.")
 
     # save the network
-    out_path = out_dir / "lomap_network.json"
+    out_path = out_dir / "industry_benchmarks_network.json"
     network.to_json(out_path)
-    print(f"LOMAP network with kartograf mapping saved to {out_path}")
+    print(f"Industry benchmarks LOMAP style network with kartograf mapping saved to {out_path}")
 
 if __name__ == "__main__":
     main()
