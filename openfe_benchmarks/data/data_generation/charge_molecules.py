@@ -16,8 +16,8 @@ import json
 @click.command()
 @click.option("--input-path", type=click.Path(exists=True, dir_okay=False, path_type=pathlib.Path), required=True, help="Path to the input SDF file containing the molecules to be charged.")
 @click.option("--output-dir", type=click.Path(dir_okay=True, file_okay=False, exists=True, path_type=pathlib.Path), required=True, help="Path to the output folder the SDF file with charged molecules will be saved.")
-@click.option("--charge-method", type=click.Choice(["am1bcc_at", "am1bccelf10", "nagl", "am1bcc_oe"]), default="am1bcc_at", help="The method to use for charge assignment.")
-@click.option("--nagl-model", type=str, default=None, help="Path to the NAGL model to use for charge assignment when using the 'nagl' method if None the latest model will be used.")
+@click.option("--charge-method", type=click.Choice(["am1bcc_at", "am1bccelf10_oe", "nagl_off", "am1bcc_oe"]), default="am1bcc_at", help="The method to use for charge assignment.")
+@click.option("--nagl-model", type=str, default=None, help="Path to the NAGL model to use for charge assignment when using the 'nagl_off' method if None the latest model will be used.")
 @click.option("--n-cores", type=int, default=1, help="Number of CPU cores to use for parallel processing.")
 def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str, nagl_model: None | str, n_cores: int):
     """Generate partial charges for a set of molecules using OpenFE's bulk charge assignment utility.
@@ -31,8 +31,8 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
     charge_method : str
         The method to use for charge assignment. Options include:
         
-        - 'am1bcc_at': AM1BCC applied with AmberTools
-        - 'am1bcc_oe': AM1BCC Elf10 applied with OpenEye Toolkit
+        - 'am1bcc_at': AM1BCC applied with AmberTools on the input conformer
+        - 'am1bcc_oe': AM1BCC applied with OpenEye Toolkit on the input conformer
         - 'am1bccelf10_oe': AM1BCC Elf10 applied with OpenEye Toolkit using 500 conformers
         - 'nagl_off': NAGL charges applied with OpenFF-Toolkit
     n_cores : int
@@ -43,7 +43,7 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
     Notes
     -----
     - Antechamber will be used for the am1bcc_at charge assignment method, the charges are calculated at the input geometry.
-    - OpenEye toolkit is required for am1bccelf10 charge assignment method and am1bcc_oe.
+    - OpenEye toolkit is required for am1bccelf10_oe charge assignment method and am1bcc_oe.
     - The output SDF file will include software version metadata as a property for each ligand and will be named <input_name>_<charge_method>.sdf
 
     """
@@ -62,8 +62,8 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         # convert the charge method to the expected format for openff
         openff_charge_method = charge_method.split("_")[0]
 
-        # we need to generate conformers for am1bccelf10 or use the input conformer for other methods which is the None case
-        generate_n_conformers = None if charge_method != "am1bccelf10" else 500
+        # we need to generate conformers for am1bccelf10_oe or use the input conformer for other methods which is the None case
+        generate_n_conformers = None if charge_method != "am1bccelf10_oe" else 500
 
         charged_ligands = bulk_assign_partial_charges(
             molecules=mols,
@@ -93,7 +93,7 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
             from openeye import oeomega, oequacpac
             provenance["oeomega"] = str(oeomega.OEOmegaGetVersion())
             provenance["oequacpac"] = str(oequacpac.OE_OEQUACPAC_VERSION)
-        elif backend == "rdkit" and charge_method == "nagl":
+        elif backend == "rdkit" and charge_method == "nagl_off":
             from openff import nagl
             from openff.nagl_models import get_models_by_type
             if nagl_model is None:
