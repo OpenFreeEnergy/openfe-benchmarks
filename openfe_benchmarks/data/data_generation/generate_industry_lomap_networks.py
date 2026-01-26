@@ -149,7 +149,7 @@ def main(system_group: str, system_name: str, input_sdf: pathlib.Path, out_dir: 
     # save the network
     out_path = out_dir / "lomap_network.json"
     network.to_json(out_path)
-    print(f"LOMAP network saved to {out_path}")
+    print(f"LOMAP network with kartograf mapping saved to {out_path}")
 
 if __name__ == "__main__":
     main()
