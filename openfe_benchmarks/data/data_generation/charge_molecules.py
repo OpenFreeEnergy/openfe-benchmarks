@@ -54,8 +54,8 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         method_to_backend = {
             "am1bcc_at": "ambertools",
             "am1bcc_oe": "openeye",
-            "am1bccelf10": "openeye",
-            "nagl": "rdkit"
+            "am1bccelf10_oe": "openeye",
+            "nagl_off": "rdkit"
         }
         backend = method_to_backend[charge_method]
 
