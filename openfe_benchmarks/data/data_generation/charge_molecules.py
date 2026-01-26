@@ -43,7 +43,7 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
     Notes
     -----
     - Antechamber will be used for the am1bcc_at charge assignment method, the charges are calculated at the input geometry.
-    - openeye toolkits is required for am1bccelf10 charge assignment method and am1bcc_oe.
+    - OpenEye toolkit is required for am1bccelf10 charge assignment method and am1bcc_oe.
     - The output SDF file will include software version metadata as a property for each ligand and will be named <input_name>_<charge_method>.sdf
 
     """
