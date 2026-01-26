@@ -29,7 +29,12 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
     output_dir : pathlib.Path
         Directory where the output SDF file with charged molecules will be saved.
     charge_method : str
-        The method to use for charge assignment. Options are 'am1bcc_at', 'am1bccelf10', 'nagl', 'am1bcc_oe'.
+        The method to use for charge assignment. Options include:
+        
+        - 'am1bcc_at': AM1BCC applied with AmberTools
+        - 'am1bcc_oe': AM1BCC Elf10 applied with OpenEye Toolkit
+        - 'am1bccelf10_oe': AM1BCC Elf10 applied with OpenEye Toolkit using 500 conformers
+        - 'nagl_off': NAGL charges applied with OpenFF-Toolkit
     n_cores : int
         Number of CPU cores to use for parallel processing.
     nagl_model
