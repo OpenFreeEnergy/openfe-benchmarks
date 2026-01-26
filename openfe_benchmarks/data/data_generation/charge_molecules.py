@@ -105,8 +105,8 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         # construct the output path
         method_to_name = {
             "am1bcc_at": "antechamber_am1bcc",
-            "am1bccelf10": "openeye_am1bccelf10",
-            "nagl": f"nagl_{nagl_model}",
+            "am1bccelf10_oe": "openeye_am1bccelf10",
+            "nagl_off": f"nagl_{nagl_model}",
             "am1bcc_oe": "openeye_am1bcc"
         }
 
