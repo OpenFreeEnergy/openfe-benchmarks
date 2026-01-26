@@ -55,7 +55,7 @@ name_conversions = {
 
 
 @click.command()
-@click.option("--system-group", type=str, required=True, help="The industry system group ie JACS/MERCK used to determine the edges.")
+@click.option("--system-group", type=str, required=True, help="The industry system group of system names used to determine the edges, i.e., JACS/MERCK.")
 @click.option("--system-name", type=str, required=True, help="The industry system name ie TYK2 used to determine the edges.")
 @click.option("--input-sdf", type=click.Path(exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path), required=False, help="The input sdf file containing the ligands to be used in this network.")
 @click.option("--out-dir", type=click.Path(exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path), required=True, help="The output dir name")
