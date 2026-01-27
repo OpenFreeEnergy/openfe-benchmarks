@@ -36,10 +36,11 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         - 'am1bcc_oe': AM1BCC applied with OpenEye Toolkit on the input conformer
         - 'am1bccelf10_oe': AM1BCC Elf10 applied with OpenEye Toolkit using 500 conformers
         - 'nagl_off': NAGL charges applied with OpenFF-Toolkit
+
     n_cores : int
         Number of CPU cores to use for parallel processing.
-    nagl_model
-        Path to the NAGL model to use for charge assignment when using the 'nagl' method if None the latest model will be used.
+    nagl_model : str
+        Model *.pt file, optionally with path, to the NAGL model to use for charge assignment when using the 'nagl' method if None the latest model will be used. See [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl/en/latest/) documentation for more detail. I.e., "openff-gnn-am1bcc-1.0.0.pt"
 
     Notes
     -----
@@ -103,7 +104,7 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
             else:
                 nagl_model = ".".join(os.path.split(nagl_model)[1].split(".")[:-1])
             provenance["nagl_version"] = str(nagl.__version__)
-            provenance["nagl_model"] = nagl_model
+            provenance["nagl_model"] = nagl_model + ".pt" # pulling model from API requires extension
 
         # construct the output path
         method_to_name = {
