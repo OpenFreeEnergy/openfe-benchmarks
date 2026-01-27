@@ -3,6 +3,7 @@ Generate partial charges for a set of molecules using OpenFE's bulk charge assig
 as an sdf property.
 """
 import pathlib
+import os
 
 from openfe.protocols.openmm_utils.charge_generation import bulk_assign_partial_charges
 import click
@@ -99,6 +100,8 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
             if nagl_model is None:
                 # get the latest production nagl model
                 nagl_model = get_models_by_type(model_type="am1bcc", production_only=True)[-1].name
+            else:
+                nagl_model = ".".join(os.path.split(nagl_model)[1].split(".")[:-1])
             provenance["nagl_version"] = str(nagl.__version__)
             provenance["nagl_model"] = nagl_model
 
