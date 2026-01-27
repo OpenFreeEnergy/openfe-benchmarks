@@ -40,7 +40,9 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
     n_cores : int
         Number of CPU cores to use for parallel processing.
     nagl_model : str
-        Model *.pt file, optionally with path, to the NAGL model to use for charge assignment when using the 'nagl' method if None the latest model will be used. See [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl/en/latest/) documentation for more detail. I.e., "openff-gnn-am1bcc-1.0.0.pt"
+        Model *.pt file (i.e., "openff-gnn-am1bcc-1.0.0.pt"), optionally with path, to the NAGL model to use for charge assignment when using the 
+        'nagl' method if None the latest model will be used. See [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl-models)
+        documentation for more detail.
 
     Notes
     -----
