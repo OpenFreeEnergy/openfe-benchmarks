@@ -1,4 +1,4 @@
-"""OpenFE Benchmarks: Benchmarking systems for OpenFE."""
+"""OpenFE Benchmarks: Free Energy Benchmark Data Repository"""
 
 from importlib.metadata import version
 
