@@ -1,0 +1,8 @@
+name: openfe-benchmarks-test
+channels:
+  - conda-forge
+dependencies:
+  - gufe
+  - openfe
+  - openeye-toolkits
+  - pytest

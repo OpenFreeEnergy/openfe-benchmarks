@@ -1,19 +1,5 @@
 name: openfe-benchmarks
 channels:
   - conda-forge
-  - openeye
 dependencies:
-  - gufe
-  - openfe
-  # testing
-  - nbval
-  - pytest
-  - pytest-xdist
-  - pytest-cov
-  - coverage
-  - openeye-toolkits
-  # not sure why we don't install from conda-forge
-  - pip
-  - matplotlib
-  - pip:
-      - py3dmol
+  - loguru

@@ -7,15 +7,14 @@ with the OpenFE toolkit.
 
 from pathlib import Path
 from dataclasses import dataclass
-from loguru import logger
 
+from loguru import logger
 
 # Supported partial charge types
 PARTIAL_CHARGE_TYPES = ["antechamber_am1bcc", "nagl_openff-gnn-am1bcc-1.0.0.pt", "openeye_am1bcc", "openeye_am1bccelf10"]
 
 # Base directory for industry benchmark systems
 _BASE_DIR = Path(__file__).parent
-
 
 @dataclass
 class BenchmarkSystem:
