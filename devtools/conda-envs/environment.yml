@@ -7,3 +7,4 @@ dependencies:
   - openfe
   - openeye-toolkits
   - pytest
+  - loguru
