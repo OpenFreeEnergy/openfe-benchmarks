@@ -45,8 +45,13 @@ jobs:
           create-args: >-
             python=${{ matrix.python-version }}
           init-shell: bash
+          micromamba-version: "latest" # Ensure the latest version is used
 
-      - name: Additional info about the build
+      - name: Debug Micromamba Setup
+        run: |
+          ls -la /Users/runner/work/_temp/setup-micromamba
+
+      - name: "Additional info about the build"
         run: |
           uname -a
           df -h
