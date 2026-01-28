@@ -69,7 +69,7 @@ jobs:
 
       - name: "Run tests"
         run: |
-          pytest -n 2 -v --cov=openfe_benchmarks --cov-report=xml
+          pytest -vv
 
       - name: codecov
         if: ${{ github.repository == 'OpenFreeEnergy/openfe_benchmarks'
