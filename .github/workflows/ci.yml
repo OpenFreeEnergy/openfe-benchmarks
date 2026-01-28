@@ -40,7 +40,7 @@ jobs:
       - name: "Setup Micromamba"
         uses: mamba-org/setup-micromamba@v2
         with:
-          environment-file: devtools/conda-envs/environment.yaml
+          environment-file: devtools/conda-envs/environment.yml
           environment-name: openfe-benchmarks-test
           create-args: >-
             python=${{ matrix.python-version }}
