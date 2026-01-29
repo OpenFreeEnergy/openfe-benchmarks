@@ -346,6 +346,35 @@ def list_systems(benchmark_set: str) -> list[str]:
     return available_sets[benchmark_set]
 
 
+def get_benchmark_set_systems(benchmark_set: str) -> dict[str, BenchmarkSystem]:
+    """
+    Return all systems in a given benchmark set.
+    
+    Args:
+        benchmark_set: Name of the benchmark set
+        
+    Returns:
+        Dictionary of system names and BenchmarkSystem objects
+        
+    Raises:
+        ValueError: If the benchmark set does not exist
+    """
+    available_sets = _discover_benchmark_sets()
+    
+    if benchmark_set not in available_sets:
+        raise ValueError(
+            f"Benchmark set '{benchmark_set}' not found. "
+            f"Available benchmark sets: {sorted(available_sets.keys())}"
+        )
+        
+    benchmark_systems = {}
+    for system_name in available_sets[benchmark_set]:
+        system_path = _BASE_DIR / benchmark_set.replace('.', '/') / system_name
+        logger.debug(f"Loading benchmark system '{system_name}' from '{benchmark_set}'...")
+        benchmark_systems[system_name] = _validate_and_load_system(system_path, system_name, benchmark_set)
+    
+    return benchmark_systems
+
 __all__ = [
     'BenchmarkSystem',
     'get_benchmark_system',
