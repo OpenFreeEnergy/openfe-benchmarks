@@ -40,9 +40,9 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
     n_cores : int
         Number of CPU cores to use for parallel processing.
     nagl_model : str
-        Model *.pt file (i.e., "openff-gnn-am1bcc-1.0.0.pt"), optionally with path, to the NAGL model to use for charge assignment when using the 
-        'nagl' method. If None the latest model will be used. See [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl-models)
-        documentation for more detail.
+        Model *.pt file (i.e., "openff-gnn-am1bcc-1.0.0.pt"), optionally with path, for the NAGL model to use for
+        charge assignment when using the ``'nagl'`` method. If None the latest model will be used. See 
+        [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl-models) documentation for more detail.
 
     Notes
     -----
@@ -104,9 +104,9 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
                 # get the latest production nagl model
                 nagl_model = get_models_by_type(model_type="am1bcc", production_only=True)[-1].name
             else:
-                nagl_model = ".".join(os.path.split(nagl_model)[1].split(".")[:-1])
+                nagl_model = os.path.split(nagl_model)
             provenance["nagl_version"] = str(nagl.__version__)
-            provenance["nagl_model"] = nagl_model + ".pt" # pulling model from API requires extension
+            provenance["nagl_model"] = nagl_model
 
         # construct the output path
         method_to_name = {
