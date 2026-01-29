@@ -30,19 +30,26 @@ class BenchmarkData:
     """
     Represents a benchmark data system with protein, ligands, optional cofactors, 
     and network.
-    
-    Attributes:
-        name: Name of the benchmark data system
-        benchmark_set: Fully qualified name of the benchmark set this data system belongs to
-                      (e.g., 'industry_benchmark_systems.charge_annihilation_set')
-        protein: Path to the protein PDB file (optional, can be None)
-        ligands: Dictionary mapping charge type to ligand SDF file path.
-                Always includes 'no_charges' key for the base ligands.sdf file.
-                May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
-        cofactors: Dictionary mapping charge type to cofactor SDF file path (optional).
-                  May include 'no_charges' key for the base cofactors.sdf file.
-                  May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
-        network: Paths to network file '*network.json'
+
+    Attributes
+    ----------
+    name : str
+        Name of the benchmark data system
+    benchmark_set : str
+        Fully qualified name of the benchmark set this data system belongs to
+        (e.g., 'industry_benchmark_systems.charge_annihilation_set')
+    protein : Path | None
+        Path to the protein PDB file (optional, can be None)
+    ligands : dict[str, Path]
+        Dictionary mapping charge type to ligand SDF file path.
+        Always includes 'no_charges' key for the base ligands.sdf file.
+        May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
+    cofactors : dict[str, Path]
+        Dictionary mapping charge type to cofactor SDF file path (optional).
+        May include 'no_charges' key for the base cofactors.sdf file.
+        May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
+    network : Path
+        Paths to network file '*network.json'
     """
     name: str
     benchmark_set: str
@@ -68,8 +75,10 @@ def _discover_benchmark_sets() -> dict[str, list[str]]:
     (case-insensitive) in its directory. Benchmark sets are represented as hierarchical
     dot-separated paths (e.g., 'industry_benchmark_systems.charge_annihilation_set').
     
-    Returns:
-        Dictionary mapping fully qualified benchmark set names to lists of data system names
+    Returns
+    -------
+    dict[str, list[str]]
+        Dictionary mapping fully qualified benchmark set names to lists of data system names.
     """
     def _get_qualified_name(path: Path) -> str:
         """Convert a path to a dot-separated qualified name."""
@@ -117,17 +126,25 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
                                benchmark_set: str) -> BenchmarkData:
     """
     Validate and load a benchmark system from a directory.
-    
-    Args:
-        system_path: Path to the system directory
-        system_name: Name of the system
-        benchmark_set: Name of the benchmark set
-        
-    Returns:
-        BenchmarkData object
-        
-    Raises:
-        ValueError: If required files are missing or improperly named
+
+    Parameters
+    ----------
+    system_path : Path
+        Path to the system directory.
+    system_name : str
+        Name of the system.
+    benchmark_set : str
+        Name of the benchmark set.
+
+    Returns
+    -------
+    BenchmarkData
+        BenchmarkData object.
+
+    Raises
+    ------
+    ValueError
+        If required files are missing or improperly named.
     """
     protein_path = None
     ligands = {}
@@ -253,17 +270,15 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             f"Missing required 'ligands.sdf' file in system '{system_name}' "
             f"in benchmark set '{benchmark_set}'."
         )
-
-    if 'no_charges' not in ligands:
-        raise ValueError(
-            f"Missing required 'ligands.sdf' file in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'."
-        )
+        
+    if network is None:
+        raise ValueError("Missing '*network.json' file in system '{system_name}' "
+                         f"in benchmark set '{benchmark_set}'.")
     
     logger.info(
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
         f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s)."
-        f" Found network file: {network is None}; Found protein file: {protein_path is None}."
+        f" Found protein file: {protein_path is None}."
     )
     
     return BenchmarkData(
@@ -279,23 +294,29 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
 def get_benchmark_data_system(benchmark_set: str, system_name: str) -> BenchmarkData:
     """
     Factory method to retrieve a benchmark system from a given benchmark set.
-    
-    Args:
-        benchmark_set: Fully qualified name of the benchmark set 
-                      (e.g., 'industry_benchmark_systems.charge_annihilation_set')
-        system_name: Name of the system within the benchmark set (e.g., 'cdk2', 'tyk2')
-        
-    Returns:
-        BenchmarkData object with paths to all relevant files
-        
-    Raises:
-        ValueError: If the benchmark set or system does not exist, or if files 
-                   are improperly formatted
-        
-    Examples:
-        >>> system = get_benchmark_data_system('industry_benchmark_systems.jacs_set', 'p38')
-        >>> print(system.protein)
-        >>> print(system.ligands['antechamber_am1bcc'])
+
+    Parameters
+    ----------
+    benchmark_set : str
+        Fully qualified name of the benchmark set (e.g., 'industry_benchmark_systems.charge_annihilation_set').
+    system_name : str
+        Name of the system within the benchmark set (e.g., 'cdk2', 'tyk2').
+
+    Returns
+    -------
+    BenchmarkData
+        BenchmarkData object with paths to all relevant files.
+
+    Raises
+    ------
+    ValueError
+        If the benchmark set or system does not exist, or if files are improperly formatted.
+
+    Examples
+    --------
+    >>> system = get_benchmark_data_system('industry_benchmark_systems.jacs_set', 'p38')
+    >>> print(system.protein)
+    >>> print(system.ligands['antechamber_am1bcc'])
     """
     # Discover available benchmark sets and systems
     available_sets = _discover_benchmark_sets()
@@ -324,26 +345,34 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
 
 def list_benchmark_sets() -> list[str]:
     """
-    list all available benchmark sets.
-    
-    Returns:
-        list of benchmark set names
+    List all available benchmark sets.
+
+    Returns
+    -------
+    list[str]
+        List of benchmark set names.
     """
     return sorted(_discover_benchmark_sets().keys())
 
 
 def list_data_systems(benchmark_set: str) -> list[str]:
     """
-    list all systems in a given benchmark set.
-    
-    Args:
-        benchmark_set: Name of the benchmark set
-        
-    Returns:
-        list of system names in the benchmark set
-        
-    Raises:
-        ValueError: If the benchmark set does not exist
+    List all systems in a given benchmark set.
+
+    Parameters
+    ----------
+    benchmark_set : str
+        Name of the benchmark set.
+
+    Returns
+    -------
+    list[str]
+        List of system names in the benchmark set.
+
+    Raises
+    ------
+    ValueError
+        If the benchmark set does not exist.
     """
     available_sets = _discover_benchmark_sets()
     
@@ -359,15 +388,21 @@ def list_data_systems(benchmark_set: str) -> list[str]:
 def get_benchmark_set_data_systems(benchmark_set: str) -> dict[str, BenchmarkData]:
     """
     Return all systems in a given benchmark set.
-    
-    Args:
-        benchmark_set: Name of the benchmark set
-        
-    Returns:
-        Dictionary of system names and BenchmarkData objects
-        
-    Raises:
-        ValueError: If the benchmark set does not exist
+
+    Parameters
+    ----------
+    benchmark_set : str
+        Name of the benchmark set.
+
+    Returns
+    -------
+    dict[str, BenchmarkData]
+        Dictionary of system names and BenchmarkData objects.
+
+    Raises
+    ------
+    ValueError
+        If the benchmark set does not exist.
     """
     available_sets = _discover_benchmark_sets()
     
