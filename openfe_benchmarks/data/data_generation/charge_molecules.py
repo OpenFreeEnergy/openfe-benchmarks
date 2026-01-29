@@ -3,6 +3,7 @@ Generate partial charges for a set of molecules using OpenFE's bulk charge assig
 as an sdf property.
 """
 import pathlib
+import os
 
 from openfe.protocols.openmm_utils.charge_generation import bulk_assign_partial_charges
 import click
@@ -35,10 +36,13 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
         - 'am1bcc_oe': AM1BCC applied with OpenEye Toolkit on the input conformer
         - 'am1bccelf10_oe': AM1BCC Elf10 applied with OpenEye Toolkit using 500 conformers
         - 'nagl_off': NAGL charges applied with OpenFF-Toolkit
+
     n_cores : int
         Number of CPU cores to use for parallel processing.
-    nagl_model
-        Path to the NAGL model to use for charge assignment when using the 'nagl' method if None the latest model will be used.
+    nagl_model : str
+        Model *.pt file (i.e., "openff-gnn-am1bcc-1.0.0.pt"), optionally with path, for the NAGL model to use for
+        charge assignment when using the ``'nagl'`` method. If None the latest model will be used. See 
+        [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl-models) documentation for more detail.
 
     Notes
     -----
@@ -99,6 +103,8 @@ def main(input_path: pathlib.Path, output_dir: pathlib.Path, charge_method: str,
             if nagl_model is None:
                 # get the latest production nagl model
                 nagl_model = get_models_by_type(model_type="am1bcc", production_only=True)[-1].name
+            else:
+                nagl_model = os.path.split(nagl_model)
             provenance["nagl_version"] = str(nagl.__version__)
             provenance["nagl_model"] = nagl_model
 
