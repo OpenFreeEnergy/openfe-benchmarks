@@ -9,9 +9,9 @@ from rdkit import Chem
 from openfe import ProteinComponent, SmallMoleculeComponent, LigandNetwork
 
 from openfe_benchmarks.data import (
-    get_benchmark_system,
+    get_benchmark_data_system,
     list_benchmark_sets,
-    list_systems,
+    list_data_systems,
     PARTIAL_CHARGE_TYPES,
 )
 
@@ -29,18 +29,18 @@ def benchmark_sets():
 def test_list_benchmark_sets_tuple_output(benchmark_sets):
     """Test that list_benchmark_sets() outputs a list of tuples of length 2 containing strings."""
     for benchmark_set in benchmark_sets:
-        benchmark_systems = list_systems(benchmark_set)
+        benchmark_systems = list_data_systems(benchmark_set)
         assert isinstance(benchmark_systems, list)
         assert all(isinstance(item, str) for item in benchmark_systems)
 
 @pytest.mark.parametrize("benchmark_set, system_name", [
     (benchmark_set, system_name)
     for benchmark_set in list_benchmark_sets()
-    for system_name in list_systems(benchmark_set)
+    for system_name in list_data_systems(benchmark_set)
 ])
 def test_benchmark_system_initialization(benchmark_set, system_name):
-    """Test initialization of all BenchmarkSystem objects."""
-    system = get_benchmark_system(benchmark_set, system_name)
+    """Test initialization of all BenchmarkData objects."""
+    system = get_benchmark_data_system(benchmark_set, system_name)
     assert system is not None
     assert system.name == system_name
     assert system.benchmark_set == benchmark_set
@@ -56,11 +56,11 @@ def test_benchmark_system_initialization(benchmark_set, system_name):
 @pytest.mark.parametrize("benchmark_set, system_name", [
     (benchmark_set, system_name)
     for benchmark_set in list_benchmark_sets()
-    for system_name in list_systems(benchmark_set)
+    for system_name in list_data_systems(benchmark_set)
 ])
 def test_benchmark_system_components(benchmark_set, system_name):
-    """Test loading and validation of BenchmarkSystem components."""
-    system = get_benchmark_system(benchmark_set, system_name)
+    """Test loading and validation of BenchmarkData components."""
+    system = get_benchmark_data_system(benchmark_set, system_name)
 
     # Validate protein
     print(system.protein)
@@ -80,7 +80,7 @@ def test_benchmark_system_components(benchmark_set, system_name):
         assert len(cofactors) > 0
 
     # Validate network
-    if system.networks:
-        network = LigandNetwork.from_json(file=system.networks[0])
+    if system.network:
+        network = LigandNetwork.from_json(file=system.network)
         assert hasattr(network, 'edges')
         assert len(network.edges) > 0

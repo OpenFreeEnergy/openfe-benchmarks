@@ -11,12 +11,12 @@ from dataclasses import dataclass
 from loguru import logger
 
 __all__ = [
-    'BenchmarkSystem',
-    'get_benchmark_system',
+    'BenchmarkData',
+    'get_benchmark_data_system',
     'list_benchmark_sets',
-    'list_systems',
+    'list_data_systems',
     'PARTIAL_CHARGE_TYPES',
-    'get_benchmark_set_systems',
+    'get_benchmark_set_data_systems',
 ]
 
 # Supported partial charge types
@@ -26,50 +26,50 @@ PARTIAL_CHARGE_TYPES = ["antechamber_am1bcc", "nagl_openff-gnn-am1bcc-1.0.0.pt",
 _BASE_DIR = Path(__file__).parent
 
 @dataclass
-class BenchmarkSystem:
+class BenchmarkData:
     """
-    Represents a benchmark system with protein, ligands, optional cofactors, 
-    and networks.
+    Represents a benchmark data system with protein, ligands, optional cofactors, 
+    and network.
     
     Attributes:
-        name: Name of the benchmark system
-        benchmark_set: Fully qualified name of the benchmark set this system belongs to
+        name: Name of the benchmark data system
+        benchmark_set: Fully qualified name of the benchmark set this data system belongs to
                       (e.g., 'industry_benchmark_systems.charge_annihilation_set')
-        protein: Path to the protein PDB file
+        protein: Path to the protein PDB file (optional, can be None)
         ligands: Dictionary mapping charge type to ligand SDF file path.
                 Always includes 'no_charges' key for the base ligands.sdf file.
                 May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
         cofactors: Dictionary mapping charge type to cofactor SDF file path (optional).
                   May include 'no_charges' key for the base cofactors.sdf file.
                   May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
-        networks: list of paths to network files (e.g., *network.json files)
+        network: Paths to network file '*network.json'
     """
     name: str
     benchmark_set: str
-    protein: Path
+    protein: Path | None  # Updated typing to allow None
     ligands: dict[str, Path]
     cofactors: dict[str, Path]
-    networks: list[Path]
+    network: Path
     
     def __repr__(self):
-        return (f"BenchmarkSystem(name='{self.name}', "
+        return (f"BenchmarkData(name='{self.name}', "
                 f"benchmark_set='{self.benchmark_set}', "
-                f"protein={self.protein.name}, "
+                f"protein={self.protein.name if self.protein else 'None'}, "
                 f"ligands={list(self.ligands.keys())}, "
                 f"cofactors={list(self.cofactors.keys())}, "
-                f"networks={[n.name for n in self.networks]})")
+                f"network={self.network}")
 
 
 def _discover_benchmark_sets() -> dict[str, list[str]]:
     """
-    Discover all available benchmark sets and their systems.
+    Discover all available benchmark sets and their data systems.
     
-    A benchmark system is identified by the presence of a 'PREPARATION_DETAILS.md' file
+    A benchmark data system is identified by the presence of a 'PREPARATION_DETAILS.md' file
     (case-insensitive) in its directory. Benchmark sets are represented as hierarchical
     dot-separated paths (e.g., 'industry_benchmark_systems.charge_annihilation_set').
     
     Returns:
-        Dictionary mapping fully qualified benchmark set names to lists of system names
+        Dictionary mapping fully qualified benchmark set names to lists of data system names
     """
     def _get_qualified_name(path: Path) -> str:
         """Convert a path to a dot-separated qualified name."""
@@ -84,9 +84,9 @@ def _discover_benchmark_sets() -> dict[str, list[str]]:
     
     benchmark_sets = {}
     
-    # Recursively traverse directory structure to find benchmark systems
+    # Recursively traverse directory structure to find benchmark data systems
     def _traverse(current_path: Path, depth: int = 0, max_depth: int = 5):
-        """Recursively traverse directories to find benchmark systems."""
+        """Recursively traverse directories to find benchmark data systems."""
         if depth > max_depth:
             return
         
@@ -113,8 +113,8 @@ def _discover_benchmark_sets() -> dict[str, list[str]]:
     return benchmark_sets
 
 
-def _validate_and_load_system(system_path: Path, system_name: str, 
-                               benchmark_set: str) -> BenchmarkSystem:
+def _validate_and_load_data_system(system_path: Path, system_name: str, 
+                               benchmark_set: str) -> BenchmarkData:
     """
     Validate and load a benchmark system from a directory.
     
@@ -124,7 +124,7 @@ def _validate_and_load_system(system_path: Path, system_name: str,
         benchmark_set: Name of the benchmark set
         
     Returns:
-        BenchmarkSystem object
+        BenchmarkData object
         
     Raises:
         ValueError: If required files are missing or improperly named
@@ -132,7 +132,7 @@ def _validate_and_load_system(system_path: Path, system_name: str,
     protein_path = None
     ligands = {}
     cofactors = {}
-    networks = []
+    network = None
     
     # Track all files for validation
     all_files = list(system_path.glob('*'))
@@ -202,9 +202,11 @@ def _validate_and_load_system(system_path: Path, system_name: str,
             logger.debug(f"Found cofactors with {charge_type} charges: {filename}")
             continue
         
-        # Check for network files (*network.json)
+        # Check for network file (network.json)
         if filename.endswith('network.json'):
-            networks.append(file_path)
+            if network is not None:
+                raise ValueError(f"Multiple network files have been detected. The following has already been saved: {network}")
+            network = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found network: {filename}")
             continue
@@ -231,26 +233,13 @@ def _validate_and_load_system(system_path: Path, system_name: str,
                 f"'ligands_<charge_type>.sdf' or 'cofactors_<charge_type>.sdf' "
                 f"where <charge_type> is one of {PARTIAL_CHARGE_TYPES}."
             )
-        
-        # Warning for other uncategorized files
-        logger.warning(
+
+        logger.error(
             f"Uncategorized file '{filename}' found in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'. This file will be ignored."
+            f"in benchmark set '{benchmark_set}'."
         )
     
     # Validate required files
-    if protein_path is None:
-        raise ValueError(
-            f"Missing required 'protein.pdb' file in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'."
-        )
-    
-    if 'no_charges' not in ligands:
-        raise ValueError(
-            f"Missing required 'ligands.sdf' file in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'."
-        )
-    
     if not ligands:
         raise ValueError(
             f"No ligand files found in system '{system_name}' "
@@ -258,24 +247,36 @@ def _validate_and_load_system(system_path: Path, system_name: str,
             f"'ligands_<charge_type>.sdf' where <charge_type> is one of "
             f"{PARTIAL_CHARGE_TYPES}."
         )
+
+    if 'no_charges' not in ligands:
+        raise ValueError(
+            f"Missing required 'ligands.sdf' file in system '{system_name}' "
+            f"in benchmark set '{benchmark_set}'."
+        )
+
+    if 'no_charges' not in ligands:
+        raise ValueError(
+            f"Missing required 'ligands.sdf' file in system '{system_name}' "
+            f"in benchmark set '{benchmark_set}'."
+        )
     
     logger.info(
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
-        f"with {len(ligands)} ligand file(s), {len(cofactors)} cofactor file(s), "
-        f"and {len(networks)} network file(s)."
+        f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s)."
+        f" Found network file: {network is None}; Found protein file: {protein_path is None}."
     )
     
-    return BenchmarkSystem(
+    return BenchmarkData(
         name=system_name,
         benchmark_set=benchmark_set,
         protein=protein_path,
         ligands=ligands,
         cofactors=cofactors,
-        networks=networks
+        network=network
     )
 
 
-def get_benchmark_system(benchmark_set: str, system_name: str) -> BenchmarkSystem:
+def get_benchmark_data_system(benchmark_set: str, system_name: str) -> BenchmarkData:
     """
     Factory method to retrieve a benchmark system from a given benchmark set.
     
@@ -285,14 +286,14 @@ def get_benchmark_system(benchmark_set: str, system_name: str) -> BenchmarkSyste
         system_name: Name of the system within the benchmark set (e.g., 'cdk2', 'tyk2')
         
     Returns:
-        BenchmarkSystem object with paths to all relevant files
+        BenchmarkData object with paths to all relevant files
         
     Raises:
         ValueError: If the benchmark set or system does not exist, or if files 
                    are improperly formatted
         
     Examples:
-        >>> system = get_benchmark_system('industry_benchmark_systems.jacs_set', 'p38')
+        >>> system = get_benchmark_data_system('industry_benchmark_systems.jacs_set', 'p38')
         >>> print(system.protein)
         >>> print(system.ligands['antechamber_am1bcc'])
     """
@@ -318,7 +319,7 @@ def get_benchmark_system(benchmark_set: str, system_name: str) -> BenchmarkSyste
     
     logger.debug(f"Loading benchmark system '{system_name}' from '{benchmark_set}'...")
     
-    return _validate_and_load_system(system_path, system_name, benchmark_set)
+    return _validate_and_load_data_system(system_path, system_name, benchmark_set)
 
 
 def list_benchmark_sets() -> list[str]:
@@ -331,7 +332,7 @@ def list_benchmark_sets() -> list[str]:
     return sorted(_discover_benchmark_sets().keys())
 
 
-def list_systems(benchmark_set: str) -> list[str]:
+def list_data_systems(benchmark_set: str) -> list[str]:
     """
     list all systems in a given benchmark set.
     
@@ -355,7 +356,7 @@ def list_systems(benchmark_set: str) -> list[str]:
     return available_sets[benchmark_set]
 
 
-def get_benchmark_set_systems(benchmark_set: str) -> dict[str, BenchmarkSystem]:
+def get_benchmark_set_data_systems(benchmark_set: str) -> dict[str, BenchmarkData]:
     """
     Return all systems in a given benchmark set.
     
@@ -363,7 +364,7 @@ def get_benchmark_set_systems(benchmark_set: str) -> dict[str, BenchmarkSystem]:
         benchmark_set: Name of the benchmark set
         
     Returns:
-        Dictionary of system names and BenchmarkSystem objects
+        Dictionary of system names and BenchmarkData objects
         
     Raises:
         ValueError: If the benchmark set does not exist
@@ -380,6 +381,6 @@ def get_benchmark_set_systems(benchmark_set: str) -> dict[str, BenchmarkSystem]:
     for system_name in available_sets[benchmark_set]:
         system_path = _BASE_DIR / benchmark_set.replace('.', '/') / system_name
         logger.debug(f"Loading benchmark system '{system_name}' from '{benchmark_set}'...")
-        benchmark_systems[system_name] = _validate_and_load_system(system_path, system_name, benchmark_set)
+        benchmark_systems[system_name] = _validate_and_load_data_system(system_path, system_name, benchmark_set)
     
     return benchmark_systems
