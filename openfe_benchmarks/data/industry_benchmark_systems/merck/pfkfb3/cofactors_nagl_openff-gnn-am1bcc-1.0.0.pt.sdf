@@ -1,0 +1,592 @@
+pfkfb3_automap_cofactor1
+     RDKit          3D
+
+  6  5  0  0  0  0  0  0  0  0999 V2000
+   94.0750   47.6780  260.4220 O   0  0  0  0  0  0  0  0  0  0  0  0
+   95.1040   48.4990  259.4870 P   0  0  0  0  0  5  0  0  0  0  0  0
+   95.6640   47.4570  258.4800 O   0  0  0  0  0  0  0  0  0  0  0  0
+   96.1780   48.8540  260.4530 O   0  0  0  0  0  0  0  0  0  0  0  0
+   94.4660   49.6720  258.8090 O   0  0  0  0  0  0  0  0  0  0  0  0
+   94.4213   46.7929  260.9758 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0
+  1  6  1  0
+  2  3  2  0
+  2  4  1  0
+  2  5  1  0
+M  CHG  2   4  -1   5  -1
+M  END
+>  <i_epik_Tot_Q>  (1) 
+-2
+
+>  <i_epik_Tot_abs_Q>  (1) 
+2
+
+>  <i_m_Source_File_Index>  (1) 
+1
+
+>  <i_m_stars>  (1) 
+0
+
+>  <i_pdb_PDB_CRYST1_z>  (1) 
+12
+
+>  <b_m_subgroup_collapsed>  (1) 
+0
+
+>  <b_ppw_added_hydrogens>  (1) 
+1
+
+>  <b_ppw_assigned_bond_orders>  (1) 
+1
+
+>  <b_ppw_created_disulfur>  (1) 
+1
+
+>  <b_ppw_prepared>  (1) 
+1
+
+>  <b_ppw_ran_protassign>  (1) 
+1
+
+>  <b_ppw_treated_metals>  (1) 
+1
+
+>  <r_epik_Charging_Adjusted_Penalty>  (1) 
+0.0091919199999999993
+
+>  <r_epik_Ionization_Penalty>  (1) 
+0.0064000000000000003
+
+>  <r_epik_Ionization_Penalty_Charging>  (1) 
+0.0048999999999999998
+
+>  <r_epik_Ionization_Penalty_Neutral>  (1) 
+0.0014
+
+>  <r_epik_State_Penalty>  (1) 
+0.0043
+
+>  <r_pdb_PDB_CRYST1_a>  (1) 
+103.036
+
+>  <r_pdb_PDB_CRYST1_alpha>  (1) 
+90
+
+>  <r_pdb_PDB_CRYST1_b>  (1) 
+103.036
+
+>  <r_pdb_PDB_CRYST1_beta>  (1) 
+90
+
+>  <r_pdb_PDB_CRYST1_c>  (1) 
+255.012
+
+>  <r_pdb_PDB_CRYST1_gamma>  (1) 
+120
+
+>  <r_pdb_PDB_EXPDTA_PH>  (1) 
+7.5
+
+>  <r_pdb_PDB_EXPDTA_TEMPERATURE>  (1) 
+100
+
+>  <r_pdb_PDB_R>  (1) 
+0.186
+
+>  <r_pdb_PDB_RESOLUTION>  (1) 
+1.96
+
+>  <r_pdb_PDB_Rfree>  (1) 
+0.20799999999999999
+
+>  <s_epik_cmdline>  (1) 
+J2VwaWtfYXBwJywgJy1pbWFlJywgJy9Vc2Vycy9yb3NzL1dvcmsvbWVyY2tfZGF0YV9zZXRzL2ZlcC1iZW5jaG1hcmsvcGZrZmIzL2VwaWtfcG9wL2VwaWtfcG9wLm1hZWd6JywgJy1vbWFlJywgJ2VwaWtfcG9wLW91dC5tYWVneicsICctcGgnLCAnOC4wMCcsICctcycsICd3YXRlcic=
+
+>  <s_epik_input>  (1) 
+W09IXVtQSF0oW09IXSkoW09IXSlbT0hd
+
+>  <s_m_Source_File>  (1) 
+6hvi.pdb
+
+>  <s_m_Source_Path>  (1) 
+/Users/ross/Work/merck_data_sets/fep-benchmark/pfkfb3
+
+>  <s_m_entry_id>  (1) 
+195
+
+>  <s_m_entry_name>  (1) 
+6HVI - hbond-opt with PO4_mol3
+
+>  <s_m_job_name>  (1) 
+epik_pop
+
+>  <s_m_subgroup_title>  (1) 
+proteinprep_21728885_only-protein-out->pfkfb3_automap_protein - prepared_split_by_structure->6HVI - hbond-opt with PO4_split_by_molecule
+
+>  <s_m_subgroupid>  (1) 
+proteinprep_21728885_only-protein-out1->pfkfb3_automap_protein - prepared_split_by_structure1->6HVI - hbond-opt with PO4_split_by_molecule
+
+>  <s_pdb_PDB_CLASSIFICATION>  (1) 
+TRANSFERASE
+
+>  <s_pdb_PDB_CRYST1_Space_Group>  (1) 
+P 65 2 2
+
+>  <s_pdb_PDB_DEPOSITION_DATE>  (1) 
+11-OCT-18
+
+>  <s_pdb_PDB_EXPDTA>  (1) 
+X-RAY DIFFRACTION
+
+>  <s_pdb_PDB_ID>  (1) 
+6HVI
+
+>  <s_pdb_PDB_REMARK_350_Biomolecule_1_Transform_1_Chains>  (1) 
+A
+
+>  <s_pdb_PDB_REMARK_350_Biomolecule_1_Transform_1_Matrix_1>  (1) 
+1.000000 0.000000 0.000000   0.000000;0.000000 1.000000 0.000000   0.000000;0.000000 0.000000 1.000000   0.000000
+
+>  <s_pdb_PDB_TITLE>  (1) 
+HUMAN PFKFB3 IN COMPLEX WITH A N-ARYL 6-AMINOQUINOXALINE INHIBITOR 2
+
+>  <s_pdb_PDB_format_version>  (1) 
+3.2999999999999998
+
+>  <s_ppw_entry_id_backup>  (1) 
+204
+
+>  <s_ppw_het_states>  (1) 
+eJztWj1z1DAQ/Sse1zmjz9UudFS0DCWTIhNSERKKUDCZ/Hcsyfbz6WKOC/ehfFylPK+1q7dvJSvSfavb983X/me9DWeNOj9rYpPRlKnpFJoaTYOmRdOh6dEkNOHNwZuDNw9vHt48vHl48/Dm4c3Dm4c3D28e3gjeCN4I3gjeCN4I3ih5i+2By0yjHmhMQOxvHei7MuA8OzdgPpOu1wC8Ep/lAY2AThbwMgBUWES+RguTLCwsMoDQ47OcxRFwqY8AwCdg1geNwGgRyk7TaGO6zRyI6TXI/xpjPofuCyBmbnzFlRY5MAzfUxG6T4F5xOF5BEYLGb1oSCUnagRyHAQgUUgYPqXACIGRH18xUTKqU0r1L923kd2+InvgrGkjhf0fq+kvzo8e4hsi0ofafrm7uLtqfl7dXFzf/U5PVfP98uL63Y/b6w/Np9XH25tvzeXtr5u7943+0HzuTdrosjVT4ROKg1Ac1I97NYQbUB0B1RFQHQHVEdzsPT+rCcqKhwYGQAogIKEDAKpDojpAFCFRHWwJuBLwA9WuY+47ue851LbTWjY5jCbLHKpE4sq0aVib9I1j35m/ybhuAlVnrTUDg9IR0aMytHaZQpMpdHuncEGCffs4FJqtFOraKZyrUJ2Awg0VmlNRuDAPrvQuFG4pZLOVQr0HCk9WyE+mcIdCPgiF9RTyXlS4pZCPo8KTFfJ8LlRPpXDXFdkcgsIqVuSdKPyfFXkfFNZTyHtR4a4r8kFUWEUhv8Ctie6s0TQwGDoK7DYZjEbLDOYd3soea0Gu7JPmCAzueyasbC05nQZfyv64Ygafyfa4Ygafye74dPPgi6xifhKD5kAMPscqrovB51jFh2dwHxNhzVVMdX1R/zuD1XxRH4bBfW+Ma/6i/l8Gz+M54HRwF3DAHcBpgCoDKGVUNYNRBqOMpYVBKOOAm+GN4Y3hjeFN4E30LCUhnb8GnL+GTDhyFNL5a5ACYFUCOEzldCDLugSQNE4pYVsCSBq7stMM4FCXU+iM0DmFzgidc2BSAKJKQA/SkM46P0hDdeSdU/g98t+T3t4vqoTGw92hyioUx1iwMivvN3ksykN1ShNNZ9XC9pGZozdanjm4PKuuUBSzGWOuCXyMvRJRmK2i0K9HFPOZYraOvDpRbMwU6yp5E8Xb6rG0epjO23j/LWpCOkfO49tCb6qjN3eL6ghZHbpmdSysI2/qOKI6+o5bN21PBCkWpFiQYkGKBSkWpFhm20OZckwKOSalAZsZbAG7mQoksS9IxwBwCWBFlnT/VZAwSfkRXwK0DiTHGiPNca8DuO0rKceCHMdmHtM6YOd3RocMah2vg/odr4OGtW2lH/NGyoM7QjOgyWA0WWdDMzzNwDSSEeBhscrXWfOeR22GvPprzGq6wvrwB+2tXlc=
+
+>  <s_ppw_prepared_with_version>  (1) 
+2020-2
+
+>  <ofe-name>  (1) 
+pfkfb3_automap_cofactor1
+
+>  <atom.dprop.PartialCharge>  (1) 
+-0.82092016935348511 1.2954655885696411 -0.94321358203887939 -0.94321358203887939 -0.94321358203887939 0.35509532690048218
+
+>  <charge_provenance>  (1) 
+{"openfe_version": "1.8.0", "openff_toolkit_version": "0.18.0", "rdkit_version": "2025.09.4", "charge_method": "nagl_off", "nagl_version": "0.5.4", "nagl_model": "openff-gnn-am1bcc-1.0.0.pt"}
+
+$$$$
+pfkfb3_automap_cofactor2
+     RDKit          3D
+
+ 27 27  0  0  0  0  0  0  0  0999 V2000
+   58.2200   68.3240  268.6980 O   0  0  0  0  0  0  0  0  0  0  0  0
+   59.1320   67.6530  269.5140 C   0  0  0  0  0  0  0  0  0  0  0  0
+   60.4630   68.4090  269.5420 C   0  0  2  0  0  0  0  0  0  0  0  0
+   61.3270   67.6800  270.4350 O   0  0  0  0  0  0  0  0  0  0  0  0
+   60.3350   69.8950  269.9350 C   0  0  1  0  0  0  0  0  0  0  0  0
+   60.2680   70.0630  271.3580 O   0  0  0  0  0  0  0  0  0  0  0  0
+   61.5040   70.5210  269.2010 C   0  0  2  0  0  0  0  0  0  0  0  0
+   61.3770   71.9250  268.9470 O   0  0  0  0  0  0  0  0  0  0  0  0
+   61.4370   69.7210  267.8960 C   0  0  2  0  0  0  0  0  0  0  0  0
+   60.9940   68.4050  268.2240 O   0  0  0  0  0  0  0  0  0  0  0  0
+   62.7350   69.6550  267.1120 C   0  0  0  0  0  0  0  0  0  0  0  0
+   62.5150   69.0690  265.8070 O   0  0  0  0  0  0  0  0  0  0  0  0
+   62.6630   69.9500  264.4910 P   0  0  0  0  0  5  0  0  0  0  0  0
+   62.2910   68.9470  263.3900 O   0  0  0  0  0  0  0  0  0  0  0  0
+   64.1470   70.2870  264.4810 O   0  0  0  0  0  0  0  0  0  0  0  0
+   61.7210   71.1060  264.6620 O   0  0  0  0  0  0  0  0  0  0  0  0
+   58.5698   68.3809  267.8058 H   0  0  0  0  0  0  0  0  0  0  0  0
+   59.2939   66.6470  269.1268 H   0  0  0  0  0  0  0  0  0  0  0  0
+   58.7320   67.5845  270.5256 H   0  0  0  0  0  0  0  0  0  0  0  0
+   62.1794   68.1188  270.4855 H   0  0  0  0  0  0  0  0  0  0  0  0
+   59.4132   70.2838  269.5022 H   0  0  0  0  0  0  0  0  0  0  0  0
+   60.8054   69.3922  271.7855 H   0  0  0  0  0  0  0  0  0  0  0  0
+   62.4365   70.3133  269.7258 H   0  0  0  0  0  0  0  0  0  0  0  0
+   61.8644   72.1522  268.1517 H   0  0  0  0  0  0  0  0  0  0  0  0
+   60.6820   70.1807  267.2582 H   0  0  0  0  0  0  0  0  0  0  0  0
+   63.4608   69.0554  267.6614 H   0  0  0  0  0  0  0  0  0  0  0  0
+   63.1398   70.6602  266.9949 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0
+  1 17  1  0
+  2  3  1  0
+  2 18  1  0
+  2 19  1  0
+  3  4  1  1
+  3  5  1  0
+  3 10  1  0
+  4 20  1  0
+  5  6  1  0
+  5  7  1  0
+  5 21  1  6
+  6 22  1  0
+  7  8  1  0
+  7  9  1  0
+  7 23  1  1
+  8 24  1  0
+  9 10  1  0
+  9 11  1  0
+  9 25  1  6
+ 11 12  1  0
+ 11 26  1  0
+ 11 27  1  0
+ 12 13  1  0
+ 13 14  1  0
+ 13 15  1  0
+ 13 16  2  0
+M  CHG  2  14  -1  15  -1
+M  END
+>  <i_epik_Tot_Q>  (2) 
+-2
+
+>  <i_epik_Tot_abs_Q>  (2) 
+2
+
+>  <i_m_Source_File_Index>  (2) 
+1
+
+>  <i_m_stars>  (2) 
+0
+
+>  <i_pdb_PDB_CRYST1_z>  (2) 
+12
+
+>  <b_m_subgroup_collapsed>  (2) 
+0
+
+>  <b_ppw_added_hydrogens>  (2) 
+1
+
+>  <b_ppw_assigned_bond_orders>  (2) 
+1
+
+>  <b_ppw_created_disulfur>  (2) 
+1
+
+>  <b_ppw_prepared>  (2) 
+1
+
+>  <b_ppw_ran_protassign>  (2) 
+1
+
+>  <b_ppw_treated_metals>  (2) 
+1
+
+>  <r_epik_Charging_Adjusted_Penalty>  (2) 
+0.0091919199999999993
+
+>  <r_epik_Ionization_Penalty>  (2) 
+0.0064000000000000003
+
+>  <r_epik_Ionization_Penalty_Charging>  (2) 
+0.0048999999999999998
+
+>  <r_epik_Ionization_Penalty_Neutral>  (2) 
+0.0014
+
+>  <r_epik_State_Penalty>  (2) 
+0.0043
+
+>  <r_pdb_PDB_CRYST1_a>  (2) 
+103.036
+
+>  <r_pdb_PDB_CRYST1_alpha>  (2) 
+90
+
+>  <r_pdb_PDB_CRYST1_b>  (2) 
+103.036
+
+>  <r_pdb_PDB_CRYST1_beta>  (2) 
+90
+
+>  <r_pdb_PDB_CRYST1_c>  (2) 
+255.012
+
+>  <r_pdb_PDB_CRYST1_gamma>  (2) 
+120
+
+>  <r_pdb_PDB_EXPDTA_PH>  (2) 
+7.5
+
+>  <r_pdb_PDB_EXPDTA_TEMPERATURE>  (2) 
+100
+
+>  <r_pdb_PDB_R>  (2) 
+0.186
+
+>  <r_pdb_PDB_RESOLUTION>  (2) 
+1.96
+
+>  <r_pdb_PDB_Rfree>  (2) 
+0.20799999999999999
+
+>  <s_epik_cmdline>  (2) 
+J2VwaWtfYXBwJywgJy1pbWFlJywgJy9Vc2Vycy9yb3NzL1dvcmsvbWVyY2tfZGF0YV9zZXRzL2ZlcC1iZW5jaG1hcmsvcGZrZmIzL2VwaWtfcG9wL2VwaWtfcG9wLm1hZWd6JywgJy1vbWFlJywgJ2VwaWtfcG9wLW91dC5tYWVneicsICctcGgnLCAnOC4wMCcsICctcycsICd3YXRlcic=
+
+>  <s_epik_input>  (2) 
+W09IXVtQSF0oW09IXSkoW09IXSlbT0hd
+
+>  <s_m_Source_File>  (2) 
+6hvi.pdb
+
+>  <s_m_Source_Path>  (2) 
+/Users/ross/Work/merck_data_sets/fep-benchmark/pfkfb3
+
+>  <s_m_entry_id>  (2) 
+193
+
+>  <s_m_entry_name>  (2) 
+6HVI - hbond-opt with PO4_mol1
+
+>  <s_m_job_name>  (2) 
+epik_pop
+
+>  <s_m_subgroup_title>  (2) 
+proteinprep_21728885_only-protein-out->pfkfb3_automap_protein - prepared_split_by_structure->6HVI - hbond-opt with PO4_split_by_molecule
+
+>  <s_m_subgroupid>  (2) 
+proteinprep_21728885_only-protein-out1->pfkfb3_automap_protein - prepared_split_by_structure1->6HVI - hbond-opt with PO4_split_by_molecule
+
+>  <s_pdb_PDB_CLASSIFICATION>  (2) 
+TRANSFERASE
+
+>  <s_pdb_PDB_CRYST1_Space_Group>  (2) 
+P 65 2 2
+
+>  <s_pdb_PDB_DEPOSITION_DATE>  (2) 
+11-OCT-18
+
+>  <s_pdb_PDB_EXPDTA>  (2) 
+X-RAY DIFFRACTION
+
+>  <s_pdb_PDB_ID>  (2) 
+6HVI
+
+>  <s_pdb_PDB_REMARK_350_Biomolecule_1_Transform_1_Chains>  (2) 
+A
+
+>  <s_pdb_PDB_REMARK_350_Biomolecule_1_Transform_1_Matrix_1>  (2) 
+1.000000 0.000000 0.000000   0.000000;0.000000 1.000000 0.000000   0.000000;0.000000 0.000000 1.000000   0.000000
+
+>  <s_pdb_PDB_TITLE>  (2) 
+HUMAN PFKFB3 IN COMPLEX WITH A N-ARYL 6-AMINOQUINOXALINE INHIBITOR 2
+
+>  <s_pdb_PDB_format_version>  (2) 
+3.2999999999999998
+
+>  <s_ppw_entry_id_backup>  (2) 
+204
+
+>  <s_ppw_het_states>  (2) 
+eJztWj1z1DAQ/Sse1zmjz9UudFS0DCWTIhNSERKKUDCZ/Hcsyfbz6WKOC/ehfFylPK+1q7dvJSvSfavb983X/me9DWeNOj9rYpPRlKnpFJoaTYOmRdOh6dEkNOHNwZuDNw9vHt48vHl48/Dm4c3Dm4c3D28e3gjeCN4I3gjeCN4I3ih5i+2By0yjHmhMQOxvHei7MuA8OzdgPpOu1wC8Ep/lAY2AThbwMgBUWES+RguTLCwsMoDQ47OcxRFwqY8AwCdg1geNwGgRyk7TaGO6zRyI6TXI/xpjPofuCyBmbnzFlRY5MAzfUxG6T4F5xOF5BEYLGb1oSCUnagRyHAQgUUgYPqXACIGRH18xUTKqU0r1L923kd2+InvgrGkjhf0fq+kvzo8e4hsi0ofafrm7uLtqfl7dXFzf/U5PVfP98uL63Y/b6w/Np9XH25tvzeXtr5u7943+0HzuTdrosjVT4ROKg1Ac1I97NYQbUB0B1RFQHQHVEdzsPT+rCcqKhwYGQAogIKEDAKpDojpAFCFRHWwJuBLwA9WuY+47ue851LbTWjY5jCbLHKpE4sq0aVib9I1j35m/ybhuAlVnrTUDg9IR0aMytHaZQpMpdHuncEGCffs4FJqtFOraKZyrUJ2Awg0VmlNRuDAPrvQuFG4pZLOVQr0HCk9WyE+mcIdCPgiF9RTyXlS4pZCPo8KTFfJ8LlRPpXDXFdkcgsIqVuSdKPyfFXkfFNZTyHtR4a4r8kFUWEUhv8Ctie6s0TQwGDoK7DYZjEbLDOYd3soea0Gu7JPmCAzueyasbC05nQZfyv64Ygafyfa4Ygafye74dPPgi6xifhKD5kAMPscqrovB51jFh2dwHxNhzVVMdX1R/zuD1XxRH4bBfW+Ma/6i/l8Gz+M54HRwF3DAHcBpgCoDKGVUNYNRBqOMpYVBKOOAm+GN4Y3hjeFN4E30LCUhnb8GnL+GTDhyFNL5a5ACYFUCOEzldCDLugSQNE4pYVsCSBq7stMM4FCXU+iM0DmFzgidc2BSAKJKQA/SkM46P0hDdeSdU/g98t+T3t4vqoTGw92hyioUx1iwMivvN3ksykN1ShNNZ9XC9pGZozdanjm4PKuuUBSzGWOuCXyMvRJRmK2i0K9HFPOZYraOvDpRbMwU6yp5E8Xb6rG0epjO23j/LWpCOkfO49tCb6qjN3eL6ghZHbpmdSysI2/qOKI6+o5bN21PBCkWpFiQYkGKBSkWpFhm20OZckwKOSalAZsZbAG7mQoksS9IxwBwCWBFlnT/VZAwSfkRXwK0DiTHGiPNca8DuO0rKceCHMdmHtM6YOd3RocMah2vg/odr4OGtW2lH/NGyoM7QjOgyWA0WWdDMzzNwDSSEeBhscrXWfOeR22GvPprzGq6wvrwB+2tXlc=
+
+>  <s_ppw_prepared_with_version>  (2) 
+2020-2
+
+>  <ofe-name>  (2) 
+pfkfb3_automap_cofactor2
+
+>  <atom.dprop.PartialCharge>  (2) 
+-0.60630184163649881 0.11589323232571284 0.31258687625328702 -0.59777396668990457 0.11142310748497646 -0.58568018426497781 0.11149345586697261 -0.61139565457900369 0.097253265480200454
+-0.45139994968970615 0.22419321785370508 -0.53895824899276101 1.349424126247565 -0.94415741910537088 -0.94415741910537088 -0.94415741910537088 0.39517557869354886 0.028247656921545666
+0.028247656921545666 0.40820691237847012 0.056770707170168556 0.40219486008087796 0.072113382319609329 0.39471471558014554 0.061779251943031945 0.027132049823800724 0.027132049823800724
+
+>  <charge_provenance>  (2) 
+{"openfe_version": "1.8.0", "openff_toolkit_version": "0.18.0", "rdkit_version": "2025.09.4", "charge_method": "nagl_off", "nagl_version": "0.5.4", "nagl_model": "openff-gnn-am1bcc-1.0.0.pt"}
+
+$$$$
+pfkfb3_automap_cofactor3
+     RDKit          3D
+
+ 18 17  0  0  0  0  0  0  0  0999 V2000
+   97.8460   48.2900  250.2980 C   0  0  0  0  0  0  0  0  0  0  0  0
+   98.6800   48.6860  251.4680 C   0  0  0  0  0  0  0  0  0  0  0  0
+   99.5600   49.8750  251.2120 C   0  0  0  0  0  0  0  0  0  0  0  0
+  100.2720   50.1640  252.5380 C   0  0  0  0  0  0  0  0  0  0  0  0
+  100.5970   49.6720  250.1290 C   0  0  0  0  0  0  0  0  0  0  0  0
+  101.4590   50.9170  250.1680 C   0  0  0  0  0  0  0  0  0  0  0  0
+   98.2080   48.5050  249.1060 O   0  0  0  0  0  0  0  0  0  0  0  0
+   96.8030   47.7060  250.6410 O   0  0  0  0  0  0  0  0  0  0  0  0
+  101.3400   49.5560  252.8120 O   0  0  0  0  0  0  0  0  0  0  0  0
+   99.7380   50.9680  253.3390 O   0  0  0  0  0  0  0  0  0  0  0  0
+  102.6240   50.7590  249.8670 O   0  0  0  0  0  0  0  0  0  0  0  0
+  101.0350   52.0490  250.5430 O   0  0  0  0  0  0  0  0  0  0  0  0
+   98.8100   51.0280  250.8130 O   0  0  0  0  0  0  0  0  0  0  0  0
+   99.2952   47.8406  251.7761 H   0  0  0  0  0  0  0  0  0  0  0  0
+   98.0325   48.8923  252.3202 H   0  0  0  0  0  0  0  0  0  0  0  0
+  100.1005   49.6062  249.1609 H   0  0  0  0  0  0  0  0  0  0  0  0
+  101.2073   48.8020  250.3714 H   0  0  0  0  0  0  0  0  0  0  0  0
+   99.4127   51.7431  250.5963 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0
+  1  7  1  0
+  1  8  2  0
+  2  3  1  0
+  2 14  1  0
+  2 15  1  0
+  3  4  1  0
+  3  5  1  0
+  3 13  1  0
+  4  9  1  0
+  4 10  2  0
+  5  6  1  0
+  5 16  1  0
+  5 17  1  0
+  6 11  1  0
+  6 12  2  0
+ 13 18  1  0
+M  CHG  3   7  -1   9  -1  11  -1
+M  END
+>  <i_epik_Tot_Q>  (3) 
+-2
+
+>  <i_epik_Tot_abs_Q>  (3) 
+2
+
+>  <i_m_Source_File_Index>  (3) 
+1
+
+>  <i_m_stars>  (3) 
+0
+
+>  <i_pdb_PDB_CRYST1_z>  (3) 
+12
+
+>  <b_m_subgroup_collapsed>  (3) 
+0
+
+>  <b_ppw_added_hydrogens>  (3) 
+1
+
+>  <b_ppw_assigned_bond_orders>  (3) 
+1
+
+>  <b_ppw_created_disulfur>  (3) 
+1
+
+>  <b_ppw_prepared>  (3) 
+1
+
+>  <b_ppw_ran_protassign>  (3) 
+1
+
+>  <b_ppw_treated_metals>  (3) 
+1
+
+>  <r_epik_Charging_Adjusted_Penalty>  (3) 
+0.0091919199999999993
+
+>  <r_epik_Ionization_Penalty>  (3) 
+0.0064000000000000003
+
+>  <r_epik_Ionization_Penalty_Charging>  (3) 
+0.0048999999999999998
+
+>  <r_epik_Ionization_Penalty_Neutral>  (3) 
+0.0014
+
+>  <r_epik_State_Penalty>  (3) 
+0.0043
+
+>  <r_pdb_PDB_CRYST1_a>  (3) 
+103.036
+
+>  <r_pdb_PDB_CRYST1_alpha>  (3) 
+90
+
+>  <r_pdb_PDB_CRYST1_b>  (3) 
+103.036
+
+>  <r_pdb_PDB_CRYST1_beta>  (3) 
+90
+
+>  <r_pdb_PDB_CRYST1_c>  (3) 
+255.012
+
+>  <r_pdb_PDB_CRYST1_gamma>  (3) 
+120
+
+>  <r_pdb_PDB_EXPDTA_PH>  (3) 
+7.5
+
+>  <r_pdb_PDB_EXPDTA_TEMPERATURE>  (3) 
+100
+
+>  <r_pdb_PDB_R>  (3) 
+0.186
+
+>  <r_pdb_PDB_RESOLUTION>  (3) 
+1.96
+
+>  <r_pdb_PDB_Rfree>  (3) 
+0.20799999999999999
+
+>  <s_epik_cmdline>  (3) 
+J2VwaWtfYXBwJywgJy1pbWFlJywgJy9Vc2Vycy9yb3NzL1dvcmsvbWVyY2tfZGF0YV9zZXRzL2ZlcC1iZW5jaG1hcmsvcGZrZmIzL2VwaWtfcG9wL2VwaWtfcG9wLm1hZWd6JywgJy1vbWFlJywgJ2VwaWtfcG9wLW91dC5tYWVneicsICctcGgnLCAnOC4wMCcsICctcycsICd3YXRlcic=
+
+>  <s_epik_input>  (3) 
+W09IXVtQSF0oW09IXSkoW09IXSlbT0hd
+
+>  <s_m_Source_File>  (3) 
+6hvi.pdb
+
+>  <s_m_Source_Path>  (3) 
+/Users/ross/Work/merck_data_sets/fep-benchmark/pfkfb3
+
+>  <s_m_entry_id>  (3) 
+194
+
+>  <s_m_entry_name>  (3) 
+6HVI - hbond-opt with PO4_mol2
+
+>  <s_m_job_name>  (3) 
+epik_pop
+
+>  <s_m_subgroup_title>  (3) 
+proteinprep_21728885_only-protein-out->pfkfb3_automap_protein - prepared_split_by_structure->6HVI - hbond-opt with PO4_split_by_molecule
+
+>  <s_m_subgroupid>  (3) 
+proteinprep_21728885_only-protein-out1->pfkfb3_automap_protein - prepared_split_by_structure1->6HVI - hbond-opt with PO4_split_by_molecule
+
+>  <s_pdb_PDB_CLASSIFICATION>  (3) 
+TRANSFERASE
+
+>  <s_pdb_PDB_CRYST1_Space_Group>  (3) 
+P 65 2 2
+
+>  <s_pdb_PDB_DEPOSITION_DATE>  (3) 
+11-OCT-18
+
+>  <s_pdb_PDB_EXPDTA>  (3) 
+X-RAY DIFFRACTION
+
+>  <s_pdb_PDB_ID>  (3) 
+6HVI
+
+>  <s_pdb_PDB_REMARK_350_Biomolecule_1_Transform_1_Chains>  (3) 
+A
+
+>  <s_pdb_PDB_REMARK_350_Biomolecule_1_Transform_1_Matrix_1>  (3) 
+1.000000 0.000000 0.000000   0.000000;0.000000 1.000000 0.000000   0.000000;0.000000 0.000000 1.000000   0.000000
+
+>  <s_pdb_PDB_TITLE>  (3) 
+HUMAN PFKFB3 IN COMPLEX WITH A N-ARYL 6-AMINOQUINOXALINE INHIBITOR 2
+
+>  <s_pdb_PDB_format_version>  (3) 
+3.2999999999999998
+
+>  <s_ppw_entry_id_backup>  (3) 
+204
+
+>  <s_ppw_het_states>  (3) 
+eJztWj1z1DAQ/Sse1zmjz9UudFS0DCWTIhNSERKKUDCZ/Hcsyfbz6WKOC/ehfFylPK+1q7dvJSvSfavb983X/me9DWeNOj9rYpPRlKnpFJoaTYOmRdOh6dEkNOHNwZuDNw9vHt48vHl48/Dm4c3Dm4c3D28e3gjeCN4I3gjeCN4I3ih5i+2By0yjHmhMQOxvHei7MuA8OzdgPpOu1wC8Ep/lAY2AThbwMgBUWES+RguTLCwsMoDQ47OcxRFwqY8AwCdg1geNwGgRyk7TaGO6zRyI6TXI/xpjPofuCyBmbnzFlRY5MAzfUxG6T4F5xOF5BEYLGb1oSCUnagRyHAQgUUgYPqXACIGRH18xUTKqU0r1L923kd2+InvgrGkjhf0fq+kvzo8e4hsi0ofafrm7uLtqfl7dXFzf/U5PVfP98uL63Y/b6w/Np9XH25tvzeXtr5u7943+0HzuTdrosjVT4ROKg1Ac1I97NYQbUB0B1RFQHQHVEdzsPT+rCcqKhwYGQAogIKEDAKpDojpAFCFRHWwJuBLwA9WuY+47ue851LbTWjY5jCbLHKpE4sq0aVib9I1j35m/ybhuAlVnrTUDg9IR0aMytHaZQpMpdHuncEGCffs4FJqtFOraKZyrUJ2Awg0VmlNRuDAPrvQuFG4pZLOVQr0HCk9WyE+mcIdCPgiF9RTyXlS4pZCPo8KTFfJ8LlRPpXDXFdkcgsIqVuSdKPyfFXkfFNZTyHtR4a4r8kFUWEUhv8Ctie6s0TQwGDoK7DYZjEbLDOYd3soea0Gu7JPmCAzueyasbC05nQZfyv64Ygafyfa4Ygafye74dPPgi6xifhKD5kAMPscqrovB51jFh2dwHxNhzVVMdX1R/zuD1XxRH4bBfW+Ma/6i/l8Gz+M54HRwF3DAHcBpgCoDKGVUNYNRBqOMpYVBKOOAm+GN4Y3hjeFN4E30LCUhnb8GnL+GTDhyFNL5a5ACYFUCOEzldCDLugSQNE4pYVsCSBq7stMM4FCXU+iM0DmFzgidc2BSAKJKQA/SkM46P0hDdeSdU/g98t+T3t4vqoTGw92hyioUx1iwMivvN3ksykN1ShNNZ9XC9pGZozdanjm4PKuuUBSzGWOuCXyMvRJRmK2i0K9HFPOZYraOvDpRbMwU6yp5E8Xb6rG0epjO23j/LWpCOkfO49tCb6qjN3eL6ghZHbpmdSysI2/qOKI6+o5bN21PBCkWpFiQYkGKBSkWpFhm20OZckwKOSalAZsZbAG7mQoksS9IxwBwCWBFlnT/VZAwSfkRXwK0DiTHGiPNca8DuO0rKceCHMdmHtM6YOd3RocMah2vg/odr4OGtW2lH/NGyoM7QjOgyWA0WWdDMzzNwDSSEeBhscrXWfOeR22GvPprzGq6wvrwB+2tXlc=
+
+>  <s_ppw_prepared_with_version>  (3) 
+2020-2
+
+>  <ofe-name>  (3) 
+pfkfb3_automap_cofactor3
+
+>  <atom.dprop.PartialCharge>  (3) 
+0.89828061643573975 -0.17417854484584597 0.10671229246589872 0.89797722879383302 -0.17417854484584597 0.89828061643573975 -0.89025795873668456 -0.89025795873668456 -0.88663709577586913
+-0.88663709577586913 -0.89025795873668456 -0.89025795873668456 -0.58927488740947509 0.022191334101888869 0.022191334101888869 0.022191334101888869 0.022191334101888869 0.38192191306087708
+
+>  <charge_provenance>  (3) 
+{"openfe_version": "1.8.0", "openff_toolkit_version": "0.18.0", "rdkit_version": "2025.09.4", "charge_method": "nagl_off", "nagl_version": "0.5.4", "nagl_model": "openff-gnn-am1bcc-1.0.0.pt"}
+
+$$$$
