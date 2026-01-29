@@ -272,7 +272,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         )
         
     if network is None:
-        raise ValueError("Missing '*network.json' file in system '{system_name}' "
+        raise ValueError(f"Missing '*network.json' file in system '{system_name}' "
                          f"in benchmark set '{benchmark_set}'.")
     
     logger.info(
