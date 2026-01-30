@@ -10,14 +10,13 @@ from openfe import (
     SmallMoleculeComponent, SolventComponent, ProteinComponent,
 )
 from openfe.protocols.openmm_rfe.equil_rfe_methods import RelativeHybridTopologyProtocol
-import gufe
 
 from openfe_benchmarks.data import BenchmarkData
 from openfe_benchmarks.scripts import utils as ofebu
 
 class BenchmarkSystem(ABC):
     """
-    Abstract base class defining the components of a and alchemical network.
+    Abstract base class defining the components of an alchemical network.
 
     Parameters
     ----------
@@ -29,8 +28,8 @@ class BenchmarkSystem(ABC):
         OpenFE SolventComponent object
     forcefield : str
         Force field name supported by ``openff.forcefields``, i.e., "openff-2.3.0"
-    protocol : RelativeHybridTopologyProtocol
-        Object defining the protocol in the free energy calculation
+    settings : RelativeHybridTopologyProtocol
+        Object defining the settings in the free energy calculation
 
     Attributes
     ----------
@@ -52,12 +51,12 @@ class BenchmarkSystem(ABC):
         Partial charge type used in alchemical network for ligand and cofactors.
     protein : ProteinComponent
         ProteinComponent defining the host molecule of the benchmark system
-    protocol : RelativeHybridTopologyProtocol
-        Object defining the protocol in the free energy calculation
+    settings : RelativeHybridTopologyProtocol
+        Object defining the settings in the free energy calculation
     solvent : SolventComponent
         SolventComponent defining the solvent used for the benchmark system
     """
-    def __init__(self, bmd_obj: BenchmarkData, partial_charge_scheme: str, solvent: SolventComponent, forcefield, protocol=None):
+    def __init__(self, bmd_obj: BenchmarkData, partial_charge_scheme: str, solvent: SolventComponent, forcefield, settings=None):
         
         self.solvent = solvent
         self.benchmark_data = bmd_obj
@@ -65,7 +64,7 @@ class BenchmarkSystem(ABC):
         self.benchmark_set = bmd_obj.benchmark_set
         self.partial_charge_scheme = partial_charge_scheme
         self.forcefield = forcefield
-        self.protocol = self._protocol(forcefield) if protocol is None else protocol
+        self.settings = self._settings(forcefield) if settings is None else settings
         
         self._process_inputs(bmd_obj.ligands, bmd_obj.protein, bmd_obj.cofactors)
         self.initial_network = openfe.LigandNetwork.from_json(file=str(bmd_obj.network))
@@ -73,8 +72,8 @@ class BenchmarkSystem(ABC):
 
     @staticmethod
     @abstractmethod
-    def _protocol(forcefield) -> gufe.Protocol:
-        """Return the alchemical topology protocol for the benchmark system."""
+    def _settings(forcefield) -> gufe.Protocol:
+        """Return the alchemical topology settings for the benchmark system."""
         pass
 
 
@@ -102,7 +101,7 @@ class BenchmarkSystem(ABC):
     
     def generate_alchemical_network(self):
         """
-        Generate an alchemical network based on the initial network, protocol, 
+        Generate an alchemical network based on the initial network, settings, 
         solvent, ligand dictionary, protein, and cofactors.
         This method compiles the transformations required for the alchemical 
         network using the specified parameters and creates an 
@@ -114,13 +113,13 @@ class BenchmarkSystem(ABC):
         Notes
         -----
         - The `self.initial_network` should define the initial state of the network.
-        - The `self.protocol` specifies the protocol to be used for the transformations.
+        - The `self.settings` specifies the settings to be used for the transformations.
         - The `self.solvent`, `self.ligand_dict`, `self.protein`, and `self.cofactors` 
           are used to define the environment and components of the network.
         """
         
         transformations = ofebu.compile_network_transformations(
-            self.initial_network, self.protocol, self.solvent, self.ligand_dict, self.protein, self.cofactors
+            self.initial_network, self.settings, self.solvent, self.ligand_dict, self.protein, self.cofactors
         )
         self.network = openfe.AlchemicalNetwork(edges=transformations)
     
@@ -143,12 +142,8 @@ class BenchmarkSystem(ABC):
         to encode the network data into JSON format.
         """
         """"""
-        alchemical_network_json_fp = pathlib.Path(filename)
-        json.dump(
-            self.network.to_dict(),
-            alchemical_network_json_fp.open(mode="w"),
-            cls=gufe.tokenization.JSON_HANDLER.encoder
-        )
+        
+        self.network.to_json(file=filename)
         
     def print_alchemical_network(self):
         """
@@ -174,8 +169,8 @@ class RBFEBenchmarkSystem(BenchmarkSystem):
         SolventComponent defining the solvent used for the benchmark system
     forcefield : str
         Force field name supported by ``openff.forcefields``, i.e., "openff-2.3.0"
-    protocol : RelativeHybridTopologyProtocol
-        Object defining the protocol in the free energy calculation
+    settings : RelativeHybridTopologyProtocol
+        Object defining the settings in the free energy calculation
 
     Attributes
     ----------
@@ -197,14 +192,14 @@ class RBFEBenchmarkSystem(BenchmarkSystem):
         Partial charge type used in alchemical network for ligand and cofactors.
     protein : ProteinComponent
         ProteinComponent defining the host molecule of the benchmark system
-    protocol : RelativeHybridTopologyProtocol
-        Object defining the protocol in the free energy calculation
+    settings : RelativeHybridTopologyProtocol
+        Object defining the settings in the free energy calculation
     solvent : SolventComponent
         SolventComponent defining the solvent used for the benchmark system
     """
 
     @staticmethod
-    def _protocol(forcefield) -> RelativeHybridTopologyProtocol:
+    def _settings(forcefield) -> RelativeHybridTopologyProtocol:
         """Utility method for getting RFEProtocol settings for non charge changing transformations.
         """
         # Are there additional settings we should specify here?
