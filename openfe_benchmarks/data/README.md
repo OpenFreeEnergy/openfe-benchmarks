@@ -23,10 +23,10 @@ industry_benchmark_systems/
 
 ### Supported Partial Charge Types:
 
-- `antechamber_am1bcc` - AM1-BCC charges calculated with AmberTools 24.8
+- `antechamber_am1bcc` - AM1-BCC charges calculated with AmberTools 24.8 at the input conformer
 - `nagl_openff-gnn-am1bcc-1.0.0.pt` - NAGL AM1-BCC charges
-- `openeye_am1bcc` - OpenEye AM1-BCC charges
-- `openeye_am1bccelf10` - OpenEye AM1-BCC ELF10 charges
+- `openeye_am1bcc` - OpenEye AM1-BCC charges generated at the input conformer
+- `openeye_am1bccelf10` - OpenEye AM1-BCC ELF10 charges using a conformer ensemble size of 500
 
 **Notes**:
 - All charges generated using `openfe_benchmarks/data/data_generation/conda-lock_linux-64.yml`.
