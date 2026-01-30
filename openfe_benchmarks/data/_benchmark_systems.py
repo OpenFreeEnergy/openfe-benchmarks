@@ -278,7 +278,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
     logger.info(
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
         f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s)."
-        f" Found protein file: {protein_path is None}."
+        f" Found protein file: {protein_path is not None}."
     )
     
     return BenchmarkData(
