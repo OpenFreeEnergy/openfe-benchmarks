@@ -27,22 +27,17 @@ classifiers = [
 ]
 urls = { "Homepage" = "https://github.com/OpenFreeEnergy/openfe-benchmarks" }
 
-[project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-xdist",
-]
+[tool.setuptools_scm]
+fallback_version = "0.0.0"
+
+[tool.setuptools]
+packages = ["openfe_benchmarks"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"openfe_benchmarks" = ["data/*"]
 
 [tool.mypy]
 files = "openfe_benchmarks"
 ignore_missing_imports = true
 warn_unused_ignores = true
-
-[tool.setuptools_scm]
-fallback_version = "0.0.0"
-
-[tool.setuptools]
-include-package-data = true
-
-[tool.setuptools.package-data]
-"openfe_benchmarks" = ["data/*"]
