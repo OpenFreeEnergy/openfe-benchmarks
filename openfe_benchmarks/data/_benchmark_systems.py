@@ -272,13 +272,13 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         )
         
     if network is None:
-        raise ValueError("Missing '*network.json' file in system '{system_name}' "
+        raise ValueError(f"Missing '*network.json' file in system '{system_name}' "
                          f"in benchmark set '{benchmark_set}'.")
     
     logger.info(
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
         f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s)."
-        f" Found protein file: {protein_path is None}."
+        f" Found protein file: {protein_path is not None}."
     )
     
     return BenchmarkData(
