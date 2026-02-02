@@ -29,12 +29,13 @@ def process_components(benchmark_sys):
         raise ValueError("Valid protein pdb is required.")
     protein = ProteinComponent.from_pdb_file(str(benchmark_sys.protein))
 
+    cofactors = None
     if benchmark_sys.cofactors is not None:
         cofactors = ofebu.process_sdf(benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=False)
 
     return network0, ligand_dict, protein, cofactors
 
-def compile_network_transformations(network, solvent, ligands_by_name, protein, cofactors)
+def compile_network_transformations(network, solvent, ligands_by_name, protein, cofactors):
     transformations = []
     for edge in network.edges:
         new_edge = openfe.LigandAtomMapping(
@@ -55,22 +56,22 @@ def compile_network_transformations(network, solvent, ligands_by_name, protein, 
             if leg == "complex":
                 system_a_dict["protein"] = protein
                 system_b_dict["protein"] = protein
-    
+
                 if cofactors is not None:
                     for i, cofactor in enumerate(cofactors):
                         cofactor_name = f"cofactor_{i}"
                         system_a_dict[cofactor_name] = cofactor
                         system_b_dict[cofactor_name] = cofactor
-    
+
             system_a = openfe.ChemicalSystem(system_a_dict)
             system_b = openfe.ChemicalSystem(system_b_dict)
-    
+
             name = f"{leg}_{new_edge.componentA.name}_{new_edge.componentB.name}"
-            
+
             # Create protocol with adaptive settings
             transformation_protocol = RelativeHybridTopologyProtocol
-            protocol_settings = transformation_protocol.settings.unfrozen_copy()
-    
+            protocol_settings = RelativeHybridTopologyProtocol.default_settings()
+
             if isinstance(transformation_protocol, RelativeHybridTopologyProtocol):
                 # adaptive transformation settings are only supported for RelativeHybridTopologyProtocol currently
                 protocol_settings = transformation_protocol._adaptive_settings(
@@ -80,11 +81,11 @@ def compile_network_transformations(network, solvent, ligands_by_name, protein, 
                     initial_settings=protocol_settings,
                 )
     
-            transformation_name = self.name + "_" + system_a.name + "_" + system_b.name
+            transformation_name = "test" + "_" + system_a.name + "_" + system_b.name
             if "vacuum" in transformation_name: # usually detected with transformation_name, likely doesn't apply here
                 protocol_settings.nonbonded_method = "nocutoff"
-    
-            transformation_protocol = transformation_protocol.__class__(settings=protocol_settings)
+
+            transformation_protocol = RelativeHybridTopologyProtocol(settings=protocol_settings)
 
             # Create transformation
             transformation = openfe.Transformation(
