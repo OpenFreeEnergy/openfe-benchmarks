@@ -1,10 +1,8 @@
 name: openfe-benchmarks-test
 channels:
   - conda-forge
-  - openeye
 dependencies:
   - gufe
   - openfe
-  - openeye-toolkits
   - pytest
   - loguru
