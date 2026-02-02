@@ -6,10 +6,10 @@ This directory contains benchmark system data for OpenFE (Open Free Energy) calc
 
 ### Structure
 
-The `industry_benchmark_systems/` directory contains remediated benchmark inputs organized as:
+The `benchmark_systems/` directory contains remediated benchmark inputs organized as:
 
 ```
-industry_benchmark_systems/
+benchmark_systems/
 ├── <benchmark_set>/           # e.g., jacs_set, fragments, janssen_bace, mcs_docking_set
 │   └── <system_name>/         # e.g., p38, tyk2, mcl1
 │       ├── PREPARATION_DETAILS.md          # System preparation documentation generated
@@ -50,14 +50,14 @@ benchmark_sets = list_benchmark_sets()
 print(f"Available sets: {benchmark_sets}")
 
 # List systems in a benchmark set
-systems = list_data_systems('industry_benchmark_systems.jacs_set')
+systems = list_data_systems('jacs_set')
 print(f"Systems in jacs_set: {systems}")
 
 # Load a specific benchmark system
-system = get_benchmark_data_system('industry_benchmark_systems.jacs_set', 'p38')
+system = get_benchmark_data_system('jacs_set', 'p38')
 
 # Load all benchmark systems in a set
-systems = get_benchmark_set_data_systems('industry_benchmark_systems')
+systems = get_benchmark_set_data_systems('jacs_set')
 
 # Access system components
 print(f"Protein: {system.protein}")
@@ -66,7 +66,7 @@ print(f"Cofactors: {system.cofactors}")  # Dict mapping charge type to file path
 print(f"Networks: {system.network}")  # Network JSON file paths
 ```
 
-For a complete tutorial on interaction with benchmark dataset, see `examples/using_industry_benchmark_systems.ipynb`.
+For a complete tutorial on interaction with benchmark dataset, see `examples/using_benchmark_systems.ipynb`.
 For an example on applying a dataset, see `examples/building_networks.ipynb`.
 
 ## Additional Resources
@@ -74,14 +74,14 @@ For an example on applying a dataset, see `examples/building_networks.ipynb`.
 - **OpenFE Documentation**: https://docs.openfree.energy
 - **GUFE Documentation**: https://gufe.openfree.energy
 - **Example Notebooks**: See `examples/` directory for:
-  - `using_industry_benchmark_systems.ipynb` - How to use the benchmark systems API
+  - `using_benchmark_systems.ipynb` - How to use the benchmark systems API
   - `building_networks.ipynb` - Creating ligand networks
 
 ## Contributing
 
 When adding new benchmark systems:
 
-1. Follow the directory structure in `industry_benchmark_systems/`
+1. Follow the directory structure in `benchmark_systems/`
 2. Document preparation details in `PREPARATION_DETAILS.md` within the system directory
 3. Name files according to conventions:
    - `protein.pdb` for protein structures
