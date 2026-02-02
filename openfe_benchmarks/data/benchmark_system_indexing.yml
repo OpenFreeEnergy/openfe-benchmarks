@@ -1,0 +1,101 @@
+# Benchmark System Indexing by Calculation Type
+#
+# This file categorizes benchmark systems based on the inputs required for
+# different OpenFE calculation types:
+#
+# - rbfe (Relative Binding Free Energy): Requires protein, ligands, and network
+# - abfe (Absolute Binding Free Energy): Requires protein and ligands (no network)
+# - rsfe (Relative Solvation Free Energy): Requires ligands and network (no protein)
+# - asfe (Absolute Solvation Free Energy): Requires ligands only (no protein, no network)
+#
+# Note: All current benchmark systems include network files and have protein structures,
+# making them suitable for RBFE calculations. Systems without proteins would be
+# suitable for RSFE calculations.
+
+calculation_types:
+  rbfe:
+    description: "Relative Binding Free Energy - requires protein, ligands, and network"
+    benchmark_sets:
+      charge_annihilation_set:
+        - cdk2
+        - dlk
+        - egfr
+        - ephx2
+        - irak4_s2
+        - irak4_s3
+        - itk
+        - jak1
+        - jnk1
+        - ptp1b
+        - thrombin
+        - tyk2
+      fragments:
+        - hsp90_2rings
+        - hsp90_single_ring
+        - jak2_set1
+        - jak2_set2
+        - liga
+        - mcl1
+        - mup1
+        - p38
+        - t4_lysozyme
+      jacs_set:
+        - bace
+        - cdk2
+        - jnk1
+        - mcl1
+        - p38
+        - ptp1b
+        - thrombin
+        - tyk2
+      janssen_bace:
+        - bace_ciordia_prospective
+        - bace_p3_arg368_in
+        - ciordia_retro
+        - keranen_p2
+      mcs_docking_set:
+        - hne
+        - renin
+      merck:
+        - cdk8
+        - cmet
+        - eg5
+        - hif2a
+        - pfkfb3
+        - shp2
+        - syk
+        - tnks2
+      miscellaneous_set:
+        - btk
+        - cdk8
+        - faah
+        - galectin
+        - hiv1_protease
+      water_set:
+        - brd4
+        - chk1
+        - hsp90_kung
+        - hsp90_woodhead
+        - scyt_dehyd
+        - taf12
+        - thrombin
+        - urokinase
+  abfe:
+    description: "Absolute Binding Free Energy - requires protein and ligands (no network)"
+    benchmark_sets: {}
+    # Note: No systems currently available without networks
+  rsfe:
+    description: "Relative Solvation Free Energy - requires ligands and network (no protein)"
+    benchmark_sets: {}
+    # Note: No systems currently available without proteins (all have protein.pdb)
+  asfe:
+    description: "Absolute Solvation Free Energy - requires ligands only (no protein, no network)"
+    benchmark_sets: {}
+    # Note: No systems currently available without proteins and networks
+metadata:
+  total_systems: 56
+  last_updated: "2026-02-02"
+  notes:
+    - "Benchmark systems configured for RBFE calculations can be used for ABFEs, ASFEs, and RSFEs"
+    - "RSFE and ABFE systems can be used for ASFE calculations"
+    - "Systems may also include cofactor files"

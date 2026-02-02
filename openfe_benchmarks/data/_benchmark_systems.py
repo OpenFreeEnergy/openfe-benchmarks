@@ -7,23 +7,202 @@ with the OpenFE toolkit.
 
 from pathlib import Path
 from dataclasses import dataclass
+import yaml
 
 from loguru import logger
 
 __all__ = [
     'BenchmarkData',
+    'BenchmarkIndex',
     'get_benchmark_data_system',
     'list_benchmark_sets',
     'list_data_systems',
     'PARTIAL_CHARGE_TYPES',
     'get_benchmark_set_data_systems',
+    'get_system_index',
 ]
 
 # Supported partial charge types
 PARTIAL_CHARGE_TYPES = ["antechamber_am1bcc", "nagl_openff-gnn-am1bcc-1.0.0.pt", "openeye_am1bcc", "openeye_am1bccelf10"]
 
-# Base directory for industry benchmark systems
 _BASE_DIR = Path(__file__).resolve().parent / "benchmark_systems"
+_INDEX_FILE = Path(__file__).resolve().parent / "benchmark_system_indexing.yml"
+
+
+class BenchmarkIndex:
+    """
+    Singleton class that manages the benchmark system index.
+    
+    Loads and caches the benchmark system index from YAML on first access.
+    Provides methods to query systems by calculation type and validate
+    the index against the filesystem.
+    """
+    _instance = None
+    _data = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
+    def __init__(self):
+        # Only load once
+        if self._data is None:
+            self.reload()
+    
+    def reload(self):
+        """Reload the index from the YAML file."""
+        try:
+            with open(_INDEX_FILE, 'r') as f:
+                self._data = yaml.safe_load(f)
+            logger.debug(f"Loaded benchmark index from {_INDEX_FILE}")
+        except FileNotFoundError:
+            raise ValueError(
+                f"Benchmark system index file not found at {_INDEX_FILE}"
+            )
+        except Exception as e:
+            raise ValueError(
+                f"Error reading benchmark system index file: {e}"
+            )
+        
+        if 'calculation_types' not in self._data:
+            raise ValueError(
+                "Invalid index file format: missing 'calculation_types' key"
+            )
+    
+    def get_all_systems(self) -> dict[str, list[str]]:
+        """
+        Get all benchmark systems from all calculation types.
+        
+        Returns
+        -------
+        dict[str, list[str]]
+            Dictionary mapping benchmark set names to lists of system names.
+        """
+        all_systems = {}
+        
+        for calc_type in self._data['calculation_types'].values():
+            if 'benchmark_sets' in calc_type and calc_type['benchmark_sets']:
+                for set_name, systems in calc_type['benchmark_sets'].items():
+                    if set_name in all_systems:
+                        # Merge and deduplicate
+                        all_systems[set_name] = sorted(list(set(all_systems[set_name] + systems)))
+                    else:
+                        all_systems[set_name] = systems
+        
+        return all_systems
+    
+    def get_systems_for_calculation(self, calculation_type: str) -> dict[str, list[str]]:
+        """
+        Get all systems that can be used for a specific calculation type.
+        
+        Applies logic for system reuse:
+        - RBFE systems can be used for any calculation type
+        - RSFE and ABFE systems can be used for ASFE
+        
+        Parameters
+        ----------
+        calculation_type : str
+            The type of calculation: 'rbfe', 'abfe', 'asfe', or 'rsfe'.
+        
+        Returns
+        -------
+        dict[str, list[str]]
+            Dictionary mapping benchmark set names to lists of system names.
+        
+        Raises
+        ------
+        ValueError
+            If the calculation_type is not valid.
+        """
+        valid_types = ['rbfe', 'abfe', 'asfe', 'rsfe']
+        
+        if calculation_type not in valid_types:
+            raise ValueError(
+                f"Invalid calculation type '{calculation_type}'. "
+                f"Valid types are: {valid_types}"
+            )
+        
+        calc_types = self._data['calculation_types']
+        
+        # Helper function to merge systems
+        def _merge_systems(target_dict: dict, source_dict: dict):
+            for set_name, systems in source_dict.items():
+                if set_name in target_dict:
+                    target_dict[set_name] = sorted(list(set(target_dict[set_name] + systems)))
+                else:
+                    target_dict[set_name] = systems
+        
+        # Get systems for the requested calculation type
+        result = {}
+        
+        # Add systems specifically categorized for this calculation type
+        if calculation_type in calc_types:
+            calc_data = calc_types[calculation_type]
+            if 'benchmark_sets' in calc_data and calc_data['benchmark_sets']:
+                result = dict(calc_data['benchmark_sets'])
+        
+        # RBFE systems can be used for any calculation type
+        if calculation_type != 'rbfe' and 'rbfe' in calc_types:
+            rbfe_data = calc_types['rbfe']
+            if 'benchmark_sets' in rbfe_data and rbfe_data['benchmark_sets']:
+                _merge_systems(result, rbfe_data['benchmark_sets'])
+        
+        # For ASFE, also include RSFE and ABFE systems
+        if calculation_type == 'asfe':
+            if 'rsfe' in calc_types:
+                rsfe_data = calc_types['rsfe']
+                if 'benchmark_sets' in rsfe_data and rsfe_data['benchmark_sets']:
+                    _merge_systems(result, rsfe_data['benchmark_sets'])
+            
+            if 'abfe' in calc_types:
+                abfe_data = calc_types['abfe']
+                if 'benchmark_sets' in abfe_data and abfe_data['benchmark_sets']:
+                    _merge_systems(result, abfe_data['benchmark_sets'])
+        
+        return result
+
+# Module-level instance
+_benchmark_index = BenchmarkIndex()
+
+
+def get_system_index(calculation_type: str) -> dict[str, list[str]]:
+    """
+    Get all benchmark systems that can be used for a specific calculation type.
+    
+    Systems categorized as 'rbfe' can be used for any calculation type since they
+    have all required inputs (protein, ligands, network). Additionally:
+    - RSFE and ABFE systems can be used for ASFE calculations
+    - Other calculation types return their specifically categorized systems plus
+      any systems that can be reused.
+    
+    Parameters
+    ----------
+    calculation_type : str
+        The type of calculation: 'rbfe', 'abfe', 'asfe', or 'rsfe'.
+    
+    Returns
+    -------
+    dict[str, list[str]]
+        Dictionary mapping benchmark set names to lists of system names that can
+        be used for the specified calculation type.
+    
+    Raises
+    ------
+    ValueError
+        If the calculation_type is not valid or if the index file cannot be read.
+    
+    Examples
+    --------
+    >>> systems = get_system_index('rbfe')
+    >>> print(systems['jacs_set'])
+    ['bace', 'cdk2', 'jnk1', 'mcl1', 'p38', 'ptp1b', 'thrombin', 'tyk2']
+    
+    >>> systems = get_system_index('asfe')
+    >>> # Returns rbfe, abfe, and rsfe systems since they can be used for asfe
+    """
+    return _benchmark_index.get_systems_for_calculation(calculation_type)
+    
 
 @dataclass
 class BenchmarkData:
@@ -69,57 +248,17 @@ class BenchmarkData:
 
 def _discover_benchmark_sets() -> dict[str, list[str]]:
     """
-    Discover all available benchmark sets and their data systems.
+    Discover all available benchmark sets and their data systems from the index.
     
-    A benchmark data system is identified by the presence of a 'PREPARATION_DETAILS.md' file
-    (case-insensitive) in its directory. Benchmark sets are represented as hierarchical
-    dot-separated paths (e.g., 'charge_annihilation_set').
+    Uses the YAML index file instead of filesystem traversal for better
+    performance. Systems are loaded from benchmark_system_indexing.yml.
     
     Returns
     -------
     dict[str, list[str]]
         Dictionary mapping fully qualified benchmark set names to lists of data system names.
     """
-    def _get_qualified_name(path: Path) -> str:
-        """Convert a path to a dot-separated qualified name."""
-        return ".".join(path.relative_to(_BASE_DIR).parts)
-    
-    def _has_preparation_details(directory: Path) -> bool:
-        """Check if directory contains PREPARATION_DETAILS.md (case-insensitive)."""
-        for file in directory.glob('*'):
-            if file.is_file() and file.name.lower() == 'preparation_details.md':
-                return True
-        return False
-    
-    benchmark_sets = {}
-    
-    # Recursively traverse directory structure to find benchmark data systems
-    def _traverse(current_path: Path, depth: int = 0, max_depth: int = 5):
-        """Recursively traverse directories to find benchmark data systems."""
-        if depth > max_depth:
-            return
-        
-        for item in current_path.iterdir():
-            if not item.is_dir() or item.name.startswith('_') or item.name.startswith('.'):
-                continue
-            
-            # Check if this directory contains systems with PREPARATION_DETAILS.md
-            systems = []
-            for potential_system in item.iterdir():
-                if potential_system.is_dir() and _has_preparation_details(potential_system):
-                    systems.append(potential_system.name)
-            
-            if systems:
-                # This is a benchmark set
-                set_name = _get_qualified_name(item)
-                benchmark_sets[set_name] = sorted(systems)
-            else:
-                # Continue traversing deeper
-                _traverse(item, depth + 1, max_depth)
-    
-    _traverse(_BASE_DIR)
-    
-    return benchmark_sets
+    return _benchmark_index.get_all_systems()
 
 
 def _validate_and_load_data_system(system_path: Path, system_name: str, 
