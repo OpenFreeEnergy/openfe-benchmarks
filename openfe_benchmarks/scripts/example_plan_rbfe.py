@@ -1,12 +1,10 @@
-import json
+"""
+This module provides an example script for planning relative binding free energy (RBFE) calculations.
+It demonstrates how to process benchmark systems, compile alchemical transformations, and save the resulting network to a JSON file.
+"""
 
-from rdkit import Chem
-
-from openff.units import unit
 import openfe
-from openfe import (
-    SmallMoleculeComponent, SolventComponent, ProteinComponent,
-)
+from openfe import SolventComponent, ProteinComponent
 from openfe.protocols.openmm_rfe.equil_rfe_methods import RelativeHybridTopologyProtocol
 
 from openfe_benchmarks.data import get_benchmark_data_system
@@ -20,6 +18,20 @@ FORCEFIELD = 'openff-2.3.0'
 FILENAME = f"network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
 
 def process_components(benchmark_sys):
+
+    """
+    Process the components of a benchmark system.
+
+    Parameters
+    ----------
+    benchmark_sys : BenchmarkData
+        The benchmark system to process.
+
+    Returns
+    -------
+    tuple
+        A tuple containing the ligand network, ligand dictionary, protein component, and cofactors.
+    """
 
     if benchmark_sys.network is None:
         raise ValueError("Valid protein network.json is required.")
@@ -36,6 +48,27 @@ def process_components(benchmark_sys):
     return network0, ligand_dict, protein, cofactors
 
 def compile_network_transformations(network, solvent, ligands_by_name, protein, cofactors):
+    """
+    Compile alchemical transformations for a given network.
+
+    Parameters
+    ----------
+    network : LigandNetwork
+        The alchemical network containing edges to transform.
+    solvent : SolventComponent
+        The solvent component for the transformations.
+    ligands_by_name : dict
+        Dictionary mapping ligand names to SmallMoleculeComponent objects.
+    protein : ProteinComponent
+        The protein component for the transformations.
+    cofactors : list or None
+        List of cofactor components, if any.
+
+    Returns
+    -------
+    list
+        A list of alchemical transformations.
+    """
     transformations = []
     for edge in network.edges:
         new_edge = openfe.LigandAtomMapping(
@@ -101,6 +134,12 @@ def compile_network_transformations(network, solvent, ligands_by_name, protein, 
 
 
 def main():
+    """
+    Main function to process the benchmark system and save the alchemical network.
+
+    This function retrieves the benchmark system, processes its components, compiles the transformations,
+    and saves the resulting alchemical network to a JSON file.
+    """
     benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
     network0, ligand_dict, protein, cofactors = process_components(benchmark_sys)
     
