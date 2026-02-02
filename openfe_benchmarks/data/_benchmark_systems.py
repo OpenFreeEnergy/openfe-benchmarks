@@ -23,7 +23,7 @@ __all__ = [
 PARTIAL_CHARGE_TYPES = ["antechamber_am1bcc", "nagl_openff-gnn-am1bcc-1.0.0.pt", "openeye_am1bcc", "openeye_am1bccelf10"]
 
 # Base directory for industry benchmark systems
-_BASE_DIR = Path(__file__).parent
+_BASE_DIR = Path(__file__).resolve().parent / "benchmark_systems"
 
 @dataclass
 class BenchmarkData:
@@ -37,7 +37,7 @@ class BenchmarkData:
         Name of the benchmark data system
     benchmark_set : str
         Fully qualified name of the benchmark set this data system belongs to
-        (e.g., 'industry_benchmark_systems.charge_annihilation_set')
+        (e.g., 'charge_annihilation_set')
     protein : Path | None
         Path to the protein PDB file (optional, can be None)
     ligands : dict[str, Path]
@@ -73,7 +73,7 @@ def _discover_benchmark_sets() -> dict[str, list[str]]:
     
     A benchmark data system is identified by the presence of a 'PREPARATION_DETAILS.md' file
     (case-insensitive) in its directory. Benchmark sets are represented as hierarchical
-    dot-separated paths (e.g., 'industry_benchmark_systems.charge_annihilation_set').
+    dot-separated paths (e.g., 'charge_annihilation_set').
     
     Returns
     -------
@@ -298,7 +298,7 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
     Parameters
     ----------
     benchmark_set : str
-        Fully qualified name of the benchmark set (e.g., 'industry_benchmark_systems.charge_annihilation_set').
+        Fully qualified name of the benchmark set (e.g., 'charge_annihilation_set').
     system_name : str
         Name of the system within the benchmark set (e.g., 'cdk2', 'tyk2').
 
@@ -314,7 +314,7 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
 
     Examples
     --------
-    >>> system = get_benchmark_data_system('industry_benchmark_systems.jacs_set', 'p38')
+    >>> system = get_benchmark_data_system('jacs_set', 'p38')
     >>> print(system.protein)
     >>> print(system.ligands['antechamber_am1bcc'])
     """

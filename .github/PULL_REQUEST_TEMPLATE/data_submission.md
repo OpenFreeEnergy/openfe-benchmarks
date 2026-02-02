@@ -4,7 +4,7 @@
 
 Please ensure the following criteria are met before submitting the PR:
 
-- [ ] **Data Format**: All files are in the expected format as outlined in `openfe_benchmarks/data/industry_benchmark_systems/README.md`.
+- [ ] **Data Format**: All files are in the expected format as outlined in `openfe_benchmarks/data/benchmark_systems/README.md`.
 - [ ] A `ligand.sdf` file is present
 - [ ] A `protein.pdb` file is present for binding free energy calculations (bfe)
 - [ ] **Documentation**: A `PREPARATION_DETAILS.md` file is included in the data directory, describing:
