@@ -223,18 +223,18 @@ class BenchmarkData:
         Dictionary mapping charge type to ligand SDF file path.
         Always includes 'no_charges' key for the base ligands.sdf file.
         May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
-    cofactors : dict[str, Path]
+    cofactors : dict[str, Path] | None
         Dictionary mapping charge type to cofactor SDF file path (optional).
         May include 'no_charges' key for the base cofactors.sdf file.
         May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
     network : Path
-        Paths to network file '*network.json'
+        Path to network file '*network.json'
     """
     name: str
     benchmark_set: str
     protein: Path | None  # Updated typing to allow None
     ligands: dict[str, Path]
-    cofactors: dict[str, Path]
+    cofactors: dict[str, Path] | None
     network: Path
     
     def __repr__(self):
@@ -409,15 +409,12 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             f"Missing required 'ligands.sdf' file in system '{system_name}' "
             f"in benchmark set '{benchmark_set}'."
         )
-        
-    if network is None:
-        raise ValueError(f"Missing '*network.json' file in system '{system_name}' "
-                         f"in benchmark set '{benchmark_set}'.")
-    
+
     logger.info(
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
-        f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s)."
-        f" Found protein file: {protein_path is not None}."
+        f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s).\n"
+        f"Found protein file: {protein_path is not None}.\n"
+        f"Found network file: {network is not None}."
     )
     
     return BenchmarkData(
