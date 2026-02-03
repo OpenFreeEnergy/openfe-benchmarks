@@ -15,11 +15,8 @@ __all__ = [
     'BenchmarkData',
     'BenchmarkIndex',
     'get_benchmark_data_system',
-    'list_benchmark_sets',
-    'list_data_systems',
-    'PARTIAL_CHARGE_TYPES',
     'get_benchmark_set_data_systems',
-    'get_system_index',
+    'PARTIAL_CHARGE_TYPES',
 ]
 
 # Supported partial charge types
@@ -54,7 +51,7 @@ class BenchmarkIndex:
         """Reload the index from the YAML file."""
         try:
             with open(_INDEX_FILE, 'r') as f:
-                self._data = yaml.safe_load(f)
+                raw_data = yaml.safe_load(f) or {}
             logger.debug(f"Loaded benchmark index from {_INDEX_FILE}")
         except FileNotFoundError:
             raise ValueError(
@@ -64,145 +61,126 @@ class BenchmarkIndex:
             raise ValueError(
                 f"Error reading benchmark system index file: {e}"
             )
+
+        # Adapt the structure to ensure 'systems' key exists
+        systems_data = {
+            key: value for key, value in raw_data.items() if key != 'metadata'
+        }
         
-        if 'calculation_types' not in self._data:
-            raise ValueError(
-                "Invalid index file format: missing 'calculation_types' key"
-            )
+        if not systems_data:
+            raise ValueError("Invalid index file format: no benchmark systems found.")
+
+        self._data = {'systems': systems_data}
+
+        logger.debug("Benchmark index successfully reloaded and validated.")
     
-    def get_all_systems(self) -> dict[str, list[str]]:
+    def list_systems_by_tag(self, tags: list[str]) -> list[tuple[str, str]]:
         """
-        Get all benchmark systems from all calculation types.
-        
-        Returns
-        -------
-        dict[str, list[str]]
-            Dictionary mapping benchmark set names to lists of system names.
-        """
-        all_systems = {}
-        
-        for calc_type in self._data['calculation_types'].values():
-            if 'benchmark_sets' in calc_type and calc_type['benchmark_sets']:
-                for set_name, systems in calc_type['benchmark_sets'].items():
-                    if set_name in all_systems:
-                        # Merge and deduplicate
-                        all_systems[set_name] = sorted(list(set(all_systems[set_name] + systems)))
-                    else:
-                        all_systems[set_name] = systems
-        
-        return all_systems
-    
-    def get_systems_for_calculation(self, calculation_type: str) -> dict[str, list[str]]:
-        """
-        Get all systems that can be used for a specific calculation type.
-        
-        Applies logic for system reuse:
-        - RBFE systems can be used for any calculation type
-        - RSFE and ABFE systems can be used for ASFE
+        Get all systems that match ANY of the provided tags.
         
         Parameters
         ----------
-        calculation_type : str
-            The type of calculation: 'rbfe', 'abfe', 'asfe', or 'rsfe'.
+        tags : list[str]
+            List of tags to filter by (e.g., ['bfe', 'cofactors']).
+            Systems matching any of these tags will be returned.
         
         Returns
         -------
-        dict[str, list[str]]
-            Dictionary mapping benchmark set names to lists of system names.
+        list[tuple[str, str]]
+            List of tuples containing (benchmark_set, system_name).
+        
+        Examples
+        --------
+        >>> index = BenchmarkIndex()
+        >>> systems = index.get_systems_by_tag(['bfe'])
+        >>> # Returns all systems tagged with 'bfe' (includes rbfe and abfe)
+        >>> systems_with_cofactors = index.get_systems_by_tag(['cofactors'])
+        >>> # Returns all systems that have cofactors
+        >>> bfe_with_cofactors = index.get_systems_by_tag(['bfe', 'cofactors'])
+        >>> # Returns systems with either 'bfe' OR 'cofactors' tags
+        """
+        if not self._data or not self._data.get('systems'):
+            logger.error("Benchmark index data is not loaded or is invalid.")
+            return []
+
+        matching_systems = []
+        
+        for benchmark_set, systems in self._data['systems'].items():
+            for system_name, system_data in systems.items():
+                # Check if any of the requested tags match
+                if all(tag in system_data for tag in tags):
+                    matching_systems.append((benchmark_set, system_name))
+        
+        return matching_systems
+    
+    def list_available_tags(self) -> set[str]:
+        """
+        Get all unique tags used across all systems.
+        
+        Returns
+        -------
+        set[str]
+            Set of all available tags.
+        """
+        if not self._data or not self._data.get('systems'):
+            logger.error("Benchmark index data is not loaded or is invalid.")
+            return set()
+
+        tags = set()
+        for systems in self._data['systems'].values():
+            for system_tags in systems.values():
+                tags.update(system_tags)
+
+        return tags
+    
+    def list_systems_by_benchmark_set(self, benchmark_set: str) -> list[str]:
+        """
+        Get all system names in a specific benchmark set.
+        
+        Parameters
+        ----------
+        benchmark_set : str
+            The benchmark set name.
+        
+        Returns
+        -------
+        list[str]
+            List of system names in the benchmark set.
         
         Raises
         ------
         ValueError
-            If the calculation_type is not valid.
+            If the benchmark set doesn't exist.
         """
-        valid_types = ['rbfe', 'abfe', 'asfe', 'rsfe']
-        
-        if calculation_type not in valid_types:
+        if not self._data or not self._data.get('systems'):
+            logger.error("Benchmark index data is not loaded or is invalid.")
+            return []
+
+        if benchmark_set not in self._data['systems']:
+            available = list(self._data['systems'].keys())
             raise ValueError(
-                f"Invalid calculation type '{calculation_type}'. "
-                f"Valid types are: {valid_types}"
+                f"Benchmark set '{benchmark_set}' not found. Available sets: {available}"
             )
         
-        calc_types = self._data['calculation_types']
+        return list(self._data['systems'][benchmark_set].keys())
+    
+    def list_benchmark_sets(self) -> list[str]:
+        """
+        List all available benchmark sets.
         
-        # Helper function to merge systems
-        def _merge_systems(target_dict: dict, source_dict: dict):
-            for set_name, systems in source_dict.items():
-                if set_name in target_dict:
-                    target_dict[set_name] = sorted(list(set(target_dict[set_name] + systems)))
-                else:
-                    target_dict[set_name] = systems
-        
-        # Get systems for the requested calculation type
-        result = {}
-        
-        # Add systems specifically categorized for this calculation type
-        if calculation_type in calc_types:
-            calc_data = calc_types[calculation_type]
-            if 'benchmark_sets' in calc_data and calc_data['benchmark_sets']:
-                result = dict(calc_data['benchmark_sets'])
-        
-        # RBFE systems can be used for any calculation type
-        if calculation_type != 'rbfe' and 'rbfe' in calc_types:
-            rbfe_data = calc_types['rbfe']
-            if 'benchmark_sets' in rbfe_data and rbfe_data['benchmark_sets']:
-                _merge_systems(result, rbfe_data['benchmark_sets'])
-        
-        # For ASFE, also include RSFE and ABFE systems
-        if calculation_type == 'asfe':
-            if 'rsfe' in calc_types:
-                rsfe_data = calc_types['rsfe']
-                if 'benchmark_sets' in rsfe_data and rsfe_data['benchmark_sets']:
-                    _merge_systems(result, rsfe_data['benchmark_sets'])
-            
-            if 'abfe' in calc_types:
-                abfe_data = calc_types['abfe']
-                if 'benchmark_sets' in abfe_data and abfe_data['benchmark_sets']:
-                    _merge_systems(result, abfe_data['benchmark_sets'])
-        
-        return result
+        Returns
+        -------
+        list[str]
+            Sorted list of benchmark set names.
+        """
+        if not self._data or not self._data.get('systems'):
+            logger.error("Benchmark index data is not loaded or is invalid.")
+            return []
+
+        return sorted(self._data['systems'].keys())
 
 # Module-level instance
 _benchmark_index = BenchmarkIndex()
-
-
-def get_system_index(calculation_type: str) -> dict[str, list[str]]:
-    """
-    Get all benchmark systems that can be used for a specific calculation type.
-    
-    Systems categorized as 'rbfe' can be used for any calculation type since they
-    have all required inputs (protein, ligands, network). Additionally:
-    - RSFE and ABFE systems can be used for ASFE calculations
-    - Other calculation types return their specifically categorized systems plus
-      any systems that can be reused.
-    
-    Parameters
-    ----------
-    calculation_type : str
-        The type of calculation: 'rbfe', 'abfe', 'asfe', or 'rsfe'.
-    
-    Returns
-    -------
-    dict[str, list[str]]
-        Dictionary mapping benchmark set names to lists of system names that can
-        be used for the specified calculation type.
-    
-    Raises
-    ------
-    ValueError
-        If the calculation_type is not valid or if the index file cannot be read.
-    
-    Examples
-    --------
-    >>> systems = get_system_index('rbfe')
-    >>> print(systems['jacs_set'])
-    ['bace', 'cdk2', 'jnk1', 'mcl1', 'p38', 'ptp1b', 'thrombin', 'tyk2']
-    
-    >>> systems = get_system_index('asfe')
-    >>> # Returns rbfe, abfe, and rsfe systems since they can be used for asfe
-    """
-    return _benchmark_index.get_systems_for_calculation(calculation_type)
-    
 
 @dataclass
 class BenchmarkData:
@@ -227,38 +205,27 @@ class BenchmarkData:
         Dictionary mapping charge type to cofactor SDF file path (optional).
         May include 'no_charges' key for the base cofactors.sdf file.
         May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
-    network : Path
-        Path to network file '*network.json'
+    networks : dict[str, Path] | None
+        Dictionary of available networks where the key is the filename, '*network.json', 
+        and the value is a Path to a network file.
+    details : str
+        Information available in the preparation_details.md file
     """
     name: str
     benchmark_set: str
     protein: Path | None  # Updated typing to allow None
     ligands: dict[str, Path]
     cofactors: dict[str, Path] | None
-    network: Path
+    networks: dict[str, Path] | None
+    details: str
     
     def __repr__(self):
         return (f"BenchmarkData(name='{self.name}', "
                 f"benchmark_set='{self.benchmark_set}', "
                 f"protein={self.protein.name if self.protein else 'None'}, "
                 f"ligands={list(self.ligands.keys())}, "
-                f"cofactors={list(self.cofactors.keys())}, "
-                f"network={self.network}")
-
-
-def _discover_benchmark_sets() -> dict[str, list[str]]:
-    """
-    Discover all available benchmark sets and their data systems from the index.
-    
-    Uses the YAML index file instead of filesystem traversal for better
-    performance. Systems are loaded from benchmark_system_indexing.yml.
-    
-    Returns
-    -------
-    dict[str, list[str]]
-        Dictionary mapping fully qualified benchmark set names to lists of data system names.
-    """
-    return _benchmark_index.get_all_systems()
+                f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else "None"}, "
+                f"network={list(self.networks.keys()) if self.networks is not None else "None"}")
 
 
 def _validate_and_load_data_system(system_path: Path, system_name: str, 
@@ -288,8 +255,9 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
     protein_path = None
     ligands = {}
     cofactors = {}
-    network = None
-    
+    networks = {}
+    details = None
+
     # Track all files for validation
     all_files = list(system_path.glob('*'))
     categorized_files = set()
@@ -302,6 +270,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         
         # Skip PREPARATION_DETAILS.md (case-insensitive)
         if filename.lower() == 'preparation_details.md':
+            details = file_path.read_text(encoding='utf-8')
             categorized_files.add(file_path)
             continue
         
@@ -359,10 +328,8 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             continue
         
         # Check for network file (network.json)
-        if filename.endswith('network.json'):
-            if network is not None:
-                raise ValueError(f"Multiple network files have been detected. The following has already been saved: {network}")
-            network = file_path
+        if 'network' in filename and filename.endswith('.json'):
+            networks[file_path.stem] = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found network: {filename}")
             continue
@@ -390,7 +357,14 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
                 f"where <charge_type> is one of {PARTIAL_CHARGE_TYPES}."
             )
 
-        logger.error(
+        if filename.endswith('.json'):
+            raise ValueError(
+                f"Uncategorized JSON file '{filename}' found in system '{system_name}' "
+                f"in benchmark set '{benchmark_set}'. Expected format: "
+                f"'*network*.json'"
+            )
+
+        raise ValueError(
             f"Uncategorized file '{filename}' found in system '{system_name}' "
             f"in benchmark set '{benchmark_set}'."
         )
@@ -409,12 +383,18 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             f"Missing required 'ligands.sdf' file in system '{system_name}' "
             f"in benchmark set '{benchmark_set}'."
         )
+        
+    if details is None:
+        raise ValueError(
+            "The file 'preparation_details.md' if missing from"
+            f"system '{system_name}' in benchmark set '{benchmark_set}'."
+        )
 
     logger.info(
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
         f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s).\n"
         f"Found protein file: {protein_path is not None}.\n"
-        f"Found network file: {network is not None}."
+        f"Found {len(networks)} network files"
     )
     
     return BenchmarkData(
@@ -423,7 +403,8 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         protein=protein_path,
         ligands=ligands,
         cofactors=cofactors,
-        network=network
+        networks=networks,
+        details=details,
     )
 
 
@@ -454,21 +435,20 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
     >>> print(system.protein)
     >>> print(system.ligands['antechamber_am1bcc'])
     """
-    # Discover available benchmark sets and systems
-    available_sets = _discover_benchmark_sets()
-    
     # Check if benchmark set exists
+    available_sets = _benchmark_index.list_benchmark_sets()
     if benchmark_set not in available_sets:
         raise ValueError(
             f"Benchmark set '{benchmark_set}' not found. "
-            f"Available benchmark sets: {sorted(available_sets.keys())}"
+            f"Available benchmark sets: {available_sets}"
         )
     
     # Check if system exists in the benchmark set
-    if system_name not in available_sets[benchmark_set]:
+    available_systems = _benchmark_index.list_systems_by_benchmark_set(benchmark_set)
+    if system_name not in available_systems:
         raise ValueError(
             f"System '{system_name}' not found in benchmark set '{benchmark_set}'. "
-            f"Available systems in '{benchmark_set}': {available_sets[benchmark_set]}"
+            f"Available systems in '{benchmark_set}': {available_systems}"
         )
     
     # Load and validate the system - convert dot-separated path to filesystem path
@@ -478,80 +458,38 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
     
     return _validate_and_load_data_system(system_path, system_name, benchmark_set)
 
-
-def list_benchmark_sets() -> list[str]:
-    """
-    List all available benchmark sets.
-
-    Returns
-    -------
-    list[str]
-        List of benchmark set names.
-    """
-    return sorted(_discover_benchmark_sets().keys())
-
-
-def list_data_systems(benchmark_set: str) -> list[str]:
-    """
-    List all systems in a given benchmark set.
-
-    Parameters
-    ----------
-    benchmark_set : str
-        Name of the benchmark set.
-
-    Returns
-    -------
-    list[str]
-        List of system names in the benchmark set.
-
-    Raises
-    ------
-    ValueError
-        If the benchmark set does not exist.
-    """
-    available_sets = _discover_benchmark_sets()
-    
-    if benchmark_set not in available_sets:
-        raise ValueError(
-            f"Benchmark set '{benchmark_set}' not found. "
-            f"Available benchmark sets: {sorted(available_sets.keys())}"
-        )
-    
-    return available_sets[benchmark_set]
-
-
 def get_benchmark_set_data_systems(benchmark_set: str) -> dict[str, BenchmarkData]:
     """
-    Return all systems in a given benchmark set.
+    Retrieve all benchmark systems in a given benchmark set.
 
     Parameters
     ----------
     benchmark_set : str
-        Name of the benchmark set.
+        The name of the benchmark set.
 
     Returns
     -------
     dict[str, BenchmarkData]
-        Dictionary of system names and BenchmarkData objects.
+        A dictionary of BenchmarkData objects for all systems in the benchmark set.
 
     Raises
     ------
     ValueError
         If the benchmark set does not exist.
     """
-    available_sets = _discover_benchmark_sets()
-    
+    # Check if benchmark set exists
+    available_sets = _benchmark_index.list_benchmark_sets()
     if benchmark_set not in available_sets:
         raise ValueError(
             f"Benchmark set '{benchmark_set}' not found. "
-            f"Available benchmark sets: {sorted(available_sets.keys())}"
+            f"Available benchmark sets: {available_sets}"
         )
-        
-    benchmark_systems = {}
-    for system_name in available_sets[benchmark_set]:
-        system_path = _BASE_DIR / benchmark_set.replace('.', '/') / system_name
-        logger.debug(f"Loading benchmark system '{system_name}' from '{benchmark_set}'...")
-        benchmark_systems[system_name] = _validate_and_load_data_system(system_path, system_name, benchmark_set)
-    
-    return benchmark_systems
+
+    # Retrieve all systems in the benchmark set
+    system_names = _benchmark_index.list_systems_by_benchmark_set(benchmark_set)
+
+    # Load and return all systems as BenchmarkData objects
+    return {
+        system_name: get_benchmark_data_system(benchmark_set, system_name)
+        for system_name in system_names
+    }
