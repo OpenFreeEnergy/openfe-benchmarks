@@ -1,7 +1,16 @@
 """
 This module provides an example script for planning relative binding free energy (RBFE) calculations.
-It demonstrates how to process benchmark systems, compile alchemical transformations, and save the resulting network to a JSON file.
+It demonstrates how to process benchmark systems, compile alchemical transformations, and save the
+resulting network to a JSON file.
+
+The alchemical_network.json file is a consolidation of each of the transformation files. It is the
+latter files that can be run on an HPC simply with:
+`openfe quickrun path/to/transformation.json -o results.json -d working-directory`
+See the [openfe tutorials](https://docs.openfree.energy/en/latest/tutorials/rbfe_cli_tutorial.html)
+for more details.
 """
+import copy
+import os
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
@@ -15,7 +24,9 @@ BENCHMARK_SET = "mcs_docking_set"
 BENCHMARK_SYS = "hne"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"
 FORCEFIELD = 'openff-2.3.0'
+LIG_NETWORK_FILE = "industry_benchmarks_network"
 FILENAME_ALCHEMICALNETWORK = f"alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
+OUTPUT_DIR = "outputs"
 
 def process_components(benchmark_sys):
 
@@ -33,9 +44,9 @@ def process_components(benchmark_sys):
         A tuple containing the ligand network, ligand dictionary, protein component, and cofactors.
     """
 
-    if benchmark_sys.network is None:
+    if not benchmark_sys.ligand_networks:
         raise ValueError("Valid protein network.json is required.")
-    lig_network = openfe.LigandNetwork.from_json(file=str(benchmark_sys.network))
+    lig_network = openfe.LigandNetwork.from_json(file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE]))
     ligand_dict = ofebu.process_sdf(benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=True)
     if benchmark_sys.protein is None:
         raise ValueError("Valid protein pdb is required.")
@@ -102,19 +113,16 @@ def compile_network_transformations(ligand_network, solvent, ligands_by_name, pr
             name = f"{leg}_{new_edge.componentA.name}_{new_edge.componentB.name}"
 
             # Create protocol with adaptive settings
-            transformation_protocol = RelativeHybridTopologyProtocol
-            protocol_settings = RelativeHybridTopologyProtocol.default_settings()
-
-            if isinstance(transformation_protocol, RelativeHybridTopologyProtocol):
-                # adaptive transformation settings are only supported for RelativeHybridTopologyProtocol currently
-                protocol_settings = transformation_protocol._adaptive_settings(
+            # adaptive transformation settings are only supported for RelativeHybridTopologyProtocol currently
+            protocol_settings = copy.deepcopy(RelativeHybridTopologyProtocol.default_settings())
+            transformation_protocol = RelativeHybridTopologyProtocol(
+                settings=RelativeHybridTopologyProtocol._adaptive_settings(
                     stateA=system_a,
                     stateB=system_b,
                     mapping=new_edge,
                     initial_settings=protocol_settings,
                 )
-
-            transformation_protocol = RelativeHybridTopologyProtocol(settings=protocol_settings)
+            )
 
             # Create transformation
             transformation = openfe.Transformation(
@@ -136,6 +144,7 @@ def main():
     This function retrieves the benchmark system, processes its components, compiles the transformations,
     and saves the resulting alchemical network to a JSON file.
     """
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
     benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
     lig_network, ligand_dict, protein, cofactors = process_components(benchmark_sys)
     
@@ -143,7 +152,11 @@ def main():
         lig_network, SOLVENT, ligand_dict, protein, cofactors
     )
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
-    alchem_network.to_json(file=FILENAME_ALCHEMICALNETWORK)
+    alchem_network.to_json(file=os.path.join(OUTPUT_DIR,FILENAME_ALCHEMICALNETWORK))
+    
+    # Write each leg for computation
+    for transformation in alchem_network.edges:
+        transformation.to_json(os.path.join(OUTPUT_DIR, f"{transformation.name}.json"))
 
 if __name__ == "__main__":
     main()
