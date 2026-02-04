@@ -19,3 +19,11 @@ The `openfe_benchmark` repository contains:
 ## Available Systems
 
 The available systems are indexed in the [benchmark_system_indexing.yml](openfe_benchmarks/data/benchmark_system_indexing.yml) file. This file provides a comprehensive list of the benchmark systems along with tags representing whether they can be used for `bfe` or `sfe` calculations and whether there are cofactors in the system. These systems can also be explored in Python, as demonstrated in the notebook [`1_initializing_benchmark_data.ipynb`](examples/1_initializing_benchmark_data.ipynb).
+
+## Additional Resources
+
+- **OpenFE Documentation**: https://docs.openfree.energy
+- **GUFE Documentation**: https://gufe.openfree.energy
+- **Example Notebooks**: See `examples/` directory for:
+  - `using_benchmark_systems.ipynb` - How to use the benchmark systems API
+  - `building_networks.ipynb` - Creating ligand networks

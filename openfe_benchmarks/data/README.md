@@ -69,14 +69,6 @@ print(f"Networks: {system.network}")  # Network JSON file paths
 For a complete tutorial on interaction with benchmark dataset, see `examples/using_benchmark_systems.ipynb`.
 For an example on applying a dataset, see `examples/building_networks.ipynb`.
 
-## Additional Resources
-
-- **OpenFE Documentation**: https://docs.openfree.energy
-- **GUFE Documentation**: https://gufe.openfree.energy
-- **Example Notebooks**: See `examples/` directory for:
-  - `using_benchmark_systems.ipynb` - How to use the benchmark systems API
-  - `building_networks.ipynb` - Creating ligand networks
-
 ## Contributing
 
 When adding new benchmark systems:
