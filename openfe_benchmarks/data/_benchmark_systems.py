@@ -224,8 +224,8 @@ class BenchmarkData:
                 f"benchmark_set='{self.benchmark_set}', "
                 f"protein={self.protein.name if self.protein else 'None'}, "
                 f"ligands={list(self.ligands.keys())}, "
-                f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else "None"}, "
-                f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else "None"}")
+                f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else 'None'}, "
+                f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else 'None'}")
 
 
 def _validate_and_load_data_system(system_path: Path, system_name: str, 

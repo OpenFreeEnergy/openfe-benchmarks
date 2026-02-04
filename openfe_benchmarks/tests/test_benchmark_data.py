@@ -101,8 +101,8 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
                     f"Cofactor {i+1} ({charge_type}) for {benchmark_set}/{system_name} has no atoms"
 
     # Validate network can be loaded with OpenFE
-    if system.networks:
-        for network_name, network_path in system.networks.items():
+    if system.ligand_networks:
+        for network_name, network_path in system.ligand_networks.items():
             network = LigandNetwork.from_json(file=str(network_path))
             assert hasattr(network, 'edges'), \
                 f"Network {network_name} for {benchmark_set}/{system_name} has no edges attribute"
