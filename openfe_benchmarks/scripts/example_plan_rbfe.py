@@ -15,7 +15,7 @@ BENCHMARK_SET = "mcs_docking_set"
 BENCHMARK_SYS = "hne"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"
 FORCEFIELD = 'openff-2.3.0'
-FILENAME = f"network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
+FILENAME_ALCHEMICALNETWORK = f"alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
 
 def process_components(benchmark_sys):
 
@@ -35,7 +35,7 @@ def process_components(benchmark_sys):
 
     if benchmark_sys.network is None:
         raise ValueError("Valid protein network.json is required.")
-    network0 = openfe.LigandNetwork.from_json(file=str(benchmark_sys.network))
+    lig_network = openfe.LigandNetwork.from_json(file=str(benchmark_sys.network))
     ligand_dict = ofebu.process_sdf(benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=True)
     if benchmark_sys.protein is None:
         raise ValueError("Valid protein pdb is required.")
@@ -45,15 +45,15 @@ def process_components(benchmark_sys):
     if benchmark_sys.cofactors is not None:
         cofactors = ofebu.process_sdf(benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=False)
 
-    return network0, ligand_dict, protein, cofactors
+    return lig_network, ligand_dict, protein, cofactors
 
-def compile_network_transformations(network, solvent, ligands_by_name, protein, cofactors):
+def compile_network_transformations(ligand_network, solvent, ligands_by_name, protein, cofactors):
     """
     Compile alchemical transformations for a given network.
 
     Parameters
     ----------
-    network : LigandNetwork
+    ligand_network : LigandNetwork
         The alchemical network containing edges to transform.
     solvent : SolventComponent
         The solvent component for the transformations.
@@ -70,7 +70,7 @@ def compile_network_transformations(network, solvent, ligands_by_name, protein, 
         A list of alchemical transformations.
     """
     transformations = []
-    for edge in network.edges:
+    for edge in ligand_network.edges:
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name], 
@@ -113,10 +113,6 @@ def compile_network_transformations(network, solvent, ligands_by_name, protein, 
                     mapping=new_edge,
                     initial_settings=protocol_settings,
                 )
-    
-            transformation_name = "test" + "_" + system_a.name + "_" + system_b.name
-            if "vacuum" in transformation_name: # usually detected with transformation_name, likely doesn't apply here
-                protocol_settings.nonbonded_method = "nocutoff"
 
             transformation_protocol = RelativeHybridTopologyProtocol(settings=protocol_settings)
 
@@ -141,13 +137,13 @@ def main():
     and saves the resulting alchemical network to a JSON file.
     """
     benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
-    network0, ligand_dict, protein, cofactors = process_components(benchmark_sys)
+    lig_network, ligand_dict, protein, cofactors = process_components(benchmark_sys)
     
     transformations = compile_network_transformations(
-        network0, SOLVENT, ligand_dict, protein, cofactors
+        lig_network, SOLVENT, ligand_dict, protein, cofactors
     )
-    network = openfe.AlchemicalNetwork(edges=transformations)
-    network.to_json(file=FILENAME)
+    alchem_network = openfe.AlchemicalNetwork(edges=transformations)
+    alchem_network.to_json(file=FILENAME_ALCHEMICALNETWORK)
 
 if __name__ == "__main__":
     main()
