@@ -115,13 +115,14 @@ def compile_network_transformations(ligand_network, solvent, ligands_by_name, pr
             # Create protocol with adaptive settings
             # adaptive transformation settings are only supported for RelativeHybridTopologyProtocol currently
             protocol_settings = copy.deepcopy(RelativeHybridTopologyProtocol.default_settings())
+            protocol_settings.forcefield_settings.small_molecule_forcefield = FORCEFIELD
             transformation_protocol = RelativeHybridTopologyProtocol(
                 settings=RelativeHybridTopologyProtocol._adaptive_settings(
                     stateA=system_a,
                     stateB=system_b,
                     mapping=new_edge,
                     initial_settings=protocol_settings,
-                )
+                ),
             )
 
             # Create transformation
