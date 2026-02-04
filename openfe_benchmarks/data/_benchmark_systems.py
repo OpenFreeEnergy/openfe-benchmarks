@@ -186,7 +186,7 @@ _benchmark_index = BenchmarkIndex()
 class BenchmarkData:
     """
     Represents a benchmark data system with protein, ligands, optional cofactors, 
-    and network.
+    and ligand networks.
 
     Attributes
     ----------
@@ -205,9 +205,9 @@ class BenchmarkData:
         Dictionary mapping charge type to cofactor SDF file path (optional).
         May include 'no_charges' key for the base cofactors.sdf file.
         May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
-    networks : dict[str, Path] | None
-        Dictionary of available networks where the key is the filename, '*network.json', 
-        and the value is a Path to a network file.
+    ligand_networks : dict[str, Path] | None
+        Dictionary of available ligand networks where the key is the filename, '*network.json', 
+        and the value is a Path to a ligand network file.
     details : str
         Information available in the preparation_details.md file
     """
@@ -216,7 +216,7 @@ class BenchmarkData:
     protein: Path | None  # Updated typing to allow None
     ligands: dict[str, Path]
     cofactors: dict[str, Path] | None
-    networks: dict[str, Path] | None
+    ligand_networks: dict[str, Path] | None
     details: str
     
     def __repr__(self):
@@ -225,7 +225,7 @@ class BenchmarkData:
                 f"protein={self.protein.name if self.protein else 'None'}, "
                 f"ligands={list(self.ligands.keys())}, "
                 f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else "None"}, "
-                f"network={list(self.networks.keys()) if self.networks is not None else "None"}")
+                f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else "None"}")
 
 
 def _validate_and_load_data_system(system_path: Path, system_name: str, 
@@ -255,7 +255,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
     protein_path = None
     ligands = {}
     cofactors = {}
-    networks = {}
+    ligand_networks = {}
     details = None
 
     # Track all files for validation
@@ -327,11 +327,11 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             logger.debug(f"Found cofactors with {charge_type} charges: {filename}")
             continue
         
-        # Check for network file (network.json)
+        # Check for ligand network file (network.json)
         if 'network' in filename and filename.endswith('.json'):
-            networks[file_path.stem] = file_path
+            ligand_networks[file_path.stem] = file_path
             categorized_files.add(file_path)
-            logger.debug(f"Found network: {filename}")
+            logger.debug(f"Found ligand network: {filename}")
             continue
     
     # Check for uncategorized files
@@ -361,7 +361,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             raise ValueError(
                 f"Uncategorized JSON file '{filename}' found in system '{system_name}' "
                 f"in benchmark set '{benchmark_set}'. Expected format: "
-                f"'*network*.json'"
+                f"'*network*.json' for ligand networks."
             )
 
         raise ValueError(
@@ -394,7 +394,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
         f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s).\n"
         f"Found protein file: {protein_path is not None}.\n"
-        f"Found {len(networks)} network files"
+        f"Found {len(ligand_networks)} ligand network files"
     )
     
     return BenchmarkData(
@@ -403,7 +403,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         protein=protein_path,
         ligands=ligands,
         cofactors=cofactors,
-        networks=networks,
+        ligand_networks=ligand_networks,
         details=details,
     )
 
