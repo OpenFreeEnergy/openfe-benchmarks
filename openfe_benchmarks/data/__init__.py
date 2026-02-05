@@ -1,5 +1,5 @@
 """
-Industry Benchmark Systems for OpenFE
+Benchmark Data Systems for OpenFE
 
 This module provides access to remediated benchmark system inputs ready for use
 with the OpenFE toolkit.
