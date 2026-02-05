@@ -29,15 +29,6 @@ benchmark_systems/
 For a complete tutorial on interaction with benchmark dataset, see `examples/1_initializing_benchmark_data.ipynb`.
 For an example on applying a dataset, see `examples/2_benchmark_data_with_openfe.ipynb`.
 
-## Additional Resources
-
-- **OpenFE Documentation**: https://docs.openfree.energy
-- **GUFE Documentation**: https://gufe.openfree.energy
-- **Example Notebooks**: See `examples/` directory for:
-  - `1_initializing_benchmark_data.ipynb` - How to use the benchmark systems API
-  - `2_benchmark_data_with_openfe.ipynb`  - Using a BenchmarkData system with OpenFE tools
-  - `building_networks.ipynb` - Creating ligand networks
-
 ## Contributing
 
 When adding new benchmark systems:

@@ -25,5 +25,6 @@ The available systems are indexed in the [benchmark_system_indexing.yml](openfe_
 - **OpenFE Documentation**: https://docs.openfree.energy
 - **GUFE Documentation**: https://gufe.openfree.energy
 - **Example Notebooks**: See `examples/` directory for:
-  - `using_benchmark_systems.ipynb` - How to use the benchmark systems API
+  - `1_initializing_benchmark_data.ipynb` - How to use the benchmark systems API
+  - `2_benchmark_data_with_openfe.ipynb`  - Using a BenchmarkData system with OpenFE tools
   - `building_networks.ipynb` - Creating ligand networks
