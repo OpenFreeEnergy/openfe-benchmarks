@@ -1,0 +1,34 @@
+ci:
+    autoupdate_schedule: quarterly
+    # comment / label "pre-commit.ci autofix" to a pull request to manually trigger auto-fixing
+    autofix_prs: false
+    skip: []
+    submodules: false
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+  - id: check-added-large-files
+    args: ["--maxkb=900"]
+  - id: check-case-conflict
+  - id: check-executables-have-shebangs
+  - id: check-symlinks
+  - id: check-toml
+  - id: check-yaml
+    exclude: devtools/installer/construct.yaml  # not a true YAML file
+  - id: debug-statements
+
+- repo: https://github.com/tox-dev/pyproject-fmt
+  rev: "v2.11.1"
+  hooks:
+    - id: pyproject-fmt
+
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.14.10
+  hooks:
+    # Run the linter.
+    - id: ruff
+      args: [--fix ]
+    # Run the formatter.
+    - id: ruff-format
