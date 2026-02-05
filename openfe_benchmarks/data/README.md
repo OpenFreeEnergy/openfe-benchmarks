@@ -1,8 +1,8 @@
 # OpenFE Benchmarks Data
 
-This directory contains benchmark system data for OpenFE (Open Free Energy) calculations, including protein structures, ligands, ligand networks, and sometimes cofactors for remediated industry benchmark systems.
+This directory contains benchmark system data for OpenFE (Open Free Energy) calculations, including protein structures, ligands, ligand networks, and sometimes cofactors for remediated benchmark systems.
 
-## Industry Benchmark Systems
+## Benchmark Systems
 
 ### Structure
 
@@ -24,7 +24,7 @@ benchmark_systems/
 **Notes**:
 - All charges generated using `openfe_benchmarks/data/data_generation/conda-lock_linux-64.yml`.
 
-### Using Industry Benchmark Systems
+### Using Benchmark Systems
 
 For a complete tutorial on interaction with benchmark dataset, see `examples/1_initializing_benchmark_data.ipynb`.
 For an example on applying a dataset, see `examples/2_benchmark_data_with_openfe.ipynb`.

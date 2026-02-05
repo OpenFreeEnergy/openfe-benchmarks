@@ -1,5 +1,5 @@
 """
-Tests for the industry benchmark systems module.
+Tests for the benchmark systems module.
 """
 
 import pytest

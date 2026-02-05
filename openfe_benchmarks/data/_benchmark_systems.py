@@ -1,7 +1,4 @@
-"""
-Industry Benchmark Systems for OpenFE
-
-This module provides access to remediated benchmark system inputs ready for use
+"""This module provides access to remediated benchmark system inputs ready for use
 with the OpenFE toolkit.
 """
 
@@ -96,12 +93,12 @@ class BenchmarkIndex:
         Examples
         --------
         >>> index = BenchmarkIndex()
-        >>> systems = index.get_systems_by_tag(['bfe'])
-        >>> # Returns all systems tagged with 'bfe' (includes rbfe and abfe)
+        >>> systems = index.get_systems_by_tag(['protein'])
+        >>> # Returns all systems tagged with 'protein'
         >>> systems_with_cofactors = index.get_systems_by_tag(['cofactors'])
         >>> # Returns all systems that have cofactors
-        >>> bfe_with_cofactors = index.get_systems_by_tag(['bfe', 'cofactors'])
-        >>> # Returns systems with either 'bfe' OR 'cofactors' tags
+        >>> bfe_with_cofactors = index.get_systems_by_tag(['protein', 'cofactors'])
+        >>> # Returns systems with either 'protein' AND 'cofactors' tags
         """
         if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
@@ -111,7 +108,7 @@ class BenchmarkIndex:
 
         for benchmark_set, systems in self._data["systems"].items():
             for system_name, system_data in systems.items():
-                # Check if any of the requested tags match
+                # Check if all of the requested tags match
                 if all(tag in system_data for tag in tags):
                     matching_systems.append((benchmark_set, system_name))
 
