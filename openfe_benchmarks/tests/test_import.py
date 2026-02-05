@@ -2,8 +2,6 @@
 Import tests
 """
 
-import openfe_benchmarks
-import pytest
 import sys
 
 
