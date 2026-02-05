@@ -21,7 +21,6 @@ from openfe_benchmarks.scripts import utils as ofebu
 
 import logging
 
-# Configure logging
 logger = logging.getLogger(__name__)
 
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
@@ -69,7 +68,7 @@ def process_components(benchmark_sys):
             benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=False
         )
 
-    # apply new partial charges
+    # Apply custom partial charges to ligands and cofactors here
 
     return lig_network, ligand_dict, protein, cofactors
 
@@ -171,9 +170,10 @@ def main():
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
     alchem_network.to_json(file=os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
 
-    # Can be run HPC3
-    for transformation in alchem_network.edges:
-        transformation.to_json(os.path.join(OUTPUT_DIR, f"{transformation.name}.json"))
+
+#    # Can be run HPC3
+#    for transformation in alchem_network.edges:
+#        transformation.to_json(os.path.join(OUTPUT_DIR, f"{transformation.name}.json"))
 
 
 if __name__ == "__main__":
