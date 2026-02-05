@@ -82,7 +82,7 @@ class BenchmarkIndex:
         Parameters
         ----------
         tags : list[str]
-            List of tags to filter by (e.g., ['bfe', 'cofactors']).
+            List of tags to filter by (e.g., ['protein', 'cofactors']).
             Systems matching any of these tags will be returned.
 
         Returns
