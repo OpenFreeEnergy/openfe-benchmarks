@@ -133,3 +133,6 @@ class TestErrorHandling:
         """Test get_benchmark_set_data_systems with invalid set."""
         with pytest.raises(ValueError, match="not found"):
             get_benchmark_set_data_systems('nonexistent_set')
+
+if __name__ == '__main__':
+    pytest.main([__file__, '-v'])

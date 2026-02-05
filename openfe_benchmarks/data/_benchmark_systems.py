@@ -1,26 +1,33 @@
 """
 Industry Benchmark Systems for OpenFE
 
-This module provides access to remediated benchmark system inputs ready for use 
+This module provides access to remediated benchmark system inputs ready for use
 with the OpenFE toolkit.
 """
 
 from pathlib import Path
 from dataclasses import dataclass
 import yaml
+import logging
 
-from loguru import logger
+# Get logger for this module - will inherit configuration from parent
+logger = logging.getLogger(__name__)
 
 __all__ = [
-    'BenchmarkData',
-    'BenchmarkIndex',
-    'get_benchmark_data_system',
-    'get_benchmark_set_data_systems',
-    'PARTIAL_CHARGE_TYPES',
+    "BenchmarkData",
+    "BenchmarkIndex",
+    "get_benchmark_data_system",
+    "get_benchmark_set_data_systems",
+    "PARTIAL_CHARGE_TYPES",
 ]
 
 # Supported partial charge types
-PARTIAL_CHARGE_TYPES = ["antechamber_am1bcc", "nagl_openff-gnn-am1bcc-1.0.0.pt", "openeye_am1bcc", "openeye_am1bccelf10"]
+PARTIAL_CHARGE_TYPES = [
+    "antechamber_am1bcc",
+    "nagl_openff-gnn-am1bcc-1.0.0.pt",
+    "openeye_am1bcc",
+    "openeye_am1bccelf10",
+]
 
 _BASE_DIR = Path(__file__).resolve().parent / "benchmark_systems"
 _INDEX_FILE = Path(__file__).resolve().parent / "benchmark_system_indexing.yml"
@@ -29,66 +36,63 @@ _INDEX_FILE = Path(__file__).resolve().parent / "benchmark_system_indexing.yml"
 class BenchmarkIndex:
     """
     Singleton class that manages the benchmark system index.
-    
+
     Loads and caches the benchmark system index from YAML on first access.
     Provides methods to query systems by calculation type and validate
     the index against the filesystem.
     """
+
     _instance = None
     _data = None
-    
+
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
-    
+
     def __init__(self):
         # Only load once
         if self._data is None:
             self.reload()
-    
+
     def reload(self):
         """Reload the index from the YAML file."""
         try:
-            with open(_INDEX_FILE, 'r') as f:
+            with open(_INDEX_FILE, "r") as f:
                 raw_data = yaml.safe_load(f) or {}
             logger.debug(f"Loaded benchmark index from {_INDEX_FILE}")
         except FileNotFoundError:
-            raise ValueError(
-                f"Benchmark system index file not found at {_INDEX_FILE}"
-            )
+            raise ValueError(f"Benchmark system index file not found at {_INDEX_FILE}")
         except Exception as e:
-            raise ValueError(
-                f"Error reading benchmark system index file: {e}"
-            )
+            raise ValueError(f"Error reading benchmark system index file: {e}")
 
         # Adapt the structure to ensure 'systems' key exists
         systems_data = {
-            key: value for key, value in raw_data.items() if key != 'metadata'
+            key: value for key, value in raw_data.items() if key != "metadata"
         }
-        
+
         if not systems_data:
             raise ValueError("Invalid index file format: no benchmark systems found.")
 
-        self._data = {'systems': systems_data}
+        self._data = {"systems": systems_data}
 
         logger.debug("Benchmark index successfully reloaded and validated.")
-    
+
     def list_systems_by_tag(self, tags: list[str]) -> list[tuple[str, str]]:
         """
         Get all systems that match ANY of the provided tags.
-        
+
         Parameters
         ----------
         tags : list[str]
             List of tags to filter by (e.g., ['bfe', 'cofactors']).
             Systems matching any of these tags will be returned.
-        
+
         Returns
         -------
         list[tuple[str, str]]
             List of tuples containing (benchmark_set, system_name).
-        
+
         Examples
         --------
         >>> index = BenchmarkIndex()
@@ -99,93 +103,95 @@ class BenchmarkIndex:
         >>> bfe_with_cofactors = index.get_systems_by_tag(['bfe', 'cofactors'])
         >>> # Returns systems with either 'bfe' OR 'cofactors' tags
         """
-        if not self._data or not self._data.get('systems'):
+        if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
             return []
 
         matching_systems = []
-        
-        for benchmark_set, systems in self._data['systems'].items():
+
+        for benchmark_set, systems in self._data["systems"].items():
             for system_name, system_data in systems.items():
                 # Check if any of the requested tags match
                 if all(tag in system_data for tag in tags):
                     matching_systems.append((benchmark_set, system_name))
-        
+
         return matching_systems
-    
+
     def list_available_tags(self) -> set[str]:
         """
         Get all unique tags used across all systems.
-        
+
         Returns
         -------
         set[str]
             Set of all available tags.
         """
-        if not self._data or not self._data.get('systems'):
+        if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
             return set()
 
         tags = set()
-        for systems in self._data['systems'].values():
+        for systems in self._data["systems"].values():
             for system_tags in systems.values():
                 tags.update(system_tags)
 
         return tags
-    
+
     def list_systems_by_benchmark_set(self, benchmark_set: str) -> list[str]:
         """
         Get all system names in a specific benchmark set.
-        
+
         Parameters
         ----------
         benchmark_set : str
             The benchmark set name.
-        
+
         Returns
         -------
         list[str]
             List of system names in the benchmark set.
-        
+
         Raises
         ------
         ValueError
             If the benchmark set doesn't exist.
         """
-        if not self._data or not self._data.get('systems'):
+        if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
             return []
 
-        if benchmark_set not in self._data['systems']:
-            available = list(self._data['systems'].keys())
+        if benchmark_set not in self._data["systems"]:
+            available = list(self._data["systems"].keys())
             raise ValueError(
                 f"Benchmark set '{benchmark_set}' not found. Available sets: {available}"
             )
-        
-        return list(self._data['systems'][benchmark_set].keys())
-    
+
+        return list(self._data["systems"][benchmark_set].keys())
+
     def list_benchmark_sets(self) -> list[str]:
         """
         List all available benchmark sets.
-        
+
         Returns
         -------
         list[str]
             Sorted list of benchmark set names.
         """
-        if not self._data or not self._data.get('systems'):
+        if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
             return []
 
-        return sorted(self._data['systems'].keys())
+        return sorted(self._data["systems"].keys())
+
 
 # Module-level instance
 _benchmark_index = BenchmarkIndex()
 
+
 @dataclass
 class BenchmarkData:
     """
-    Represents a benchmark data system with protein, ligands, optional cofactors, 
+    Represents a benchmark data system with protein, ligands, optional cofactors,
     and ligand networks.
 
     Attributes
@@ -206,11 +212,12 @@ class BenchmarkData:
         May include 'no_charges' key for the base cofactors.sdf file.
         May include charge type keys from PARTIAL_CHARGE_TYPES for charged versions.
     ligand_networks : dict[str, Path] | None
-        Dictionary of available ligand networks where the key is the filename, '*network.json', 
+        Dictionary of available ligand networks where the key is the filename, '*network.json',
         and the value is a Path to a ligand network file.
     details : str
         Information available in the preparation_details.md file
     """
+
     name: str
     benchmark_set: str
     protein: Path | None  # Updated typing to allow None
@@ -218,18 +225,21 @@ class BenchmarkData:
     cofactors: dict[str, Path] | None
     ligand_networks: dict[str, Path] | None
     details: str
-    
+
     def __repr__(self):
-        return (f"BenchmarkData(name='{self.name}', "
-                f"benchmark_set='{self.benchmark_set}', "
-                f"protein={self.protein.name if self.protein else 'None'}, "
-                f"ligands={list(self.ligands.keys())}, "
-                f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else 'None'}, "
-                f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else 'None'}")
+        return (
+            f"BenchmarkData(name='{self.name}', "
+            f"benchmark_set='{self.benchmark_set}', "
+            f"protein={self.protein.name if self.protein else 'None'}, "
+            f"ligands={list(self.ligands.keys())}, "
+            f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else 'None'}, "
+            f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else 'None'}"
+        )
 
 
-def _validate_and_load_data_system(system_path: Path, system_name: str, 
-                               benchmark_set: str) -> BenchmarkData:
+def _validate_and_load_data_system(
+    system_path: Path, system_name: str, benchmark_set: str
+) -> BenchmarkData:
     """
     Validate and load a benchmark system from a directory.
 
@@ -259,38 +269,38 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
     details = None
 
     # Track all files for validation
-    all_files = list(system_path.glob('*'))
+    all_files = list(system_path.glob("*"))
     categorized_files = set()
-    
+
     for file_path in all_files:
         if not file_path.is_file():
             continue
-            
+
         filename = file_path.name
-        
+
         # Skip PREPARATION_DETAILS.md (case-insensitive)
-        if filename.lower() == 'preparation_details.md':
-            details = file_path.read_text(encoding='utf-8')
+        if filename.lower() == "preparation_details.md":
+            details = file_path.read_text(encoding="utf-8")
             categorized_files.add(file_path)
             continue
-        
+
         # Check for protein PDB
-        if filename == 'protein.pdb':
+        if filename == "protein.pdb":
             protein_path = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found protein: {filename}")
             continue
-        
+
         # Check for base ligands file (without charges)
-        if filename == 'ligands.sdf':
-            ligands['no_charges'] = file_path
+        if filename == "ligands.sdf":
+            ligands["no_charges"] = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found ligands without charges: {filename}")
             continue
-        
+
         # Check for ligand files with specific charge types
-        if filename.startswith('ligands_') and filename.endswith('.sdf'):
-            charge_type = filename[len('ligands_'):-len('.sdf')]
+        if filename.startswith("ligands_") and filename.endswith(".sdf"):
+            charge_type = filename[len("ligands_") : -len(".sdf")]
             if charge_type not in PARTIAL_CHARGE_TYPES:
                 raise ValueError(
                     f"Unsupported partial charge type '{charge_type}' in file '{filename}' "
@@ -303,17 +313,17 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             categorized_files.add(file_path)
             logger.debug(f"Found ligands with {charge_type} charges: {filename}")
             continue
-        
+
         # Check for base cofactors file (without charges)
-        if filename == 'cofactors.sdf':
-            cofactors['no_charges'] = file_path
+        if filename == "cofactors.sdf":
+            cofactors["no_charges"] = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found cofactors without charges: {filename}")
             continue
-        
+
         # Check for cofactor files with specific charge types
-        if filename.startswith('cofactors_') and filename.endswith('.sdf'):
-            charge_type = filename[len('cofactors_'):-len('.sdf')]
+        if filename.startswith("cofactors_") and filename.endswith(".sdf"):
+            charge_type = filename[len("cofactors_") : -len(".sdf")]
             if charge_type not in PARTIAL_CHARGE_TYPES:
                 raise ValueError(
                     f"Unsupported partial charge type '{charge_type}' in file '{filename}' "
@@ -326,30 +336,30 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             categorized_files.add(file_path)
             logger.debug(f"Found cofactors with {charge_type} charges: {filename}")
             continue
-        
+
         # Check for ligand network file (network.json)
-        if 'network' in filename and filename.endswith('.json'):
+        if "network" in filename and filename.endswith(".json"):
             ligand_networks[file_path.stem] = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found ligand network: {filename}")
             continue
-    
+
     # Check for uncategorized files
     uncategorized = set(all_files) - categorized_files
     for file_path in uncategorized:
         if not file_path.is_file():
             continue
-        
+
         filename = file_path.name
-        
+
         # Error on uncategorized PDB or SDF files
-        if filename.endswith('.pdb'):
+        if filename.endswith(".pdb"):
             raise ValueError(
                 f"Uncategorized PDB file '{filename}' found in system '{system_name}' "
                 f"in benchmark set '{benchmark_set}'. Expected 'protein.pdb'."
             )
-        
-        if filename.endswith('.sdf'):
+
+        if filename.endswith(".sdf"):
             raise ValueError(
                 f"Uncategorized SDF file '{filename}' found in system '{system_name}' "
                 f"in benchmark set '{benchmark_set}'. Expected format: "
@@ -357,7 +367,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
                 f"where <charge_type> is one of {PARTIAL_CHARGE_TYPES}."
             )
 
-        if filename.endswith('.json'):
+        if filename.endswith(".json"):
             raise ValueError(
                 f"Uncategorized JSON file '{filename}' found in system '{system_name}' "
                 f"in benchmark set '{benchmark_set}'. Expected format: "
@@ -368,7 +378,7 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             f"Uncategorized file '{filename}' found in system '{system_name}' "
             f"in benchmark set '{benchmark_set}'."
         )
-    
+
     # Validate required files
     if not ligands:
         raise ValueError(
@@ -378,12 +388,12 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
             f"{PARTIAL_CHARGE_TYPES}."
         )
 
-    if 'no_charges' not in ligands:
+    if "no_charges" not in ligands:
         raise ValueError(
             f"Missing required 'ligands.sdf' file in system '{system_name}' "
             f"in benchmark set '{benchmark_set}'."
         )
-        
+
     if details is None:
         raise ValueError(
             "The file 'preparation_details.md' if missing from"
@@ -391,12 +401,12 @@ def _validate_and_load_data_system(system_path: Path, system_name: str,
         )
 
     logger.info(
-        f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' "
-        f"with {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s).\n"
-        f"Found protein file: {protein_path is not None}.\n"
-        f"Found {len(ligand_networks)} ligand network files"
+        f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' with:\n"
+        f"  {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s).\n"
+        f"  Found protein file: {protein_path is not None}.\n"
+        f"  Found {len(ligand_networks)} ligand network files with keys: {', '.join(list(ligand_networks.keys()))}"
     )
-    
+
     return BenchmarkData(
         name=system_name,
         benchmark_set=benchmark_set,
@@ -442,7 +452,7 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
             f"Benchmark set '{benchmark_set}' not found. "
             f"Available benchmark sets: {available_sets}"
         )
-    
+
     # Check if system exists in the benchmark set
     available_systems = _benchmark_index.list_systems_by_benchmark_set(benchmark_set)
     if system_name not in available_systems:
@@ -450,13 +460,14 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
             f"System '{system_name}' not found in benchmark set '{benchmark_set}'. "
             f"Available systems in '{benchmark_set}': {available_systems}"
         )
-    
+
     # Load and validate the system - convert dot-separated path to filesystem path
-    system_path = _BASE_DIR / benchmark_set.replace('.', '/') / system_name
-    
+    system_path = _BASE_DIR / benchmark_set.replace(".", "/") / system_name
+
     logger.debug(f"Loading benchmark system '{system_name}' from '{benchmark_set}'...")
-    
+
     return _validate_and_load_data_system(system_path, system_name, benchmark_set)
+
 
 def get_benchmark_set_data_systems(benchmark_set: str) -> dict[str, BenchmarkData]:
     """

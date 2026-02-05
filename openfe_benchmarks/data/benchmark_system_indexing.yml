@@ -1,80 +1,76 @@
 # Benchmark System Index with Tags
 #
-# This file provides tags for benchmark systems based on the inputs required for
-# different OpenFE calculation types:
-#
-# Note: All current benchmark systems include network files and have protein structures,
-# making them suitable for BFE calculations. Systems without proteins would be
-# suitable for SFE calculations.
+# This file provides tags for benchmark systems based on the files available, e.g., protein or cofactor.
+# Other tags indicate experimental data present, labeled as exp_bfe and exp_sfe appropriately.
 
 charge_annihilation_set:
-  cdk2: ["bfe", "sfe"]
-  dlk: ["bfe", "sfe"]
-  egfr: ["bfe", "sfe"]
-  ephx2: ["bfe", "sfe"]
-  irak4_s2: ["bfe", "sfe"]
-  irak4_s3: ["bfe", "sfe"]
-  itk: ["bfe", "sfe"]
-  jak1: ["bfe", "sfe"]
-  jnk1: ["bfe", "sfe"]
-  ptp1b: ["bfe", "sfe"]
-  thrombin: ["bfe", "sfe", "cofactor"]
-  tyk2: ["bfe", "sfe"]
+  cdk2: ["protein",]
+  dlk: ["protein",]
+  egfr: ["protein",]
+  ephx2: ["protein",]
+  irak4_s2: ["protein",]
+  irak4_s3: ["protein",]
+  itk: ["protein",]
+  jak1: ["protein",]
+  jnk1: ["protein",]
+  ptp1b: ["protein",]
+  thrombin: ["protein", "cofactor"]
+  tyk2: ["protein",]
 fragments:
-  hsp90_2rings: ["bfe", "sfe"]
-  hsp90_single_ring: ["bfe", "sfe"]
-  jak2_set1: ["bfe", "sfe"]
-  jak2_set2: ["bfe", "sfe"]
-  liga: ["bfe", "sfe"]
-  mcl1: ["bfe", "sfe"]
-  mup1: ["bfe", "sfe"]
-  p38: ["bfe", "sfe"]
-  t4_lysozyme: ["bfe", "sfe"]
+  hsp90_2rings: ["protein",]
+  hsp90_single_ring: ["protein",]
+  jak2_set1: ["protein",]
+  jak2_set2: ["protein",]
+  liga: ["protein",]
+  mcl1: ["protein",]
+  mup1: ["protein",]
+  p38: ["protein",]
+  t4_lysozyme: ["protein",]
 jacs_set:
-  bace: ["bfe", "sfe"]
-  cdk2: ["bfe", "sfe"]
-  jnk1: ["bfe", "sfe"]
-  mcl1: ["bfe", "sfe"]
-  p38: ["bfe", "sfe"]
-  ptp1b: ["bfe", "sfe"]
-  thrombin: ["bfe", "sfe"]
-  tyk2: ["bfe", "sfe"]
+  bace: ["protein",]
+  cdk2: ["protein",]
+  jnk1: ["protein",]
+  mcl1: ["protein",]
+  p38: ["protein",]
+  ptp1b: ["protein",]
+  thrombin: ["protein",]
+  tyk2: ["protein",]
 janssen_bace:
-  bace_ciordia_prospective: ["bfe", "sfe"]
-  bace_p3_arg368_in: ["bfe", "sfe"]
-  ciordia_retro: ["bfe", "sfe"]
-  keranen_p2: ["bfe", "sfe"]
+  bace_ciordia_prospective: ["protein",]
+  bace_p3_arg368_in: ["protein",]
+  ciordia_retro: ["protein",]
+  keranen_p2: ["protein",]
 mcs_docking_set:
-  hne: ["bfe", "sfe", "cofactor"]
-  renin: ["bfe", "sfe"]
+  hne: ["protein", "cofactor"]
+  renin: ["protein",]
 merck:
-  cdk8: ["bfe", "sfe"]
-  cmet: ["bfe", "sfe"]
-  eg5: ["bfe", "sfe"]
-  hif2a: ["bfe", "sfe"]
-  pfkfb3: ["bfe", "sfe", "cofactor"]
-  shp2: ["bfe", "sfe"]
-  syk: ["bfe", "sfe"]
-  tnks2: ["bfe", "sfe", "cofactor"]
+  cdk8: ["protein",]
+  cmet: ["protein",]
+  eg5: ["protein",]
+  hif2a: ["protein",]
+  pfkfb3: ["protein", "cofactor"]
+  shp2: ["protein",]
+  syk: ["protein",]
+  tnks2: ["protein", "cofactor"]
 miscellaneous_set:
-  btk: ["bfe", "sfe"]
-  cdk8: ["bfe", "sfe"]
-  faah: ["bfe", "sfe"]
-  galectin: ["bfe", "sfe"]
-  hiv1_protease: ["bfe", "sfe"]
+  btk: ["protein",]
+  cdk8: ["protein",]
+  faah: ["protein",]
+  galectin: ["protein",]
+  hiv1_protease: ["protein",]
 water_set:
-  brd4: ["bfe", "sfe"]
-  chk1: ["bfe", "sfe"]
-  hsp90_kung: ["bfe", "sfe"]
-  hsp90_woodhead: ["bfe", "sfe", "cofactor"]
-  scyt_dehyd: ["bfe", "sfe"]
-  taf12: ["bfe", "sfe"]
-  thrombin: ["bfe", "sfe"]
-  urokinase: ["bfe", "sfe"]
+  brd4: ["protein",]
+  chk1: ["protein",]
+  hsp90_kung: ["protein",]
+  hsp90_woodhead: ["protein", "cofactor"]
+  scyt_dehyd: ["protein",]
+  taf12: ["protein",]
+  thrombin: ["protein",]
+  urokinase: ["protein",]
 metadata:
-  total_systems: 56
   last_updated: "2026-02-02"
   notes:
-    - "Benchmark systems configured for RBFE calculations can be used for ABFEs, ASFEs, and RSFEs"
-    - "RSFE and ABFE systems can be used for ASFE calculations"
-    - "Systems may also include cofactor files"
+    - "Systems may or may not include cofactor files"
+    - "All systems can be used for ASFEs and RSFEs"
+    - "Systems with proteins can also be used for RBFE and ABFE calculations"
+    - "Systems with ligands and cofactors could potentially be used for RBFE and ABFE calculations"
