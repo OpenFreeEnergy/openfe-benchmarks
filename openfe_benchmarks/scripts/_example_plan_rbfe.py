@@ -11,6 +11,8 @@ for more details.
 """
 
 import os
+import logging
+import json
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
@@ -18,8 +20,6 @@ from openfe.protocols.openmm_rfe.equil_rfe_methods import RelativeHybridTopology
 
 from openfe_benchmarks.data import get_benchmark_data_system
 from openfe_benchmarks.scripts import utils as ofebu
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -174,6 +174,189 @@ def main():
 #    # Can be run HPC3
 #    for transformation in alchem_network.edges:
 #        transformation.to_json(os.path.join(OUTPUT_DIR, f"{transformation.name}.json"))
+
+
+# __________________________ Pytest Validation Function ________________________________
+
+
+def validate_rbfe_network(script_dir, config):
+    """Validate RBFE network against BenchmarkData expectations.
+
+    Checks:
+    - Exact number of edges (2 per ligand pair: complex + solvent)
+    - Transformations match expected ligand network
+    - Each transformation has protein, solvent, and cofactors (if present)
+    - Ligand charges match expected values from BenchmarkData
+    """
+
+    errors = []
+    network_file = script_dir / config["outputs"][0]
+
+    # Load generated alchemical network
+    try:
+        with open(network_file) as f:
+            network_json = json.load(f)
+    except Exception as e:
+        return [f"Failed to load network: {e}"]
+
+    if not isinstance(network_json, list) or len(network_json) == 0:
+        return ["Invalid network JSON structure"]
+
+    # Last element is the AlchemicalNetwork
+    network_data = network_json[-1][1]
+    edges = network_data.get("edges", [])
+
+    # Get benchmark data for validation
+    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    expected_lig_network = openfe.LigandNetwork.from_json(
+        file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE])
+    )
+
+    # Check exact number of edges (2 per ligand edge: complex + solvent)
+    expected_edge_count = len(expected_lig_network.edges) * 2
+    actual_edge_count = len(edges)
+    if actual_edge_count != expected_edge_count:
+        errors.append(
+            f"Expected exactly {expected_edge_count} edges "
+            f"({len(expected_lig_network.edges)} ligand pairs × 2 legs), "
+            f"got {actual_edge_count}"
+        )
+
+    # Build ChemicalSystem lookup from network JSON to check components
+    chem_systems = {}
+    for item in network_json:
+        if len(item) == 2 and "ChemicalSystem" in item[0]:
+            chem_systems[item[0]] = item[1]
+
+    # Validate each transformation
+    transformation_names = set()
+    complex_legs = []
+    solvent_legs = []
+
+    for edge_ref in edges:
+        edge_key = edge_ref.get(":gufe-key:")
+        # Find the transformation details
+        transformation = None
+        for item in network_json:
+            if len(item) == 2 and item[0] == edge_key:
+                transformation = item[1]
+                break
+
+        if not transformation:
+            errors.append(f"Could not find transformation data for {edge_key}")
+            continue
+
+        name = transformation.get("name", "")
+        transformation_names.add(name)
+
+        # Check leg type (complex vs solvent)
+        if name.startswith("complex_"):
+            complex_legs.append(name)
+        elif name.startswith("solvent_"):
+            solvent_legs.append(name)
+
+        # Get the ChemicalSystem components for stateA
+        stateA_key = transformation.get("stateA", {}).get(":gufe-key:")
+        if stateA_key and stateA_key in chem_systems:
+            components = chem_systems[stateA_key].get("components", {})
+
+            # Check required components based on leg type
+            if name.startswith("complex_"):
+                # Complex leg must have protein, solvent, ligand
+                required = ["protein", "solvent", "ligand"]
+                for comp in required:
+                    if comp not in components:
+                        errors.append(
+                            f"Transformation '{name}' missing {comp} component"
+                        )
+
+                # Check for cofactors if benchmark system has them
+                if benchmark_sys.cofactors is not None:
+                    has_cofactor = any("cofactor" in k for k in components.keys())
+                    if not has_cofactor:
+                        errors.append(
+                            f"Transformation '{name}' missing cofactor component"
+                        )
+
+            elif name.startswith("solvent_"):
+                # Solvent leg must have solvent and ligand
+                required = ["solvent", "ligand"]
+                for comp in required:
+                    if comp not in components:
+                        errors.append(
+                            f"Transformation '{name}' missing {comp} component"
+                        )
+
+    # Validate that we have both complex and solvent legs for each ligand pair
+    expected_ligand_pairs = len(expected_lig_network.edges)
+    if len(complex_legs) != expected_ligand_pairs:
+        errors.append(
+            f"Expected {expected_ligand_pairs} complex legs, got {len(complex_legs)}"
+        )
+    if len(solvent_legs) != expected_ligand_pairs:
+        errors.append(
+            f"Expected {expected_ligand_pairs} solvent legs, got {len(solvent_legs)}"
+        )
+
+    # Validate that ligands have partial charges from BenchmarkData
+    # Load expected ligands to get count
+    expected_ligands = ofebu.process_sdf(
+        benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=True
+    )
+
+    # Map ligands in the network by their declared name (molprops['ofe-name'])
+    lig_map = {}
+    for item in network_json:
+        if len(item) == 2 and "SmallMoleculeComponent" in item[0]:
+            ligand_data = item[1]
+            molprops = ligand_data.get("molprops", {}) or {}
+            ofe_name = (
+                str(molprops.get("ofe-name"))
+                if molprops.get("ofe-name") is not None
+                else None
+            )
+
+            # partial charges are stored under molprops e.g. 'atom.dprop.PartialCharge'
+            has_charges = False
+            for k in molprops.keys():
+                if (
+                    "partialcharge" in k.lower()
+                    or "partial_charge" in k.lower()
+                    or "partial_charge" in k
+                ):
+                    val = molprops.get(k)
+                    if val is not None and (
+                        not (isinstance(val, str) and val.strip() == "")
+                    ):
+                        has_charges = True
+                        break
+
+            if ofe_name:
+                lig_map[ofe_name] = lig_map.get(ofe_name, False) or has_charges
+
+    expected_keys = set(str(k) for k in expected_ligands.keys())
+    found_keys = set(lig_map.keys())
+
+    missing_expected = expected_keys - found_keys
+    if missing_expected:
+        errors.append(f"Ligands not found in network: {sorted(list(missing_expected))}")
+
+    ligands_without_charges = [k for k, v in lig_map.items() if not v]
+    if ligands_without_charges:
+        errors.append(
+            f"Ligands missing partial charges: {sorted(ligands_without_charges)}"
+        )
+
+    return errors
+
+
+# Test configuration for automated testing (see TESTING.md)
+__test_config__ = {
+    "outputs": [f"{OUTPUT_DIR}/{FILENAME_ALCHEMICALNETWORK}"],
+    "custom_validate": validate_rbfe_network,
+}
+
+# _______________________________________________________________________________________
 
 
 if __name__ == "__main__":
