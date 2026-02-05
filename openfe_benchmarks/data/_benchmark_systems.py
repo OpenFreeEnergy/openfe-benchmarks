@@ -8,8 +8,10 @@ with the OpenFE toolkit.
 from pathlib import Path
 from dataclasses import dataclass
 import yaml
+import logging
 
-from loguru import logger
+# Get logger for this module - will inherit configuration from parent
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "BenchmarkData",

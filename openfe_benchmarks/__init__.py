@@ -1,18 +1,22 @@
 """OpenFE Benchmarks: Free Energy Benchmark Data Repository"""
 
 from importlib.metadata import version
-from loguru import logger
+import logging
 import sys
 
 __all__ = ()
 
 __version__ = version("openfe_benchmarks")
 
-# Configure logger for the package
-# Remove default handler and add a single configured handler
-logger.remove()
-logger.add(
-    sys.stderr,
-    format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <level>{message}</level>",
-    level="INFO"
-)
+# Configure logging for the package
+# Only configure if no handlers are already set up (to avoid duplicate output)
+_logger = logging.getLogger(__name__)
+if not _logger.handlers:
+    _handler = logging.StreamHandler(sys.stderr)
+    _formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    _handler.setFormatter(_formatter)
+    _logger.addHandler(_handler)
+    _logger.setLevel(logging.INFO)

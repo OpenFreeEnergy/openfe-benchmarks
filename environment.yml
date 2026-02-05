@@ -1,5 +1,0 @@
-name: openfe-benchmarks
-channels:
-  - conda-forge
-dependencies:
-  - loguru
