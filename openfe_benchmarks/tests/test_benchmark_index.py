@@ -144,7 +144,7 @@ class TestBenchmarkIndex:
 
         # Find all relevant files in the repository
         all_relevant_files = list(_BASE_DIR.rglob("ligands.sdf")) + list(
-            _BASE_DIR.rglob("PREPARATION_DETAILS.md".lower())
+            _BASE_DIR.rglob("preparation_details.md")
         )
 
         # Build a set of expected paths from the index
@@ -171,10 +171,14 @@ class TestBenchmarkIndex:
         # Also verify the reverse: that indexed systems actually have both of the relevant files
         missing_files = []
         for system_path in indexed_systems:
-            has_relevant_file = all(
-                (system_path / file_name).exists()
-                for file_name in ["ligands.sdf", "PREPARATION_DETAILS.md".lower()]
-            )
+            if not system_path.exists():
+                has_relevant_file = False
+            else:
+                present = {p.name.lower() for p in system_path.iterdir() if p.is_file()}
+                has_relevant_file = all(
+                    fname.lower() in present
+                    for fname in ["ligands.sdf", "preparation_details.md"]
+                )
             if not has_relevant_file:
                 rel_path = system_path.relative_to(_BASE_DIR)
                 missing_files.append(str(rel_path))
