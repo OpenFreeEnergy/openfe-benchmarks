@@ -21,13 +21,6 @@ benchmark_systems/
 │       └── <network_name>.json             # Network mappings (e.g., industry_benchmarks_network.json) generated with generate_industry_lomap_networks.py
 ```
 
-### Supported Partial Charge Types:
-
-- `antechamber_am1bcc` - AM1-BCC charges calculated with AmberTools 24.8 at the input conformer
-- `nagl_openff-gnn-am1bcc-1.0.0.pt` - NAGL AM1-BCC charges
-- `openeye_am1bcc` - OpenEye AM1-BCC charges generated at the input conformer
-- `openeye_am1bccelf10` - OpenEye AM1-BCC ELF10 charges using a conformer ensemble size of 500
-
 **Notes**:
 - All charges generated using `openfe_benchmarks/data/data_generation/conda-lock_linux-64.yml`.
 
@@ -66,15 +59,15 @@ print(f"Cofactors: {system.cofactors}")  # Dict mapping charge type to file path
 print(f"Networks: {system.network}")  # Network JSON file paths
 ```
 
-For a complete tutorial on interaction with benchmark dataset, see `examples/using_benchmark_systems.ipynb`.
-For an example on applying a dataset, see `examples/building_networks.ipynb`.
+For a complete tutorial on interaction with benchmark dataset, see `examples/1_initializing_benchmark_data.ipynb`.
+For an example on applying a dataset, see `examples/2_benchmark_data_with_openfe.ipynb`.
 
 ## Additional Resources
 
 - **OpenFE Documentation**: https://docs.openfree.energy
 - **GUFE Documentation**: https://gufe.openfree.energy
 - **Example Notebooks**: See `examples/` directory for:
-  - `using_benchmark_systems.ipynb` - How to use the benchmark systems API
+  - `1_initializing_benchmark_data.ipynb` - How to use the benchmark systems API
   - `building_networks.ipynb` - Creating ligand networks
 
 ## Contributing

@@ -27,15 +27,10 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu-latest', macos-latest]
-        py3Dmol: ["no"]
         python-version:
           - "3.11"
           - "3.12"
           - "3.13"
-        include:
-          - os: "ubuntu-latest"
-            python-version: "3.12"
-            py3Dmol: "yes"
 
     steps:
       - uses: actions/checkout@v4
