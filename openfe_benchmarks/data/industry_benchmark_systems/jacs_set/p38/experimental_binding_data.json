@@ -1,0 +1,478 @@
+{
+    "2j": {
+        "dg": {
+            "magnitude": -10.079999923706056,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2gg": {
+        "dg": {
+            "magnitude": -10.65999984741211,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2q": {
+        "dg": {
+            "magnitude": -12.260000228881836,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2t": {
+        "dg": {
+            "magnitude": -11.850000381469728,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2g": {
+        "dg": {
+            "magnitude": -10.65999984741211,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2l": {
+        "dg": {
+            "magnitude": -12.260000228881836,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2ee": {
+        "dg": {
+            "magnitude": -12.260000228881836,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2aa": {
+        "dg": {
+            "magnitude": -9.270000457763672,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2o": {
+        "dg": {
+            "magnitude": -10.489999771118164,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3flw": {
+        "dg": {
+            "magnitude": -10.68000030517578,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2u": {
+        "dg": {
+            "magnitude": -12.260000228881836,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2p": {
+        "dg": {
+            "magnitude": -11.199999809265137,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2h": {
+        "dg": {
+            "magnitude": -9.479999542236328,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3fmk": {
+        "dg": {
+            "magnitude": -11.829999923706056,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2i": {
+        "dg": {
+            "magnitude": -10.050000190734863,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2f": {
+        "dg": {
+            "magnitude": -8.479999542236328,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2x": {
+        "dg": {
+            "magnitude": -10.229999542236328,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2ff": {
+        "dg": {
+            "magnitude": -11.4399995803833,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2k": {
+        "dg": {
+            "magnitude": -10.550000190734863,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2n": {
+        "dg": {
+            "magnitude": -11.850000381469728,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3flq": {
+        "dg": {
+            "magnitude": -9.93000030517578,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3fln": {
+        "dg": {
+            "magnitude": -10.880000114440918,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2e": {
+        "dg": {
+            "magnitude": -10.699999809265137,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3fmh": {
+        "dg": {
+            "magnitude": -10.829999923706056,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2c": {
+        "dg": {
+            "magnitude": -10.460000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2y": {
+        "dg": {
+            "magnitude": -9.779999732971191,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2s": {
+        "dg": {
+            "magnitude": -11.109999656677246,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2m": {
+        "dg": {
+            "magnitude": -10.960000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2bb": {
+        "dg": {
+            "magnitude": -9.0600004196167,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2v": {
+        "dg": {
+            "magnitude": -8.970000267028809,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2r": {
+        "dg": {
+            "magnitude": -10.789999961853027,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3flz": {
+        "dg": {
+            "magnitude": -9.489999771118164,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "2z": {
+        "dg": {
+            "magnitude": -10.359999656677246,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    },
+    "3fly": {
+        "dg": {
+            "magnitude": -11.420000076293944,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "uncertainty": {
+            "magnitude": 0.0,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        }
+    }
+}
