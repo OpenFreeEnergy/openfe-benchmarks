@@ -1,0 +1,77 @@
+name: "CI"
+on:
+  # Allow for workflows to be manuallly triggered
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+      - stable
+  schedule:
+    # At 07:00 UTC on Monday and Thursday.
+    - cron: "0 1 * * 0"
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  tests:
+    runs-on: ${{ matrix.OS }}
+    name: "💻-${{matrix.os }} 🐍-${{ matrix.python-version }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest', macos-latest]
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "Setup Micromamba"
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-binary-path: ~/.local/bin/micromamba
+          environment-file: devtools/conda-envs/environment.yml
+          environment-name: openfe-benchmarks-test
+          cache-environment: true
+          cache-downloads: true
+          create-args: >-
+            python=${{ matrix.python-version }}
+          init-shell: bash
+
+      - name: "Install"
+        run: python -m pip install --no-deps -e .
+
+      - name: "Test imports"
+        run: |
+          # if we add more to this, consider changing to for + env vars
+          python -Ic "import openfe_benchmarks; print(openfe_benchmarks.__version__)"
+
+      - name: "Environment Information"
+        run: |
+          micromamba info
+          micromamba list
+
+      - name: "Run tests"
+        run: |
+          pytest -vv
+
+      - name: codecov
+        if: ${{ github.repository == 'OpenFreeEnergy/openfe_benchmarks'
+                && github.event != 'schedule' }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: False
+          verbose: True

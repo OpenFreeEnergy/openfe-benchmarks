@@ -1,0 +1,76 @@
+# Benchmark System Index with Tags
+#
+# This file provides tags for benchmark systems based on the files available, e.g., protein or cofactor.
+# Other tags indicate experimental data present, labeled as exp_bfe and exp_sfe appropriately.
+
+charge_annihilation_set:
+  cdk2: ["protein",]
+  dlk: ["protein",]
+  egfr: ["protein",]
+  ephx2: ["protein",]
+  irak4_s2: ["protein",]
+  irak4_s3: ["protein",]
+  itk: ["protein",]
+  jak1: ["protein",]
+  jnk1: ["protein",]
+  ptp1b: ["protein",]
+  thrombin: ["protein", "cofactor"]
+  tyk2: ["protein",]
+fragments:
+  hsp90_2rings: ["protein",]
+  hsp90_single_ring: ["protein",]
+  jak2_set1: ["protein",]
+  jak2_set2: ["protein",]
+  liga: ["protein",]
+  mcl1: ["protein",]
+  mup1: ["protein",]
+  p38: ["protein",]
+  t4_lysozyme: ["protein",]
+jacs_set:
+  bace: ["protein",]
+  cdk2: ["protein",]
+  jnk1: ["protein",]
+  mcl1: ["protein",]
+  p38: ["protein",]
+  ptp1b: ["protein",]
+  thrombin: ["protein",]
+  tyk2: ["protein",]
+janssen_bace:
+  bace_ciordia_prospective: ["protein",]
+  bace_p3_arg368_in: ["protein",]
+  ciordia_retro: ["protein",]
+  keranen_p2: ["protein",]
+mcs_docking_set:
+  hne: ["protein", "cofactor"]
+  renin: ["protein",]
+merck:
+  cdk8: ["protein",]
+  cmet: ["protein",]
+  eg5: ["protein",]
+  hif2a: ["protein",]
+  pfkfb3: ["protein", "cofactor"]
+  shp2: ["protein",]
+  syk: ["protein",]
+  tnks2: ["protein", "cofactor"]
+miscellaneous_set:
+  btk: ["protein",]
+  cdk8: ["protein",]
+  faah: ["protein",]
+  galectin: ["protein",]
+  hiv1_protease: ["protein",]
+water_set:
+  brd4: ["protein",]
+  chk1: ["protein",]
+  hsp90_kung: ["protein",]
+  hsp90_woodhead: ["protein", "cofactor"]
+  scyt_dehyd: ["protein",]
+  taf12: ["protein",]
+  thrombin: ["protein",]
+  urokinase: ["protein",]
+metadata:
+  last_updated: "2026-02-02"
+  notes:
+    - "Systems may or may not include cofactor files"
+    - "All systems can be used for ASFEs and RSFEs"
+    - "Systems with proteins can also be used for RBFE and ABFE calculations"
+    - "Systems with ligands and cofactors could potentially be used for RBFE and ABFE calculations"
