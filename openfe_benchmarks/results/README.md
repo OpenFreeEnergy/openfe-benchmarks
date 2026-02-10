@@ -14,85 +14,88 @@ Minimum Required Layout
 ------------------------
 results/<submission-id>/
 - `submission.yaml`          # (Required) Metadata + links (see schema)
-- `dg.tsv`                   # (Required) Output of `openfe gather --report dg`
-- `ddg.tsv`                  # (Required) Output of `openfe gather --report ddg`
-- `raw.tsv`                  # (Recommended) `openfe gather --report raw` (per-leg values)
-- `checksums.sha256`         # (Recommended) Checksums for tsv/yaml
+- `dg.tsv` or `dg.csv`       # (Required) Output of `openfe gather --report dg` (tab- or comma-delimited)
+- `ddg.tsv` or `ddg.csv`     # (Required) Output of `openfe gather --report ddg` (tab- or comma-delimited)
+- `raw.tsv` or `raw.csv`     # (Recommended) `openfe gather --report raw` (per-leg values)
 
 Note: heavy/binary simulation artifacts (repeat folders, JSON results, trajectories) SHOULD be deposited in a long-term archive (Zenodo/Alchemical Archive) and referenced from `submission.yaml` rather than included in the git repo.
 
-What must be in `submission.yaml` (schema)
------------------------------------------
-The following minimal schema should be present in every `submission.yaml`. Keys marked **required** must be present.
+submission.yaml — annotated example (required fields + guidance)
+----------------------------------------------------------------
+The block below is a single, copy‑pasteable example that documents required and recommended keys inline. Use the exact key names shown; for report filenames the repository accepts `.tsv` or `.csv` (tab- or comma-delimited respectively).
 
-Required fields
-- `submission_id` (str) — **required**: unique id (use kebab-case, e.g. `jensen-tyk2-2025`)
-- `title` (str) — **required**: short descriptive title
-- `authors` (list) — **required**: list of {name:, affiliation:, orcid: (optional)}
-- `contact` (object) — **required**: {name:, email:}
-- `date` (ISO 8601) — **required**: date of submission/publication
-- `openfe_version` (str) — **required**: OpenFE version used to produce the `gather` outputs
-- `gather_command` (str) — **required**: exact `openfe gather` command used (for provenance)
-- `reports` (object) — **required**: mapping of report names to filenames; at minimum:
-  - `dg: dg.tsv`
-  - `ddg: ddg.tsv`
-- `archive` (object) — **required**: long-term archive info with at least one of:
-  - `doi` (preferred) or `url`
-  - `archive_provider` (e.g. `zenodo`, `alchemical-archive`, `institutional`) 
-- `license` (str) — **required**: license for the results (e.g. `CC-BY-4.0`)
-
-Recommended/optional fields
-- `summary` (str) — short plain‑English description of what is contained and key findings
-- `protocol` (object) — summary of protocol settings (e.g. `n_protocol_repeats`, `integrator`, `timestep`, `nonbonded_cutoff`, etc.)
-- `software` (object) — versions of important packages (OpenMM, kartograf, nagl, etc.)
-- `keywords` (list)
-- `associated_publication` (doi/url)
-- `compute_environment` (free text — e.g. cluster name, GPU model)
-- `checksums` (object) — map of filename → sha256
-- `notes` (str)
-
-Example minimal `submission.yaml`
----------------------------------
 ```yaml
+# REQUIRED: unique, kebab-case identifier for this submission
 submission_id: example-tyk2-2025
+
+# REQUIRED: short descriptive title
 title: Tyk2 RBFE benchmark — OpenFE example submission
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
   - name: My Name
     affiliation: Example Lab
     orcid: '0000-0002-XXXX-XXXX'
-contact:
-  name: My Name
-  email: m.name@example.org
+
+# REQUIRED: publication/submission date (ISO 8601)
 date: 2025-02-10
+
+# REQUIRED: OpenFE version used to produce the gathered reports
 openfe_version: 0.8.3
+
+# Recommended but useful: force field and partial charge descriptor
 forcefield: openff-2.3.0
-partial_charges:
-gather_command: "openfe gather results/ --report dg --report ddg -o final_results.tsv"
+partial_charges: am1bcc
+
+# REQUIRED: exact command used to create the reports (provenance)
+# can output TSV or CSV; keep the extension consistent with produced files
+gather_command: "openfe gather results/ --report dg --report ddg -o final_results.tsv"  # or final_results.csv
+
+# REQUIRED: mapping of logical report names → filenames
+# filenames MUST use .tsv or .csv (delimiter must match extension)
 reports:
-  dg: dg.tsv
-  ddg: ddg.tsv
-  raw: raw.tsv
+  dg: dg.tsv        # required: absolute/relative path to DG report (dg.csv allowed)
+  ddg: ddg.tsv      # required: relative path to DDG report (ddg.csv allowed)
+  raw: raw.tsv      # recommended: per-leg values (raw.csv allowed)
+
+# REQUIRED: long-term archive pointer (at least doi or url)
 archive:
   doi: 10.5281/zenodo.1234567
   archive_provider: zenodo
+
+# REQUIRED: license for the submission (e.g. CC-BY-4.0)
 license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata
 summary: "RBFE benchmark for TYK2 comparing protocols X and Y; includes dg and ddg summary tables."
 keywords: [tyk2, rbfe, benchmark, openfe]
+software:
+  openmm: 8.0
+  openfe: 0.8.3
+protocol:
+  n_protocol_repeats: 3
+  integrator: langevin
+  timestep_fs: 2
+
+# notes: any additional provenance or caveats
+notes: "Replica counts reduced for testing; full archive available at DOI above."
 ```
 
-Expected TSV Contents (What `openfe gather` Writes)
---------------------------------------------------
-- `dg` report (TSV): columns typically include at least
+Expected TSV/CSV Contents (What `openfe gather` Writes)
+--------------------------------------------------------
+Files must be tab- or comma-delimited and use the `.tsv` or `.csv` extension; column headings must match the examples below.
+
+- `dg` report (TSV/CSV): columns typically include at least
   - `ligand` — ligand identifier
   - `DG(MLE) (kcal/mol)` — MLE absolute free energy
   - `uncertainty (kcal/mol)` — reported uncertainty
 
-- `ddg` report (TSV): columns typically include at least
+- `ddg` report (TSV/CSV): columns typically include at least
   - `ligand_i`, `ligand_j`
   - `DDG(i->j) (kcal/mol)` — relative free energy
   - `uncertainty (kcal/mol)`
 
-- `raw` report (TSV, recommended): per-leg rows with a `leg` column (`vacuum`/`solvent`/`complex`) and the raw DG per leg.
+- `raw` report (TSV/CSV, recommended): per-leg rows with a `leg` column (`vacuum`/`solvent`/`complex`) and the raw DG per leg.
 
 See OpenFE CLI tutorial for concrete examples and column headings: https://docs.openfree.energy/en/latest/tutorials/rbfe_cli_tutorial.html
 

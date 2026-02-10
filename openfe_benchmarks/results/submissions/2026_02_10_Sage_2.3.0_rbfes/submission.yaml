@@ -1,0 +1,20 @@
+submission_id: 2026-02-Sage2.3-rbfe-jacs
+title: RBFE JACS Benchmarks for Sage 2.3.0
+authors:
+  - name: Irfan Alibay
+    affiliation: Open Free Energy
+    orcid: '0000-0001-5787-9130'
+date: 2026-02-10
+openfe_version: 0.8.3
+forcefield: openff-2.3.0
+partial_charges: AshGC v1.0
+gather_command: "openfe gather results/ --report dg --report ddg -o final_results.csv"
+reports:
+  dg: dG.csv
+  ddg: ddG.csv
+archive:
+  doi: https://doi.org/10.5281/zenodo.17408549
+  archive_provider: zenodo
+license: CC-BY-4.0
+summary: "RBFE JACS benchmark for Sage 2.3.0 ; includes dg and ddg summary tables."
+keywords: [jacs, rbfe]
