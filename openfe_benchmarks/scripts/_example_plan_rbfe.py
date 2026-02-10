@@ -23,11 +23,24 @@ from openfe_benchmarks.scripts import utils as ofebu
 
 logger = logging.getLogger(__name__)
 
+
+def _configure_example_logging(level=logging.INFO):
+    handler = logging.StreamHandler()
+    handler.setFormatter(
+        logging.Formatter("%(asctime)s %(name)s %(levelname)s: %(message)s")
+    )
+    # Attach to this module's logger so output appears when running the example
+    logger.addHandler(handler)
+    logger.setLevel(level)
+    # Optionally enable package-wide logs:
+    logging.getLogger("openfe_benchmarks").setLevel(level)
+
+
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
 BENCHMARK_SET = "mcs_docking_set"
 BENCHMARK_SYS = "hne"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
-FORCEFIELD = "openff-2.3.0"  # available in openff-forcefields
+FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 LIG_NETWORK_FILE = "industry_benchmarks_network"
 FILENAME_ALCHEMICALNETWORK = (
     f"alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
@@ -176,10 +189,10 @@ def main():
 #        transformation.to_json(os.path.join(OUTPUT_DIR, f"{transformation.name}.json"))
 
 
-# __________________________ Pytest Validation Function ________________________________
+# __________________________ Validation Function ________________________________
 
 
-def validate_rbfe_network(script_dir, config):
+def validate_rbfe_network(network_file):
     """Validate RBFE network against BenchmarkData expectations.
 
     Checks:
@@ -190,7 +203,6 @@ def validate_rbfe_network(script_dir, config):
     """
 
     errors = []
-    network_file = script_dir / config["outputs"][0]
 
     # Load generated alchemical network
     try:
@@ -202,9 +214,14 @@ def validate_rbfe_network(script_dir, config):
     if not isinstance(network_json, list) or len(network_json) == 0:
         return ["Invalid network JSON structure"]
 
+    logger.info(
+        "Loaded alchemical network JSON with %d top-level items", len(network_json)
+    )
+
     # Last element is the AlchemicalNetwork
     network_data = network_json[-1][1]
     edges = network_data.get("edges", [])
+    logger.info("AlchemicalNetwork contains %d edges", len(edges))
 
     # Get benchmark data for validation
     benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
@@ -220,6 +237,12 @@ def validate_rbfe_network(script_dir, config):
             f"Expected exactly {expected_edge_count} edges "
             f"({len(expected_lig_network.edges)} ligand pairs × 2 legs), "
             f"got {actual_edge_count}"
+        )
+    else:
+        logger.info(
+            "Edge count correct: %d edges (expected %d)",
+            actual_edge_count,
+            expected_edge_count,
         )
 
     # Build ChemicalSystem lookup from network JSON to check components
@@ -277,6 +300,15 @@ def validate_rbfe_network(script_dir, config):
                         errors.append(
                             f"Transformation '{name}' missing cofactor component"
                         )
+                    else:
+                        logger.info("Transformation '%s' includes cofactors", name)
+
+                # Log success if none of the required components were missing
+                missing = [c for c in required if c not in components]
+                if not missing:
+                    logger.info(
+                        "Transformation '%s' complex leg has required components", name
+                    )
 
             elif name.startswith("solvent_"):
                 # Solvent leg must have solvent and ligand
@@ -286,6 +318,10 @@ def validate_rbfe_network(script_dir, config):
                         errors.append(
                             f"Transformation '{name}' missing {comp} component"
                         )
+                else:
+                    logger.info(
+                        "Transformation '%s' solvent leg has required components", name
+                    )
 
     # Validate that we have both complex and solvent legs for each ligand pair
     expected_ligand_pairs = len(expected_lig_network.edges)
@@ -346,18 +382,10 @@ def validate_rbfe_network(script_dir, config):
         errors.append(
             f"Ligands missing partial charges: {sorted(ligands_without_charges)}"
         )
-
     return errors
 
 
-# Test configuration for automated testing (see TESTING.md)
-__test_config__ = {
-    "outputs": [f"{OUTPUT_DIR}/{FILENAME_ALCHEMICALNETWORK}"],
-    "custom_validate": validate_rbfe_network,
-}
-
-# _______________________________________________________________________________________
-
-
 if __name__ == "__main__":
+    _configure_example_logging(level=logging.INFO)
     main()
+    validate_rbfe_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
