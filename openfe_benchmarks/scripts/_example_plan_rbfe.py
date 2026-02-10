@@ -78,7 +78,7 @@ def process_components(benchmark_sys):
     cofactors = None
     if benchmark_sys.cofactors is not None:
         cofactors = ofebu.process_sdf(
-            benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=False
+            benchmark_sys.cofactors[PARTIAL_CHARGE], return_dict=False
         )
 
     # Apply custom partial charges to ligands and cofactors here
