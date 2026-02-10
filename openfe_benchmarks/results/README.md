@@ -4,7 +4,7 @@ Purpose
 -------
 This document defines the structure, required files, metadata schema, and validation expectations for a "submitted result" in this repository. The goal is to make each submission a self‑contained, machine-readable dataset that an external user or automated tool can ingest, validate and cite.
 
-See [OpenFE CLI tutorial](https://docs.openfree.energy/en/latest/tutorials/rbfe_cli_tutorial.html) for more information in how to prepare files for a submission with the plan/gather/run lifecycle and example `gather` output
+See [OpenFE CLI tutorial](https://docs.openfree.energy/en/latest/tutorials/rbfe_cli_tutorial.html) for more information in how to prepare files for a submission with the plan/gather/run lifecycle and example `gather` output. For visualization and example plots that consume `dg`/`ddg` reports see the [OpenFE plotting tutorial](https://docs.openfree.energy/en/latest/tutorials/plotting.html).
 
 Summary
 --------
