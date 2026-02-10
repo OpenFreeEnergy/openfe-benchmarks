@@ -51,7 +51,7 @@ def process_components(benchmark_sys):
     """
 
     if not benchmark_sys.ligand_networks:
-        raise ValueError("Valid protein network.json is required.")
+        raise ValueError("Valid ligand network JSON file is required.")
     lig_network = openfe.LigandNetwork.from_json(
         file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE])
     )
