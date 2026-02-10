@@ -2,7 +2,8 @@ name: openfe-benchmarks-test
 channels:
   - conda-forge
 dependencies:
-  - gufe
+  - gufe=1.7.1
   - openfe
   - pytest
   - pre-commit
+  - pontibus
