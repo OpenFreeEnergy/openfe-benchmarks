@@ -14,7 +14,7 @@ import json
 
 
 @click.command()
-@click.option("--system-group", type=str, required=True, help="The industry system group of system names used to determine the edges, i.e., JACS/MERCK.")
+@click.option("--system-group", type=str, required=True, help="The system group of system names used to determine the edges, i.e., JACS/MERCK.")
 @click.option("--system-name", type=str, required=True, help="The industry system name used to determine the edges, i.e., TYK2.")
 @click.option("--out-dir", type=click.Path(exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path), required=True, help="The output dir name")
 def main(system_group: str, system_name: str, out_dir: pathlib.Path):
