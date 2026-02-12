@@ -1,0 +1,72 @@
+{
+    "10": {
+        "dg": {
+            "magnitude": -8.3100004196167,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([C@]2([H])[C]([H])([H])[C](=[O])[c]3[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]3[C]2([H])[H])[c]([H])[c]([H])[c]1[F]",
+        "inchikey": "NARZZERNZUIZFH-XIAHPCBMNA-N"
+    },
+    "3": {
+        "dg": {
+            "magnitude": -8.3100004196167,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c]([C@]2([H])[C]([H])([H])[C](=[O])[c]3[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]3[C]2([H])[H])[c]([H])[c]1[H]",
+        "inchikey": "PHMJMYBSWXYOLM-AEHWWIJFNA-N"
+    },
+    "9": {
+        "dg": {
+            "magnitude": -7.360000133514404,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[n][c]([N]([H])[H])[n][c]2[c]1[C](=[O])[C]([H])([H])[C@@]([H])([c]1[c]([H])[c]([H])[c]([F])[c]([H])[c]1[H])[C]2([H])[H]",
+        "inchikey": "CWTONXLSVLUGHC-CZTYGBFHNA-N"
+    },
+    "8": {
+        "dg": {
+            "magnitude": -8.029999732971191,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "GHGOUZISPNLJFN-LADNRUCKNA-N"
+    },
+    "11": {
+        "dg": {
+            "magnitude": -8.119999885559082,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([F])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "CYTMJYGOCMJJSF-PHQPVDBZNA-N"
+    },
+    "12": {
+        "dg": {
+            "magnitude": -8.59000015258789,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([F])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "LXJBFSPOWIEPEA-XXUCGLHHNA-N"
+    },
+    "2": {
+        "dg": {
+            "magnitude": -6.929999828338623,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[n][c]([N]([H])[H])[n][c]2[c]1[C](=[O])[C]([H])([H])[C@@]([H])([c]1[c]([H])[c]([H])[c]([H])[c]([H])[c]1[H])[C]2([H])[H]",
+        "inchikey": "QNFZGNPBBNOUBH-UWQCKRFXNA-N"
+    }
+}

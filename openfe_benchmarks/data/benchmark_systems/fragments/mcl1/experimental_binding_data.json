@@ -1,0 +1,122 @@
+{
+    "2": {
+        "dg": {
+            "magnitude": -5.329999923706055,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c]2[c]([c]1[H])[S][C]([C](=[O])[O-])=[C]2[Cl]",
+        "inchikey": "HJTMIYKPPPYDRJ-XMCBPIDINA-M"
+    },
+    "3": {
+        "dg": {
+            "magnitude": -6.389999866485596,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([Cl])[c]2[c]([c]1[H])[S][C]([C](=[O])[O-])=[C]2[Cl]",
+        "inchikey": "OIWHDKKVGXWDEW-HQEZMPLBNA-M"
+    },
+    "4": {
+        "dg": {
+            "magnitude": -5.809999942779541,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1[Cl])[S][C]([C](=[O])[O-])=[C]2[Cl]",
+        "inchikey": "AAHPIJMQJAZYTM-HQEZMPLBNA-M"
+    },
+    "5": {
+        "dg": {
+            "magnitude": -6.039999961853027,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([C]([H])([H])[H])[c]([H])[c]2[c]1[C]([Cl])=[C]([C](=[O])[O-])[S]2",
+        "inchikey": "KWGVHWHFCFSQAZ-FRZCZMPINA-M"
+    },
+    "7": {
+        "dg": {
+            "magnitude": -5.880000114440918,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1[Cl])[C]([C]([H])([H])[H])=[C]([C](=[O])[O-])[O]2",
+        "inchikey": "QEYMIQBZTUQKAC-XXPPZESMNA-M"
+    },
+    "8": {
+        "dg": {
+            "magnitude": -6.369999885559082,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1[Cl])[O][C]([C](=[O])[O-])=[C]2[C]([H])([H])[H]",
+        "inchikey": "JHAVUEBXBBRYED-XXPPZESMNA-M"
+    },
+    "9": {
+        "dg": {
+            "magnitude": -5.480000019073486,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([C]([H])([H])[H])[c]1[H])[O][C]([C](=[O])[O-])=[C]2[C]([H])([H])[H]",
+        "inchikey": "KUEJSYJMMRPGTH-AOABKPLONA-M"
+    },
+    "10": {
+        "dg": {
+            "magnitude": -5.039999961853027,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([C]([H])([H])[H])[c]([C]([H])([H])[H])[c]2[c]1[C]([C]([H])([H])[H])=[C]([C](=[O])[O-])[O]2",
+        "inchikey": "VJKQDNBXKMSKKV-IHVXUZLYNA-M"
+    },
+    "11": {
+        "dg": {
+            "magnitude": -5.550000190734863,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([C](=[O])[O-])[O][c]2[c]([H])[c]([Cl])[c]([H])[c]([Br])[c]21",
+        "inchikey": "FSMYDGIHIYJHHE-SWKQPKDUNA-M"
+    },
+    "14": {
+        "dg": {
+            "magnitude": -5.610000133514404,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([C](=[O])[O-])[N]([C]([H])([H])[H])[c]2[c]([H])[c]([H])[c]([Br])[c]([H])[c]21",
+        "inchikey": "GCGFIFNQFLLJIR-BIFIMFBKNA-M"
+    },
+    "15": {
+        "dg": {
+            "magnitude": -5.309999942779541,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c]([C]2=[C]([C](=[O])[O-])[N]([H])[c]3[c]2[c]([H])[c]([H])[c]([H])[c]3[C]([H])([H])[H])[c]([H])[c]1[H]",
+        "inchikey": "OSOLISRTJWBBIW-YJFUTVOHNA-M"
+    },
+    "13 flipped": {
+        "dg": {
+            "magnitude": -5.210000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([C](=[O])[O-])[N]([C]([H])([H])[H])[c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]21",
+        "inchikey": "MAHAMBLNIDMREX-ZRFWDMTCNA-M"
+    }
+}

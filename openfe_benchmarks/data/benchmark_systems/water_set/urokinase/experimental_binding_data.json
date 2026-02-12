@@ -1,0 +1,42 @@
+{
+    "10302 (1GJ7, no water pose)": {
+        "dg": {
+            "magnitude": -10.82235622406006,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([c]2[c]([H])[c]([H])[c]([H])[c](-[c]3[c]([H])[c]([H])[c]([H])[c]([H])[c]3[H])[c]2[O-])[N]([H])[c]2[c]([H])[c]([Cl])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]21",
+        "inchikey": "FEKRWNWZMOSVBX-NOZNPFKWNA-N"
+    },
+    "11417 (no water pose)": {
+        "dg": {
+            "magnitude": -10.5656099319458,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([c]2[c]([H])[c]([H])[c]([H])[c](-[c]3[c]([H])[c]([H])[c]([H])[c]([H])[c]3[H])[c]2[O-])[N]([H])[c]2[c]([H])[c]([F])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]21",
+        "inchikey": "NKADRYHVDUCFQU-NOZNPFKWNA-N"
+    },
+    "7806 (no water pose)": {
+        "dg": {
+            "magnitude": -8.651498794555664,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]([H])[c]([C]3=[N][c]4[c]([H])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]([H])[c]4[N]3[H])[c]2[O-])[c]([H])[c]1[H]",
+        "inchikey": "LMGQGPVCSYOMNS-JMPDCCJRNA-N"
+    },
+    "8696 (no water pose)": {
+        "dg": {
+            "magnitude": -9.802173614501951,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([c]2[c]([H])[c]([H])[c]([H])[c](-[c]3[c]([H])[c]([H])[c]([H])[c]([H])[c]3[H])[c]2[O-])[N]([H])[c]2[c]([H])[c]([H])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]21",
+        "inchikey": "GAVRMVQHHVMXFD-KCXCKTAENA-N"
+    }
+}

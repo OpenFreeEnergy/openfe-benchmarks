@@ -1,0 +1,62 @@
+{
+    "18": {
+        "dg": {
+            "magnitude": -8.960000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([F])[c]([H])[c]2-[c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "MHIVBZMMBHOGBZ-AUOIEHHZNA-N"
+    },
+    "17": {
+        "dg": {
+            "magnitude": -9.920000076293944,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2-[c]2[c]([H])[n][c]([H])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "ALDCUNYXOZZGQC-PABKDTJQNA-N"
+    },
+    "19": {
+        "dg": {
+            "magnitude": -10.260000228881836,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([F])[c]([H])[c]2-[c]2[c]([H])[n][c]([H])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "KYIXUSLGFINPTC-XBQJSKFZNA-N"
+    },
+    "15": {
+        "dg": {
+            "magnitude": -9.880000114440918,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2-[c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "JDZCGCMWIGPWCW-MDBWSKIWNA-N"
+    },
+    "14": {
+        "dg": {
+            "magnitude": -8.720000267028809,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2-[c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "PLWCLSRCDITSSB-AWNOXXQPNA-N"
+    },
+    "16": {
+        "dg": {
+            "magnitude": -8.119999885559082,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][O]/[N]=[C]1/[c]2[c]([C]([H])([H])[H])[n][c]([N]([H])[H])[n][c]2[C]([H])([H])[C@]([H])([c]2[c]([H])[c]([H])[c]([H])[c]([H])[c]2-[c]2[c]([H])[c]([H])[n][c]([H])[c]2[H])[C]1([H])[H]",
+        "inchikey": "NVYXKUAJTQHFBM-PABKDTJQNA-N"
+    }
+}

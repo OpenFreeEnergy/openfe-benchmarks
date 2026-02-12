@@ -1,0 +1,102 @@
+{
+    "2_3E63": {
+        "dg": {
+            "magnitude": -7.90701150894165,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]([H])[c]1[H]",
+        "inchikey": "ZCUSNQPYUNLATP-NLMIROKBNA-N"
+    },
+    "9": {
+        "dg": {
+            "magnitude": -8.363882064819336,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([Cl])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]1[H]",
+        "inchikey": "JNMNZGXGVBHQTA-GFJIPZKJNA-N"
+    },
+    "8": {
+        "dg": {
+            "magnitude": -8.774560928344727,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]([Cl])[c]1[H]",
+        "inchikey": "XKAXPZKYFSNGLW-GFJIPZKJNA-N"
+    },
+    "5": {
+        "dg": {
+            "magnitude": -7.789802551269531,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[n][c]([H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]1[H]",
+        "inchikey": "UTMCUTMEDJDDJZ-QZINJFTLNA-N"
+    },
+    "10": {
+        "dg": {
+            "magnitude": -7.143977165222168,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([Cl])[n][c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]([H])[c]1[H]",
+        "inchikey": "AKDXHLKQWLSKFV-CDZRGBSPNA-N"
+    },
+    "4a": {
+        "dg": {
+            "magnitude": -6.864231586456299,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[N][N]([H])[C]([c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])=[C]1[H]",
+        "inchikey": "IGZUVSXJCYZCJZ-ISAILUAZNA-N"
+    },
+    "6": {
+        "dg": {
+            "magnitude": -6.198638439178467,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1[C]1=[C]([C]([H])([H])[H])[O][N]=[C]1[C]([H])([H])[H])[C]([N]([H])[H])=[N][N]2[H]",
+        "inchikey": "VNVOFPOBSPJSAR-BDCRCPFKNA-N"
+    },
+    "3": {
+        "dg": {
+            "magnitude": -5.235617160797119,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[N]([H])[N]=[C]3[N]([H])[H])[c]([H])[c]1[H]",
+        "inchikey": "JVRYRQAVZOZLTL-NLMIROKBNA-N"
+    },
+    "1_3E62": {
+        "dg": {
+            "magnitude": -5.986692905426025,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1[Br])[C]([N]([H])[H])=[N][N]2[H]",
+        "inchikey": "OMPYFDJVSAMSMA-ACESRIFFNA-N"
+    },
+    "7": {
+        "dg": {
+            "magnitude": -8.860579490661621,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1[C]1=[C]([C]([H])([H])[H])[N]=[C]([C]([H])([H])[H])[S]1)[C]([N]([H])[H])=[N][N]2[H]",
+        "inchikey": "BLSFBFJSSNCFOX-QZINJFTLNA-N"
+    }
+}
