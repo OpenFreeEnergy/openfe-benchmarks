@@ -3,7 +3,9 @@ Tests for the benchmark systems module.
 """
 
 import pytest
+import json
 
+from gufe.tokenization import JSON_HANDLER
 from rdkit import Chem
 from openfe import ProteinComponent, SmallMoleculeComponent, LigandNetwork
 
@@ -14,6 +16,8 @@ from openfe_benchmarks.data import (
     get_benchmark_set_data_systems,
     PARTIAL_CHARGE_TYPES,
 )
+
+from openff.units import unit
 
 
 def test_list_benchmark_sets_output():
@@ -148,6 +152,26 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
             assert len(network.nodes) > 0, (
                 f"Network {network_name} for {benchmark_set}/{system_name} has no nodes"
             )
+
+    # make sure the reference data is present and can be loaded and has dg
+    if system.reference_data:
+        for ref_path in system.reference_data.values():
+            with open(ref_path, "r") as f:
+                ref_data = json.load(f, cls=JSON_HANDLER.decoder)
+            assert isinstance(ref_data, dict), (
+                f"Reference data for {benchmark_set}/{system_name} is not a dict"
+            )
+            for ref_entry in ref_data.values():
+                assert "dg" in ref_entry, (
+                    f"Reference data for {benchmark_set}/{system_name} missing 'dg' key"
+                )
+                # make sure the units are compatible with kilocalories per mole
+                dg = ref_entry["dg"]
+                assert isinstance(dg, unit.Quantity), (
+                    f"'dg' value for {benchmark_set}/{system_name} is not a Quantity"
+                )
+                # convert to kcal/mol to check compatibility
+                dg.to("kcal/mol")
 
 
 class TestErrorHandling:

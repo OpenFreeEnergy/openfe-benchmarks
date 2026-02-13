@@ -1,0 +1,68 @@
+{
+    "18": {
+        "dg": {
+            "magnitude": -8.960000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[C@]3(C(c4c(c(nc(n4)N([H])[H])C([H])([H])[H])/C(=N/O[H])/C3([H])[H])([H])[H])[H])[H])[H])F)[H])[H])[H]",
+        "inchikey": "MHIVBZMMBHOGBZ-AUOIEHHZNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "17": {
+        "dg": {
+            "magnitude": -9.920000076293944,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])c2c(c(c(nc2[H])[H])[H])[H])[C@]3(C(c4c(c(nc(n4)N([H])[H])C([H])([H])[H])/C(=N/O[H])/C3([H])[H])([H])[H])[H])[H])[H]",
+        "inchikey": "ALDCUNYXOZZGQC-PABKDTJQNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "19": {
+        "dg": {
+            "magnitude": -10.260000228881836,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c(nc1[H])[H])c2c(c(c(c(c2[C@]3(C(c4c(c(nc(n4)N([H])[H])C([H])([H])[H])/C(=N/O[H])/C3([H])[H])([H])[H])[H])[H])[H])F)[H])[H]",
+        "inchikey": "KYIXUSLGFINPTC-XBQJSKFZNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "15": {
+        "dg": {
+            "magnitude": -9.880000114440918,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[C@]3(C(c4c(c(nc(n4)N([H])[H])C([H])([H])[H])/C(=N/O[H])/C3([H])[H])([H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "JDZCGCMWIGPWCW-MDBWSKIWNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "14": {
+        "dg": {
+            "magnitude": -8.720000267028809,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[C@]3(C(c4c(c(nc(n4)N([H])[H])[H])/C(=N/O[H])/C3([H])[H])([H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "PLWCLSRCDITSSB-AWNOXXQPNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "16": {
+        "dg": {
+            "magnitude": -8.119999885559082,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])c2c(c(nc(c2[H])[H])[H])[H])[C@]3(C(c4c(c(nc(n4)N([H])[H])C([H])([H])[H])/C(=N/O[H])/C3([H])[H])([H])[H])[H])[H])[H]",
+        "inchikey": "NVYXKUAJTQHFBM-PABKDTJQNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    }
+}
