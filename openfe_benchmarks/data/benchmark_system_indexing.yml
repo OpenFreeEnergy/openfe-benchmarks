@@ -67,8 +67,10 @@ water_set:
   taf12: ["protein",]
   thrombin: ["protein",]
   urokinase: ["protein",]
+solvation_set:
+  freesolv: ["sfe"]
 metadata:
-  last_updated: "2026-02-02"
+  last_updated: "2026-02-11"
   notes:
     - "Systems may or may not include cofactor files"
     - "All systems can be used for ASFEs and RSFEs"
