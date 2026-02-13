@@ -6,8 +6,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[N][c]2[c]([O][C]([H])([H])[C]3([H])[C]([H])([H])[C]([H])([H])[C]([H])([H])[C]([H])([H])[C]3([H])[H])[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]([C](=[O])[O-])[c]([H])[c]3[H])[n][c]2[N]1[H]",
-        "inchikey": "TVEHBRDXVINFRZ-RHMRERFDNA-M"
+        "canonical_smiles": "[H]c1c(c(c(c(c1C(=O)[O-])[H])[H])N([H])c2nc3c(c(n2)OC([H])([H])C4(C(C(C(C(C4([H])[H])([H])[H])([H])[H])([H])[H])([H])[H])[H])N=C(N3[H])[H])[H]",
+        "inchikey": "TVEHBRDXVINFRZ-RHMRERFDNA-M",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "34": {
         "dg": {
@@ -16,8 +17,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[N][c]2[c]([O][C]([H])([H])[C]3([H])[C]([H])([H])[C]([H])([H])[C]([H])([H])[C]([H])([H])[C]3([H])[H])[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]([C](=[O])[N]([H])[H])[c]([H])[c]3[H])[n][c]2[N]1[H]",
-        "inchikey": "RUUOIINPNMNPIU-GJCIOOLPNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1C(=O)N([H])[H])[H])[H])N([H])c2nc3c(c(n2)OC([H])([H])C4(C(C(C(C(C4([H])[H])([H])[H])([H])[H])([H])[H])([H])[H])[H])N=C(N3[H])[H])[H]",
+        "inchikey": "RUUOIINPNMNPIU-GJCIOOLPNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "25": {
         "dg": {
@@ -26,7 +28,8 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][O][c]1[c]([H])[c]([H])[c]([N]([H])[c]2[n][c]([O][C]([H])([H])[C]3([H])[C]([H])([H])[C]([H])([H])[C]([H])([H])[C]([H])([H])[C]3([H])[H])[c]3[c]([n]2)[N]([H])[C]([H])=[N]3)[c]([H])[c]1[H]",
-        "inchikey": "RFSDQDHHBKYQOD-BDGWVKIONA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1N([H])c2nc3c(c(n2)OC([H])([H])C4(C(C(C(C(C4([H])[H])([H])[H])([H])[H])([H])[H])([H])[H])[H])N=C(N3[H])[H])[H])[H])O[H])[H]",
+        "inchikey": "RFSDQDHHBKYQOD-BDGWVKIONA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     }
 }

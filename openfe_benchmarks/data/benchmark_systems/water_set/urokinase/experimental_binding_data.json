@@ -6,8 +6,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([c]2[c]([H])[c]([H])[c]([H])[c](-[c]3[c]([H])[c]([H])[c]([H])[c]([H])[c]3[H])[c]2[O-])[N]([H])[c]2[c]([H])[c]([Cl])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]21",
-        "inchikey": "FEKRWNWZMOSVBX-NOZNPFKWNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[O-])C3=C(c4c(c(c(c(c4N3[H])[H])Cl)C(=[N+]([H])[H])N([H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "FEKRWNWZMOSVBX-NOZNPFKWNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "11417 (no water pose)": {
         "dg": {
@@ -16,8 +17,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([c]2[c]([H])[c]([H])[c]([H])[c](-[c]3[c]([H])[c]([H])[c]([H])[c]([H])[c]3[H])[c]2[O-])[N]([H])[c]2[c]([H])[c]([F])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]21",
-        "inchikey": "NKADRYHVDUCFQU-NOZNPFKWNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[O-])C3=C(c4c(c(c(c(c4N3[H])[H])F)C(=[N+]([H])[H])N([H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "NKADRYHVDUCFQU-NOZNPFKWNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "7806 (no water pose)": {
         "dg": {
@@ -26,8 +28,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]([H])[c]([C]3=[N][c]4[c]([H])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]([H])[c]4[N]3[H])[c]2[O-])[c]([H])[c]1[H]",
-        "inchikey": "LMGQGPVCSYOMNS-JMPDCCJRNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[O-])C3=Nc4c(c(c(c(c4N3[H])[H])[H])C(=[N+]([H])[H])N([H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "LMGQGPVCSYOMNS-JMPDCCJRNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "8696 (no water pose)": {
         "dg": {
@@ -36,7 +39,8 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([c]2[c]([H])[c]([H])[c]([H])[c](-[c]3[c]([H])[c]([H])[c]([H])[c]([H])[c]3[H])[c]2[O-])[N]([H])[c]2[c]([H])[c]([H])[c]([C]([N]([H])[H])=[N+]([H])[H])[c]([H])[c]21",
-        "inchikey": "GAVRMVQHHVMXFD-KCXCKTAENA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])c2c(c(c(c(c2[O-])C3=C(c4c(c(c(c(c4N3[H])[H])[H])C(=[N+]([H])[H])N([H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "GAVRMVQHHVMXFD-KCXCKTAENA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     }
 }

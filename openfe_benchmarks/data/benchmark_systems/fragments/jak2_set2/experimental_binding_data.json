@@ -6,8 +6,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([S](=[O])(=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H])[c]([H])[c]([H])[c]1-[c]1[c]([H])[c]([H])[c]2[c]([c]1[H])[C]([N]([H])[H])=[N][N]2[H]",
-        "inchikey": "KFJCXIOVAGJCKB-VNHAUOCNNA-N"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3[H])[H])S(=O)(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H])[H])[H])C(=NN2[H])N([H])[H])[H]",
+        "inchikey": "KFJCXIOVAGJCKB-VNHAUOCNNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "21": {
         "dg": {
@@ -16,8 +17,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([S](=[O])(=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H])[c]([H])[c]([H])[c]1-[c]1[c]([H])[c]2[c]([c]([C]([H])([H])[H])[c]1[H])[N]([H])[N]=[C]2[N]([H])[H]",
-        "inchikey": "DKOFSMUNNKPPDR-BUKGPZPNNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1c2c(c3c(c(c2[H])C([H])([H])[H])N(N=C3N([H])[H])[H])[H])[H])[H])S(=O)(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H]",
+        "inchikey": "DKOFSMUNNKPPDR-BUKGPZPNNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "20": {
         "dg": {
@@ -26,8 +28,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([S](=[O])(=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H])[c]([H])[c]([H])[c]1-[c]1[c]([H])[c]([Cl])[c]2[c]([c]1[H])[C]([N]([H])[H])=[N][N]2[H]",
-        "inchikey": "VCEXCUAUEUWDED-BUKGPZPNNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1c2c(c3c(c(c2[H])Cl)N(N=C3N([H])[H])[H])[H])[H])[H])S(=O)(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H]",
+        "inchikey": "VCEXCUAUEUWDED-BUKGPZPNNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "18": {
         "dg": {
@@ -36,8 +39,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([S](=[O])(=[O])[C]([H])([H])[C]([H])([H])[H])[c]([H])[c]([H])[c]1-[c]1[c]([H])[c]([H])[c]2[c]([c]1[H])[C]([N]([H])[H])=[N][N]2[H]",
-        "inchikey": "OBWNDLABSGHHAC-QDYITYEQNA-N"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3[H])[H])S(=O)(=O)C([H])([H])C([H])([H])[H])[H])[H])[H])C(=NN2[H])N([H])[H])[H]",
+        "inchikey": "OBWNDLABSGHHAC-QDYITYEQNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "14": {
         "dg": {
@@ -46,8 +50,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]([H])[c]([H])[c]1[C](=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H]",
-        "inchikey": "CIKBLPHOAAJDCO-BUDVQIAPNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1c2c(c(c3c(c2[H])C(=NN3[H])N([H])[H])[H])[H])[H])[H])C(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H]",
+        "inchikey": "CIKBLPHOAAJDCO-BUDVQIAPNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "12": {
         "dg": {
@@ -56,8 +61,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C]([N]([H])[H])=[N][N]3[H])[c]([H])[c]([S](=[O])(=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H])[c]1[H]",
-        "inchikey": "VPKLJPDVIXYRRU-VNHAUOCNNA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])S(=O)(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H])c2c(c(c3c(c2[H])C(=NN3[H])N([H])[H])[H])[H])[H]",
+        "inchikey": "VPKLJPDVIXYRRU-VNHAUOCNNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "15": {
         "dg": {
@@ -66,8 +72,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([N]([H])[C](=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H])[c]([H])[c]([H])[c]1-[c]1[c]([H])[c]([H])[c]2[c]([c]1[H])[C]([N]([H])[H])=[N][N]2[H]",
-        "inchikey": "DZMQEARCRJKNAB-ZYUCQPJJNA-N"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3[H])[H])N([H])C(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H])[H])[H])C(=NN2[H])N([H])[H])[H]",
+        "inchikey": "DZMQEARCRJKNAB-ZYUCQPJJNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "22-flip": {
         "dg": {
@@ -76,7 +83,8 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]2[c]([c]([H])[c]1-[c]1[c]([H])[c]([H])[c]([S](=[O])(=[O])[N]([H])[C]([C]([H])([H])[H])([C]([H])([H])[H])[C]([H])([H])[H])[c]([H])[c]1[Cl])[C]([N]([H])[H])=[N][N]2[H]",
-        "inchikey": "VSMZYLYGAGOBGV-BUKGPZPNNA-N"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3Cl)[H])S(=O)(=O)N([H])C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])[H])[H])[H])C(=NN2[H])N([H])[H])[H]",
+        "inchikey": "VSMZYLYGAGOBGV-BUKGPZPNNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     }
 }

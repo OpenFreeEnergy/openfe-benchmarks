@@ -6,8 +6,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c](-[c]2[c]([H])[c]([C]#[N])[c]([H])[c]([C]([F])([F])[F])[c]2[H])[c]([H])[c]2[c]1[O][C]([H])([H])[C@@]21[N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]1([H])[C]([F])([F])[F]",
-        "inchikey": "IQPNUYDSOIVCDT-NAMUXGLNNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3[H])C(F)(F)F)[H])C#N)[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "IQPNUYDSOIVCDT-NAMUXGLNNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro5": {
         "dg": {
@@ -16,8 +17,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[n][c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[c]1[O][C]([H])([H])[H]",
-        "inchikey": "QZXYUWIUWKHJOB-GBTMPLDMNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(nc3[H])[H])OC([H])([H])[H])[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "QZXYUWIUWKHJOB-GBTMPLDMNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro2": {
         "dg": {
@@ -26,8 +28,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[n][c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[n]1",
-        "inchikey": "UOJYCSQENDETGB-MVYGJSIYNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(nc(nc3[H])[H])[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "UOJYCSQENDETGB-MVYGJSIYNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro10": {
         "dg": {
@@ -36,8 +39,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[n][c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[c]1[C]#[C][C]([H])([H])[O][C]([H])([H])[H]",
-        "inchikey": "PVKWYAQGNCAZRF-LOQGPMILNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(nc3[H])[H])C#CC([H])([H])OC([H])([H])[H])[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "PVKWYAQGNCAZRF-LOQGPMILNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro3": {
         "dg": {
@@ -46,8 +50,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([Cl])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[c]1[Cl]",
-        "inchikey": "NLBKUPNJXUGSFP-ZWRJMSFZNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3[H])Cl)[H])Cl)[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "NLBKUPNJXUGSFP-ZWRJMSFZNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro6": {
         "dg": {
@@ -56,8 +61,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[n][c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[c]1[C]#[C][C]([H])([H])[H]",
-        "inchikey": "QXBFTWSGJHVMLE-MOPUPUFLNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(nc3[H])[H])C#CC([H])([H])[H])[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "QXBFTWSGJHVMLE-MOPUPUFLNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro4": {
         "dg": {
@@ -66,8 +72,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([H])[c]([O][C]([H])([H])[H])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]1[H]",
-        "inchikey": "AUVSPXNSOMMQAZ-QLAICEHQNA-O"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])OC([H])([H])[H])[H])c2c(c(c3c(c2[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O3)([H])[H])[H])[H])[H]",
+        "inchikey": "AUVSPXNSOMMQAZ-QLAICEHQNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro1": {
         "dg": {
@@ -76,8 +83,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[n][c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[c]1[C]#[N]",
-        "inchikey": "NPXZAFGUUYDQCF-JPOBMCRRNA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(nc3[H])[H])C#N)[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "NPXZAFGUUYDQCF-JPOBMCRRNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "spiro15": {
         "dg": {
@@ -86,7 +94,8 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][c]1[c]([Cl])[c]([H])[c](-[c]2[c]([H])[c]([H])[c]3[c]([c]2[H])[C@]2([N+]([H])=[C]([N]([H])[H])[C]([H])([H])[C@@]2([H])[C]([F])([F])[F])[C]([H])([H])[O]3)[c]([H])[c]1[C]#[N]",
-        "inchikey": "RCNADAYYWCVGJF-WCGZXOJINA-O"
+        "canonical_smiles": "[H]c1c(c2c(c(c1c3c(c(c(c(c3[H])Cl)[H])C#N)[H])[H])[C@@]4([C@](C(C(=[N+]4[H])N([H])[H])([H])[H])([H])C(F)(F)F)C(O2)([H])[H])[H]",
+        "inchikey": "RCNADAYYWCVGJF-WCGZXOJINA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     }
 }

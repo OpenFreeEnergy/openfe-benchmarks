@@ -6,8 +6,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([H])[N]2[C](=[N][C]([c]3[c]([H])[c]([H])[c]([H])[c]([N]([H])[C](=[O])[C]([H])([H])[c]4[c]([H])[c]([H])[c]([H])[c]([H])[c]4[H])[c]3[H])=[C]2[c]2[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]([N]4[C]([H])([H])[C]([H])([H])[O][C]([H])([H])[C]4([H])[H])[c]([H])[c]3[H])[n][c]([H])[c]2[H])[S]1",
-        "inchikey": "BFTPDUXUTFGDLP-QQYWGXKINA-N"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])C([H])([H])C(=O)N([H])c2c(c(c(c(c2[H])C3=C(N4C(=C(SC4=N3)[H])[H])c5c(c(nc(n5)N([H])c6c(c(c(c(c6[H])[H])N7C(C(OC(C7([H])[H])([H])[H])([H])[H])([H])[H])[H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "BFTPDUXUTFGDLP-QQYWGXKINA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "27chargR": {
         "dg": {
@@ -16,8 +17,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([H])[N]2[C](=[N][C]([c]3[c]([H])[c]([H])[c]([H])[c]([N]([H])[C](=[O])[C]([H])([H])[c]4[c]([H])[c]([H])[c]([H])[c]([H])[c]4[H])[c]3[H])=[C]2[c]2[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]4[c]([c]3[H])[C]([H])([H])[N@+]([H])([C]([H])([H])[H])[C]([H])([H])[C]4([H])[H])[n][c]([H])[c]2[H])[S]1",
-        "inchikey": "PVKPCQULPTYIRN-RRKCJBJINA-O"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])C([H])([H])C(=O)N([H])c2c(c(c(c(c2[H])C3=C(N4C(=C(SC4=N3)[H])[H])c5c(c(nc(n5)N([H])c6c(c(c7c(c6[H])C([N@+](C(C7([H])[H])([H])[H])([H])C([H])([H])[H])([H])[H])[H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "PVKPCQULPTYIRN-RRKCJBJINA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "28charg": {
         "dg": {
@@ -26,8 +28,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([H])[N]2[C](=[N][C]([c]3[c]([H])[c]([H])[c]([H])[c]([N]([H])[C](=[O])[C]([H])([H])[c]4[c]([H])[c]([H])[c]([H])[c]([H])[c]4[H])[c]3[H])=[C]2[c]2[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]([N]4[C]([H])([H])[C]([H])([H])[N+]([H])([C]([H])([H])[C]([H])([H])[H])[C]([H])([H])[C]4([H])[H])[c]([H])[c]3[H])[n][c]([H])[c]2[H])[S]1",
-        "inchikey": "MBYBHGUQPPLBRD-XUHMWGPANA-O"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])C([H])([H])C(=O)N([H])c2c(c(c(c(c2[H])C3=C(N4C(=C(SC4=N3)[H])[H])c5c(c(nc(n5)N([H])c6c(c(c(c(c6[H])[H])N7C(C([N+](C(C7([H])[H])([H])[H])([H])C([H])([H])C([H])([H])[H])([H])[H])([H])[H])[H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "MBYBHGUQPPLBRD-XUHMWGPANA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "29charg": {
         "dg": {
@@ -36,8 +39,9 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([H])[N]2[C](=[N][C]([c]3[c]([H])[c]([H])[c]([H])[c]([N]([H])[C](=[O])[C]([H])([H])[c]4[c]([H])[c]([H])[c]([H])[c]([H])[c]4[H])[c]3[H])=[C]2[c]2[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]([H])[c]([C]([H])([H])[C]([H])([H])[N+]([H])([C]([H])([H])[H])[C]([H])([H])[H])[c]3[H])[n][c]([H])[c]2[H])[S]1",
-        "inchikey": "JPSXZEQQHPNTNX-UPNFYDLJNA-O"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])C([H])([H])C(=O)N([H])c2c(c(c(c(c2[H])C3=C(N4C(=C(SC4=N3)[H])[H])c5c(c(nc(n5)N([H])c6c(c(c(c(c6[H])C([H])([H])C([H])([H])[N+]([H])(C([H])([H])[H])C([H])([H])[H])[H])[H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "JPSXZEQQHPNTNX-UPNFYDLJNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     },
     "30charg": {
         "dg": {
@@ -46,7 +50,8 @@
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
         },
-        "canonical_smiles": "[H][C]1=[C]([H])[N]2[C](=[N][C]([c]3[c]([H])[c]([H])[c]([H])[c]([N]([H])[C](=[O])[C]([H])([H])[c]4[c]([H])[c]([H])[c]([H])[c]([H])[c]4[H])[c]3[H])=[C]2[c]2[n][c]([N]([H])[c]3[c]([H])[c]([H])[c]4[c]([c]3[H])[C]([H])([H])[N+]([H])([H])[C]([H])([H])[C]4([H])[H])[n][c]([H])[c]2[H])[S]1",
-        "inchikey": "KEOFEULIBILKAL-NSQPPVFJNA-O"
+        "canonical_smiles": "[H]c1c(c(c(c(c1[H])[H])C([H])([H])C(=O)N([H])c2c(c(c(c(c2[H])C3=C(N4C(=C(SC4=N3)[H])[H])c5c(c(nc(n5)N([H])c6c(c(c7c(c6[H])C([N+](C(C7([H])[H])([H])[H])([H])[H])([H])[H])[H])[H])[H])[H])[H])[H])[H])[H])[H]",
+        "inchikey": "KEOFEULIBILKAL-NSQPPVFJNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
     }
 }

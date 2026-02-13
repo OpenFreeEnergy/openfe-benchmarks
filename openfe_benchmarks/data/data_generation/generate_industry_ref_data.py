@@ -83,6 +83,8 @@ def main(system_group: str, system_name: str, out_dir: pathlib.Path, input_sdf: 
     ValueError
         If the system group or system name is not found in the reference data.
     """
+    # tag each entry with the source, currently we link to the aggregated reference data but this should be changed if we refine it in future.
+    ross_et_al_doi = "https://doi.org/10.1038/s42004-023-01019-9"
     # load the ref data from the industry benchmark results stored on github
     ref_dg_data = pd.read_csv("https://raw.githubusercontent.com/OpenFreeEnergy/IndustryBenchmarks2024/refs/tags/v1.0.0/industry_benchmarks/analysis/schrodinger_21_4_results/combined_schrodinger_dg.csv")
     available_groups = ref_dg_data["system group"].unique().tolist()
@@ -97,7 +99,7 @@ def main(system_group: str, system_name: str, out_dir: pathlib.Path, input_sdf: 
     system_data = group_data[group_data["system name"] == system_name].reset_index(drop=True)
     print(f"Extracted reference data for system group {system_group} and system name {system_name} with {len(system_data)} ligands.")
     # load the ligands with openff toolkit to extract the identifiers
-    molecules = Molecule.from_file(input_sdf.as_posix())
+    molecules = Molecule.from_file(input_sdf.as_posix(), allow_undefined_stereo=True)
     molecule_by_name = {molecule.name: molecule for molecule in molecules}
     # reverse the name conversions to match the names in the input sdf
     reversed_name_conversions = dict((value, key) for key, value in name_conversions.items())
@@ -111,7 +113,8 @@ def main(system_group: str, system_name: str, out_dir: pathlib.Path, input_sdf: 
             "dg": row["Exp. dG (kcal/mol)"] * unit.kilocalories_per_mole,
             "canonical_smiles": molecule_by_name[ligand_name].to_smiles(isomeric=True),
             # do we need to be tautomer specific?
-            "inchikey": molecule_by_name[ligand_name].to_inchikey(fixed_hydrogens=True)
+            "inchikey": molecule_by_name[ligand_name].to_inchikey(fixed_hydrogens=True),
+            "reference": ross_et_al_doi,
         }
         dg_uncertainty = row["Exp. dG error (kcal/mol)"] * unit.kilocalories_per_mole
         if dg_uncertainty.m != 0.0:
