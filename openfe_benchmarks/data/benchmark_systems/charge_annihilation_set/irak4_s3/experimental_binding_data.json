@@ -1,0 +1,46 @@
+{
+    "19charg": {
+        "dg": {
+            "magnitude": -10.600000381469728,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c2c(c1[H])N=C(S2)C3=C(N=C(N(C3=O)[H])N4C(C(OC(C4([H])[H])([H])[H])([H])[H])([H])[H])N([H])[C@@]5(C(C(C([N+](C5([H])[H])([H])[H])([H])[H])([H])[H])([H])[H])[H])[H])[H]",
+        "inchikey": "FWVSQXVRLKRCRX-RAUSCZIGNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "29": {
+        "dg": {
+            "magnitude": -8.710000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c2c(c1[H])N=C(S2)C3=C(N=C(N(C3=O)[H])N4C(C(OC(C4([H])[H])([H])[H])([H])[H])([H])[H])N([H])[C@]5(C([C@](C(C(C5([H])[H])([H])[H])([H])[H])([H])O[H])([H])[H])[H])[H])[H]",
+        "inchikey": "UTHLBNANUVJKKV-ISBUIBJZNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "28charg": {
+        "dg": {
+            "magnitude": -9.5,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c2c(c1[H])N=C(S2)C3=C(N=C(N(C3=O)[H])N4C(C(OC(C4([H])[H])([H])[H])([H])[H])([H])[H])N([H])C5(C(C([N+](C(C5([H])[H])([H])[H])([H])[H])([H])[H])([H])[H])[H])[H])[H]",
+        "inchikey": "OKBLGUODEJGUAX-HAGXSQGDNA-O",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "27": {
+        "dg": {
+            "magnitude": -8.710000038146973,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H]c1c(c(c2c(c1[H])N=C(S2)C3=C(N=C(N(C3=O)[H])N4C(C(OC(C4([H])[H])([H])[H])([H])[H])([H])[H])N([H])[C@@]5(C(C(C(=O)N(C5([H])[H])[H])([H])[H])([H])[H])[H])[H])[H]",
+        "inchikey": "PAJJCFWELYJDGI-IPCHPNADNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    }
+}
