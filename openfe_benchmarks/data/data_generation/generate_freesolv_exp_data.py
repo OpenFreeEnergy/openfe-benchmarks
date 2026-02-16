@@ -18,24 +18,32 @@ def main():
     url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
     response = requests.get(url)
     data = response.json()
+    # water is the only solvent in the dataset
+    water = Molecule.from_smiles("O")
+    water_inchi = water.to_inchi(fixed_hydrogens=True)
+    water_inchikey = water.to_inchikey(fixed_hydrogens=True)
 
     ref_data = {}
     for name, entry in data.items():
         # make the molecule from the provided smiles
         off_mol = Molecule.from_smiles(entry["smiles"], allow_undefined_stereo=True)
-        ref_data[name] = {
+        # use the solute solvent names as the keys
+        ref_data[f"{name},water"] = {
             "dg": entry["expt"] * unit.kilocalories_per_mole,
             "uncertainty": entry["d_expt"] * unit.kilocalories_per_mole,
             "reference": entry["expt_reference"],
-            "iupac": entry["iupac"],
+            "solute_iupac": entry["iupac"],
             "notes": entry["notes"],
-            "smiles": entry["smiles"],
+            "solute_smiles": entry["smiles"],
             # store extra identifiers which can be used to match the molecule if we lose the name
-            "inchikey": off_mol.to_inchikey(fixed_hydrogens=True),
-            "inchi": off_mol.to_inchi(fixed_hydrogens=True),
+            "solute_inchikey": off_mol.to_inchikey(fixed_hydrogens=True),
+            "solute_inchi": off_mol.to_inchi(fixed_hydrogens=True),
+            "solvent_smiles": "O",
+            "solvent_inchikey": water_inchikey,
+            "solvent_inchi": water_inchi,
         }
 
-    with open("experimental_solvation_free_energy.json", "w") as f:
+    with open("experimental_solvation_free_energy_data.json", "w") as f:
         json.dump(ref_data, f, cls=JSON_HANDLER.encoder, indent=4)
 
 

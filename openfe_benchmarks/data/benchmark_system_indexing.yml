@@ -74,6 +74,7 @@ metadata:
   notes:
     - "Systems may or may not include cofactor files"
     - "All systems can be used for ASFEs and RSFEs"
+    - "sfe tags indicate that a system has experimental salvation free energy data available"
     - "bfe tag indicates that experimental binding free energy data is available for this system"
     - "Systems with proteins can also be used for RBFE and ABFE calculations"
     - "Systems with ligands and cofactors could potentially be used for RBFE and ABFE calculations"
