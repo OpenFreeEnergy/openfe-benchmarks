@@ -14,7 +14,8 @@ _BASE_DIR = Path(__file__).resolve().parent.parent / "data" / "benchmark_systems
 TAG_CHECKS = [  # Each tag should be represented here with necessary files. If no files are necessary, include an empty list.
     ("protein", ["protein.pdb"]),
     ("cofactor", ["cofactors.sdf"]),
-    ("bfe", ["experimental_binding_data.json"])
+    ("bfe", ["experimental_binding_data.json"]),
+    ("sfe", ["experimental_solvation_free_energy_data.json"])
 ]
 
 
