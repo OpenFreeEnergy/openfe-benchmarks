@@ -235,7 +235,7 @@ def validate_rbfe_network(network_file):
             expected_edge_count,
         )
 
-    # Build ChemicalSystem lookup from network JSON to check components
+    # Build ChemicalSystem lookup from AlchemicalNetwork to check components
     chem_systems = {}
     for chem_system in network.nodes:
         chem_systems[chem_system.key] = chem_system
@@ -331,7 +331,7 @@ def validate_rbfe_network(network_file):
     for chem_system in network.nodes:
         # get all ligands and cofactors
         ligands = chem_system.get_components_of_type(openfe.SmallMoleculeComponent)
-        # check the have changes using the openff molecule
+        # check the ligands have charges using the openff molecule
         for ligand in ligands:
             found_ligands.add(ligand.name)
             off_mol = ligand.to_openff()
