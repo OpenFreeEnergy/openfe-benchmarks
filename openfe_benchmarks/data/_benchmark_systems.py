@@ -422,9 +422,9 @@ def _validate_and_load_data_system(
         benchmark_set=benchmark_set,
         protein=protein_path,
         ligands=ligands,
-        cofactors=cofactors,
-        ligand_networks=ligand_networks,
-        reference_data=reference_data,
+        cofactors=cofactors or None,
+        ligand_networks=ligand_networks or None,
+        reference_data=reference_data or None,
         details=details,
     )
 
