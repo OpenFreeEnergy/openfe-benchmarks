@@ -345,7 +345,7 @@
   "2,6-dichlorobenzonitrile": "c1cc(c(c(c1)Cl)C#N)Cl",
   "4-amino-3,5,6-trichloropyridine-2-carboxylicacid": "c1(c(c(nc(c1Cl)Cl)C(=O)O)Cl)N",
   "diethyl2,4-dichlorophenylthiophosphate": "CCOP(=S)(OCC)Oc1c(Cl)cc(Cl)cc1",
-  "dimethyl2,4,5-trichlorophenylthiophosphate": "COP(=S)(OC)Oc1c(Cl)c(Cl)c(Cl)cc1",
+  "dimethyl2,4,5-trichlorophenylthiophosphate": "COP(=S)(OC)Oc1c(Cl)cc(Cl)c(Cl)c1",
   "dimethyl4-bromo-2,5-dichlorophenylthiophosphate": "COP(=S)(OC)Oc1c(Cl)cc(Br)c(Cl)c1",
   "ethyl4-cyanophenylphenylthiophosphonate": "P(c1ccccc1)(=S)(OCC)Oc2ccc(cc2)C#N",
   "methylhydrazine": "CNN",
