@@ -2,10 +2,13 @@
 Generate partial charges for a set of molecules using OpenFE's bulk charge assignment utility will also add software version metadata to each ligand
 as an sdf property.
 """
+
 import pathlib
 import os
 
-from openfe.protocols.openmm_utils.charge_generation import assign_offmol_partial_charges
+from openfe.protocols.openmm_utils.charge_generation import (
+    assign_offmol_partial_charges,
+)
 import click
 from rdkit import Chem
 from gufe import SmallMoleculeComponent
@@ -17,15 +20,38 @@ import tqdm
 
 
 @click.command()
-@click.option("--input-dir", type=click.Path(exists=True, dir_okay=True, path_type=pathlib.Path), required=True,
-              help="Path to the input SDF files containing the molecules to be charged.")
-@click.option("--output-dir", type=click.Path(dir_okay=True, file_okay=False, exists=True, path_type=pathlib.Path),
-              required=True, help="Path to the output folder the SDF files with charged molecules will be saved.")
-@click.option("--charge-method", type=click.Choice(["am1bcc_at", "am1bccelf10_oe", "nagl_off", "am1bcc_oe"]),
-              default="am1bcc_at", help="The method to use for charge assignment.")
-@click.option("--nagl-model", type=str, default=None,
-              help="Path to the NAGL model to use for charge assignment when using the 'nagl_off' method if None the latest model will be used.")
-def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, nagl_model: None | str):
+@click.option(
+    "--input-dir",
+    type=click.Path(exists=True, dir_okay=True, path_type=pathlib.Path),
+    required=True,
+    help="Path to the input SDF files containing the molecules to be charged.",
+)
+@click.option(
+    "--output-dir",
+    type=click.Path(
+        dir_okay=True, file_okay=False, exists=True, path_type=pathlib.Path
+    ),
+    required=True,
+    help="Path to the output folder the SDF files with charged molecules will be saved.",
+)
+@click.option(
+    "--charge-method",
+    type=click.Choice(["am1bcc_at", "am1bccelf10_oe", "nagl_off", "am1bcc_oe"]),
+    default="am1bcc_at",
+    help="The method to use for charge assignment.",
+)
+@click.option(
+    "--nagl-model",
+    type=str,
+    default=None,
+    help="Path to the NAGL model to use for charge assignment when using the 'nagl_off' method if None the latest model will be used.",
+)
+def main(
+    input_dir: pathlib.Path,
+    output_dir: pathlib.Path,
+    charge_method: str,
+    nagl_model: None | str,
+):
     """Generate partial charges for a set of molecules using OpenFE's charge assignment utility.
 
     Parameters
@@ -42,11 +68,9 @@ def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, 
         - 'am1bccelf10_oe': AM1BCC Elf10 applied with OpenEye Toolkit using 500 conformers
         - 'nagl_off': NAGL charges applied with OpenFF-Toolkit
 
-    n_cores : int
-        Number of CPU cores to use for parallel processing.
     nagl_model : str
         Model *.pt file (i.e., "openff-gnn-am1bcc-1.0.0.pt"), optionally with path, for the NAGL model to use for
-        charge assignment when using the ``'nagl'`` method. If None the latest model will be used. See 
+        charge assignment when using the ``'nagl'`` method. If None the latest model will be used. See
         [OpenFF NAGL](https://docs.openforcefield.org/projects/nagl-models) documentation for more detail.
 
     Notes
@@ -60,7 +84,9 @@ def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, 
     mols = []
     for input_path in input_dir.glob("*.sdf"):
         # should be a single molecule per file
-        off_mol = toolkit.Molecule.from_file(input_path.as_posix(), allow_undefined_stereo=True)
+        off_mol = toolkit.Molecule.from_file(
+            input_path.as_posix(), allow_undefined_stereo=True
+        )
         mols.append(SmallMoleculeComponent.from_openff(off_mol))
 
     # construct the toolkit backend
@@ -68,7 +94,7 @@ def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, 
         "am1bcc_at": "ambertools",
         "am1bcc_oe": "openeye",
         "am1bccelf10_oe": "openeye",
-        "nagl_off": "rdkit"
+        "nagl_off": "rdkit",
     }
     backend = method_to_backend[charge_method]
 
@@ -87,7 +113,7 @@ def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, 
                 method=openff_charge_method,
                 toolkit_backend=backend,
                 generate_n_conformers=generate_n_conformers,
-                nagl_model=nagl_model
+                nagl_model=nagl_model,
             )
         except Exception as e:
             print(f"Failed to generate charges for molecule {mol.name} with error: {e}")
@@ -110,14 +136,18 @@ def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, 
 
     elif backend == "openeye":
         from openeye import oeomega, oequacpac
+
         provenance["oeomega"] = str(oeomega.OEOmegaGetVersion())
         provenance["oequacpac"] = str(oequacpac.OE_OEQUACPAC_VERSION)
     elif backend == "rdkit" and charge_method == "nagl_off":
         from openff import nagl
         from openff.nagl_models import get_models_by_type
+
         if nagl_model is None:
             # get the latest production nagl model
-            prov_nagl_model = get_models_by_type(model_type="am1bcc", production_only=True)[-1].name
+            prov_nagl_model = get_models_by_type(
+                model_type="am1bcc", production_only=True
+            )[-1].name
         else:
             prov_nagl_model = os.path.split(nagl_model)
         provenance["nagl_version"] = str(nagl.__version__)
@@ -128,7 +158,7 @@ def main(input_dir: pathlib.Path, output_dir: pathlib.Path, charge_method: str, 
         "am1bcc_at": "antechamber_am1bcc",
         "am1bccelf10_oe": "openeye_am1bccelf10",
         "nagl_off": f"nagl_{prov_nagl_model}",
-        "am1bcc_oe": "openeye_am1bcc"
+        "am1bcc_oe": "openeye_am1bcc",
     }
 
     output_path = output_dir / f"ligands_{method_to_name[charge_method]}.sdf"
