@@ -211,6 +211,9 @@ class BenchmarkData:
     ligand_networks : dict[str, Path] | None
         Dictionary of available ligand networks where the key is the filename, '*network.json',
         and the value is a Path to a ligand network file.
+    reference_data : dict[str, Path] | None
+        Dictionary of available reference data files where the key is the filename 'experimental*data.json',
+        and the value is a Path to a reference data file.
     details : str
         Information available in the preparation_details.md file
     """
@@ -221,6 +224,7 @@ class BenchmarkData:
     ligands: dict[str, Path]
     cofactors: dict[str, Path] | None
     ligand_networks: dict[str, Path] | None
+    reference_data: dict[str, Path] | None
     details: str
 
     def __repr__(self):
@@ -231,6 +235,7 @@ class BenchmarkData:
             f"ligands={list(self.ligands.keys())}, "
             f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else 'None'}, "
             f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else 'None'}"
+            f"reference_data={list(self.reference_data.keys()) if self.reference_data is not None else 'None'})"
         )
 
 
@@ -263,6 +268,7 @@ def _validate_and_load_data_system(
     ligands = {}
     cofactors = {}
     ligand_networks = {}
+    reference_data = {}
     details = None
 
     # Track all files for validation
@@ -341,6 +347,13 @@ def _validate_and_load_data_system(
             logger.debug(f"Found ligand network: {filename}")
             continue
 
+        # check for reference data file (experimental*data.json)
+        if filename.startswith("experimental") and filename.endswith("data.json"):
+            reference_data[file_path.stem] = file_path
+            categorized_files.add(file_path)
+            logger.debug(f"Found reference data: {filename}")
+            continue
+
     # Check for uncategorized files
     uncategorized = set(all_files) - categorized_files
     for file_path in uncategorized:
@@ -409,8 +422,9 @@ def _validate_and_load_data_system(
         benchmark_set=benchmark_set,
         protein=protein_path,
         ligands=ligands,
-        cofactors=cofactors,
-        ligand_networks=ligand_networks,
+        cofactors=cofactors or None,
+        ligand_networks=ligand_networks or None,
+        reference_data=reference_data or None,
         details=details,
     )
 
