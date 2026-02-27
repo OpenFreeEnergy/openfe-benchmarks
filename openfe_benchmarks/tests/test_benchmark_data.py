@@ -4,10 +4,12 @@ Tests for the benchmark systems module.
 
 import pytest
 import json
+import logging
+import warnings
 
 from gufe.tokenization import JSON_HANDLER
-from rdkit import Chem
-from openfe import ProteinComponent, SmallMoleculeComponent, LigandNetwork
+from openff.units import unit
+from openfe import ProteinComponent, LigandNetwork
 
 from openfe_benchmarks.data import (
     BenchmarkData,
@@ -16,8 +18,12 @@ from openfe_benchmarks.data import (
     get_benchmark_set_data_systems,
     PARTIAL_CHARGE_TYPES,
 )
+from openfe_benchmarks.scripts.utils import process_sdf
 
-from openff.units import unit
+
+logging.getLogger("gufekey.gufe").setLevel(
+    logging.CRITICAL
+)  # Too many gufe logs to read pytest output otherwise
 
 
 def test_list_benchmark_sets_output():
@@ -66,8 +72,8 @@ def test_benchmark_system_initialization(benchmark_set, system_name):
         charge for charge in PARTIAL_CHARGE_TYPES if charge not in system.ligands
     ]
     if missing_ligand_charges:
-        print(
-            f"Warning: Missing ligand charge types for {system_name}: {missing_ligand_charges}"
+        pytest.fail(
+            f"Missing ligand charge types for {system_name}: {missing_ligand_charges}"
         )
 
     if system.cofactors:
@@ -75,8 +81,8 @@ def test_benchmark_system_initialization(benchmark_set, system_name):
             charge for charge in PARTIAL_CHARGE_TYPES if charge not in system.cofactors
         ]
         if missing_cofactor_charges:
-            print(
-                f"Warning: Missing cofactor charge types for {system_name}: {missing_cofactor_charges}"
+            pytest.fail(
+                f"Missing cofactor charge types for {system_name}: {missing_cofactor_charges}"
             )
 
 
@@ -101,16 +107,13 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
 
     # Validate ligands can be loaded with RDKit and converted to OpenFE components
     for charge_type, ligand_path in system.ligands.items():
-        ligand_supplier = Chem.SDMolSupplier(str(ligand_path), removeHs=False)
-        ligands = [
-            SmallMoleculeComponent(mol) for mol in ligand_supplier if mol is not None
-        ]
+        ligands = process_sdf(str(ligand_path), return_dict=True)
         assert len(ligands) > 0, (
             f"No valid ligands loaded from {charge_type} for {benchmark_set}/{system_name}"
         )
 
         # Verify each ligand has atoms
-        for i, ligand in enumerate(ligands):
+        for i, ligand in enumerate(ligands.values()):
             rdkit_mol = ligand.to_rdkit()
             assert rdkit_mol.GetNumAtoms() > 0, (
                 f"Ligand {i + 1} ({charge_type}) for {benchmark_set}/{system_name} has no atoms"
@@ -119,12 +122,7 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
     # Validate cofactors can be loaded with RDKit and converted to OpenFE components
     if system.cofactors:
         for charge_type, cofactor_path in system.cofactors.items():
-            cofactor_supplier = Chem.SDMolSupplier(str(cofactor_path), removeHs=False)
-            cofactors = [
-                SmallMoleculeComponent(mol)
-                for mol in cofactor_supplier
-                if mol is not None
-            ]
+            cofactors = process_sdf(str(cofactor_path))
             assert len(cofactors) > 0, (
                 f"No valid cofactors loaded from {charge_type} for {benchmark_set}/{system_name}"
             )
@@ -155,23 +153,54 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
 
     # make sure the reference data is present and can be loaded and has dg
     if system.reference_data:
-        for ref_path in system.reference_data.values():
+        for ref_name, ref_path in system.reference_data.items():
             with open(ref_path, "r") as f:
+                first_line = f.readline()
+                if "git-lfs" in first_line:
+                    warnings.warn(
+                        f"Warning: Reference data file {ref_path} is a Git LFS pointer and not downloaded."
+                    )
+                    continue
+                f.seek(0)
                 ref_data = json.load(f, cls=JSON_HANDLER.decoder)
             assert isinstance(ref_data, dict), (
                 f"Reference data for {benchmark_set}/{system_name} is not a dict"
             )
             for ref_entry in ref_data.values():
-                assert "dg" in ref_entry, (
-                    f"Reference data for {benchmark_set}/{system_name} missing 'dg' key"
-                )
-                # make sure the units are compatible with kilocalories per mole
-                dg = ref_entry["dg"]
-                assert isinstance(dg, unit.Quantity), (
-                    f"'dg' value for {benchmark_set}/{system_name} is not a Quantity"
-                )
-                # convert to kcal/mol to check compatibility
-                dg.to("kcal/mol")
+                if ref_name.startswith("experimental_"):
+                    assert "dg" in ref_entry, (
+                        f"Reference data, {ref_name},  for {benchmark_set}/{system_name} missing 'dg' key"
+                    )
+                    # make sure the units are compatible with kilocalories per mole
+                    dg = ref_entry["dg"]
+                    assert isinstance(dg, unit.Quantity), (
+                        f"'dg' value for {benchmark_set}/{system_name}, {ref_name}, is not a Quantity"
+                    )
+                    # convert to kcal/mol to check compatibility
+                    dg.to("kcal/mol")
+
+                if ref_name == "system_data" or "solvation_free_energy" in ref_name:
+                    ligands = process_sdf(
+                        str(system.ligands["no_charges"]), return_dict=True
+                    )
+                    assert "solute_name" in ref_entry, (
+                        f"Reference data for {benchmark_set}/{system_name}, {ref_name} is missing 'solute_name' key"
+                    )
+                    assert (
+                        ref_entry["solute_name"] in ligands
+                        or ref_entry["solute_name"] == "water"
+                    ), (
+                        f"Solute referenced in exp data, {ref_entry['solute_name']}, is not found in ligand.sdf"
+                    )
+                    assert "solvent_name" in ref_entry, (
+                        f"Reference data for {benchmark_set}/{system_name}, {ref_name} is missing 'solvent_name' key"
+                    )
+                    assert (
+                        ref_entry["solvent_name"] in ligands
+                        or ref_entry["solvent_name"] == "water"
+                    ), (
+                        f"Solvent referenced in exp data, {ref_entry['solvent_name']}, is not found in ligand.sdf"
+                    )
 
 
 class TestErrorHandling:
