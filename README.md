@@ -1,30 +1,26 @@
-# Open Free Energy Benchmark Systems
+# OpenFE Benchmarks
 
-A set of benchmark systems to validate the OpenFE components.
+Curated benchmark inputs and result submission conventions for OpenFE-based free-energy calculations. The repository provides remediated system inputs (proteins, ligands, ligand networks), example scripts/notebooks, and a machine-readable results schema.
 
 ## Contents
 
-The `openfe_benchmark` repository contains:
-  * A file for each system in the benchmark set (e.g. `tyk2.py`). These hold
-    methods for creating the free energy network and the system components
-    necessary to calculate the benchmark.
-  * A [`data`](/Users/jenniferclark/bin/openfe-benchmarks/openfe_benchmarks/data/README.md) directory with a set of PDB files for each host system and SDF files
-    for each set of ligands for each system.
-  * A `scripts` directory with examples of how to set up calculations such as:
-   - bfe: binding free energy
-   - hfe: hydration free energy
-   - sfe: solvation free energy (requires external tools)
-  * `examples` a directory with notebooks for example calculations and analyses
+- `openfe_benchmarks/data/` — remediated benchmark inputs (ligands, proteins, networks, preparation notes).
+- `openfe_benchmarks/scripts/` — utility scripts and validation helpers.
+- `openfe_benchmarks/results/` — canonical result-submission layout and schema (see `results/README.md`).
+- `examples/` — runnable notebooks showing common workflows.
 
-## Available Systems
+## Quick start
 
-The available systems are indexed in the [benchmark_system_indexing.yml](openfe_benchmarks/data/benchmark_system_indexing.yml) file. This file provides a comprehensive list of the benchmark systems along with tags representing whether they can be used for `bfe` or `sfe` calculations and whether there are cofactors in the system. These systems can also be explored in Python, as demonstrated in the notebook [`1_initializing_benchmark_data.ipynb`](examples/1_initializing_benchmark_data.ipynb).
+1. Install the package. No dependencies are needed to access data.
 
-## Additional Resources
+   ```bash
+   pip install -e .
+   ```
 
-- **OpenFE Documentation**: https://docs.openfree.energy
-- **GUFE Documentation**: https://gufe.openfree.energy
-- **Example Notebooks**: See `examples/` directory for:
-  - `1_initializing_benchmark_data.ipynb` - How to use the benchmark systems API
-  - `2_benchmark_data_with_openfe.ipynb`  - Using a BenchmarkData system with OpenFE tools
-  - `building_networks.ipynb` - Creating ligand networks
+2. Browse benchmarking systems with [data](openfe_benchmarks/data/README.md)
+3. Set-up calculations with scripts.
+4. Submit benchmarking [results](openfe_benchmarks/results/README.md)
+
+## License
+
+This project is MIT-licensed. See `LICENSE` for details.
