@@ -4,9 +4,12 @@ Tests for the benchmark systems module.
 
 import pytest
 import json
+import logging
+import warnings
 
 from gufe.tokenization import JSON_HANDLER
 from rdkit import Chem
+from openff.units import unit
 from openfe import ProteinComponent, SmallMoleculeComponent, LigandNetwork
 
 from openfe_benchmarks.data import (
@@ -17,7 +20,10 @@ from openfe_benchmarks.data import (
     PARTIAL_CHARGE_TYPES,
 )
 
-from openff.units import unit
+
+logging.getLogger("gufekey.gufe").setLevel(
+    logging.CRITICAL
+)  # Too many gufe logs to read pytest output otherwise
 
 
 def test_list_benchmark_sets_output():
@@ -66,8 +72,8 @@ def test_benchmark_system_initialization(benchmark_set, system_name):
         charge for charge in PARTIAL_CHARGE_TYPES if charge not in system.ligands
     ]
     if missing_ligand_charges:
-        print(
-            f"Warning: Missing ligand charge types for {system_name}: {missing_ligand_charges}"
+        pytest.fail(
+            f"Missing ligand charge types for {system_name}: {missing_ligand_charges}"
         )
 
     if system.cofactors:
@@ -75,8 +81,8 @@ def test_benchmark_system_initialization(benchmark_set, system_name):
             charge for charge in PARTIAL_CHARGE_TYPES if charge not in system.cofactors
         ]
         if missing_cofactor_charges:
-            print(
-                f"Warning: Missing cofactor charge types for {system_name}: {missing_cofactor_charges}"
+            pytest.fail(
+                f"Missing cofactor charge types for {system_name}: {missing_cofactor_charges}"
             )
 
 
@@ -157,6 +163,13 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
     if system.reference_data:
         for ref_path in system.reference_data.values():
             with open(ref_path, "r") as f:
+                first_line = f.readline()
+                if "git-lfs" in first_line:
+                    warnings.warn(
+                        f"Warning: Reference data file {ref_path} is a Git LFS pointer and not downloaded."
+                    )
+                    continue
+                f.seek(0)
                 ref_data = json.load(f, cls=JSON_HANDLER.decoder)
             assert isinstance(ref_data, dict), (
                 f"Reference data for {benchmark_set}/{system_name} is not a dict"
