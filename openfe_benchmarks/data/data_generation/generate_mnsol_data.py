@@ -2,7 +2,6 @@ import json
 import csv
 import os
 import copy
-from collections import defaultdict
 
 import click
 import pathlib
@@ -186,6 +185,8 @@ def main(mnsol_alldata: pathlib.Path):
                 "uncertainty": uncertainty * unit.kilocalories_per_mole,
                 "reference": "https://doi.org/10.13020/3eks-j059",
                 "notes": ";".join(f"{k}={v}" for k, v in list(row.items())[:12]),
+                "solute_name": solute_name,
+                "solvent_name": solvent_name,
                 "solute_charge": charge,
                 "solute_smiles": offmol_solute.to_smiles(explicit_hydrogens=True),
                 "solute_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
@@ -199,6 +200,8 @@ def main(mnsol_alldata: pathlib.Path):
                 "reference": "https://doi.org/10.13020/3eks-j059",
                 "notes": ";".join(f"{k}={v}" for k, v in list(row.items())[:12]),
                 "solute_charge": charge,
+                "solute_name": solute_name,
+                "solvent_name": solvent_name,
                 "solute_smiles": offmol_solute.to_smiles(explicit_hydrogens=True),
                 "solute_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
                 "solute_inchi": offmol_solute.to_inchi(fixed_hydrogens=True),
@@ -214,16 +217,10 @@ def main(mnsol_alldata: pathlib.Path):
         with open(sys_filename, "w") as f:
             json.dump(sys_data, f, cls=JSON_HANDLER.encoder, indent=4)
 
-    errors = defaultdict(list)
     if not os.path.isfile(sdf_filename):
         with SDWriter(sdf_filename) as writer:
             for molecule in tqdm(molecules.values()):
-                try:
-                    writer.write(_best_conformer_rdmol(molecule).to_rdkit())
-                except Exception as e:
-                    errors[str(e)[:80]].append(molecule.name)
-        for err, tmp in errors.items():
-            print(err, tmp)
+                writer.write(_best_conformer_rdmol(molecule).to_rdkit())
 
 
 if __name__ == "__main__":
