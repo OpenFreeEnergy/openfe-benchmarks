@@ -2986,26 +2986,6 @@ p-bromophenol
 {"openfe_version": "1.8.0", "openff_toolkit_version": "0.18.0", "rdkit_version": "2025.09.4", "charge_method": "am1bccelf10_oe", "oeomega": "20251120", "oequacpac": "2111"}
 
 $$$$
-water
-     RDKit          3D
-
-  3  2  0  0  0  0  0  0  0  0999 V2000
-   -0.0008    0.3664   -0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
-   -0.8123   -0.1835   -0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
-    0.8131   -0.1829    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
-  1  2  1  0
-  1  3  1  0
-M  END
->  <ofe-name>  (67) 
-water
-
->  <atom.dprop.PartialCharge>  (67) 
--0.78504002094268799 0.39252001047134399 0.39252001047134399
-
->  <charge_provenance>  (67) 
-{"openfe_version": "1.8.0", "openff_toolkit_version": "0.18.0", "rdkit_version": "2025.09.4", "charge_method": "am1bccelf10_oe", "oeomega": "20251120", "oequacpac": "2111"}
-
-$$$$
 trimethylphosphate
      RDKit          3D
 
