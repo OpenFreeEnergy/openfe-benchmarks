@@ -1,23 +1,22 @@
 import json
 import csv
 import os
-import copy
-from collections import defaultdict
 
 import click
 import pathlib
 from rdkit.Chem import SDWriter
-import openmm
-import openmm.unit
 from tqdm import tqdm
 
 from openff.toolkit import Molecule
-from openff.toolkit.utils.toolkits import RDKitToolkitWrapper
 from openff.units import unit
 from gufe.tokenization import JSON_HANDLER
-from openff.toolkit.typing.engines.smirnoff import ForceField
+from rdkit import RDLogger
+from rdkit import Chem
+from rdkit.Chem import AllChem
 
 NAMES_TO_SMILES = json.load(open("mnsol-name-to-smiles.json", "r"))
+
+RDLogger.DisableLog("rdApp.*")
 
 
 def _best_conformer_rdmol(offmol: "Molecule"):
@@ -43,43 +42,34 @@ def _best_conformer_rdmol(offmol: "Molecule"):
         The same molecule object with ``_conformers`` replaced by a single
         lowest-energy conformer.
     """
-    offmol.generate_conformers(
-        n_conformers=10,
-        rms_cutoff=0.25 * unit.angstrom,
-        toolkit_registry=RDKitToolkitWrapper(),
-    )
-
-    ff = ForceField("openff-2.3.0.offxml")
-    best_energy = float("inf") * openmm.unit.kilojoules_per_mole
-    for conf_idx in range(len(offmol.conformers)):
-        #        try:
-        offmol_copy = copy.deepcopy(offmol)
-        offmol_copy._conformers = [offmol.conformers[conf_idx]]
-        positions = offmol_copy.conformers[0]
-
-        interchange = ff.create_interchange(offmol_copy.to_topology())
-        openmm_system = interchange.to_openmm_system(combine_nonbonded_forces=False)
-        context = openmm.Context(
-            openmm_system,
-            openmm.VerletIntegrator(0.1 * openmm.unit.femtoseconds),
-            openmm.Platform.getPlatformByName("Reference"),
-        )
-        context.setPositions(
-            (positions * openmm.unit.angstrom).in_units_of(openmm.unit.nanometer),
-        )
-        openmm.LocalEnergyMinimizer.minimize(
-            context=context,
-            tolerance=10,
-            maxIterations=0,
-        )
-        energy = context.getState(getEnergy=True).getPotentialEnergy()
-
+    best_energy = float("inf")
+    best_conformer = None
+    rdmol = offmol.to_rdkit()
+    params = AllChem.ETKDGv3()
+    params.pruneRmsThresh = 0.25
+    AllChem.EmbedMultipleConfs(rdmol, numConfs=10, params=params)
+    for conf_id in range(rdmol.GetNumConformers()):
+        try:
+            AllChem.UFFOptimizeMolecule(rdmol, confId=conf_id)
+            energy = AllChem.UFFGetMoleculeForceField(
+                rdmol, confId=conf_id
+            ).CalcEnergy()
+        except Exception:
+            continue
         if energy < best_energy:
             best_energy = energy
-            best_conformer = offmol_copy.conformers[0]
+            best_conformer = conf_id
 
-    offmol._conformers = [best_conformer]
-    return offmol
+    new_rdmol = Chem.Mol(rdmol)
+    new_rdmol.RemoveAllConformers()
+    conf = (
+        rdmol.GetConformer(best_conformer)
+        if best_conformer is not None
+        else rdmol.GetConformer(0)
+    )
+    new_conf = Chem.rdchem.Conformer(conf)
+    new_rdmol.AddConformer(new_conf, assignId=True)
+    return new_rdmol
 
 
 @click.command()
@@ -127,13 +117,18 @@ def main(mnsol_alldata: pathlib.Path):
     exp_filename = "../benchmark_systems/solvation_set/mnsol_neutral/experimental_solvation_free_energy_data.json"
     sys_filename = "../benchmark_systems/solvation_set/mnsol_neutral/systems_data.json"
     sdf_filename = "../benchmark_systems/solvation_set/mnsol_neutral/ligands.sdf"
+    flag_sdf = not os.path.isfile(sdf_filename)
 
     sys_data = {}
     exp_data = {}
     molecules = {}
+    skip_molecules = []
     with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
         reader = csv.DictReader(fh, delimiter="\t")
-        for row in reader:
+        total_lines = sum(1 for _ in fh) - 1  # subtract header
+        fh.seek(0)
+        reader = csv.DictReader(fh, delimiter="\t")
+        for row in tqdm(reader, total=total_lines):
             if not row or not row.get("FileHandle"):
                 continue
 
@@ -142,10 +137,11 @@ def main(mnsol_alldata: pathlib.Path):
             solvent_name = row.get("Solvent").strip().strip('"')
             group = row.get("Level1").strip().strip('"')
             charge = row.get("Charge").strip().strip('"')
-            formula = row.get("Formula").strip().strip('"')
             dg = float(row.get("DeltaGsolv").strip().strip('"'))
             uncertainty = 0.2 if charge == 0 else 3
 
+            if solute_name in skip_molecules or solvent_name in skip_molecules:
+                continue
             if solute_name not in NAMES_TO_SMILES:
                 print(f"Skipping {key}: SMILES for solute name not found")
                 continue
@@ -161,8 +157,8 @@ def main(mnsol_alldata: pathlib.Path):
             if charge != "0":
                 print(f"Skipping {key}: Charge is not zero")
                 continue
-            if "si" in formula.lower():
-                print(f"Skipping {key}: Silicon in molecule")
+            if solute_name == "water":
+                print(f"Skipping {key}: Water")
                 continue
 
             offmol_solute = Molecule.from_smiles(
@@ -170,15 +166,31 @@ def main(mnsol_alldata: pathlib.Path):
                 allow_undefined_stereo=True,
                 name=solute_name,
             )
-            if solute_name not in molecules:
-                molecules[solute_name] = offmol_solute
+            if flag_sdf and solute_name not in molecules:
+                try:
+                    rdmol = _best_conformer_rdmol(offmol_solute)
+                except Exception as e:
+                    print(
+                        f"Failed to find a conformer for solute: {solute_name}, {str(e)}"
+                    )
+                    skip_molecules.append(solute_name)
+                    continue
+                molecules[solute_name] = rdmol
             offmol_solvent = Molecule.from_smiles(
                 NAMES_TO_SMILES[solvent_name],
                 allow_undefined_stereo=True,
                 name=solvent_name,
             )
-            if solvent_name not in molecules:
-                molecules[solvent_name] = offmol_solvent
+            if flag_sdf and solvent_name not in molecules:
+                try:
+                    rdmol = _best_conformer_rdmol(offmol_solvent)
+                except Exception as e:
+                    print(
+                        f"Failed to find a conformer for solvent: {solvent_name}, {str(e)}"
+                    )
+                    skip_molecules.append(solvent_name)
+                    continue
+                molecules[solvent_name] = rdmol
 
             exp_data[key] = {
                 "mnsol No.": key.split("-")[1],
@@ -186,6 +198,8 @@ def main(mnsol_alldata: pathlib.Path):
                 "uncertainty": uncertainty * unit.kilocalories_per_mole,
                 "reference": "https://doi.org/10.13020/3eks-j059",
                 "notes": ";".join(f"{k}={v}" for k, v in list(row.items())[:12]),
+                "solute_name": solute_name,
+                "solvent_name": solvent_name,
                 "solute_charge": charge,
                 "solute_smiles": offmol_solute.to_smiles(explicit_hydrogens=True),
                 "solute_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
@@ -199,6 +213,8 @@ def main(mnsol_alldata: pathlib.Path):
                 "reference": "https://doi.org/10.13020/3eks-j059",
                 "notes": ";".join(f"{k}={v}" for k, v in list(row.items())[:12]),
                 "solute_charge": charge,
+                "solute_name": solute_name,
+                "solvent_name": solvent_name,
                 "solute_smiles": offmol_solute.to_smiles(explicit_hydrogens=True),
                 "solute_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
                 "solute_inchi": offmol_solute.to_inchi(fixed_hydrogens=True),
@@ -214,16 +230,10 @@ def main(mnsol_alldata: pathlib.Path):
         with open(sys_filename, "w") as f:
             json.dump(sys_data, f, cls=JSON_HANDLER.encoder, indent=4)
 
-    errors = defaultdict(list)
-    if not os.path.isfile(sdf_filename):
+    if flag_sdf:
         with SDWriter(sdf_filename) as writer:
-            for molecule in tqdm(molecules.values()):
-                try:
-                    writer.write(_best_conformer_rdmol(molecule).to_rdkit())
-                except Exception as e:
-                    errors[str(e)[:80]].append(molecule.name)
-        for err, tmp in errors.items():
-            print(err, tmp)
+            for molecule in molecules.values():
+                writer.write(molecule)
 
 
 if __name__ == "__main__":

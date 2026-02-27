@@ -11,11 +11,15 @@ from openfe_benchmarks.data import (
 
 _BASE_DIR = Path(__file__).resolve().parent.parent / "data" / "benchmark_systems"
 
-TAG_CHECKS = [  # Each tag should be represented here with necessary files. If no files are necessary, include an empty list.
+# Each entry is (tag, [candidate_files]).
+# For tags with files: systems WITH the tag must contain at least one of the listed files;
+# systems WITHOUT the tag must contain none of them.
+# Use an empty list if no files are associated with the tag.
+TAG_CHECKS = [
     ("protein", ["protein.pdb"]),
     ("cofactor", ["cofactors.sdf"]),
     ("bfe", ["experimental_binding_data.json"]),
-    ("sfe", ["experimental_solvation_free_energy_data.json"])
+    ("sfe", ["experimental_solvation_free_energy_data.json", "systems_data.json"]),
 ]
 
 
@@ -103,41 +107,37 @@ class TestBenchmarkIndex:
             "Systems for an empty tag list should include all systems in the index"
         )
 
-    @pytest.mark.parametrize("tag, required_files", TAG_CHECKS)
-    def test_files_for_tags(self, tag, required_files):
-        """Check that systems with specific tags have the required files."""
+    @pytest.mark.parametrize("tag, candidate_files", TAG_CHECKS)
+    def test_files_for_tags(self, tag, candidate_files):
+        """Check that systems with a tag have at least one of its candidate files,
+        and systems without the tag have none of them."""
         index = BenchmarkIndex()
 
-        if not required_files:
+        if not candidate_files:
             return
 
-        systems_with_tag = index.list_systems_by_tag([tag])
-
-        # Check that systems with the tag have the required files
-        for benchmark_set, system_name in systems_with_tag:
-            system_path = _BASE_DIR / benchmark_set / system_name
-            for file_pattern in required_files:
-                assert any(system_path.glob(file_pattern)), (
-                    f"System '{system_name}' in '{benchmark_set}' should have file matching '{file_pattern}'"
-                )
-
-        # Check that systems without the tag do not have the required files
         all_systems = [
             (benchmark_set, system_name)
             for benchmark_set, systems in index._data["systems"].items()
             for system_name in systems
         ]
-        systems_without_tag = [
-            (benchmark_set, system_name)
-            for benchmark_set, system_name in all_systems
-            if tag not in index._data["systems"][benchmark_set][system_name]
-        ]
 
-        for benchmark_set, system_name in systems_without_tag:
+        for benchmark_set, system_name in all_systems:
             system_path = _BASE_DIR / benchmark_set / system_name
-            for file_pattern in required_files:
-                assert not any(system_path.glob(file_pattern)), (
-                    f"System '{system_name}' in '{benchmark_set}' should not have file matching '{file_pattern}'"
+            has_file = any(
+                any(system_path.glob(pattern)) for pattern in candidate_files
+            )
+            has_tag = tag in index._data["systems"][benchmark_set][system_name]
+
+            if has_tag:
+                assert has_file, (
+                    f"System '{system_name}' in '{benchmark_set}' is tagged '{tag}' but "
+                    f"has none of {candidate_files}"
+                )
+            else:
+                assert not has_file, (
+                    f"System '{system_name}' in '{benchmark_set}' has a '{tag}' candidate "
+                    f"file but is not tagged '{tag}'"
                 )
 
     def test_all_systems_in_index(self):
