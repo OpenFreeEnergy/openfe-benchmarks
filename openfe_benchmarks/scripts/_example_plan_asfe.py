@@ -16,6 +16,7 @@ import openfe
 from openfe import SmallMoleculeComponent
 
 from pontibus.components import ExtendedSolventComponent
+from pontibus.utils.molecules import WATER
 from pontibus.protocols.solvation import ASFEProtocol, ASFESettings
 from pontibus.protocols.solvation.settings import PackmolSolvationSettings
 
@@ -38,42 +39,39 @@ def _configure_example_logging(level=logging.INFO):
 
 
 BENCHMARK_SET = "solvation_set"
-BENCHMARK_SYS = "freesolv"  # or "mnsol_neutral"
+# BENCHMARK_SYS = "freesolv"
+BENCHMARK_SYS = "mnsol_neutral"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 OUTPUT_DIR = "outputs"
 FILENAME = f"network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl_asfe.json"
 WATER_MODEL = "tip3p"  # or opc
 
+EXPECTED_NETWORKS = []
+EXPECTED_LIGANDS = set()
+
 
 def get_chemical_systems(
     benchmark_sys,
 ) -> dict[str, openfe.ChemicalSystem]:
-    """Assemble ``ChemicalSystem`` from experimental data.
+    """
+    Build ChemicalSystem objects from benchmark reference data for ASFE calculations.
 
-    Loads ``experimental_solvation_free_energy_data.json`` or ``system_data.json``
-    from the benchmark system's reference data, then for each entry:
-
-    * Uses the JSON key as the **network name**.
-    * Looks up the **solute** molecule by name from
-      ``ligands_<PARTIAL_CHARGE>.sdf``.
-    * If ``solvent_name`` is ``"water"``, uses the module-level :data:`SOLVENT`
-      object (which already respects :data:`WATER_MODEL`); otherwise looks up
-      the **solvent** molecule by name from the same SDF as a
-      ``SmallMoleculeComponent``.
+    For each entry in the reference data file (experimental_solvation_free_energy_data.json or systems_data.json):
+        - Uses the JSON key as the network name.
+        - Matches solute and solvent molecules by name from the ligand SDF file (ligands_<PARTIAL_CHARGE>.sdf).
+        - If the solute or solvent is water, uses the module-level WATER object and sets the name appropriately.
+        - If a molecule is missing from the SDF, skips that entry and logs a warning.
 
     Parameters
     ----------
     benchmark_sys : BenchmarkData
-        A loaded benchmark system (e.g. from
-        :func:`~openfe_benchmarks.data.get_benchmark_data_system`).
+        Loaded benchmark system with reference and ligand data.
 
     Returns
     -------
-    dict[str, openfe.ChemicalSystem]
-        Mapping of network name to ``ChemicalSystem`` containing ``"solute"``
-        and ``"solvent"`` components.  Entries whose solute or solvent cannot
-        be found in the SDF are skipped with a warning.
+    dict of str to openfe.ChemicalSystem
+        Mapping of network name to ChemicalSystem with solute and solvent components.
     """
     if "experimental_solvation_free_energy_data" in benchmark_sys.reference_data:
         ref_key = "experimental_solvation_free_energy_data"
@@ -95,13 +93,20 @@ def get_chemical_systems(
     for network_name, entry in exp_data.items():
         solute_name, solvent_name = entry["solute_name"], entry["solvent_name"]
 
-        if solute_name not in mol_dict:
+        if solute_name == "water":
+            solute = WATER
+            ### Until Pontibus PR is Merged that defined water component name ###
+            water_dict = solute.to_dict()
+            water_dict["molprops"]["ofe-name"] = "water"
+            solute = SmallMoleculeComponent.from_dict(water_dict)
+            #####################################################################
+        elif solute_name not in mol_dict:
             logger.warning(
                 f"Solute '{solute_name}' not found in SDF; skipping network '{network_name}'"
             )
             continue
-
-        solute = mol_dict[solute_name]
+        else:
+            solute = mol_dict[solute_name]
 
         if solvent_name.lower() == "water":
             solvent = ExtendedSolventComponent()
@@ -124,6 +129,9 @@ def get_chemical_systems(
             {"solute": solute, "solvent": solvent},
             name=network_name,
         )
+        EXPECTED_NETWORKS.append(network_name)
+        EXPECTED_LIGANDS.add(solute_name)
+        EXPECTED_LIGANDS.add(solvent_name)
 
     logger.info(
         f"Built {len(systems)} ChemicalSystems from experimental data ({len(exp_data) - len(systems)} skipped)"
@@ -133,9 +141,19 @@ def get_chemical_systems(
 
 def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESettings:
     """
-    Get the settings for hydration free energy calculations.
-    These settings are tuned to give reasonable results on the FreeSolv dataset
-    with a balance of accuracy and speed.
+    Get settings for hydration free energy calculations (water as solvent).
+
+    Parameters
+    ----------
+    forcefield : str
+        Name of the force field to use.
+    water_model : str, optional
+        Water model to use (default is "tip3p").
+
+    Returns
+    -------
+    ASFESettings
+        Settings object for ASFEProtocol.
     """
     # The settings here are effectively the "fast" settings
     # shown in the validation.
@@ -233,9 +251,17 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
 
 def get_nonwater_settings(forcefield: str) -> ASFESettings:
     """
-    Get the settings for solvation free energy calculations.
-    These settings are tuned to give reasonable results on the MNSol dataset
-    with a balance of accuracy and speed.
+    Get settings for solvation free energy calculations (non-water solvents).
+
+    Parameters
+    ----------
+    forcefield : str
+        Name of the force field to use.
+
+    Returns
+    -------
+    ASFESettings
+        Settings object for ASFEProtocol.
     """
     # The settings here are effectively the "fast" settings
     # shown in the validation.
@@ -357,22 +383,21 @@ def get_nonwater_settings(forcefield: str) -> ASFESettings:
 def compile_transformations(
     systems_by_name: dict[str, openfe.ChemicalSystem],
 ) -> list[openfe.Transformation]:
-    """Create one ASFE transformation per chemical system.
+    """
+    Create one ASFE transformation per chemical system.
 
-    Each transformation runs both vacuum and solvent legs of the absolute
-    solvation free energy calculation. stateA is the solvated solute and
-    stateB is the pure solvent, as required by the Pontibus ``ASFEProtocol``.
+    Each transformation runs both vacuum and solvent legs of the absolute solvation free energy calculation.
+    stateA is the solvated solute and stateB is the pure solvent, as required by the Pontibus ASFEProtocol.
 
     Parameters
     ----------
-    systems_by_name : dict[str, openfe.ChemicalSystem]
-        Mapping of system name to ``ChemicalSystem`` containing the solute
-        and solvent components.
+    systems_by_name : dict of str to openfe.ChemicalSystem
+        Mapping of system name to ChemicalSystem containing the solute and solvent components.
 
     Returns
     -------
-    list[openfe.Transformation]
-        One ``Transformation`` per entry in ``systems_by_name``.
+    list of openfe.Transformation
+        One Transformation per entry in systems_by_name.
     """
     transformations: list[openfe.Transformation] = []
     settings = {
@@ -391,7 +416,7 @@ def compile_transformations(
             "aqueous"
             if system_solvated_solute.components["solvent"].solvent_molecule.name
             == "water"
-            else "nonaqeous"
+            else "nonaqueous"
         )
         transformations.append(
             openfe.Transformation(
@@ -407,7 +432,13 @@ def compile_transformations(
 
 
 def main():
-    """Build ASFE transformations and write network + per-transformation files."""
+    """
+    Build ASFE transformations and write network and per-transformation files.
+
+    Returns
+    -------
+    None
+    """
 
     script_dir = Path(__file__).parent
     out_dir = script_dir / OUTPUT_DIR
@@ -440,22 +471,20 @@ def main():
 
 
 def validate_asfe_network(network_file: Path) -> list[str]:
-    """Validate an ASFE AlchemicalNetwork against BenchmarkData expectations.
+    """
+    Validate an ASFE AlchemicalNetwork against BenchmarkData expectations.
 
-    Loads the network as an ``openfe.AlchemicalNetwork`` instance and checks:
-
-    - Each expected solute has a corresponding transformation.
-    - Every transformation's stateA contains ``solute`` and ``solvent`` components.
-    - Every ``SmallMoleculeComponent`` in the network has partial charges assigned
-      (``partial_charges`` is not ``None`` and length matches atom count).
-    - All expected solutes are present somewhere in the network nodes.
-    - The pontibus manifest exists, lists all expected solutes, and references an
-      existing SDF file.
+    Loads the network as an openfe.AlchemicalNetwork instance and checks:
+        - Each expected solute has a corresponding transformation.
+        - Every transformation's stateA contains solute and solvent components.
+        - Every SmallMoleculeComponent in the network has partial charges assigned (partial_charges is not None and length matches atom count).
+        - All expected solutes are present somewhere in the network nodes.
+        - The pontibus manifest exists, lists all expected solutes, and references an existing SDF file.
 
     Parameters
     ----------
     network_file : Path
-        Path to the ``AlchemicalNetwork`` JSON file to validate.
+        Path to the AlchemicalNetwork JSON file to validate.
 
     Returns
     -------
@@ -476,43 +505,27 @@ def validate_asfe_network(network_file: Path) -> list[str]:
         return ["Loaded AlchemicalNetwork does not expose .edges"]
 
     logger.info(f"AlchemicalNetwork contains {len(edges)} transformations")
-
-    # Expected solutes from the source SDF
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
-    # Determine which reference data file to use
-    if "experimental_solvation_free_energy_data" in benchmark_sys.reference_data:
-        ref_key = "experimental_solvation_free_energy_data"
-    else:
-        ref_key = "systems_data"
-    ref_path = benchmark_sys.reference_data[ref_key]
-    exp_data: dict = json.loads(Path(ref_path).read_text())
-    expected_trans_names = set(exp_data.keys())
-
-    # Get expected ligand names from the ligands SDF file
-    ligand_dict = ofebu.process_sdf(
-        benchmark_sys.ligands[PARTIAL_CHARGE], return_dict=True
+    logger.info(
+        f"Expected {len(EXPECTED_NETWORKS)} transformations using {len(EXPECTED_LIGANDS)} ligands"
     )
-    expected_lig_names = set(ligand_dict.keys())
 
     # Check that each expected solute has a transformation
     transformation_names = {getattr(t, "name", "") for t in edges}
-    missing = [
-        name for name in expected_trans_names if name not in transformation_names
-    ]
+    missing = [name for name in EXPECTED_NETWORKS if name not in transformation_names]
     if missing:
         errors.append(f"Missing expected transformations: {sorted(missing)}")
 
     # Validate stateA components for each transformation
     for t in edges:
-        tname = getattr(t, "name", "")
-        stateA = getattr(t, "stateA", None)
-        if stateA is None:
-            errors.append(f"Transformation '{tname}' has no stateA")
+        if t.stateA is None:
+            errors.append(f"Transformation '{t.name}' has no stateA")
             continue
-        comps = getattr(stateA, "components", {})
+        comps = t.stateA.components
         for comp_name in ("solute", "solvent"):
             if comp_name not in comps:
-                errors.append(f"Transformation '{tname}' missing {comp_name} component")
+                errors.append(
+                    f"Transformation '{t.tname}' missing {comp_name} component"
+                )
 
     # Validate partial charges using get_components_of_type across all nodes
     found_ligands: set[str] = set()
@@ -528,8 +541,25 @@ def validate_asfe_network(network_file: Path) -> list[str]:
             errors.append(
                 f"Ligand '{ligand.name}' in '{chem_system.key}' is missing partial charges"
             )
+        for solvent in chem_system.get_components_of_type(ExtendedSolventComponent):
+            ligand = solvent.solvent_molecule
+            found_ligands.add(ligand.name)
+            if ligand.name == "water":
+                continue
+            off_mol = ligand.to_openff()
+            if (
+                off_mol.partial_charges is not None
+                and len(off_mol.partial_charges) == off_mol.n_atoms
+            ):
+                continue
+            errors.append(
+                f"Ligand '{ligand.name}' in '{chem_system.key}' is missing partial charges"
+            )
 
-    missing_ligs = expected_lig_names - found_ligands
+    print(
+        len(EXPECTED_LIGANDS), len(found_ligands), len(EXPECTED_LIGANDS - found_ligands)
+    )
+    missing_ligs = EXPECTED_LIGANDS - found_ligands
     if missing_ligs:
         errors.append(f"Ligands not found in network: {sorted(missing_ligs)}")
 
