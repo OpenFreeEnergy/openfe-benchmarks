@@ -4,6 +4,7 @@ from openff.toolkit import Molecule
 from openff.units import unit
 from gufe.tokenization import JSON_HANDLER
 
+
 def main():
     """
     Extract the reference experimental solvation free energy data from the FreeSolv dataset and save it as a JSON file in a slightly different format with units.
@@ -32,6 +33,8 @@ def main():
             "dg": entry["expt"] * unit.kilocalories_per_mole,
             "uncertainty": entry["d_expt"] * unit.kilocalories_per_mole,
             "reference": entry["expt_reference"],
+            "solute_name": name,
+            "solvent_name": "water",
             "solute_iupac": entry["iupac"],
             "notes": entry["notes"],
             "solute_smiles": entry["smiles"],
@@ -45,7 +48,6 @@ def main():
 
     with open("experimental_solvation_free_energy_data.json", "w") as f:
         json.dump(ref_data, f, cls=JSON_HANDLER.encoder, indent=4)
-
 
 
 if __name__ == "__main__":
