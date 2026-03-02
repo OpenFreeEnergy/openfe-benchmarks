@@ -21,26 +21,24 @@ RDLogger.DisableLog("rdApp.*")
 
 def _best_conformer_rdmol(offmol: "Molecule"):
     """
-    Generate conformers and return the OpenFF ``Molecule`` with only the
-    lowest-energy conformer retained.
+    Generate conformers for an OpenFF ``Molecule`` and return an
+    RDKit molecule containing only the lowest-energy conformer.
 
-    Up to 10 conformers are generated via RDKit's ETKDGv3 (through
-    ``RDKitToolkitWrapper``) with a 0.25 Å RMS pruning cutoff. Each conformer
-    is assigned OpenFF 2.3.0 SMIRNOFF parameters and energy-minimised with
-    OpenMM's ``LocalEnergyMinimizer`` on the Reference platform. The conformer
-    with the lowest post-minimisation potential energy is kept; all others are
-    discarded.
+    Up to 10 conformers are generated via RDKit's ETKDGv3 algorithm with a 0.25 Å
+    RMS pruning cutoff. Each conformer is optimized using RDKit's UFF force field.
+    The conformer with the lowest post-optimization potential energy is kept; all
+    others are discarded.
 
     Parameters
     ----------
     offmol : openff.toolkit.Molecule
-        Input molecule without conformers. Modified in-place.
+        Input molecule without conformers.
 
     Returns
     -------
-    openff.toolkit.Molecule
-        The same molecule object with ``_conformers`` replaced by a single
-        lowest-energy conformer.
+    rdkit.Chem.Mol
+        A new RDKit ``Mol`` object containing a single lowest‑energy
+        conformer.
     """
     best_energy = float("inf")
     best_conformer = None
@@ -91,9 +89,14 @@ def main(mnsol_alldata: pathlib.Path):
       MNSol row that passes all filters.
     - ``systems_data.json`` — molecule metadata (SMILES, InChI, InChIKey)
       without energetic data; only written if the file does not already exist.
-    - ``ligands.sdf`` — 3-D coordinates for every unique solute and solvent
-      molecule, one lowest-energy conformer each (OpenFF 2.3.0 + OpenMM
-      minimised); only written if the file does not already exist.
+    - ``ligands.sdf`` — 3‑D coordinates for every unique solute and solvent
+      molecule, one lowest‑energy conformer each (OpenFF 2.3.0 + OpenMM
+      minimised); only written if the file does not already exist. When this
+      file is generated each record is stamped with a
+      ``conformer_provenance`` SDF property containing a JSON object with
+      keys ``rdkit_version``, ``openff_toolkit_version``,
+      ``conformer_generation_method``, ``optimization_method``,
+      ``rms_pruning_threshold`` and ``num_conformers_generated``.
 
     Filters applied
     ---------------
@@ -138,6 +141,8 @@ def main(mnsol_alldata: pathlib.Path):
             group = row.get("Level1").strip().strip('"')
             charge = row.get("Charge").strip().strip('"')
             dg = float(row.get("DeltaGsolv").strip().strip('"'))
+            # Experimental uncertainties for neutral molecules are set to 0.2 kcal/mol,
+            # following the recommendation in the MNSol documentation.
             uncertainty = 0.2 if charge == 0 else 3
 
             if solute_name in skip_molecules or solvent_name in skip_molecules:
@@ -205,8 +210,8 @@ def main(mnsol_alldata: pathlib.Path):
                 "solute_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
                 "solute_inchi": offmol_solute.to_inchi(fixed_hydrogens=True),
                 "solvent_smiles": offmol_solvent.to_smiles(explicit_hydrogens=True),
-                "solvent_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
-                "solvent_inchi": offmol_solute.to_inchi(fixed_hydrogens=True),
+                "solvent_inchikey": offmol_solvent.to_inchikey(fixed_hydrogens=True),
+                "solvent_inchi": offmol_solvent.to_inchi(fixed_hydrogens=True),
             }
             sys_data[key] = {
                 "mnsol No.": key.split("-")[1],
@@ -219,8 +224,8 @@ def main(mnsol_alldata: pathlib.Path):
                 "solute_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
                 "solute_inchi": offmol_solute.to_inchi(fixed_hydrogens=True),
                 "solvent_smiles": offmol_solvent.to_smiles(explicit_hydrogens=True),
-                "solvent_inchikey": offmol_solute.to_inchikey(fixed_hydrogens=True),
-                "solvent_inchi": offmol_solute.to_inchi(fixed_hydrogens=True),
+                "solvent_inchikey": offmol_solvent.to_inchikey(fixed_hydrogens=True),
+                "solvent_inchi": offmol_solvent.to_inchi(fixed_hydrogens=True),
             }
 
     print(f"There are {len(sys_data)} systems, and {len(molecules)} molecules")
@@ -231,8 +236,17 @@ def main(mnsol_alldata: pathlib.Path):
             json.dump(sys_data, f, cls=JSON_HANDLER.encoder, indent=4)
 
     if flag_sdf:
+        provenance = {
+            "rdkit_version": Chem.rdBase.rdkitVersion,
+            "openff_toolkit_version": Molecule.__module__,
+            "conformer_generation_method": "ETKDGv3",
+            "optimization_method": "UFF",
+            "rms_pruning_threshold": 0.25,
+            "num_conformers_generated": 10,
+        }
         with SDWriter(sdf_filename) as writer:
             for molecule in molecules.values():
+                molecule.SetProp("conformer_provenance", json.dumps(provenance))
                 writer.write(molecule)
 
 
