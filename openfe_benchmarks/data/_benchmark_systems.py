@@ -77,13 +77,13 @@ class BenchmarkIndex:
 
     def list_systems_by_tag(self, tags: list[str]) -> list[tuple[str, str]]:
         """
-        Get all systems that match ANY of the provided tags.
+        Get all systems that match **all** of the provided tags.
 
         Parameters
         ----------
         tags : list[str]
             List of tags to filter by (e.g., ['protein', 'cofactors']).
-            Systems matching any of these tags will be returned.
+            Only systems containing every tag in this list will be returned.
 
         Returns
         -------
@@ -96,9 +96,9 @@ class BenchmarkIndex:
         >>> systems = index.get_systems_by_tag(['protein'])
         >>> # Returns all systems tagged with 'protein'
         >>> systems_with_cofactors = index.get_systems_by_tag(['cofactors'])
-        >>> # Returns all systems that have cofactors
-        >>> bfe_with_cofactors = index.get_systems_by_tag(['protein', 'cofactors'])
-        >>> # Returns systems with either 'protein' AND 'cofactors' tags
+        >>> # Returns all systems tagged with 'cofactors'
+        >>> protein_and_cofactors = index.get_systems_by_tag(['protein', 'cofactors'])
+        >>> # Returns systems tagged with both 'protein' and 'cofactors'
         """
         if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
