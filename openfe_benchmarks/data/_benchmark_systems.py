@@ -348,9 +348,7 @@ def _validate_and_load_data_system(
             continue
 
         # check for reference data file (experimental*data.json)
-        if (
-            filename.startswith("experimental") and filename.endswith("data.json")
-        ) or filename == "systems_data.json":
+        if filename.startswith("experimental") and filename.endswith("data.json"):
             reference_data[file_path.stem] = file_path
             categorized_files.add(file_path)
             logger.debug(f"Found reference data: {filename}")

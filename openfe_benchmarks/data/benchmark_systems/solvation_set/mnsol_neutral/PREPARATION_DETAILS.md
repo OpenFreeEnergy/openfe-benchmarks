@@ -7,7 +7,7 @@ Systems extracted from the MNSol database (https://doi.org/10.13020/3eks-j059).
 The reference data was generated using the [generate_mnsol_data.py](../../../data_generation/generate_mnsol_data.py) script. Entries were excluded if:
 
 - The solute or solvent name was not present in `mnsol-name-to-smiles.json`
-  - Molecules with ambiguous isomeric structure were expluded including: 'bromotoluene', 'chlorotoluene', 'dichloroethane', 'fluoroctane', 'trimethylbenzene'
+  - Molecules with ambiguous isomeric structure were excluded including: 'bromotoluene', 'chlorotoluene', 'dichloroethane', 'fluoroctane', 'trimethylbenzene'
 - The solute is a radical (name contains "radical")
 - The solute is a dimer (MNSol Level1=14)
 - The net charge is non-zero
