@@ -24,7 +24,7 @@ TAG_CHECKS = [
     ("protein", ["protein.pdb"], []),
     ("cofactor", ["cofactors.sdf"], []),
     ("bfe", ["experimental_binding_data.json"], []),
-    ("sfe", ["experimental_solvation_free_energy_data.json"], ["mnsol"]),
+    ("sfe", ["experimental_solvation_free_energy_data.json"], ["mnsol_neutral"]),
 ]
 
 
