@@ -15,9 +15,11 @@ _BASE_DIR = Path(__file__).resolve().parent.parent / "data" / "benchmark_systems
 # For tags with files:
 #   * systems WITH the tag must contain at least one of the listed files;
 #   * systems WITHOUT the tag must contain none of them.
-# The optional ``exceptions`` list may contain benchmark set names that are
-# allowed to violate the rule (e.g. some sets are tagged but intentionally
-# lack the candidate file).
+# The optional ``exceptions`` list may contain individual system names that
+# are exempt from the rule; any system whose name appears will be skipped
+# during the check.  This is convenient when a particular system is tagged
+# even though the corresponding data file is intentionally absent, e.g.
+# ``mnsol_neutral`` for ``sfe``.
 # Use an empty list if no files are associated with the tag or if there are
 # no exceptions.
 TAG_CHECKS = [
@@ -118,9 +120,10 @@ class TestBenchmarkIndex:
         and systems without the tag have none of them.
 
         Entries in :data:`TAG_CHECKS` may supply an ``exceptions`` list of
-        benchmark set names; those systems will be skipped when asserting the
+        system names; any matching systems will be skipped when asserting the
         presence/absence of files.  This allows for known deviations such as
-        ``mnsol`` being tagged ``sfe`` despite lacking the JSON data file.
+        ``mnsol_neutral`` being tagged ``sfe`` despite lacking the JSON data
+        file.
         """
         index = BenchmarkIndex()
 
@@ -134,8 +137,7 @@ class TestBenchmarkIndex:
         ]
 
         for benchmark_set, system_name in all_systems:
-            # skip any exceptions for this tag
-            if benchmark_set in exceptions:
+            if system_name in exceptions:
                 continue
 
             system_path = _BASE_DIR / benchmark_set / system_name
