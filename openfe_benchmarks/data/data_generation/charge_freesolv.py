@@ -1,6 +1,11 @@
 """
-Generate partial charges for a set of molecules using OpenFE's bulk charge assignment utility will also add software version metadata to each ligand
+Generate partial charges for a set of molecules using OpenFE's bulk charge
+assignment utility will also add software version metadata to each ligand
 as an sdf property.
+
+This scripts is functionally equivalent to `charge_mnsol.py`, except for
+that individual SDFs for each molecule are imported instead of a single
+SDF file with all small molecules.
 """
 
 import pathlib
