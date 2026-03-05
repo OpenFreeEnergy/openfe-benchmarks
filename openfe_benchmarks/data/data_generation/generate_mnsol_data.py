@@ -122,6 +122,7 @@ def main(mnsol_alldata: pathlib.Path):
     exp_data = {}
     molecules = {}
     skip_molecules = []
+    skipped_systems = []
     with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
         reader = csv.DictReader(fh, delimiter="\t")
         total_lines = sum(1 for _ in fh) - 1  # subtract header
@@ -131,7 +132,8 @@ def main(mnsol_alldata: pathlib.Path):
             if not row or not row.get("FileHandle"):
                 continue
 
-            key = f"mnsol-{int(row.get('No.')):04d}"
+            index = f"{int(row.get('No.')):04d}"
+            key = f"mnsol-{index}"
             solute_name = row.get("SoluteName").strip().strip('"')
             solvent_name = row.get("Solvent").strip().strip('"')
             group = row.get("Level1").strip().strip('"')
@@ -142,24 +144,22 @@ def main(mnsol_alldata: pathlib.Path):
             uncertainty = 0.2 if charge == "0" else 3
 
             if solute_name in skip_molecules or solvent_name in skip_molecules:
+                skipped_systems.append(index)
                 continue
             if solute_name not in NAMES_TO_SMILES:
-                print(f"Skipping {key}: SMILES for solute name not found")
+                skipped_systems.append(index)
                 continue
             if solvent_name not in NAMES_TO_SMILES:
-                print(f"Skipping {key}: SMILES for solvent name not found")
+                skipped_systems.append(index)
                 continue
             if "radical" in solute_name:
-                print(f"Skipping {key}: Solute is a radical")
+                skipped_systems.append(index)
                 continue
             if group == "14":
-                print(f"Skipping {key}: Solute is a dimer")
+                skipped_systems.append(index)
                 continue
             if charge != "0":
-                print(f"Skipping {key}: Charge is not zero")
-                continue
-            if solute_name == "water":
-                print(f"Skipping {key}: Water")
+                skipped_systems.append(index)
                 continue
 
             offmol_solute = Molecule.from_smiles(
@@ -167,35 +167,37 @@ def main(mnsol_alldata: pathlib.Path):
                 allow_undefined_stereo=True,
                 name=solute_name,
             )
-            if flag_sdf and solute_name not in molecules:
-                try:
-                    rdmol_solute = _best_conformer_rdmol(offmol_solute)
-                except Exception as e:
-                    print(
-                        f"Failed to find a conformer for solute: {solute_name}, {str(e)}"
-                    )
-                    skip_molecules.append(solute_name)
-                    continue
-
             offmol_solvent = Molecule.from_smiles(
                 NAMES_TO_SMILES[solvent_name],
                 allow_undefined_stereo=True,
                 name=solvent_name,
             )
-            if flag_sdf and solvent_name not in molecules:
-                try:
-                    rdmol_solvent = _best_conformer_rdmol(offmol_solvent)
-                except Exception as e:
-                    print(
-                        f"Failed to find a conformer for solvent: {solvent_name}, {str(e)}"
-                    )
-                    skip_molecules.append(solvent_name)
-                    continue
 
-            if flag_sdf and solute_name not in molecules:
-                molecules[solute_name] = rdmol_solute
-            if flag_sdf and solvent_name not in molecules:
-                molecules[solvent_name] = rdmol_solvent
+            if flag_sdf:
+                if solute_name not in molecules and solute_name != "water":
+                    try:
+                        rdmol_solute = _best_conformer_rdmol(offmol_solute)
+                    except Exception as e:
+                        print(
+                            f"Failed to find a conformer for solute: {solute_name}, {str(e)}"
+                        )
+                        skip_molecules.append(solute_name)
+                        continue
+
+                if solvent_name not in molecules and solvent_name != "water":
+                    try:
+                        rdmol_solvent = _best_conformer_rdmol(offmol_solvent)
+                    except Exception as e:
+                        print(
+                            f"Failed to find a conformer for solvent: {solvent_name}, {str(e)}"
+                        )
+                        skip_molecules.append(solvent_name)
+                        continue
+
+                if solute_name not in molecules and solute_name != "water":
+                    molecules[solute_name] = rdmol_solute
+                if solvent_name not in molecules and solvent_name != "water":
+                    molecules[solvent_name] = rdmol_solvent
 
             exp_data[key] = {
                 "mnsol No.": key.split("-")[1],
@@ -214,6 +216,7 @@ def main(mnsol_alldata: pathlib.Path):
                 "solvent_inchi": offmol_solvent.to_inchi(fixed_hydrogens=True),
             }
 
+    print(f"The following systems were skipped MNSol No.: {skipped_systems}")
     print(f"There are {len(exp_data)} systems, and {len(molecules)} molecules")
     with open(exp_filename, "w") as f:
         json.dump(exp_data, f, cls=JSON_HANDLER.encoder, indent=4)
