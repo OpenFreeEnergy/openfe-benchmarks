@@ -69,6 +69,7 @@ water_set:
   urokinase: ["protein", "bfe"]
 solvation_set:
   freesolv: ["sfe"]
+  mnsol_neutral: ["sfe"]
 metadata:
   last_updated: "2026-02-16"
   notes:

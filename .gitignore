@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore file for licensing reasons
+**/mnsol_neutral/experimental_solvation_free_energy_data.json
+
 # Distribution / packaging
 .Python
 build/
