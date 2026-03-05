@@ -130,8 +130,10 @@ def get_chemical_systems(
             name=network_name,
         )
         EXPECTED_NETWORKS.append(network_name)
-        EXPECTED_LIGANDS.add(solute_name)
-        EXPECTED_LIGANDS.add(solvent_name)
+        if solute_name != "water":
+            EXPECTED_LIGANDS.add(solute_name)
+        if solvent_name != "water":
+            EXPECTED_LIGANDS.add(solvent_name)
 
     logger.info(
         f"Built {len(systems)} ChemicalSystems from experimental data ({len(exp_data) - len(systems)} skipped)"
@@ -531,6 +533,8 @@ def validate_asfe_network(network_file: Path) -> list[str]:
     found_ligands: set[str] = set()
     for chem_system in alchemical_network.nodes:
         for ligand in chem_system.get_components_of_type(openfe.SmallMoleculeComponent):
+            if ligand.name == "water":
+                continue
             found_ligands.add(ligand.name)
             off_mol = ligand.to_openff()
             if (
@@ -543,9 +547,9 @@ def validate_asfe_network(network_file: Path) -> list[str]:
             )
         for solvent in chem_system.get_components_of_type(ExtendedSolventComponent):
             ligand = solvent.solvent_molecule
-            found_ligands.add(ligand.name)
             if ligand.name == "water":
                 continue
+            found_ligands.add(ligand.name)
             off_mol = ligand.to_openff()
             if (
                 off_mol.partial_charges is not None
