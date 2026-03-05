@@ -3,6 +3,10 @@ Generate partial charges for all molecules in a ``ligands.sdf`` file using
 OpenFE's bulk charge assignment utility, then write a charged SDF file with
 software version metadata stamped as an SDF property on each molecule.
 
+This scripts is functionally equivalent to `charge_freesolv.py`, except for
+that a single SDF file is imported with all small molecules instead of
+individual SDFs for each molecule.
+
 Supported charge methods
 ------------------------
 - ``am1bcc_at``      — AM1BCC via AmberTools antechamber (input conformer)

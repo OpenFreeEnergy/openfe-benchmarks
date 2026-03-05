@@ -11,15 +11,22 @@ from openfe_benchmarks.data import (
 
 _BASE_DIR = Path(__file__).resolve().parent.parent / "data" / "benchmark_systems"
 
-# Each entry is (tag, [candidate_files]).
-# For tags with files: systems WITH the tag must contain at least one of the listed files;
-# systems WITHOUT the tag must contain none of them.
-# Use an empty list if no files are associated with the tag.
+# Each entry is (tag, [candidate_files], [exceptions]).
+# For tags with files:
+#   * systems WITH the tag must contain at least one of the listed files;
+#   * systems WITHOUT the tag must contain none of them.
+# The optional ``exceptions`` list may contain individual system names that
+# are exempt from the rule; any system whose name appears will be skipped
+# during the check.  This is convenient when a particular system is tagged
+# even though the corresponding data file is intentionally absent, e.g.
+# ``mnsol_neutral`` for ``sfe``.
+# Use an empty list if no files are associated with the tag or if there are
+# no exceptions.
 TAG_CHECKS = [
-    ("protein", ["protein.pdb"]),
-    ("cofactor", ["cofactors.sdf"]),
-    ("bfe", ["experimental_binding_data.json"]),
-    ("sfe", ["experimental_solvation_free_energy_data.json", "systems_data.json"]),
+    ("protein", ["protein.pdb"], []),
+    ("cofactor", ["cofactors.sdf"], []),
+    ("bfe", ["experimental_binding_data.json"], []),
+    ("sfe", ["experimental_solvation_free_energy_data.json"], ["mnsol_neutral"]),
 ]
 
 
@@ -107,10 +114,17 @@ class TestBenchmarkIndex:
             "Systems for an empty tag list should include all systems in the index"
         )
 
-    @pytest.mark.parametrize("tag, candidate_files", TAG_CHECKS)
-    def test_files_for_tags(self, tag, candidate_files):
+    @pytest.mark.parametrize("tag, candidate_files, exceptions", TAG_CHECKS)
+    def test_files_for_tags(self, tag, candidate_files, exceptions):
         """Check that systems with a tag have at least one of its candidate files,
-        and systems without the tag have none of them."""
+        and systems without the tag have none of them.
+
+        Entries in :data:`TAG_CHECKS` may supply an ``exceptions`` list of
+        system names; any matching systems will be skipped when asserting the
+        presence/absence of files.  This allows for known deviations such as
+        ``mnsol_neutral`` being tagged ``sfe`` despite lacking the JSON data
+        file.
+        """
         index = BenchmarkIndex()
 
         if not candidate_files:
@@ -123,6 +137,9 @@ class TestBenchmarkIndex:
         ]
 
         for benchmark_set, system_name in all_systems:
+            if system_name in exceptions:
+                continue
+
             system_path = _BASE_DIR / benchmark_set / system_name
             has_file = any(
                 any(system_path.glob(pattern)) for pattern in candidate_files

@@ -54,6 +54,9 @@ n-octane
   8 25  1  0
   8 26  1  0
 M  END
+>  <conformer_provenance>  (1) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (1) 
 n-octane
 
@@ -99,6 +102,9 @@ $$$$
   5 13  1  0
   6 14  1  0
 M  END
+>  <conformer_provenance>  (2) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (2) 
 2methylpyridine
 
@@ -145,6 +151,9 @@ toluene
   6 14  1  0
   7 15  1  0
 M  END
+>  <conformer_provenance>  (3) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (3) 
 toluene
 
@@ -178,6 +187,9 @@ ethanol
   2  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (4) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (4) 
 ethanol
 
@@ -221,6 +233,9 @@ $$$$
   5 13  1  0
   5 14  1  0
 M  END
+>  <conformer_provenance>  (5) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (5) 
 1,4-dioxane
 
@@ -262,6 +277,9 @@ $$$$
   5 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (6) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (6) 
 2-butanone
 
@@ -306,6 +324,9 @@ $$$$
   5 13  1  0
   6 14  1  0
 M  END
+>  <conformer_provenance>  (7) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (7) 
 2-methylpyridine
 
@@ -359,6 +380,9 @@ naphthalene
   8 17  1  0
  10 18  1  0
 M  END
+>  <conformer_provenance>  (8) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (8) 
 naphthalene
 
@@ -413,6 +437,9 @@ $$$$
   7 18  1  0
   7 19  1  0
 M  END
+>  <conformer_provenance>  (9) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (9) 
 4methyl2pentanone
 
@@ -456,6 +483,9 @@ phenol
   6 12  1  0
   7 13  1  0
 M  END
+>  <conformer_provenance>  (10) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (10) 
 phenol
 
@@ -504,6 +534,9 @@ m-cresol
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (11) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (11) 
 m-cresol
 
@@ -535,6 +568,9 @@ aceticacid
   1  7  1  0
   4  8  1  0
 M  END
+>  <conformer_provenance>  (12) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (12) 
 aceticacid
 
@@ -571,6 +607,9 @@ propanoicacid
   2 10  1  0
   5 11  1  0
 M  END
+>  <conformer_provenance>  (13) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (13) 
 propanoicacid
 
@@ -614,6 +653,9 @@ butanoicacid
   3 13  1  0
   6 14  1  0
 M  END
+>  <conformer_provenance>  (14) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (14) 
 butanoicacid
 
@@ -655,6 +697,9 @@ trimethylamine
   4 12  1  0
   4 13  1  0
 M  END
+>  <conformer_provenance>  (15) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (15) 
 trimethylamine
 
@@ -702,6 +747,9 @@ diethylamine
   5 15  1  0
   5 16  1  0
 M  END
+>  <conformer_provenance>  (16) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (16) 
 diethylamine
 
@@ -740,6 +788,9 @@ pyridine
   5 10  1  0
   6 11  1  0
 M  END
+>  <conformer_provenance>  (17) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (17) 
 pyridine
 
@@ -784,6 +835,9 @@ aniline
   7 13  1  0
   7 14  1  0
 M  END
+>  <conformer_provenance>  (18) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (18) 
 aniline
 
@@ -807,6 +861,9 @@ ammonia
   1  3  1  0
   1  4  1  0
 M  END
+>  <conformer_provenance>  (19) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (19) 
 ammonia
 
@@ -835,6 +892,9 @@ methylamine
   2  6  1  0
   2  7  1  0
 M  END
+>  <conformer_provenance>  (20) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (20) 
 methylamine
 
@@ -887,6 +947,9 @@ $$$$
   7 18  1  0
   7 19  1  0
 M  END
+>  <conformer_provenance>  (21) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (21) 
 4-methyl-2-pentanone
 
@@ -918,6 +981,9 @@ nitromethane
   1  7  1  0
 M  CHG  2   2   1   4  -1
 M  END
+>  <conformer_provenance>  (22) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (22) 
 nitromethane
 
@@ -944,6 +1010,9 @@ acetonitrile
   1  5  1  0
   1  6  1  0
 M  END
+>  <conformer_provenance>  (23) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (23) 
 acetonitrile
 
@@ -993,6 +1062,9 @@ acetophenone
   8 16  1  0
   9 17  1  0
 M  END
+>  <conformer_provenance>  (24) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (24) 
 acetophenone
 
@@ -1016,6 +1088,9 @@ hydrogenperoxide
   1  3  1  0
   2  4  1  0
 M  END
+>  <conformer_provenance>  (25) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (25) 
 hydrogenperoxide
 
@@ -1063,6 +1138,9 @@ anisole
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (26) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (26) 
 anisole
 
@@ -1110,6 +1188,9 @@ butylamine
   5 15  1  0
   5 16  1  0
 M  END
+>  <conformer_provenance>  (27) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (27) 
 butylamine
 
@@ -1159,6 +1240,9 @@ n-pentane
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (28) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (28) 
 n-pentane
 
@@ -1199,6 +1283,9 @@ benzene
   5 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (29) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (29) 
 benzene
 
@@ -1254,6 +1341,9 @@ n-hexane
   6 19  1  0
   6 20  1  0
 M  END
+>  <conformer_provenance>  (30) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (30) 
 n-hexane
 
@@ -1307,6 +1397,9 @@ cyclohexane
   6 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (31) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (31) 
 cyclohexane
 
@@ -1335,6 +1428,9 @@ methanol
   1  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (32) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (32) 
 methanol
 
@@ -1373,6 +1469,9 @@ $$$$
   3 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (33) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (33) 
 1-propanol
 
@@ -1412,6 +1511,9 @@ isopropanol
   3 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (34) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (34) 
 isopropanol
 
@@ -1457,6 +1559,9 @@ $$$$
   4 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (35) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (35) 
 1-butanol
 
@@ -1502,6 +1607,9 @@ t-butanol
   4 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (36) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (36) 
 t-butanol
 
@@ -1553,6 +1661,9 @@ $$$$
   5 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (37) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (37) 
 1-pentanol
 
@@ -1611,6 +1722,9 @@ $$$$
   6 20  1  0
   7 21  1  0
 M  END
+>  <conformer_provenance>  (38) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (38) 
 1-hexanol
 
@@ -1660,6 +1774,9 @@ o-cresol
   6 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (39) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (39) 
 o-cresol
 
@@ -1708,6 +1825,9 @@ p-cresol
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (40) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (40) 
 p-cresol
 
@@ -1771,6 +1891,9 @@ $$$$
   7 23  1  0
   8 24  1  0
 M  END
+>  <conformer_provenance>  (41) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (41) 
 1-heptanol
 
@@ -1807,6 +1930,9 @@ acetone
   4  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (42) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (42) 
 acetone
 
@@ -1854,6 +1980,9 @@ $$$$
   6 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (43) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (43) 
 2-pentanone
 
@@ -1907,6 +2036,9 @@ $$$$
   7 18  1  0
   7 19  1  0
 M  END
+>  <conformer_provenance>  (44) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (44) 
 2-hexanone
 
@@ -1967,6 +2099,9 @@ $$$$
   8 21  1  0
   8 22  1  0
 M  END
+>  <conformer_provenance>  (45) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (45) 
 2-heptanone
 
@@ -2017,6 +2152,9 @@ pentanoicacid
   4 16  1  0
   7 17  1  0
 M  END
+>  <conformer_provenance>  (46) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (46) 
 pentanoicacid
 
@@ -2072,6 +2210,9 @@ hexanoicacid
   5 19  1  0
   8 20  1  0
 M  END
+>  <conformer_provenance>  (47) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (47) 
 hexanoicacid
 
@@ -2110,6 +2251,9 @@ methylacetate
   5 10  1  0
   5 11  1  0
 M  END
+>  <conformer_provenance>  (48) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (48) 
 methylacetate
 
@@ -2153,6 +2297,9 @@ methylpropanoate
   6 13  1  0
   6 14  1  0
 M  END
+>  <conformer_provenance>  (49) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (49) 
 methylpropanoate
 
@@ -2196,6 +2343,9 @@ ethylacetate
   6 13  1  0
   6 14  1  0
 M  END
+>  <conformer_provenance>  (50) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (50) 
 ethylacetate
 
@@ -2245,6 +2395,9 @@ propylacetate
   7 16  1  0
   7 17  1  0
 M  END
+>  <conformer_provenance>  (51) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (51) 
 propylacetate
 
@@ -2300,6 +2453,9 @@ methylpentanoate
   8 19  1  0
   8 20  1  0
 M  END
+>  <conformer_provenance>  (52) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (52) 
 methylpentanoate
 
@@ -2356,6 +2512,9 @@ butylacetate
   8 19  1  0
   8 20  1  0
 M  END
+>  <conformer_provenance>  (53) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (53) 
 butylacetate
 
@@ -2418,6 +2577,9 @@ methylhexanoate
   9 22  1  0
   9 23  1  0
 M  END
+>  <conformer_provenance>  (54) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (54) 
 methylhexanoate
 
@@ -2480,6 +2642,9 @@ pentylacetate
   9 22  1  0
   9 23  1  0
 M  END
+>  <conformer_provenance>  (55) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (55) 
 pentylacetate
 
@@ -2516,6 +2681,9 @@ ethylamine
   3  9  1  0
   3 10  1  0
 M  END
+>  <conformer_provenance>  (56) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (56) 
 ethylamine
 
@@ -2551,6 +2719,9 @@ dimethylamine
   3  9  1  0
   3 10  1  0
 M  END
+>  <conformer_provenance>  (57) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (57) 
 dimethylamine
 
@@ -2592,6 +2763,9 @@ propylamine
   4 12  1  0
   4 13  1  0
 M  END
+>  <conformer_provenance>  (58) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (58) 
 propylamine
 
@@ -2651,6 +2825,9 @@ dipropylamine
   7 21  1  0
   7 22  1  0
 M  END
+>  <conformer_provenance>  (59) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (59) 
 dipropylamine
 
@@ -2696,6 +2873,9 @@ $$$$
   6 13  1  0
   7 14  1  0
 M  END
+>  <conformer_provenance>  (60) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (60) 
 4-methylpyridine
 
@@ -2746,6 +2926,9 @@ N-methylaniline
   7 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (61) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (61) 
 N-methylaniline
 
@@ -2796,6 +2979,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (62) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (62) 
 2,6-dimethylpyridine
 
@@ -2841,6 +3027,9 @@ nitrobenzene
   6 14  1  0
 M  CHG  2   7   1   9  -1
 M  END
+>  <conformer_provenance>  (63) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (63) 
 nitrobenzene
 
@@ -2887,6 +3076,9 @@ m-hydroxybenzaldehyde
   7 14  1  0
   8 15  1  0
 M  END
+>  <conformer_provenance>  (64) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (64) 
 m-hydroxybenzaldehyde
 
@@ -2933,6 +3125,9 @@ p-hydroxybenzaldehyde
   7 14  1  0
   9 15  1  0
 M  END
+>  <conformer_provenance>  (65) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (65) 
 p-hydroxybenzaldehyde
 
@@ -2975,6 +3170,9 @@ p-bromophenol
   5 12  1  0
   7 13  1  0
 M  END
+>  <conformer_provenance>  (66) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (66) 
 p-bromophenol
 
@@ -3024,6 +3222,9 @@ trimethylphosphate
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (67) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (67) 
 trimethylphosphate
 
@@ -3091,6 +3292,9 @@ triethylphosphate
  11 25  1  0
  11 26  1  0
 M  END
+>  <conformer_provenance>  (68) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (68) 
 triethylphosphate
 
@@ -3177,6 +3381,9 @@ tripropylphosphate
  14 34  1  0
  14 35  1  0
 M  END
+>  <conformer_provenance>  (69) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (69) 
 tripropylphosphate
 
@@ -3229,6 +3436,9 @@ piperidine
   6 16  1  0
   6 17  1  0
 M  END
+>  <conformer_provenance>  (70) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (70) 
 piperidine
 
@@ -3256,6 +3466,9 @@ hydrazine
   2  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (71) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (71) 
 hydrazine
 
@@ -3324,6 +3537,9 @@ $$$$
   8 26  1  0
   9 27  1  0
 M  END
+>  <conformer_provenance>  (72) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (72) 
 1-octanol
 
@@ -3378,6 +3594,9 @@ methylbenzoate
   9 17  1  0
  10 18  1  0
 M  END
+>  <conformer_provenance>  (73) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (73) 
 methylbenzoate
 
@@ -3442,6 +3661,9 @@ $$$$
  11 23  1  0
  12 24  1  0
 M  END
+>  <conformer_provenance>  (74) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (74) 
 1,1-dimethyl-3-phenylurea
 
@@ -3494,6 +3716,9 @@ $$$$
   6 17  1  0
   8 18  1  0
 M  END
+>  <conformer_provenance>  (75) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (75) 
 2,2-dichloroethenyldimethylphosphate
 
@@ -3563,6 +3788,9 @@ dimethyl4-nitrophenylthiophosphate
  13 26  1  0
 M  CHG  2  14   1  16  -1
 M  END
+>  <conformer_provenance>  (76) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (76) 
 dimethyl4-nitrophenylthiophosphate
 
@@ -3643,6 +3871,9 @@ diethyl4-nitrophenylthiophosphonate
  14 31  1  0
 M  CHG  2  15   1  17  -1
 M  END
+>  <conformer_provenance>  (77) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (77) 
 diethyl4-nitrophenylthiophosphonate
 
@@ -3695,6 +3926,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (78) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (78) 
 3,5-dimethylpyridine
 
@@ -3743,6 +3977,9 @@ benzamide
   9 15  1  0
   9 16  1  0
 M  END
+>  <conformer_provenance>  (79) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (79) 
 benzamide
 
@@ -3793,6 +4030,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (80) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (80) 
 2-methylaniline
 
@@ -3843,6 +4083,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (81) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (81) 
 3-methylaniline
 
@@ -3893,6 +4136,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (82) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (82) 
 4-methylaniline
 
@@ -3935,6 +4181,9 @@ benzonitrile
   5 12  1  0
   6 13  1  0
 M  END
+>  <conformer_provenance>  (83) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (83) 
 benzonitrile
 
@@ -3983,6 +4232,9 @@ benzylalcohol
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (84) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (84) 
 benzylalcohol
 
@@ -4006,6 +4258,9 @@ formaldehyde
   1  3  1  0
   1  4  1  0
 M  END
+>  <conformer_provenance>  (85) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (85) 
 formaldehyde
 
@@ -4045,6 +4300,9 @@ bromobenzene
   5 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (86) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (86) 
 bromobenzene
 
@@ -4076,6 +4334,9 @@ bromoethane
   2  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (87) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (87) 
 bromoethane
 
@@ -4100,6 +4361,9 @@ bromoform
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (88) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (88) 
 bromoform
 
@@ -4166,6 +4430,9 @@ bromooctane
   8 25  1  0
   8 26  1  0
 M  END
+>  <conformer_provenance>  (89) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (89) 
 bromooctane
 
@@ -4212,6 +4479,9 @@ butanol
   4 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (90) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (90) 
 butanol
 
@@ -4264,6 +4534,9 @@ ethylbenzene
   7 17  1  0
   8 18  1  0
 M  END
+>  <conformer_provenance>  (91) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (91) 
 ethylbenzene
 
@@ -4299,6 +4572,9 @@ $$$$
   3  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (92) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (92) 
 1,2-ethanediol
 
@@ -4339,6 +4615,9 @@ uracil
   3 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (93) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (93) 
 uracil
 
@@ -4380,6 +4659,9 @@ butanone
   5 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (94) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (94) 
 butanone
 
@@ -4420,6 +4702,9 @@ g-butyrolactone
   6 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (95) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (95) 
 g-butyrolactone
 
@@ -4484,6 +4769,9 @@ butylbenzene
   9 23  1  0
  10 24  1  0
 M  END
+>  <conformer_provenance>  (96) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (96) 
 butylbenzene
 
@@ -4538,6 +4826,9 @@ $$$$
   7 18  1  0
   7 19  1  0
 M  END
+>  <conformer_provenance>  (97) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (97) 
 3,3-dimethylbutanone
 
@@ -4560,6 +4851,9 @@ carbondisulfide
   1  2  2  0
   1  3  2  0
 M  END
+>  <conformer_provenance>  (98) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (98) 
 carbondisulfide
 
@@ -4601,6 +4895,9 @@ $$$$
   3 13  1  0
 M  CHG  2   4   1   6  -1
 M  END
+>  <conformer_provenance>  (99) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (99) 
 1-nitropropane
 
@@ -4626,6 +4923,9 @@ carbontet
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (100) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (100) 
 carbontet
 
@@ -4664,6 +4964,9 @@ $$$$
   4 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (101) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (101) 
 2-methylpropene
 
@@ -4703,6 +5006,9 @@ $$$$
   4 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (102) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (102) 
 1-butene
 
@@ -4748,6 +5054,9 @@ E-2-pentene
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (103) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (103) 
 E-2-pentene
 
@@ -4800,6 +5109,9 @@ o-xylene
   8 17  1  0
   8 18  1  0
 M  END
+>  <conformer_provenance>  (104) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (104) 
 o-xylene
 
@@ -4853,6 +5165,9 @@ m-xylene
   8 17  1  0
   8 18  1  0
 M  END
+>  <conformer_provenance>  (105) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (105) 
 m-xylene
 
@@ -4898,6 +5213,9 @@ benzaldehyde
   6 13  1  0
   7 14  1  0
 M  END
+>  <conformer_provenance>  (106) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (106) 
 benzaldehyde
 
@@ -4942,6 +5260,9 @@ cyclopentanone
   6 13  1  0
   6 14  1  0
 M  END
+>  <conformer_provenance>  (107) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (107) 
 cyclopentanone
 
@@ -4993,6 +5314,9 @@ $$$$
   6 17  1  0
 M  CHG  2   8   1  10  -1
 M  END
+>  <conformer_provenance>  (108) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (108) 
 2-methyl-1-nitrobenzene
 
@@ -5041,6 +5365,9 @@ thioanisole
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (109) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (109) 
 thioanisole
 
@@ -5081,6 +5408,9 @@ fluorobenzene
   5 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (110) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (110) 
 fluorobenzene
 
@@ -5121,6 +5451,9 @@ chlorobenzene
   5 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (111) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (111) 
 chlorobenzene
 
@@ -5161,6 +5494,9 @@ $$$$
   4 11  1  0
   5 12  1  0
 M  END
+>  <conformer_provenance>  (112) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (112) 
 1,4-dichlorobenzene
 
@@ -5201,6 +5537,9 @@ iodobenzene
   5 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (113) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (113) 
 iodobenzene
 
@@ -5226,6 +5565,9 @@ chloroform
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (114) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (114) 
 chloroform
 
@@ -5270,6 +5612,9 @@ diethylether
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (115) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (115) 
 diethylether
 
@@ -5299,6 +5644,9 @@ acetaldehyde
   1  6  1  0
   2  7  1  0
 M  END
+>  <conformer_provenance>  (116) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (116) 
 acetaldehyde
 
@@ -5340,6 +5688,9 @@ $$$$
   5 12  1  0
   6 13  1  0
 M  END
+>  <conformer_provenance>  (117) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (117) 
 2-methylpyrazine
 
@@ -5384,6 +5735,9 @@ $$$$
   5 13  1  0
   7 14  1  0
 M  END
+>  <conformer_provenance>  (118) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (118) 
 3-methylpyridine
 
@@ -5426,6 +5780,9 @@ thiophenol
   6 12  1  0
   7 13  1  0
 M  END
+>  <conformer_provenance>  (119) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (119) 
 thiophenol
 
@@ -5471,6 +5828,9 @@ diethylsulfide
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (120) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (120) 
 diethylsulfide
 
@@ -5506,6 +5866,9 @@ allylalcohol
   3  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (121) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (121) 
 allylalcohol
 
@@ -5552,6 +5915,9 @@ morpholine
   5 14  1  0
   6 15  1  0
 M  END
+>  <conformer_provenance>  (122) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (122) 
 morpholine
 
@@ -5585,6 +5951,9 @@ $$$$
   1  8  1  0
   6  9  1  0
 M  END
+>  <conformer_provenance>  (123) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (123) 
 2,2,2-trifluoroethanol
 
@@ -5605,6 +5974,9 @@ hydrogensulfide
   1  2  1  0
   1  3  1  0
 M  END
+>  <conformer_provenance>  (124) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (124) 
 hydrogensulfide
 
@@ -5652,6 +6024,9 @@ $$$$
   6 15  1  0
   7 16  1  0
 M  END
+>  <conformer_provenance>  (125) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (125) 
 2-ethylpyrazine
 
@@ -5685,6 +6060,9 @@ acetamide
   4  8  1  0
   4  9  1  0
 M  END
+>  <conformer_provenance>  (126) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (126) 
 acetamide
 
@@ -5741,6 +6119,9 @@ isopropylether
   7 20  1  0
   7 21  1  0
 M  END
+>  <conformer_provenance>  (127) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (127) 
 isopropylether
 
@@ -5790,6 +6171,9 @@ tetrahydropyran
   6 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (128) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (128) 
 tetrahydropyran
 
@@ -5824,6 +6208,9 @@ thiophene
   3  8  1  0
   5  9  1  0
 M  END
+>  <conformer_provenance>  (129) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (129) 
 thiophene
 
@@ -5877,6 +6264,9 @@ ethylphenylether
   8 18  1  0
   9 19  1  0
 M  END
+>  <conformer_provenance>  (130) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (130) 
 ethylphenylether
 
@@ -5931,6 +6321,9 @@ $$$$
  11 17  1  0
  11 18  1  0
 M  END
+>  <conformer_provenance>  (131) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (131) 
 9-methyladenine
 
@@ -5983,6 +6376,9 @@ $$$$
  10 17  1  0
  10 18  1  0
 M  END
+>  <conformer_provenance>  (132) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (132) 
 1-methylthymine
 
@@ -6008,6 +6404,9 @@ difluorodichloromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (133) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (133) 
 difluorodichloromethane
 
@@ -6032,6 +6431,9 @@ fluorotrichloromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (134) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (134) 
 fluorotrichloromethane
 
@@ -6076,6 +6478,9 @@ N,N-dimethylacetamide
   6 14  1  0
   6 15  1  0
 M  END
+>  <conformer_provenance>  (135) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (135) 
 N,N-dimethylacetamide
 
@@ -6112,6 +6517,9 @@ pyrrole
   4  9  1  0
   5 10  1  0
 M  END
+>  <conformer_provenance>  (136) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (136) 
 pyrrole
 
@@ -6163,6 +6571,9 @@ quinoline
   8 16  1  0
   9 17  1  0
 M  END
+>  <conformer_provenance>  (137) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (137) 
 quinoline
 
@@ -6194,6 +6605,9 @@ urea
   4  7  1  0
   4  8  1  0
 M  END
+>  <conformer_provenance>  (138) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (138) 
 urea
 
@@ -6241,6 +6655,9 @@ N-methyl-2-pyrrolidinone
   5 15  1  0
   5 16  1  0
 M  END
+>  <conformer_provenance>  (139) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (139) 
 N-methyl-2-pyrrolidinone
 
@@ -6281,6 +6698,9 @@ $$$$
   5 11  1  0
   8 12  1  0
 M  END
+>  <conformer_provenance>  (140) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (140) 
 5-fluorouracil
 
@@ -6321,6 +6741,9 @@ $$$$
   5 11  1  0
   8 12  1  0
 M  END
+>  <conformer_provenance>  (141) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (141) 
 5-bromouracil
 
@@ -6376,6 +6799,9 @@ chlorohexane
   6 19  1  0
   6 20  1  0
 M  END
+>  <conformer_provenance>  (142) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (142) 
 chlorohexane
 
@@ -6414,6 +6840,9 @@ n-propane
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (143) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (143) 
 n-propane
 
@@ -6457,6 +6886,9 @@ n-butane
   4 13  1  0
   4 14  1  0
 M  END
+>  <conformer_provenance>  (144) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (144) 
 n-butane
 
@@ -6504,6 +6936,9 @@ $$$$
   6 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (145) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (145) 
 3-pentanone
 
@@ -6543,6 +6978,9 @@ $$$$
   3 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (146) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (146) 
 1-propanethiol
 
@@ -6574,6 +7012,9 @@ $$$$
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (147) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (147) 
 1,1,1-trichloroethane
 
@@ -6600,6 +7041,9 @@ trichloroethene
   1  5  1  0
   1  6  1  0
 M  END
+>  <conformer_provenance>  (148) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (148) 
 trichloroethene
 
@@ -6643,6 +7087,9 @@ $$$$
   3 13  1  0
   8 14  1  0
 M  END
+>  <conformer_provenance>  (149) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (149) 
 3,5-dibromo-4-hydroxybenzonitrile
 
@@ -6682,6 +7129,9 @@ N,N-dimethylformamide
   3 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (150) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (150) 
 N,N-dimethylformamide
 
@@ -6732,6 +7182,9 @@ cyclohexanone
   7 16  1  0
   7 17  1  0
 M  END
+>  <conformer_provenance>  (151) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (151) 
 cyclohexanone
 
@@ -6805,6 +7258,9 @@ decalin
  10 27  1  0
  10 28  1  0
 M  END
+>  <conformer_provenance>  (152) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (152) 
 decalin
 
@@ -6886,6 +7342,9 @@ decane
  10 31  1  0
  10 32  1  0
 M  END
+>  <conformer_provenance>  (153) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (153) 
 decane
 
@@ -6967,6 +7426,9 @@ n-decane
  10 31  1  0
  10 32  1  0
 M  END
+>  <conformer_provenance>  (154) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (154) 
 n-decane
 
@@ -7050,6 +7512,9 @@ decanol
  10 32  1  0
  11 33  1  0
 M  END
+>  <conformer_provenance>  (155) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (155) 
 decanol
 
@@ -7133,6 +7598,9 @@ $$$$
  10 32  1  0
  11 33  1  0
 M  END
+>  <conformer_provenance>  (156) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (156) 
 1-decanol
 
@@ -7176,6 +7644,9 @@ $$$$
   4 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (157) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (157) 
 2-methoxyethanol
 
@@ -7207,6 +7678,9 @@ dibromoethane
   1  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (158) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (158) 
 dibromoethane
 
@@ -7275,6 +7749,9 @@ dibutylether
   9 26  1  0
   9 27  1  0
 M  END
+>  <conformer_provenance>  (159) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (159) 
 dibutylether
 
@@ -7325,6 +7802,9 @@ cyclopentanol
   5 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (160) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (160) 
 cyclopentanol
 
@@ -7360,6 +7840,9 @@ propanal
   2  9  1  0
   3 10  1  0
 M  END
+>  <conformer_provenance>  (161) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (161) 
 propanal
 
@@ -7387,6 +7870,9 @@ formamide
   3  5  1  0
   3  6  1  0
 M  END
+>  <conformer_provenance>  (162) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (162) 
 formamide
 
@@ -7411,6 +7897,9 @@ iodomethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (163) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (163) 
 iodomethane
 
@@ -7467,6 +7956,9 @@ diisopropylether
   7 20  1  0
   7 21  1  0
 M  END
+>  <conformer_provenance>  (164) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (164) 
 diisopropylether
 
@@ -7513,6 +8005,9 @@ dimethylacetamide
   6 14  1  0
   6 15  1  0
 M  END
+>  <conformer_provenance>  (165) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (165) 
 dimethylacetamide
 
@@ -7552,6 +8047,9 @@ dimethylformamide
   3 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (166) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (166) 
 dimethylformamide
 
@@ -7602,6 +8100,9 @@ dimethylpyridine
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (167) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (167) 
 dimethylpyridine
 
@@ -7637,6 +8138,9 @@ dimethylsulfoxide
   4  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (168) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (168) 
 dimethylsulfoxide
 
@@ -7728,6 +8232,9 @@ dodecane
  12 37  1  0
  12 38  1  0
 M  END
+>  <conformer_provenance>  (169) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (169) 
 dodecane
 
@@ -7822,6 +8329,9 @@ n-dodecane
  12 37  1  0
  12 38  1  0
 M  END
+>  <conformer_provenance>  (170) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (170) 
 n-dodecane
 
@@ -7879,6 +8389,9 @@ ethoxybenzene
   8 18  1  0
   9 19  1  0
 M  END
+>  <conformer_provenance>  (171) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (171) 
 ethoxybenzene
 
@@ -7941,6 +8454,9 @@ n-heptane
   7 22  1  0
   7 23  1  0
 M  END
+>  <conformer_provenance>  (172) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (172) 
 n-heptane
 
@@ -8003,6 +8519,9 @@ heptane
   7 22  1  0
   7 23  1  0
 M  END
+>  <conformer_provenance>  (173) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (173) 
 heptane
 
@@ -8056,6 +8575,9 @@ p-xylene
   8 17  1  0
   8 18  1  0
 M  END
+>  <conformer_provenance>  (174) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (174) 
 p-xylene
 
@@ -8122,6 +8644,9 @@ anthracene
  12 23  1  0
  14 24  1  0
 M  END
+>  <conformer_provenance>  (175) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (175) 
 anthracene
 
@@ -8163,6 +8688,9 @@ $$$$
   3 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (176) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (176) 
 1,2-dichlorobenzene
 
@@ -8203,6 +8731,9 @@ p-dibromobenzene
   4 11  1  0
   5 12  1  0
 M  END
+>  <conformer_provenance>  (177) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (177) 
 p-dibromobenzene
 
@@ -8268,6 +8799,9 @@ $$$$
   9 24  1  0
   9 25  1  0
 M  END
+>  <conformer_provenance>  (178) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (178) 
 2-octanone
 
@@ -8330,6 +8864,9 @@ $$$$
  10 21  1  0
  11 22  1  0
 M  END
+>  <conformer_provenance>  (179) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (179) 
 2,2'-dichlorobiphenyl
 
@@ -8394,6 +8931,9 @@ heptanol
   7 23  1  0
   8 24  1  0
 M  END
+>  <conformer_provenance>  (180) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (180) 
 heptanol
 
@@ -8420,6 +8960,9 @@ methane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (181) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (181) 
 methane
 
@@ -8534,6 +9077,9 @@ hexadecane
  16 49  1  0
  16 50  1  0
 M  END
+>  <conformer_provenance>  (182) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (182) 
 hexadecane
 
@@ -8569,6 +9115,9 @@ ethane
   2  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (183) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (183) 
 ethane
 
@@ -8683,6 +9232,9 @@ n-hexadecane
  16 49  1  0
  16 50  1  0
 M  END
+>  <conformer_provenance>  (184) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (184) 
 n-hexadecane
 
@@ -8730,6 +9282,9 @@ $$$$
   4 13  1  0
   4 14  1  0
 M  END
+>  <conformer_provenance>  (185) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (185) 
 2-methylpropane
 
@@ -8779,6 +9334,9 @@ $$$$
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (186) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (186) 
 2,2-dimethylpropane
 
@@ -8834,6 +9392,9 @@ $$$$
   6 19  1  0
   6 20  1  0
 M  END
+>  <conformer_provenance>  (187) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (187) 
 2-methylpentane
 
@@ -8896,6 +9457,9 @@ $$$$
   7 22  1  0
   7 23  1  0
 M  END
+>  <conformer_provenance>  (188) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (188) 
 2,4-dimethylpentane
 
@@ -8964,6 +9528,9 @@ $$$$
   8 25  1  0
   8 26  1  0
 M  END
+>  <conformer_provenance>  (189) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (189) 
 2,2,4-trimethylpentane
 
@@ -8999,6 +9566,9 @@ cyclopropane
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (190) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (190) 
 cyclopropane
 
@@ -9044,6 +9614,9 @@ cyclopentane
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (191) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (191) 
 cyclopentane
 
@@ -9102,6 +9675,9 @@ methylcyclohexane
   7 20  1  0
   7 21  1  0
 M  END
+>  <conformer_provenance>  (192) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (192) 
 methylcyclohexane
 
@@ -9130,6 +9706,9 @@ ethene
   2  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (193) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (193) 
 ethene
 
@@ -9162,6 +9741,9 @@ propene
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (194) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (194) 
 propene
 
@@ -9196,6 +9778,9 @@ s-trans-1,3-butadiene
   4  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (195) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (195) 
 s-trans-1,3-butadiene
 
@@ -9241,6 +9826,9 @@ $$$$
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (196) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (196) 
 1-pentene
 
@@ -9292,6 +9880,9 @@ $$$$
   6 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (197) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (197) 
 1-hexene
 
@@ -9316,6 +9907,9 @@ ethyne
   1  3  1  0
   2  4  1  0
 M  END
+>  <conformer_provenance>  (198) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (198) 
 ethyne
 
@@ -9344,6 +9938,9 @@ propyne
   1  6  1  0
   3  7  1  0
 M  END
+>  <conformer_provenance>  (199) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (199) 
 propyne
 
@@ -9378,6 +9975,9 @@ $$$$
   2  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (200) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (200) 
 1-butyne
 
@@ -9419,6 +10019,9 @@ $$$$
   3 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (201) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (201) 
 1-pentyne
 
@@ -9466,6 +10069,9 @@ $$$$
   4 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (202) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (202) 
 1-hexyne
 
@@ -9545,6 +10151,9 @@ chrysene
  17 29  1  0
  18 30  1  0
 M  END
+>  <conformer_provenance>  (203) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (203) 
 chrysene
 
@@ -9580,6 +10189,9 @@ dimethylether
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (204) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (204) 
 dimethylether
 
@@ -9621,6 +10233,9 @@ tetrahydrofuran
   5 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (205) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (205) 
 tetrahydrofuran
 
@@ -9668,6 +10283,9 @@ $$$$
   6 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (206) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (206) 
 1,2-dimethoxyethane
 
@@ -9709,6 +10327,9 @@ butanal
   3 12  1  0
   4 13  1  0
 M  END
+>  <conformer_provenance>  (207) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (207) 
 butanal
 
@@ -9756,6 +10377,9 @@ pentanal
   4 15  1  0
   5 16  1  0
 M  END
+>  <conformer_provenance>  (208) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (208) 
 pentanal
 
@@ -9815,6 +10439,9 @@ $$$$
   8 21  1  0
   8 22  1  0
 M  END
+>  <conformer_provenance>  (209) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (209) 
 4-heptanone
 
@@ -9887,6 +10514,9 @@ $$$$
  10 27  1  0
  10 28  1  0
 M  END
+>  <conformer_provenance>  (210) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (210) 
 5-nonanone
 
@@ -9920,6 +10550,9 @@ methylformate
   1  7  1  0
   3  8  1  0
 M  END
+>  <conformer_provenance>  (211) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (211) 
 methylformate
 
@@ -9956,6 +10589,9 @@ ethylformate
   2 10  1  0
   4 11  1  0
 M  END
+>  <conformer_provenance>  (212) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (212) 
 ethylformate
 
@@ -10005,6 +10641,9 @@ methylbutanoate
   7 16  1  0
   7 17  1  0
 M  END
+>  <conformer_provenance>  (213) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (213) 
 methylbutanoate
 
@@ -10144,6 +10783,9 @@ ethyloctadecanoate
  22 61  1  0
  22 62  1  0
 M  END
+>  <conformer_provenance>  (214) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (214) 
 ethyloctadecanoate
 
@@ -10203,6 +10845,9 @@ pentylamine
   6 18  1  0
   6 19  1  0
 M  END
+>  <conformer_provenance>  (215) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (215) 
 pentylamine
 
@@ -10254,6 +10899,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (216) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (216) 
 2,4-dimethylpyridine
 
@@ -10304,6 +10952,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (217) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (217) 
 2,5-dimethylpyridine
 
@@ -10337,6 +10988,9 @@ propionitrile
   2  8  1  0
   2  9  1  0
 M  END
+>  <conformer_provenance>  (218) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (218) 
 propionitrile
 
@@ -10376,6 +11030,9 @@ butanonitrile
   3 11  1  0
   3 12  1  0
 M  END
+>  <conformer_provenance>  (219) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (219) 
 butanonitrile
 
@@ -10412,6 +11069,9 @@ nitroethane
   2 10  1  0
 M  CHG  2   3   1   5  -1
 M  END
+>  <conformer_provenance>  (220) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (220) 
 nitroethane
 
@@ -10454,6 +11114,9 @@ $$$$
   3 13  1  0
 M  CHG  2   4   1   6  -1
 M  END
+>  <conformer_provenance>  (221) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (221) 
 2-nitropropane
 
@@ -10502,6 +11165,9 @@ $$$$
   4 16  1  0
 M  CHG  2   5   1   7  -1
 M  END
+>  <conformer_provenance>  (222) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (222) 
 1-nitrobutane
 
@@ -10535,6 +11201,9 @@ ethanethiol
   2  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (223) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (223) 
 ethanethiol
 
@@ -10568,6 +11237,9 @@ dimethylsulfide
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (224) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (224) 
 dimethylsulfide
 
@@ -10603,6 +11275,9 @@ dimethyldisulfide
   4  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (225) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (225) 
 dimethyldisulfide
 
@@ -10660,6 +11335,9 @@ dipropylsulfide
   7 20  1  0
   7 21  1  0
 M  END
+>  <conformer_provenance>  (226) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (226) 
 dipropylsulfide
 
@@ -10692,6 +11370,9 @@ fluoroethane
   2  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (227) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (227) 
 fluoroethane
 
@@ -10746,6 +11427,9 @@ $$$$
   6 19  1  0
   6 20  1  0
 M  END
+>  <conformer_provenance>  (228) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (228) 
 1-fluorohexane
 
@@ -10814,6 +11498,9 @@ $$$$
   8 25  1  0
   8 26  1  0
 M  END
+>  <conformer_provenance>  (229) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (229) 
 1-fluorooctane
 
@@ -10840,6 +11527,9 @@ dichloromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (230) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (230) 
 dichloromethane
 
@@ -10870,6 +11560,9 @@ chloroethane
   2  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (231) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (231) 
 chloroethane
 
@@ -10900,6 +11593,9 @@ $$$$
   1  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (232) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (232) 
 1,1,2-trichloroethane
 
@@ -10936,6 +11632,9 @@ $$$$
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (233) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (233) 
 1-chloropropane
 
@@ -10973,6 +11672,9 @@ $$$$
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (234) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (234) 
 2-chloropropane
 
@@ -11006,6 +11708,9 @@ $$$$
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (235) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (235) 
 3-chloropropene
 
@@ -11032,6 +11737,9 @@ Z-1,2-dichloroethene
   1  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (236) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (236) 
 Z-1,2-dichloroethene
 
@@ -11058,6 +11766,9 @@ E-1,2-dichloroethene
   1  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (237) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (237) 
 E-1,2-dichloroethene
 
@@ -11082,6 +11793,9 @@ dibromomethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (238) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (238) 
 dibromomethane
 
@@ -11118,6 +11832,9 @@ $$$$
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (239) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (239) 
 1-bromopropane
 
@@ -11155,6 +11872,9 @@ $$$$
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (240) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (240) 
 2-bromopropane
 
@@ -11198,6 +11918,9 @@ $$$$
   4 13  1  0
   4 14  1  0
 M  END
+>  <conformer_provenance>  (241) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (241) 
 1-bromobutane
 
@@ -11247,6 +11970,9 @@ $$$$
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (242) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (242) 
 1-bromopentane
 
@@ -11278,6 +12004,9 @@ $$$$
   1  7  1  0
   1  8  1  1
 M  END
+>  <conformer_provenance>  (243) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (243) 
 1-bromo-1-chloro-2,2,2-trifluoroethane
 
@@ -11308,6 +12037,9 @@ $$$$
   1  7  1  0
   1  8  1  6
 M  END
+>  <conformer_provenance>  (244) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (244) 
 1-bromo-1,2,2,2-tetrafluoroethane
 
@@ -11334,6 +12066,9 @@ tetrachloroethene
   1  5  1  0
   1  6  1  0
 M  END
+>  <conformer_provenance>  (245) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (245) 
 tetrachloroethene
 
@@ -11364,6 +12099,9 @@ $$$$
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (246) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (246) 
 1,1,2-trichloro-1,2,2-trifluoroethane
 
@@ -11402,6 +12140,9 @@ $$$$
   1 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (247) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (247) 
 1,1-dichloro-2,2-difluoroethylmethylether
 
@@ -11443,6 +12184,9 @@ $$$$
   8 12  1  0
   8 13  1  0
 M  END
+>  <conformer_provenance>  (248) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (248) 
 2,2,2-trifluorethylvinylether
 
@@ -11490,6 +12234,9 @@ diethyldisulfide
   6 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (249) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (249) 
 diethyldisulfide
 
@@ -11555,6 +12302,9 @@ octanal
   7 24  1  0
   8 25  1  0
 M  END
+>  <conformer_provenance>  (250) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (250) 
 octanal
 
@@ -11589,6 +12339,9 @@ $$$$
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (251) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (251) 
 3-bromopropene
 
@@ -11631,6 +12384,9 @@ $$$$
   4 13  1  0
   4 14  1  0
 M  END
+>  <conformer_provenance>  (252) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (252) 
 1-bromo-isobutane
 
@@ -11677,6 +12433,9 @@ p-bromotoluene
   6 14  1  0
   7 15  1  0
 M  END
+>  <conformer_provenance>  (253) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (253) 
 p-bromotoluene
 
@@ -11702,6 +12461,9 @@ bromotrichloromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (254) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (254) 
 bromotrichloromethane
 
@@ -11748,6 +12510,9 @@ dimethylmethylphosphonate
   7 15  1  0
   7 16  1  0
 M  END
+>  <conformer_provenance>  (255) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (255) 
 dimethylmethylphosphonate
 
@@ -11798,6 +12563,9 @@ $$$$
   8 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (256) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (256) 
 3,4-dimethylpyridine
 
@@ -11848,6 +12616,9 @@ $$$$
   7 16  1  0
   8 17  1  0
 M  END
+>  <conformer_provenance>  (257) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (257) 
 4-ethylpyridine
 
@@ -11897,6 +12668,9 @@ tetramethylsilane
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (258) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (258) 
 tetramethylsilane
 
@@ -11922,6 +12696,9 @@ diiodomethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (259) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (259) 
 diiodomethane
 
@@ -11952,6 +12729,9 @@ iodoethane
   2  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (260) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (260) 
 iodoethane
 
@@ -11984,6 +12764,9 @@ $$$$
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (261) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (261) 
 3-iodopropene
 
@@ -12020,6 +12803,9 @@ $$$$
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (262) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (262) 
 1-iodopropane
 
@@ -12063,6 +12849,9 @@ $$$$
   4 13  1  0
   4 14  1  0
 M  END
+>  <conformer_provenance>  (263) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (263) 
 1-iodobutane
 
@@ -12112,6 +12901,9 @@ $$$$
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (264) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (264) 
 1-iodopentane
 
@@ -12227,6 +13019,9 @@ hexadecyliodide
  16 49  1  0
  16 50  1  0
 M  END
+>  <conformer_provenance>  (265) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (265) 
 hexadecyliodide
 
@@ -12286,6 +13081,9 @@ hexane
   6 19  1  0
   6 20  1  0
 M  END
+>  <conformer_provenance>  (266) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (266) 
 hexane
 
@@ -12344,6 +13142,9 @@ hexanol
   6 20  1  0
   7 21  1  0
 M  END
+>  <conformer_provenance>  (267) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (267) 
 hexanol
 
@@ -12390,6 +13191,9 @@ isobutanol
   4 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (268) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (268) 
 isobutanol
 
@@ -12438,6 +13242,9 @@ piperazine
   5 15  1  0
   6 16  1  0
 M  END
+>  <conformer_provenance>  (269) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (269) 
 piperazine
 
@@ -12505,6 +13312,9 @@ isooctane
   8 25  1  0
   8 26  1  0
 M  END
+>  <conformer_provenance>  (270) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (270) 
 isooctane
 
@@ -12564,6 +13374,9 @@ isopropylbenzene
   8 20  1  0
   9 21  1  0
 M  END
+>  <conformer_provenance>  (271) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (271) 
 isopropylbenzene
 
@@ -12629,6 +13442,9 @@ isopropyltoluene
  10 23  1  0
  10 24  1  0
 M  END
+>  <conformer_provenance>  (272) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (272) 
 isopropyltoluene
 
@@ -12678,6 +13494,9 @@ mcresol
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (273) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (273) 
 mcresol
 
@@ -12736,6 +13555,9 @@ mesitylene
   9 20  1  0
   9 21  1  0
 M  END
+>  <conformer_provenance>  (274) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (274) 
 mesitylene
 
@@ -12778,6 +13600,9 @@ methoxyethanol
   5 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (275) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (275) 
 methoxyethanol
 
@@ -12803,6 +13628,9 @@ methylenechloride
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (276) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (276) 
 methylenechloride
 
@@ -12835,6 +13663,9 @@ methylformamide
   2  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (277) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (277) 
 methylformamide
 
@@ -12867,6 +13698,9 @@ N-methylformamide
   2  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (278) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (278) 
 N-methylformamide
 
@@ -12939,6 +13773,9 @@ nonane
   9 28  1  0
   9 29  1  0
 M  END
+>  <conformer_provenance>  (279) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (279) 
 nonane
 
@@ -13014,6 +13851,9 @@ n-nonane
   9 28  1  0
   9 29  1  0
 M  END
+>  <conformer_provenance>  (280) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (280) 
 n-nonane
 
@@ -13091,6 +13931,9 @@ nonanol
   9 29  1  0
  10 30  1  0
 M  END
+>  <conformer_provenance>  (281) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (281) 
 nonanol
 
@@ -13168,6 +14011,9 @@ $$$$
   9 29  1  0
  10 30  1  0
 M  END
+>  <conformer_provenance>  (282) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (282) 
 1-nonanol
 
@@ -13237,6 +14083,9 @@ octane
   8 25  1  0
   8 26  1  0
 M  END
+>  <conformer_provenance>  (283) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (283) 
 octane
 
@@ -13307,6 +14156,9 @@ octanol
   8 26  1  0
   9 27  1  0
 M  END
+>  <conformer_provenance>  (284) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (284) 
 octanol
 
@@ -13354,6 +14206,9 @@ methylpropylether
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (285) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (285) 
 methylpropylether
 
@@ -13399,6 +14254,9 @@ methylisopropylether
   5 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (286) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (286) 
 methylisopropylether
 
@@ -13450,6 +14308,9 @@ t-butylmethylether
   6 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (287) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (287) 
 t-butylmethylether
 
@@ -13506,6 +14367,9 @@ $$$$
  10 19  1  0
  10 20  1  0
 M  END
+>  <conformer_provenance>  (288) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (288) 
 3-ethyl-2-methoxypyrazine
 
@@ -13538,6 +14402,9 @@ $$$$
   1  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (289) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (289) 
 1,1-difluoroethane
 
@@ -13562,6 +14429,9 @@ bromomethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (290) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (290) 
 bromomethane
 
@@ -13586,6 +14456,9 @@ bromotrifluoromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (291) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (291) 
 bromotrifluoromethane
 
@@ -13610,6 +14483,9 @@ chlorodifluoromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (292) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (292) 
 chlorodifluoromethane
 
@@ -13634,6 +14510,9 @@ tetrafluoromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (293) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (293) 
 tetrafluoromethane
 
@@ -13672,6 +14551,9 @@ $$$$
   2 11  1  1
   7 12  1  0
 M  END
+>  <conformer_provenance>  (294) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (294) 
 1,1,1-trifluoropropan-2-ol
 
@@ -13711,6 +14593,9 @@ $$$$
   1 11  1  0
  10 12  1  0
 M  END
+>  <conformer_provenance>  (295) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (295) 
 1,1,1,3,3,3-hexafluoropropan-2-ol
 
@@ -13772,6 +14657,9 @@ $$$$
   9 21  1  0
  10 22  1  0
 M  END
+>  <conformer_provenance>  (296) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (296) 
 2,3-dichlorobiphenyl
 
@@ -13834,6 +14722,9 @@ $$$$
   9 21  1  0
  10 22  1  0
 M  END
+>  <conformer_provenance>  (297) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (297) 
 2,2',3'-trichlorobiphenyl
 
@@ -13877,6 +14768,9 @@ $$$$
   2 12  1  0
   6 13  1  0
 M  END
+>  <conformer_provenance>  (298) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (298) 
 2,6-dichlorobenzonitrile
 
@@ -13925,6 +14819,9 @@ $$$$
  13 15  1  0
  13 16  1  0
 M  END
+>  <conformer_provenance>  (299) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (299) 
 4-amino-3,5,6-trichloropyridine-2-carboxylicacid
 
@@ -13997,6 +14894,9 @@ methyl3-methyl-4-thiomethoxyphenylthiophosphate
  14 27  1  0
  15 28  1  0
 M  END
+>  <conformer_provenance>  (300) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (300) 
 methyl3-methyl-4-thiomethoxyphenylthiophosphate
 
@@ -14075,6 +14975,9 @@ diethyl2,4-dichlorophenylthiophosphate
  16 29  1  0
  17 30  1  0
 M  END
+>  <conformer_provenance>  (301) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (301) 
 diethyl2,4-dichlorophenylthiophosphate
 
@@ -14159,6 +15062,9 @@ O-ethylO'-4-bromo-2-chlorophenylS-propylphosphorothioate
  18 32  1  0
  18 33  1  0
 M  END
+>  <conformer_provenance>  (302) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (302) 
 O-ethylO'-4-bromo-2-chlorophenylS-propylphosphorothioate
 
@@ -14225,6 +15131,9 @@ dimethyl2,4,5-trichlorophenylthiophosphate
  11 23  1  0
  16 24  1  0
 M  END
+>  <conformer_provenance>  (303) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (303) 
 dimethyl2,4,5-trichlorophenylthiophosphate
 
@@ -14290,6 +15199,9 @@ dimethyl4-bromo-2,5-dichlorophenylthiophosphate
  11 23  1  0
  16 24  1  0
 M  END
+>  <conformer_provenance>  (304) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (304) 
 dimethyl4-bromo-2,5-dichlorophenylthiophosphate
 
@@ -14376,6 +15288,9 @@ ethyl4-cyanophenylphenylthiophosphonate
  17 33  1  0
  18 34  1  0
 M  END
+>  <conformer_provenance>  (305) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (305) 
 ethyl4-cyanophenylphenylthiophosphonate
 
@@ -14411,6 +15326,9 @@ methylhydrazine
   3  8  1  0
   3  9  1  0
 M  END
+>  <conformer_provenance>  (306) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (306) 
 methylhydrazine
 
@@ -14452,6 +15370,9 @@ $$$$
   6 12  1  0
   6 13  1  0
 M  END
+>  <conformer_provenance>  (307) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (307) 
 2-pyrrolidinone
 
@@ -14498,6 +15419,9 @@ $$$$
   5 14  1  0
   8 15  1  0
 M  END
+>  <conformer_provenance>  (308) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (308) 
 5-trifluoromethyluracil
 
@@ -14538,6 +15462,9 @@ $$$$
   5 11  1  0
   8 12  1  0
 M  END
+>  <conformer_provenance>  (309) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (309) 
 5-chlorouracil
 
@@ -14590,6 +15517,9 @@ $$$$
   5 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (310) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (310) 
 1,2,3,4,5,6-hexachlorocyclohexane(lindane)
 
@@ -14648,6 +15578,9 @@ acetylsalicylicacid
   9 20  1  0
  13 21  1  0
 M  END
+>  <conformer_provenance>  (311) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (311) 
 acetylsalicylicacid
 
@@ -14721,6 +15654,9 @@ butylparaben
  13 27  1  0
  14 28  1  0
 M  END
+>  <conformer_provenance>  (312) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (312) 
 butylparaben
 
@@ -14788,6 +15724,9 @@ caffeine
  14 23  1  0
  14 24  1  0
 M  END
+>  <conformer_provenance>  (313) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (313) 
 caffeine
 
@@ -14829,6 +15768,9 @@ cyanuricacid
   6 11  1  0
   9 12  1  0
 M  END
+>  <conformer_provenance>  (314) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (314) 
 cyanuricacid
 
@@ -14898,6 +15840,9 @@ diflunisal
  17 25  1  0
  18 26  1  0
 M  END
+>  <conformer_provenance>  (315) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (315) 
 diflunisal
 
@@ -14959,6 +15904,9 @@ ethylparaben
  11 21  1  0
  12 22  1  0
 M  END
+>  <conformer_provenance>  (316) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (316) 
 ethylparaben
 
@@ -15039,6 +15987,9 @@ flurbiprofen(racemic)
  14 30  1  0
  18 31  1  0
 M  END
+>  <conformer_provenance>  (317) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (317) 
 flurbiprofen(racemic)
 
@@ -15081,6 +16032,9 @@ hexachlorobenzene
   1 12  1  0
   6  1  1  0
 M  END
+>  <conformer_provenance>  (318) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (318) 
 hexachlorobenzene
 
@@ -15163,6 +16117,9 @@ ibuprofen(racemic)
  12 32  1  0
  15 33  1  0
 M  END
+>  <conformer_provenance>  (319) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (319) 
 ibuprofen(racemic)
 
@@ -15205,6 +16162,9 @@ $$$$
   5 11  1  0
   8 12  1  0
 M  END
+>  <conformer_provenance>  (320) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (320) 
 5-iodouracil
 
@@ -15288,6 +16248,9 @@ ketoprofen(racemic)
  16 32  1  0
  19 33  1  0
 M  END
+>  <conformer_provenance>  (321) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (321) 
 ketoprofen(racemic)
 
@@ -15344,6 +16307,9 @@ methylparaben
  10 18  1  0
  11 19  1  0
 M  END
+>  <conformer_provenance>  (322) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (322) 
 methylparaben
 
@@ -15424,6 +16390,9 @@ naproxen
  14 30  1  0
  17 31  1  0
 M  END
+>  <conformer_provenance>  (323) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (323) 
 naproxen
 
@@ -15475,6 +16444,9 @@ $$$$
   7 16  1  0
 M  CHG  2   8   1  10  -1
 M  END
+>  <conformer_provenance>  (324) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (324) 
 4-nitroaniline
 
@@ -15515,6 +16487,9 @@ octafluorocyclobutane
   1 12  1  0
   4  1  1  0
 M  END
+>  <conformer_provenance>  (325) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (325) 
 octafluorocyclobutane
 
@@ -15560,6 +16535,9 @@ pentachloronitrobenzene
   6  1  1  0
 M  CHG  2  12   1  14  -1
 M  END
+>  <conformer_provenance>  (326) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (326) 
 pentachloronitrobenzene
 
@@ -15609,6 +16587,9 @@ phthalimide
   6 15  1  0
   9 16  1  0
 M  END
+>  <conformer_provenance>  (327) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (327) 
 phthalimide
 
@@ -15675,6 +16656,9 @@ propylparaben
  12 24  1  0
  13 25  1  0
 M  END
+>  <conformer_provenance>  (328) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (328) 
 propylparaben
 
@@ -15722,6 +16706,9 @@ sulfolane
   7 14  1  0
   7 15  1  0
 M  END
+>  <conformer_provenance>  (329) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (329) 
 sulfolane
 
@@ -15778,6 +16765,9 @@ paracetamol
  10 19  1  0
  11 20  1  0
 M  END
+>  <conformer_provenance>  (330) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (330) 
 paracetamol
 
@@ -15835,6 +16825,9 @@ N-(3-hydroxyphenyl)acetamide
  10 19  1  0
  11 20  1  0
 M  END
+>  <conformer_provenance>  (331) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (331) 
 N-(3-hydroxyphenyl)acetamide
 
@@ -15919,6 +16912,9 @@ fenbufen
  16 32  1  0
  19 33  1  0
 M  END
+>  <conformer_provenance>  (332) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (332) 
 fenbufen
 
@@ -15977,6 +16973,9 @@ N-(2-hydroxyphenyl)acetamide
   9 19  1  0
  11 20  1  0
 M  END
+>  <conformer_provenance>  (333) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (333) 
 N-(2-hydroxyphenyl)acetamide
 
@@ -16046,6 +17045,9 @@ phenacetin
  13 25  1  0
  13 26  1  0
 M  END
+>  <conformer_provenance>  (334) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (334) 
 phenacetin
 
@@ -16101,6 +17103,9 @@ $$$$
   7 18  1  0
  11 19  1  0
 M  END
+>  <conformer_provenance>  (335) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (335) 
 2-methoxybenzoicacid
 
@@ -16156,6 +17161,9 @@ $$$$
   8 18  1  0
  11 19  1  0
 M  END
+>  <conformer_provenance>  (336) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (336) 
 4-methoxybenzoicacid
 
@@ -16211,6 +17219,9 @@ $$$$
   8 18  1  0
  11 19  1  0
 M  END
+>  <conformer_provenance>  (337) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (337) 
 3-methoxybenzoicacid
 
@@ -16289,6 +17300,9 @@ tolfenamicacid
  14 29  1  0
  18 30  1  0
 M  END
+>  <conformer_provenance>  (338) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (338) 
 tolfenamicacid
 
@@ -16368,6 +17382,9 @@ diclofenacacid
  15 29  1  0
  16 30  1  0
 M  END
+>  <conformer_provenance>  (339) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (339) 
 diclofenacacid
 
@@ -16447,6 +17464,9 @@ flufenamicacid
  16 29  1  0
  20 30  1  0
 M  END
+>  <conformer_provenance>  (340) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (340) 
 flufenamicacid
 
@@ -16486,6 +17506,9 @@ $$$$
   3 10  1  0
   3 11  1  0
 M  END
+>  <conformer_provenance>  (341) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (341) 
 2-iodopropane
 
@@ -16526,6 +17549,9 @@ odichlorobenzene
   7 11  1  0
   8 12  1  0
 M  END
+>  <conformer_provenance>  (342) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (342) 
 odichlorobenzene
 
@@ -16577,6 +17603,9 @@ onitrotoluene
  10 17  1  0
 M  CHG  2   4   1   6  -1
 M  END
+>  <conformer_provenance>  (343) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (343) 
 onitrotoluene
 
@@ -16686,6 +17715,9 @@ pentadecane
  15 46  1  0
  15 47  1  0
 M  END
+>  <conformer_provenance>  (344) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (344) 
 pentadecane
 
@@ -16799,6 +17831,9 @@ n-pentadecane
  15 46  1  0
  15 47  1  0
 M  END
+>  <conformer_provenance>  (345) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (345) 
 n-pentadecane
 
@@ -16852,6 +17887,9 @@ pentane
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (346) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (346) 
 pentane
 
@@ -16903,6 +17941,9 @@ pentanol
   5 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (347) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (347) 
 pentanol
 
@@ -16944,6 +17985,9 @@ perfluorobenzene
   1 12  1  0
   6  1  1  0
 M  END
+>  <conformer_provenance>  (348) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (348) 
 perfluorobenzene
 
@@ -17007,6 +18051,9 @@ phenylether
  12 22  1  0
  13 23  1  0
 M  END
+>  <conformer_provenance>  (349) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (349) 
 phenylether
 
@@ -17047,6 +18094,9 @@ propanol
   3 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (350) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (350) 
 propanol
 
@@ -17092,6 +18142,9 @@ secbutanol
   4 14  1  0
   5 15  1  0
 M  END
+>  <conformer_provenance>  (351) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (351) 
 secbutanol
 
@@ -17156,6 +18209,9 @@ secbutylbenzene
   9 23  1  0
  10 24  1  0
 M  END
+>  <conformer_provenance>  (352) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (352) 
 secbutylbenzene
 
@@ -17221,6 +18277,9 @@ tbutylbenzene
   9 23  1  0
  10 24  1  0
 M  END
+>  <conformer_provenance>  (353) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (353) 
 tbutylbenzene
 
@@ -17268,6 +18327,9 @@ tetrahydrothiophenedioxide
   7 14  1  0
   7 15  1  0
 M  END
+>  <conformer_provenance>  (354) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (354) 
 tetrahydrothiophenedioxide
 
@@ -17329,6 +18391,9 @@ tetralin
  10 21  1  0
  10 22  1  0
 M  END
+>  <conformer_provenance>  (355) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (355) 
 tetralin
 
@@ -17433,6 +18498,9 @@ tributylphosphate
  17 43  1  0
  17 44  1  0
 M  END
+>  <conformer_provenance>  (356) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (356) 
 tributylphosphate
 
@@ -17495,6 +18563,9 @@ triethylamine
   7 21  1  0
   7 22  1  0
 M  END
+>  <conformer_provenance>  (357) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (357) 
 triethylamine
 
@@ -17581,6 +18652,9 @@ undecane
  11 34  1  0
  11 35  1  0
 M  END
+>  <conformer_provenance>  (358) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (358) 
 undecane
 
@@ -17669,6 +18743,9 @@ n-undecane
  11 34  1  0
  11 35  1  0
 M  END
+>  <conformer_provenance>  (359) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (359) 
 n-undecane
 
@@ -17693,6 +18770,9 @@ water
   1  2  1  0
   1  3  1  0
 M  END
+>  <conformer_provenance>  (360) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (360) 
 water
 
@@ -17756,6 +18836,9 @@ cis-1,2-dimethylcyclohexane
   8 23  1  0
   8 24  1  0
 M  END
+>  <conformer_provenance>  (361) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (361) 
 cis-1,2-dimethylcyclohexane
 
@@ -17799,6 +18882,9 @@ cyclopentene
   5 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (362) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (362) 
 cyclopentene
 
@@ -17837,6 +18923,9 @@ azetidine
   4 10  1  0
   4 11  1  0
 M  END
+>  <conformer_provenance>  (363) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (363) 
 azetidine
 
@@ -17881,6 +18970,9 @@ pyrrolidine
   5 13  1  0
   5 14  1  0
 M  END
+>  <conformer_provenance>  (364) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (364) 
 pyrrolidine
 
@@ -17935,6 +19027,9 @@ N-methylpiperazine
   7 18  1  0
   7 19  1  0
 M  END
+>  <conformer_provenance>  (365) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (365) 
 N-methylpiperazine
 
@@ -17996,6 +19091,9 @@ N,N'-dimethylpiperazine
   8 21  1  0
   8 22  1  0
 M  END
+>  <conformer_provenance>  (366) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (366) 
 N,N'-dimethylpiperazine
 
@@ -18024,6 +19122,9 @@ methanethiol
   1  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (367) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (367) 
 methanethiol
 
@@ -18066,6 +19167,9 @@ $$$$
   5 13  1  0
   5 14  1  0
 M  END
+>  <conformer_provenance>  (368) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (368) 
 2-methoxyethanamine
 
@@ -18097,6 +19201,9 @@ butenyne
   2  7  1  0
   4  8  1  0
 M  END
+>  <conformer_provenance>  (369) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (369) 
 butenyne
 
@@ -18121,6 +19228,9 @@ fluoromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (370) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (370) 
 fluoromethane
 
@@ -18145,6 +19255,9 @@ chloromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (371) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (371) 
 chloromethane
 
@@ -18171,6 +19284,9 @@ chloroethene
   1  5  1  0
   2  6  1  0
 M  END
+>  <conformer_provenance>  (372) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (372) 
 chloroethene
 
@@ -18195,6 +19311,9 @@ chlorofluoromethane
   1  4  1  0
   1  5  1  0
 M  END
+>  <conformer_provenance>  (373) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (373) 
 chlorofluoromethane
 
@@ -18225,6 +19344,9 @@ $$$$
   2  7  1  0
   2  8  1  0
 M  END
+>  <conformer_provenance>  (374) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (374) 
 1-bromo-2-chloroethane
 
@@ -18255,6 +19377,9 @@ $$$$
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (375) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (375) 
 1-chloro-2,2,2-trifluoroethane
 
@@ -18293,6 +19418,9 @@ $$$$
   1 11  1  1
   7 12  1  0
 M  END
+>  <conformer_provenance>  (376) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (376) 
 1-chloro-2,2,2-trifluoroethyldifluoromethylether
 
@@ -18338,6 +19466,9 @@ bis(2-chloroethyl)sulfide
   6 14  1  0
   6 15  1  0
 M  END
+>  <conformer_provenance>  (377) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (377) 
 bis(2-chloroethyl)sulfide
 
@@ -18361,6 +19492,9 @@ phosphine
   1  3  1  0
   1  4  1  0
 M  END
+>  <conformer_provenance>  (378) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (378) 
 phosphine
 
@@ -18412,6 +19546,9 @@ N-methylmorpholine
   7 17  1  0
   7 18  1  0
 M  END
+>  <conformer_provenance>  (379) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (379) 
 N-methylmorpholine
 
@@ -18451,6 +19588,9 @@ E-N-methylacetamide
   5 11  1  0
   5 12  1  0
 M  END
+>  <conformer_provenance>  (380) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (380) 
 E-N-methylacetamide
 
@@ -18490,6 +19630,9 @@ Z-N-methylacetamide
   5 11  1  0
   5 12  1  0
 M  END
+>  <conformer_provenance>  (381) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (381) 
 Z-N-methylacetamide
 
@@ -18563,6 +19706,9 @@ methyloctanoate
  11 28  1  0
  11 29  1  0
 M  END
+>  <conformer_provenance>  (382) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (382) 
 methyloctanoate
 
@@ -18596,6 +19742,9 @@ hexafluoroethane
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (383) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (383) 
 hexafluoroethane
 
@@ -18632,6 +19781,9 @@ octafluoropropane
   1 10  1  0
   1 11  1  0
 M  END
+>  <conformer_provenance>  (384) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (384) 
 octafluoropropane
 
@@ -18663,6 +19815,9 @@ $$$$
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (385) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (385) 
 1,1,1,2-tetrachloroethane
 
@@ -18693,6 +19848,9 @@ hexachloroethane
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (386) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (386) 
 hexachloroethane
 
@@ -18735,6 +19893,9 @@ $$$$
   4 13  1  0
   4 14  1  0
 M  END
+>  <conformer_provenance>  (387) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (387) 
 2-chlorobutane
 
@@ -18784,6 +19945,9 @@ $$$$
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (388) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (388) 
 1-chloropentane
 
@@ -18833,6 +19997,9 @@ $$$$
   5 16  1  0
   5 17  1  0
 M  END
+>  <conformer_provenance>  (389) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (389) 
 2-chloropentane
 
@@ -18879,6 +20046,9 @@ o-chlorotoluene
   5 14  1  0
   6 15  1  0
 M  END
+>  <conformer_provenance>  (390) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (390) 
 o-chlorotoluene
 
@@ -18910,6 +20080,9 @@ chloropentaflouroethane
   1  7  1  0
   1  8  1  0
 M  END
+>  <conformer_provenance>  (391) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (391) 
 chloropentaflouroethane
 
@@ -18957,6 +20130,9 @@ $$$$
  10 15  1  0
  10 16  1  0
 M  END
+>  <conformer_provenance>  (392) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (392) 
 2,6-dichlorothiobenzamide
 
@@ -19036,6 +20212,9 @@ dimethyl5-(4-chloro)bicyclo[3.2.0]heptylphosphate
  15 30  1  0
  15 31  1  0
 M  END
+>  <conformer_provenance>  (393) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (393) 
 dimethyl5-(4-chloro)bicyclo[3.2.0]heptylphosphate
 
@@ -19077,6 +20256,9 @@ $$$$
   4 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (394) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (394) 
 1,1-dimethylhydrazine
 
@@ -19133,6 +20315,9 @@ N-ethylaniline
   8 19  1  0
   9 20  1  0
 M  END
+>  <conformer_provenance>  (395) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (395) 
 N-ethylaniline
 
@@ -19190,6 +20375,9 @@ N,N-dimethylaniline
   8 19  1  0
   9 20  1  0
 M  END
+>  <conformer_provenance>  (396) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (396) 
 N,N-dimethylaniline
 
@@ -19239,6 +20427,9 @@ $$$$
   7 15  1  0
   8 16  1  0
 M  END
+>  <conformer_provenance>  (397) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (397) 
 3,aminoaniline
 
@@ -19278,6 +20469,9 @@ $$$$
   4 11  1  0
   4 12  1  0
 M  END
+>  <conformer_provenance>  (398) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (398) 
 1,2-ethanediamine
 
@@ -19307,6 +20501,9 @@ methylperoxide
   1  6  1  0
   3  7  1  0
 M  END
+>  <conformer_provenance>  (399) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (399) 
 methylperoxide
 
@@ -19341,6 +20538,9 @@ ethylperoxide
   2  9  1  0
   4 10  1  0
 M  END
+>  <conformer_provenance>  (400) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (400) 
 ethylperoxide
 
@@ -19414,6 +20614,9 @@ $$$$
  15 28  1  0
  15 29  1  0
 M  END
+>  <conformer_provenance>  (401) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (401) 
 1,3-diacetyloxypropan-2-ylacetate(glyceroltriacetate)
 
@@ -19468,6 +20671,9 @@ m-bis(trifluoromethyl)benzene
   4 17  1  0
   6 18  1  0
 M  END
+>  <conformer_provenance>  (402) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (402) 
 m-bis(trifluoromethyl)benzene
 
@@ -19536,6 +20742,9 @@ N,N-dimethyl-p-methoxybenzamide
  13 25  1  0
  13 26  1  0
 M  END
+>  <conformer_provenance>  (403) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (403) 
 N,N-dimethyl-p-methoxybenzamide
 
@@ -19603,6 +20812,9 @@ N,N,4-trimethylbenzamide
  12 24  1  0
  12 25  1  0
 M  END
+>  <conformer_provenance>  (404) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (404) 
 N,N,4-trimethylbenzamide
 
@@ -19649,6 +20861,9 @@ bis(2-chloroethyl)ether
   6 14  1  0
   6 15  1  0
 M  END
+>  <conformer_provenance>  (405) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (405) 
 bis(2-chloroethyl)ether
 
@@ -19704,6 +20919,9 @@ $$$$
  10 19  1  0
  10 20  1  0
 M  END
+>  <conformer_provenance>  (406) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (406) 
 1,1-diacetoxyethane
 
@@ -19764,6 +20982,9 @@ $$$$
   8 21  1  0
   8 22  1  0
 M  END
+>  <conformer_provenance>  (407) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (407) 
 1,1-diethoxyethane
 
@@ -19826,6 +21047,9 @@ diethylpropanedioate
  11 22  1  0
  11 23  1  0
 M  END
+>  <conformer_provenance>  (408) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (408) 
 diethylpropanedioate
 
@@ -19868,6 +21092,9 @@ dimethoxymethane
   5 12  1  0
   5 13  1  0
 M  END
+>  <conformer_provenance>  (409) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (409) 
 dimethoxymethane
 
@@ -19923,6 +21150,9 @@ ethyleneglycoldiacetate
  10 19  1  0
  10 20  1  0
 M  END
+>  <conformer_provenance>  (410) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (410) 
 ethyleneglycoldiacetate
 
@@ -19983,6 +21213,9 @@ $$$$
   8 21  1  0
   8 22  1  0
 M  END
+>  <conformer_provenance>  (411) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (411) 
 1,2-diethoxyethane
 
@@ -20030,6 +21263,9 @@ phenylformate
   8 14  1  0
   9 15  1  0
 M  END
+>  <conformer_provenance>  (412) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (412) 
 phenylformate
 
@@ -20064,6 +21300,9 @@ imidazole
   4  8  1  0
   5  9  1  0
 M  END
+>  <conformer_provenance>  (413) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (413) 
 imidazole
 
@@ -20107,6 +21346,9 @@ nitroglycol
   2 14  1  0
 M  CHG  4   4   1   6  -1   8   1  10  -1
 M  END
+>  <conformer_provenance>  (414) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (414) 
 nitroglycol
 
@@ -20157,6 +21399,9 @@ $$$$
   3 17  1  0
 M  CHG  4   5   1   7  -1   9   1  11  -1
 M  END
+>  <conformer_provenance>  (415) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (415) 
 1,2-dinitroxypropane
 
@@ -20207,6 +21452,9 @@ butylnitrate
   4 17  1  0
 M  CHG  2   6   1   8  -1
 M  END
+>  <conformer_provenance>  (416) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (416) 
 butylnitrate
 
@@ -20257,6 +21505,9 @@ $$$$
   4 17  1  0
 M  CHG  2   6   1   8  -1
 M  END
+>  <conformer_provenance>  (417) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (417) 
 2-butylnitrate
 
@@ -20307,6 +21558,9 @@ isobutylnitrate
   4 17  1  0
 M  CHG  2   6   1   8  -1
 M  END
+>  <conformer_provenance>  (418) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (418) 
 isobutylnitrate
 
@@ -20347,6 +21601,9 @@ ethyleneglycolmononitrate
   7 12  1  0
 M  CHG  2   4   1   6  -1
 M  END
+>  <conformer_provenance>  (419) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (419) 
 ethyleneglycolmononitrate
 
@@ -20439,6 +21696,9 @@ $$$$
  17 37  1  0
  17 38  1  0
 M  END
+>  <conformer_provenance>  (420) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (420) 
 2-chloro-N-(2,6-diethylphenyl)-N-(methoxymethyl)acetamide(alachlor)
 
@@ -20509,6 +21769,9 @@ $$$$
  12 25  1  0
  12 26  1  0
 M  END
+>  <conformer_provenance>  (421) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (421) 
 2-methyl-2-(methylthio)propanalO-(N-methylcarbamoyl)oxime(aldicarb)
 
@@ -20590,6 +21853,9 @@ $$$$
  15 31  1  0
  15 32  1  0
 M  END
+>  <conformer_provenance>  (422) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (422) 
 2-(ethylamino)-4-isopropylamino-6-methyl-thio-s-triazine(ametryn)
 
@@ -20671,6 +21937,9 @@ O,O-dimethylS-[(4-oxo-1,2,3-benzotriazin-3(4H)-yl)methyl]dithiophosphate(azinpho
  15 30  1  0
  16 31  1  0
 M  END
+>  <conformer_provenance>  (423) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (423) 
 O,O-dimethylS-[(4-oxo-1,2,3-benzotriazin-3(4H)-yl)methyl]dithiophosphate(azinphosmethyl)
 
@@ -20768,6 +22037,9 @@ N-butyl-N-ethyl-2,6-dinitro-4-(trifluoromethyl)aniline(benefin)
  12 39  1  0
 M  CHG  4  14   1  16  -1  21   1  23  -1
 M  END
+>  <conformer_provenance>  (424) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (424) 
 N-butyl-N-ethyl-2,6-dinitro-4-(trifluoromethyl)aniline(benefin)
 
@@ -20880,6 +22152,9 @@ a-[(4,6-dimethoxypyrimidin-2-ylcarbamoyl)sulfamoyl]-o-toluicacid(bensulfuron)
  24 45  1  0
  28 46  1  0
 M  END
+>  <conformer_provenance>  (425) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (425) 
 a-[(4,6-dimethoxypyrimidin-2-ylcarbamoyl)sulfamoyl]-o-toluicacid(bensulfuron)
 
@@ -20954,6 +22229,9 @@ $$$$
  13 26  1  0
  13 27  1  0
 M  END
+>  <conformer_provenance>  (426) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (426) 
 5-Bromo-3-sec-butyl-6-methyl-uracil(bromacil)
 
@@ -21021,6 +22299,9 @@ $$$$
   5 23  1  1
   6 24  1  1
 M  END
+>  <conformer_provenance>  (427) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (427) 
 3a,4,7,7a-tetrahydro-2-[(trichloromethyl)thio]-1H-isoindole-1,3(2H)-dione(captan)
 
@@ -21091,6 +22372,9 @@ $$$$
  13 25  1  0
  14 26  1  0
 M  END
+>  <conformer_provenance>  (428) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (428) 
 1-naphthylmethylcarbamate(carbaryl)
 
@@ -21171,6 +22455,9 @@ $$$$
  16 30  1  0
  16 31  1  0
 M  END
+>  <conformer_provenance>  (429) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (429) 
 2,3-dihydro-2,2-dimethyl-7-benzofuranylmethylcarbamate(carbofuran)
 
@@ -21257,6 +22544,9 @@ S-4-chlorophenylthiomethylO,O-diethylphosphorodithioate(carbophenothion)
  16 33  1  0
  17 34  1  0
 M  END
+>  <conformer_provenance>  (430) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (430) 
 S-4-chlorophenylthiomethylO,O-diethylphosphorodithioate(carbophenothion)
 
@@ -21325,6 +22615,9 @@ octachloro-4,7-methanohydroindane(chlordane)
   4 23  1  6
   5 24  1  1
 M  END
+>  <conformer_provenance>  (431) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (431) 
 octachloro-4,7-methanohydroindane(chlordane)
 
@@ -21410,6 +22703,9 @@ phosphoricacid[(E)-2-chloro-1-(2,4-dichlorophenyl)vinyl]diethylester(chlorfenvin
  17 33  1  0
  18 34  1  0
 M  END
+>  <conformer_provenance>  (432) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (432) 
 phosphoricacid[(E)-2-chloro-1-(2,4-dichlorophenyl)vinyl]diethylester(chlorfenvinphos)
 
@@ -21513,6 +22809,9 @@ ethyl2-(4-chloro-6-methoxypyrimidin-2-ylcarbamoylsulfamoyl)benzoate(chlorimurone
  27 41  1  0
  27 42  1  0
 M  END
+>  <conformer_provenance>  (433) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (433) 
 ethyl2-(4-chloro-6-methoxypyrimidin-2-ylcarbamoylsulfamoyl)benzoate(chlorimuronethyl)
 
@@ -21546,6 +22845,9 @@ trichloro(nitro)methane(chloropicrin)
   1  7  1  0
 M  CHG  2   2   1   4  -1
 M  END
+>  <conformer_provenance>  (434) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (434) 
 trichloro(nitro)methane(chloropicrin)
 
@@ -21619,6 +22921,9 @@ O,O-diethylO-3,5,6-trichloro-2-pyridylphosphorothioate(chlorpyrifos)
   8 28  1  0
  14 29  1  0
 M  END
+>  <conformer_provenance>  (435) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (435) 
 O,O-diethylO-3,5,6-trichloro-2-pyridylphosphorothioate(chlorpyrifos)
 
@@ -21718,6 +23023,9 @@ S-(RS)-2-chloro-1-phthalimidoethylO,O-diethylphosphorodithioate(dialifor)
  19 39  1  0
  20 40  1  0
 M  END
+>  <conformer_provenance>  (436) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (436) 
 S-(RS)-2-chloro-1-phthalimidoethylO,O-diethylphosphorodithioate(dialifor)
 
@@ -21817,6 +23125,9 @@ diethoxy-[(2-isopropyl-6-methyl-4-pyrimidinyl)oxy]-thioxophosphorane(diazinon)
  19 39  1  0
  19 40  1  0
 M  END
+>  <conformer_provenance>  (437) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (437) 
 diethoxy-[(2-isopropyl-6-methyl-4-pyrimidinyl)oxy]-thioxophosphorane(diazinon)
 
@@ -21874,6 +23185,9 @@ $$$$
   6 18  1  0
  11 19  1  0
 M  END
+>  <conformer_provenance>  (438) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (438) 
 3,6-dichloro-2-methoxybenzoicacid(dicamba)
 
@@ -21962,6 +23276,9 @@ N1,N1-diethyl-2,6-dinitro-4-trifluoromethyl-m-phenylenediamine(dinitramine)
  15 35  1  0
 M  CHG  4  12   1  14  -1  20   1  22  -1
 M  END
+>  <conformer_provenance>  (439) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (439) 
 N1,N1-diethyl-2,6-dinitro-4-trifluoromethyl-m-phenylenediamine(dinitramine)
 
@@ -22039,6 +23356,9 @@ $$$$
  17 29  1  0
 M  CHG  4  11   1  13  -1  14   1  16  -1
 M  END
+>  <conformer_provenance>  (440) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (440) 
 (RS)-2-sec-butyl-4,6-dinitrophenol(dinoseb)
 
@@ -22115,6 +23435,9 @@ $$$$
   6 26  1  6
   7 27  1  6
 M  END
+>  <conformer_provenance>  (441) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (441) 
 (1R,4S,4aS,5S,6S,7R,8R,8aR)-1,2,3,4,10,10-hexachloro-1,4,4a,5,6,7,8,8a-octahydro-6,7-epoxy-1,4:5,8-dimethanonaphthalene(endrin)
 
@@ -22214,6 +23537,9 @@ O,O,O',O'-tetraethylS,S'-methylenebis(phosphorodithioate)(ethion)
  19 40  1  0
  19 41  1  0
 M  END
+>  <conformer_provenance>  (442) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (442) 
 O,O,O',O'-tetraethylS,S'-methylenebis(phosphorodithioate)(ethion)
 
@@ -22279,6 +23605,9 @@ $$$$
   4 21  1  1
   5 22  1  1
 M  END
+>  <conformer_provenance>  (443) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (443) 
 1,4,5,6,7,8,8-heptachloro-3a,4,7,7a-tetrahydro-4,7-methanoindene(heptachlor)
 
@@ -22344,6 +23673,9 @@ $$$$
  10 23  1  0
  10 24  1  0
 M  END
+>  <conformer_provenance>  (444) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (444) 
 3,5,5-trimethyl-2-cyclohexen-1-one(isophorone)
 
@@ -22436,6 +23768,9 @@ $$$$
  19 37  1  0
  19 38  1  0
 M  END
+>  <conformer_provenance>  (445) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (445) 
 2-(dimethoxyphosphinothioylthio)butanedioicaciddiethylester(malathion)
 
@@ -22494,6 +23829,9 @@ N-methylcarbamicacid[1-(methylthio)ethylideneamino]ester(methomyl)
  10 19  1  0
  10 20  1  0
 M  END
+>  <conformer_provenance>  (446) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (446) 
 N-methylcarbamicacid[1-(methylthio)ethylideneamino]ester(methomyl)
 
@@ -22594,6 +23932,9 @@ methyl2-(4-methoxy-6-methyl-1,3,5-triazin-2-ylcarbamoylsulfamoyl)benzoate(metsul
  26 40  1  0
  26 41  1  0
 M  END
+>  <conformer_provenance>  (447) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (447) 
 methyl2-(4-methoxy-6-methyl-1,3,5-triazin-2-ylcarbamoylsulfamoyl)benzoate(metsulfuronmethyl)
 
@@ -22698,6 +24039,9 @@ $$$$
  20 42  1  0
 M  CHG  4  14   1  16  -1  21   1  23  -1
 M  END
+>  <conformer_provenance>  (448) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (448) 
 4-mesyl-2,6-dinitro-N,N-dipropylaniline(nitralin)
 
@@ -22743,6 +24087,9 @@ nitroxyacetone
   4 13  1  0
 M  CHG  2   6   1   8  -1
 M  END
+>  <conformer_provenance>  (449) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (449) 
 nitroxyacetone
 
@@ -22824,6 +24171,9 @@ O,O-diethyl-O-4-nitro-phenylthiophosphate(parathion)
  15 32  1  0
 M  CHG  2  16   1  18  -1
 M  END
+>  <conformer_provenance>  (450) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (450) 
 O,O-diethyl-O-4-nitro-phenylthiophosphate(parathion)
 
@@ -22909,6 +24259,9 @@ S-propylbutyl(ethyl)thiocarbamate(pebulate)
  13 33  1  0
  13 34  1  0
 M  END
+>  <conformer_provenance>  (451) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (451) 
 S-propylbutyl(ethyl)thiocarbamate(pebulate)
 
@@ -22986,6 +24339,9 @@ O,O-diethylS-ethylthiomethylphosphorodithioate(phorate)
  13 29  1  0
  13 30  1  0
 M  END
+>  <conformer_provenance>  (452) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (452) 
 O,O-diethylS-ethylthiomethylphosphorodithioate(phorate)
 
@@ -23086,6 +24442,9 @@ N-cyclopropylmethyl-2,6-dinitro-N-propyl-4-trifluoromethylaniline(profluralin)
  13 40  1  0
 M  CHG  4  15   1  17  -1  22   1  24  -1
 M  END
+>  <conformer_provenance>  (453) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (453) 
 N-cyclopropylmethyl-2,6-dinitro-N-propyl-4-trifluoromethylaniline(profluralin)
 
@@ -23175,6 +24534,9 @@ N2,N4-diisopropyl-6-methylthio-1,3,5-triazine-2,4-diamine(prometryn)
  16 34  1  0
  16 35  1  0
 M  END
+>  <conformer_provenance>  (454) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (454) 
 N2,N4-diisopropyl-6-methylthio-1,3,5-triazine-2,4-diamine(prometryn)
 
@@ -23237,6 +24599,9 @@ N-(3,4-dichlorophenyl)propanamide(propanil)
  10 21  1  0
  11 22  1  0
 M  END
+>  <conformer_provenance>  (455) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (455) 
 N-(3,4-dichlorophenyl)propanamide(propanil)
 
@@ -23301,6 +24666,9 @@ $$$$
  14 22  1  0
  14 23  1  0
 M  END
+>  <conformer_provenance>  (456) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (456) 
 5-amino-4-chloro-2-phenyl-3-(2H)-pyridazinone(pyrazon)
 
@@ -23368,6 +24736,9 @@ $$$$
  13 24  1  0
  13 25  1  0
 M  END
+>  <conformer_provenance>  (457) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (457) 
 6-chloro-N,N'-diethyl-1,3,5-triazine-2,4-diamine(simazine)
 
@@ -23468,6 +24839,9 @@ methyl2-(4,6-dimethylpyrimidin-2-ylcarbamoylsulfamoyl)benzoate(sulfometuron-meth
  25 40  1  0
  25 41  1  0
 M  END
+>  <conformer_provenance>  (458) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (458) 
 methyl2-(4,6-dimethylpyrimidin-2-ylcarbamoylsulfamoyl)benzoate(sulfometuron-methyl)
 
@@ -23541,6 +24915,9 @@ $$$$
  13 26  1  0
  13 27  1  0
 M  END
+>  <conformer_provenance>  (459) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (459) 
 3-t-butyl-5-chloro-6-methyluracil(terbacil)
 
@@ -23628,6 +25005,9 @@ N2-tert-butyl-N4-ethyl-6-methylthio-1,3,5-triazine-2,4-diamine(terbutryn)
  16 34  1  0
  16 35  1  0
 M  END
+>  <conformer_provenance>  (460) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (460) 
 N2-tert-butyl-N4-ethyl-6-methylthio-1,3,5-triazine-2,4-diamine(terbutryn)
 
@@ -23717,6 +25097,9 @@ $$$$
  21 34  1  0
  24 35  1  0
 M  END
+>  <conformer_provenance>  (461) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (461) 
 3-(4-methoxy-6-methyl-1,3,5-triazin-2-ylcarbamoylsulfamoyl)thiophene-2-carboxylicacid(thifensulfuron)
 
@@ -23774,6 +25157,9 @@ dimethyl(RS)-2,2,2-trichloro-1-hydroxyethylphosphonate(trichlorfon)
  12 19  1  0
  12 20  1  0
 M  END
+>  <conformer_provenance>  (462) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (462) 
 dimethyl(RS)-2,2,2-trichloro-1-hydroxyethylphosphonate(trichlorfon)
 
@@ -23870,6 +25256,9 @@ a,a,a-trifluoro-2,6-dinitro-N,N-dipropyl-p-toluidine(trifluralin)
  12 39  1  0
 M  CHG  4  14   1  16  -1  21   1  23  -1
 M  END
+>  <conformer_provenance>  (463) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (463) 
 a,a,a-trifluoro-2,6-dinitro-N,N-dipropyl-p-toluidine(trifluralin)
 
@@ -23956,6 +25345,9 @@ S-propyldipropyl(thiocarbamate)(vernolate)
  13 33  1  0
  13 34  1  0
 M  END
+>  <conformer_provenance>  (464) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (464) 
 S-propyldipropyl(thiocarbamate)(vernolate)
 
@@ -24032,6 +25424,9 @@ $$$$
  15 28  1  0
 M  CHG  2  16   1  18  -1
 M  END
+>  <conformer_provenance>  (465) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (465) 
 4-amino-4'-nitroazobenzene
 
@@ -24129,6 +25524,9 @@ $$$$
  24 37  1  0
  24 38  1  0
 M  END
+>  <conformer_provenance>  (466) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (466) 
 1-amino-4-anilinoanthraquinone
 
@@ -24214,6 +25612,9 @@ $$$$
  20 31  1  0
  20 32  1  0
 M  END
+>  <conformer_provenance>  (467) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (467) 
 1,4,5,8-tetraminoanthraquinone
 
@@ -24286,6 +25687,9 @@ $$$$
  17 25  1  0
  17 26  1  0
 M  END
+>  <conformer_provenance>  (468) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (468) 
 1-amino-anthraquinone
 
@@ -24373,6 +25777,9 @@ $$$$
  17 34  1  0
  17 35  1  0
 M  END
+>  <conformer_provenance>  (469) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (469) 
 (2-dimethylamino-5,6-dimethyl-pyrimidin-4-yl)N,N-dimethylcarbamate(pirimor,pirimicarb)
 
@@ -24415,6 +25822,9 @@ $$$$
   3 11  1  0
   6 12  1  0
 M  END
+>  <conformer_provenance>  (470) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (470) 
 6-chlorouracil
 
@@ -24470,6 +25880,9 @@ trimethylorthotrifluoroacetate
  11 19  1  0
  11 20  1  0
 M  END
+>  <conformer_provenance>  (471) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (471) 
 trimethylorthotrifluoroacetate
 
@@ -24523,6 +25936,9 @@ xylene
   8 17  1  0
   8 18  1  0
 M  END
+>  <conformer_provenance>  (472) 
+{"rdkit_version": "2025.09.4", "openff_toolkit_version": "openff.toolkit.topology.molecule", "conformer_generation_method": "ETKDGv3", "optimization_method": "UFF", "rms_pruning_threshold": 0.25, "num_conformers_generated": 10}
+
 >  <ofe-name>  (472) 
 xylene
 

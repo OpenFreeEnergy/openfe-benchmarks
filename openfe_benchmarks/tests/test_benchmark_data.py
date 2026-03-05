@@ -5,7 +5,6 @@ Tests for the benchmark systems module.
 import pytest
 import json
 import logging
-import warnings
 
 from gufe.tokenization import JSON_HANDLER
 from openff.units import unit
@@ -155,13 +154,6 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
     if system.reference_data:
         for ref_name, ref_path in system.reference_data.items():
             with open(ref_path, "r") as f:
-                first_line = f.readline()
-                if "git-lfs" in first_line:
-                    warnings.warn(
-                        f"Warning: Reference data file {ref_path} is a Git LFS pointer and not downloaded."
-                    )
-                    continue
-                f.seek(0)
                 ref_data = json.load(f, cls=JSON_HANDLER.decoder)
             assert isinstance(ref_data, dict), (
                 f"Reference data for {benchmark_set}/{system_name} is not a dict"
@@ -179,7 +171,7 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
                     # convert to kcal/mol to check compatibility
                     dg.to("kcal/mol")
 
-                if ref_name == "system_data" or "solvation_free_energy" in ref_name:
+                if "solvation_free_energy" in ref_name:
                     ligands = process_sdf(
                         str(system.ligands["no_charges"]), return_dict=True
                     )
