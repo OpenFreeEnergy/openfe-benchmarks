@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - gufe
-  - openfe
+  - openfe<1.9
   - pytest
   - pre-commit
   - pontibus
