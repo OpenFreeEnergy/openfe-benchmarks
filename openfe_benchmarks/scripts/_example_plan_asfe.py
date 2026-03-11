@@ -85,7 +85,6 @@ def get_chemical_systems(
     mol_dict: dict[str, SmallMoleculeComponent] = ofebu.process_sdf(
         benchmark_sys.ligands[PARTIAL_CHARGE],
         return_dict=True,
-        key_type="inchikey",
     )
     logger.info(
         f"Loaded {len(mol_dict)} molecules from {benchmark_sys.ligands[PARTIAL_CHARGE].name} (charge model: {PARTIAL_CHARGE})"
