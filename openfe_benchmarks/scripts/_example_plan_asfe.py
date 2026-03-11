@@ -10,7 +10,6 @@ class for the independent transformations needed in ASFEs.
 import json
 import logging
 from pathlib import Path
-import warnings
 
 from openff.units import unit
 import openfe
@@ -19,6 +18,7 @@ from openfe import SmallMoleculeComponent
 from pontibus.components import ExtendedSolventComponent
 from pontibus.protocols.solvation import ASFEProtocol, ASFESettings
 from pontibus.protocols.solvation.settings import PackmolSolvationSettings
+from pontibus.utils.molecules import WATER
 
 from openfe_benchmarks.data import get_benchmark_data_system
 from openfe_benchmarks.scripts import utils as ofebu
@@ -85,6 +85,7 @@ def get_chemical_systems(
     mol_dict: dict[str, SmallMoleculeComponent] = ofebu.process_sdf(
         benchmark_sys.ligands[PARTIAL_CHARGE],
         return_dict=True,
+        key_type="inchikey",
     )
     logger.info(
         f"Loaded {len(mol_dict)} molecules from {benchmark_sys.ligands[PARTIAL_CHARGE].name} (charge model: {PARTIAL_CHARGE})"
@@ -98,9 +99,7 @@ def get_chemical_systems(
         )
 
         if solute_inchikey == "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
-            warnings.warn(
-                f"Cannot obtain SFE of water as a solute. Skipping {network_name}"
-            )
+            solute = WATER
         elif solute_inchikey not in mol_dict:
             logger.warning(
                 f"Solute '{solute_inchikey}' not found in SDF; skipping network '{network_name}'"
@@ -111,12 +110,12 @@ def get_chemical_systems(
 
         if solvent_inchikey == "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
             solvent = ExtendedSolventComponent()
+        elif solvent_inchikey not in mol_dict:
+            logger.warning(
+                f"Solvent '{solvent_inchikey}' not found in SDF; skipping network '{network_name}'"
+            )
+            continue
         else:
-            if solvent_inchikey not in mol_dict:
-                logger.warning(
-                    f"Solvent '{solvent_inchikey}' not found in SDF; skipping network '{network_name}'"
-                )
-                continue
             solvent = ExtendedSolventComponent(
                 solvent_molecule=mol_dict[solvent_inchikey]
             )
@@ -308,7 +307,6 @@ def get_nonwater_settings(forcefield: str) -> ASFESettings:
         target_density=0.95 * unit.grams / unit.mL,  # current default
         box_shape="cube",
         assign_solvent_charges=False,
-        solvent_padding=None,  # nondefault
     )
 
     ######## Vacuum Settings ###########
@@ -439,8 +437,10 @@ def compile_transformations(
         )
         sol_type = (
             "aqueous"
-            if system_solvated_solute.components["solvent"].solvent_molecule.name
-            == "water"
+            if system_solvated_solute.components["solvent"]
+            .solvent_molecule.to_openff()
+            .to_inchikey(fixed_hydrogens=True)
+            == "XLYOFNOQVPJJNP-UHFFFAOYNA-N"  # water
             else "nonaqueous"
         )
         transformations.append(
@@ -556,9 +556,10 @@ def validate_asfe_network(network_file: Path) -> list[str]:
     found_ligands: set[str] = set()
     for chem_system in alchemical_network.nodes:
         for ligand in chem_system.get_components_of_type(openfe.SmallMoleculeComponent):
-            if ligand.name == "water":
+            ligand_inchikey = ligand.to_openff().to_inchikey(fixed_hydrogens=True)
+            if ligand_inchikey == "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
                 continue
-            found_ligands.add(ligand.name)
+            found_ligands.add(ligand_inchikey)
             off_mol = ligand.to_openff()
             if (
                 off_mol.partial_charges is not None
@@ -566,13 +567,14 @@ def validate_asfe_network(network_file: Path) -> list[str]:
             ):
                 continue
             errors.append(
-                f"Ligand '{ligand.name}' in '{chem_system.key}' is missing partial charges"
+                f"Ligand '{ligand_inchikey}' in '{chem_system.key}' is missing partial charges"
             )
         for solvent in chem_system.get_components_of_type(ExtendedSolventComponent):
             ligand = solvent.solvent_molecule
-            if ligand.name == "water":
+            ligand_inchikey = ligand.to_openff().to_inchikey(fixed_hydrogens=True)
+            if ligand_inchikey == "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
                 continue
-            found_ligands.add(ligand.name)
+            found_ligands.add(ligand_inchikey)
             off_mol = ligand.to_openff()
             if (
                 off_mol.partial_charges is not None
@@ -580,7 +582,7 @@ def validate_asfe_network(network_file: Path) -> list[str]:
             ):
                 continue
             errors.append(
-                f"Ligand '{ligand.name}' in '{chem_system.key}' is missing partial charges"
+                f"Ligand '{ligand_inchikey}' in '{chem_system.key}' is missing partial charges"
             )
 
     missing_ligs = EXPECTED_LIGANDS - found_ligands
