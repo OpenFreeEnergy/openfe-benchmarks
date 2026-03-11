@@ -174,7 +174,7 @@ def main(mnsol_alldata: pathlib.Path):
             )
 
             if flag_sdf:
-                if solute_name not in molecules and solute_name != "water":
+                if solute_name not in molecules:
                     try:
                         rdmol_solute = _best_conformer_rdmol(offmol_solute)
                     except Exception as e:
@@ -184,7 +184,7 @@ def main(mnsol_alldata: pathlib.Path):
                         skip_molecules.append(solute_name)
                         continue
 
-                if solvent_name not in molecules and solvent_name != "water":
+                if solvent_name not in molecules:
                     try:
                         rdmol_solvent = _best_conformer_rdmol(offmol_solvent)
                     except Exception as e:
@@ -194,9 +194,9 @@ def main(mnsol_alldata: pathlib.Path):
                         skip_molecules.append(solvent_name)
                         continue
 
-                if solute_name not in molecules and solute_name != "water":
+                if solute_name not in molecules:
                     molecules[solute_name] = rdmol_solute
-                if solvent_name not in molecules and solvent_name != "water":
+                if solvent_name not in molecules:
                     molecules[solvent_name] = rdmol_solvent
 
             exp_data[key] = {
