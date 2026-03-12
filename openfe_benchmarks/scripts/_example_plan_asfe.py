@@ -73,11 +73,12 @@ def get_chemical_systems(
     dict of str to openfe.ChemicalSystem
         Mapping of network name to ChemicalSystem with solute and solvent components.
     """
-    if "experimental_solvation_free_energy_data" in benchmark_sys.reference_data:
-        ref_key = "experimental_solvation_free_energy_data"
-    else:
-        ref_key = "systems_data"
-    ref_path = benchmark_sys.reference_data[ref_key]
+    if benchmark_sys.reference_data is None:
+        raise ValueError(
+            "The file 'experimental_solvation_free_energy_data.json' is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}"
+        )
+
+    ref_path = benchmark_sys.reference_data["experimental_solvation_free_energy_data"]
     exp_data: dict = json.loads(Path(ref_path).read_text())
     logger.info(f"Loaded {len(exp_data)} experimental entries from {ref_path.name}")
 
