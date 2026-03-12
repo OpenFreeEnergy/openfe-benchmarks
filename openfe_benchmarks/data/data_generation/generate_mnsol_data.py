@@ -1,3 +1,14 @@
+"""Generate the ligands.sdf and experimental_solvation_free_energy_data.json for the MNSol dataset.
+
+One can generate experimental_solvation_free_energy_data.json if you have access to the MNSol dataset
+in compliance with the dataset license.
+
+Note that the molecules themselves are generated from SMILES strings, with conformers produced from RDKit.
+The molecular metadata in experimental_solvation_free_energy_data.json must then be generated from a RDKit
+molecule after the conformer stereochemistry is detected, like what will be done when the SDF file is imported
+into the openfe toolkit.
+"""
+
 import json
 import csv
 import os
@@ -13,6 +24,8 @@ from gufe.tokenization import JSON_HANDLER
 from rdkit import RDLogger
 from rdkit import Chem
 from rdkit.Chem import AllChem
+
+from openfe_benchmarks.scripts import utils as ofebu
 
 NAMES_TO_SMILES = json.load(open("mnsol-name-to-smiles.json", "r"))
 
@@ -117,10 +130,18 @@ def main(mnsol_alldata: pathlib.Path):
 
     exp_filename = "../benchmark_systems/solvation_set/mnsol_neutral/experimental_solvation_free_energy_data.json"
     sdf_filename = "../benchmark_systems/solvation_set/mnsol_neutral/ligands.sdf"
-    flag_sdf = not os.path.isfile(sdf_filename)
+    flag_no_sdf = not os.path.isfile(sdf_filename)
+
+    molecules: dict[str, Chem.rdchem.Mol] = (
+        {}
+        if flag_no_sdf
+        else {
+            k: m._rdkit
+            for k, m in ofebu.process_sdf(sdf_filename, return_dict=True).items()
+        }
+    )
 
     exp_data = {}
-    molecules = {}
     skip_molecules = []
     skipped_systems = []
     with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
@@ -173,10 +194,13 @@ def main(mnsol_alldata: pathlib.Path):
                 name=solvent_name,
             )
 
-            if flag_sdf:
-                if solute_name not in molecules and solute_name != "water":
+            if flag_no_sdf:
+                if solute_name not in molecules:
                     try:
                         rdmol_solute = _best_conformer_rdmol(offmol_solute)
+                        Chem.AssignStereochemistryFrom3D(
+                            rdmol_solute
+                        )  # for comparable inchi and smiles to SDF
                     except Exception as e:
                         print(
                             f"Failed to find a conformer for solute: {solute_name}, {str(e)}"
@@ -184,9 +208,12 @@ def main(mnsol_alldata: pathlib.Path):
                         skip_molecules.append(solute_name)
                         continue
 
-                if solvent_name not in molecules and solvent_name != "water":
+                if solvent_name not in molecules:
                     try:
                         rdmol_solvent = _best_conformer_rdmol(offmol_solvent)
+                        Chem.AssignStereochemistryFrom3D(
+                            rdmol_solvent
+                        )  # for comparable inchi and smiles to SDF
                     except Exception as e:
                         print(
                             f"Failed to find a conformer for solvent: {solvent_name}, {str(e)}"
@@ -194,10 +221,17 @@ def main(mnsol_alldata: pathlib.Path):
                         skip_molecules.append(solvent_name)
                         continue
 
-                if solute_name not in molecules and solute_name != "water":
+                if solute_name not in molecules:
                     molecules[solute_name] = rdmol_solute
-                if solvent_name not in molecules and solvent_name != "water":
+                if solvent_name not in molecules:
                     molecules[solvent_name] = rdmol_solvent
+
+            if solute_name not in molecules or solvent_name not in molecules:
+                continue
+
+            # Recreate the offmols like importing the SDF will to ensure comparable metadata
+            offmol_solute = Molecule.from_rdkit(molecules[solute_name])
+            offmol_solvent = Molecule.from_rdkit(molecules[solvent_name])
 
             exp_data[key] = {
                 "mnsol No.": key.split("-")[1],
@@ -221,7 +255,7 @@ def main(mnsol_alldata: pathlib.Path):
     with open(exp_filename, "w") as f:
         json.dump(exp_data, f, cls=JSON_HANDLER.encoder, indent=4)
 
-    if flag_sdf:
+    if flag_no_sdf:
         provenance = {
             "rdkit_version": Chem.rdBase.rdkitVersion,
             "openff_toolkit_version": Molecule.__module__,
