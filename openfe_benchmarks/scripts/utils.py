@@ -1,8 +1,13 @@
 import logging
 from rdkit import Chem
+
+from openff.toolkit.utils.toolkit_registry import ToolkitRegistry
+from openff.toolkit.utils.toolkits import RDKitToolkitWrapper
 import openfe
 
 logger = logging.getLogger(__name__)
+
+toolkit_registry = ToolkitRegistry([RDKitToolkitWrapper()])
 
 
 def process_sdf(
@@ -49,12 +54,16 @@ def process_sdf(
                 molecules = {mol.name: mol for mol in molecules}
             elif key_type == "smiles":
                 molecules = {
-                    mol.to_openff().to_smiles(explicit_hydrogens=True): mol
+                    mol.to_openff().to_smiles(
+                        explicit_hydrogens=True, toolkit_registry=toolkit_registry
+                    ): mol
                     for mol in molecules
                 }
             elif key_type == "inchikey":
                 molecules = {
-                    mol.to_openff().to_inchikey(fixed_hydrogens=True): mol
+                    mol.to_openff().to_inchikey(
+                        fixed_hydrogens=True, toolkit_registry=toolkit_registry
+                    ): mol
                     for mol in molecules
                 }
             else:

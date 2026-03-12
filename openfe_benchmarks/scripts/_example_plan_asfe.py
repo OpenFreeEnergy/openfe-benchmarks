@@ -39,8 +39,8 @@ def _configure_example_logging(level=logging.INFO):
 
 
 BENCHMARK_SET = "solvation_set"
-# BENCHMARK_SYS = "freesolv"
-BENCHMARK_SYS = "mnsol_neutral"
+BENCHMARK_SYS = "freesolv"
+# BENCHMARK_SYS = "mnsol_neutral"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 OUTPUT_DIR = "outputs"
@@ -75,7 +75,7 @@ def get_chemical_systems(
     """
     if benchmark_sys.reference_data is None:
         raise ValueError(
-            "The file 'experimental_solvation_free_energy_data.json' is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}"
+            f"The file 'experimental_solvation_free_energy_data.json' is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}"
         )
 
     ref_path = benchmark_sys.reference_data["experimental_solvation_free_energy_data"]
