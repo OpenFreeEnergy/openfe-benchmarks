@@ -1,3 +1,14 @@
+"""Generate the ligands.sdf and experimental_solvation_free_energy_data.json for the MNSol dataset.
+
+One can generate experimental_solvation_free_energy_data.json if you have access to the MNSol dataset
+in compliance with the dataset license.
+
+Note that the molecules themselves are generated from SMILES strings, with conformers produced from RDKit.
+The molecular metadata in experimental_solvation_free_energy_data.json must then be generated from a RDKit
+molecule after the conformer stereochemistry is detected, like what will be done when the SDF file is imported
+into the openfe toolkit.
+"""
+
 import json
 import csv
 import os
