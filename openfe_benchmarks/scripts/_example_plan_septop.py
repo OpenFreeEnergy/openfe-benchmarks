@@ -183,7 +183,7 @@ def validate_rbfe_network(network_file):
     """Validate RBFE network against BenchmarkData expectations.
 
     Checks:
-    - Exact number of edges (2 per ligand pair: complex + solvent)
+    - Exact number of edges
     - Transformations match expected ligand network
     - Each transformation has protein, solvent, and cofactors (if present)
     - Ligand charges match expected values from BenchmarkData
