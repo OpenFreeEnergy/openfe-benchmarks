@@ -37,8 +37,8 @@ def _configure_example_logging(level=logging.INFO):
 
 
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
-BENCHMARK_SET = "mcs_docking_set"
-BENCHMARK_SYS = "hne"
+BENCHMARK_SET = "fragments"
+BENCHMARK_SYS = "p38"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 LIG_NETWORK_FILE = "industry_benchmarks_network"
@@ -142,6 +142,7 @@ def compile_network_transformations(
             # adaptive transformation settings are only supported for RelativeHybridTopologyProtocol currently
             protocol_settings = RelativeHybridTopologyProtocol.default_settings()
             protocol_settings.forcefield_settings.small_molecule_forcefield = FORCEFIELD
+            protocol_settings.protocol_repeats = 1
             transformation_protocol = RelativeHybridTopologyProtocol(
                 settings=RelativeHybridTopologyProtocol._adaptive_settings(
                     stateA=system_a,
