@@ -37,7 +37,7 @@ def _configure_example_logging(level=logging.INFO):
 
 
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
-BENCHMARK_SET = "fragments"
+BENCHMARK_SET = "mcs_docking_set"
 BENCHMARK_SYS = "p38"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
