@@ -20,7 +20,7 @@ from importlib.metadata import version
     type=click.Path(
         exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path
     ),
-    required=False,
+    required=True,
     help="The input sdf file containing the ligands to be used in this network.",
 )
 @click.option(
@@ -72,7 +72,7 @@ def main(input_sdf: pathlib.Path, out_dir: pathlib.Path):
     mapper = KartografAtomMapper(map_hydrogens_on_hydrogens_only=True)
 
     print(
-        f"generating mappings for system group {system_group}, system name {system_name}..."
+        f"Generating Lomap network..."
     )
     # Generate the LOMAP network
     network = generate_lomap_network(
@@ -81,7 +81,7 @@ def main(input_sdf: pathlib.Path, out_dir: pathlib.Path):
         mappers=[mapper],
     )
     network_provenance = {
-        "network_method": "LOMAP network",
+        "network_method": "Lomap network",
         "mapper_settings": mapper.to_dict(),
         "mapper_version": version("kartograf"),
         "scorer": "default_lomap_score",
