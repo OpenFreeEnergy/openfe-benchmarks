@@ -1,0 +1,32 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-03-18-openmm-840-qa-testing
+
+# REQUIRED: short descriptive title
+title: QA runs for OpenMM 8.4.0 using some JACS and Charge changing edges
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Joshua Horton
+    affiliation: OpenFE
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-03-18
+
+# REQUIRED: OpenFE version used to produce the gathered reports
+openfe_version: 1.8.0
+
+# Recommended but useful: force field and partial charge descriptor
+forcefield: openff-2.3.0
+partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi:
+  archive_provider:
+
+# REQUIRED: license for the submission (e.g. CC-BY-4.0)
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata
+summary: "RBFE runs for the TYK2 and P38 JACS sets and Charge changing edges from the egfr, irak_s2/s3 edges charge annihilation edges."
+keywords: [charge_change, rbfe, benchmark, openfe, openmm-840]
