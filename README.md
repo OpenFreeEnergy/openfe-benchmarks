@@ -21,6 +21,12 @@ Curated benchmark inputs and result submission conventions for OpenFE-based free
 3. Set-up calculations with scripts.
 4. Submit benchmarking [results](openfe_benchmarks/results/README.md)
 
+## Additional Resources
+
+- **OpenFE Documentation**: https://docs.openfree.energy
+- **GUFE Documentation**: https://gufe.openfree.energy
+- **Example Notebooks**: See `examples/` directory for:
+
 ## License
 
 This project is MIT-licensed. See `LICENSE` for details.
