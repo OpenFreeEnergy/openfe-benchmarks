@@ -68,7 +68,7 @@ water_set:
   thrombin: ["protein", "bfe"]
   urokinase: ["protein", "bfe"]
 scaffold_hopping:
-  bace_septop: ["protein", "bfe"]
+  bace_baumann: ["protein", "bfe"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
