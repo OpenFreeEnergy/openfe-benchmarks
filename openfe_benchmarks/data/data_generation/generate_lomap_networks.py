@@ -87,7 +87,10 @@ def main(input_sdf: pathlib.Path, out_dir: pathlib.Path):
         "scorer": "default_lomap_score",
         "lomap_version": version("lomap2"),
     }
-
+    from openfe.utils.atommapping_network_plotting import plot_atommapping_network
+    with open("network_store.graphml", "w") as writer:
+        writer.write(network.to_graphml())
+    plot_atommapping_network(network)
     for edge in network.edges:
         edge.annotations.update(network_provenance)
 
