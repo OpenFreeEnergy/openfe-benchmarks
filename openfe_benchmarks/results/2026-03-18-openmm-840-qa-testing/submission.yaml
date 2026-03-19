@@ -1,0 +1,46 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-03-18-openmm-840-qa-testing
+
+# REQUIRED: short descriptive title
+title: QA runs for OpenMM 8.4.0 using JACS (P38 & TYK2) and Charge changing edges.
+# REQUIRED: short descriptive summary (1-2 sentences)
+summary: "RBFE runs for the TYK2 and P38 JACS sets and Charge changing edges from the egfr, irak_s2/s3 charge annihilation sets. Note this means the charge annihilation sets are not complete compared to what is in that system and should not be
+compared to other complete runs due to the missing edges."
+# REQUIRED: list of keywords (from the controlled vocabulary if possible)
+keywords: [charge_change, rbfe, benchmark, openfe, openmm-840]
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Joshua Horton
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-03-18
+
+# REQUIRED: OpenFE version used to produce the gathered reports
+openfe_version: 1.8.0
+openmm_version: 8.4.0
+openff_toolkit_version:
+
+# Recommended but useful: force field, partial charge and network descriptors
+forcefield: openff-2.3.0
+partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+network: industry_benchmarks_network
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi:
+  archive_provider:
+
+# REQUIRED: license for the submission (e.g. CC-BY-4.0)
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata which detail the protocols used and associated settings allowing for mixed protocol networks
+protocol_settings:
+  - # list some default settings or anything interesting which has been changed such as the number of lambda windows or the schedule
+  - protocol: RelativeHybridTopologyProtocol
+    simulation_time: 5 ns
+    equilibration_time: 1 ns
+    timestep: 4 fs
+    temperature: 298.15 K
+    pressure: 1 atm
+    repeats: 3
