@@ -42,7 +42,7 @@ BENCHMARK_SET = "solvation_set"
 BENCHMARK_SYS = "freesolv"
 # BENCHMARK_SYS = "mnsol_neutral"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"
-FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
+FORCEFIELD = "openff-2.3.0.offxml"  # Available to openff ForceField
 OUTPUT_DIR = "outputs"
 FILENAME = f"network_{BENCHMARK_SET}_{BENCHMARK_SYS}_asfe.json"
 WATER_MODEL = "tip3p"  # or opc
