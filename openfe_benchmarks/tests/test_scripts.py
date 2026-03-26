@@ -6,11 +6,13 @@ process (120s timeout), and fails if the script raises or times out. The
 test performs no output validation or cleanup.
 """
 
-from pathlib import Path
 import runpy
 import multiprocessing as mp
-import pytest
 import os
+import traceback
+
+from pathlib import Path
+import pytest
 
 TEST_DEBUG = False  # set to True to avoid leaving outputs behind
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
@@ -34,8 +36,9 @@ def _run_script_as_main(script_path: Path, queue: mp.Queue):
             runpy.run_path(str(script_path), run_name="__main__")
         finally:
             os.chdir(original_cwd)
-    except Exception as exc:  # catch and return the exception to the parent
-        queue.put((False, repr(exc)))
+    except Exception:
+        tb = traceback.format_exc()
+        queue.put((False, tb))
         return
 
     queue.put((True, "ok"))
