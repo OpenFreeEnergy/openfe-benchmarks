@@ -146,13 +146,6 @@ def _down_select_representative_subset(
     selected_for_solvent: set[str] = set()
 
     for env_name in target_environment_names:
-        already_covering = sum(
-            1 for k in selected_for_solvent if env_name in key_to_envs[k]
-        )
-        n_still_needed = n_per_environment - already_covering
-        if n_still_needed <= 0:
-            continue
-
         candidate_keys = [
             key
             for key in data
@@ -163,7 +156,7 @@ def _down_select_representative_subset(
             candidate_keys,
             selected_for_solvent,
             fp_by_key,
-            n_still_needed,
+            n_per_environment,
         )
         selected_for_solvent.update(selected_for_pair)
 
