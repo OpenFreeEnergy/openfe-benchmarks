@@ -133,7 +133,12 @@ def main(mnsol_alldata: pathlib.Path):
     flag_no_sdf = not os.path.isfile(sdf_filename)
 
     molecules: dict[str, Chem.rdchem.Mol] = (
-        {} if flag_no_sdf else ofebu.process_sdf(sdf_filename, return_dict=True)
+        {}
+        if flag_no_sdf
+        else {
+            k: m._rdkit
+            for k, m in ofebu.process_sdf(sdf_filename, return_dict=True).items()
+        }
     )
 
     exp_data = {}
@@ -220,6 +225,9 @@ def main(mnsol_alldata: pathlib.Path):
                     molecules[solute_name] = rdmol_solute
                 if solvent_name not in molecules:
                     molecules[solvent_name] = rdmol_solvent
+
+            if solute_name not in molecules or solvent_name not in molecules:
+                continue
 
             # Recreate the offmols like importing the SDF will to ensure comparable metadata
             offmol_solute = Molecule.from_rdkit(molecules[solute_name])
