@@ -336,7 +336,7 @@ def main(mnsol_alldata: pathlib.Path):
     """
 
     subset_filename_filtered = (
-        "../benchmark_systems/solvation_set/mnsol_neutral/subset_openff.json"
+        "../benchmark_systems/solvation_set/mnsol_neutral/subset_openff_filtered.json"
     )
     subset_filename_small = (
         "../benchmark_systems/solvation_set/mnsol_neutral/subset_openff_small.json"
