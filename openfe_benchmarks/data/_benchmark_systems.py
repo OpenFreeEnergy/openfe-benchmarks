@@ -214,6 +214,9 @@ class BenchmarkData:
     reference_data : dict[str, Path] | None
         Dictionary of available reference data files where the key is the filename 'experimental*data.json',
         and the value is a Path to a reference data file.
+    subset_data : dict[str, Path] | None
+        Dictionary of available subset files where the key is the filename stem 'subset*.json',
+        and the value is a Path to a subset JSON file defining a named subset of ligands.
     details : str
         Information available in the preparation_details.md file
     """
@@ -225,6 +228,7 @@ class BenchmarkData:
     cofactors: dict[str, Path] | None
     ligand_networks: dict[str, Path] | None
     reference_data: dict[str, Path] | None
+    subset_data: dict[str, Path] | None
     details: str
 
     def __repr__(self):
@@ -234,8 +238,9 @@ class BenchmarkData:
             f"protein={self.protein.name if self.protein else 'None'}, "
             f"ligands={list(self.ligands.keys())}, "
             f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else 'None'}, "
-            f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else 'None'}"
-            f"reference_data={list(self.reference_data.keys()) if self.reference_data is not None else 'None'})"
+            f"ligand_network={list(self.ligand_networks.keys()) if self.ligand_networks is not None else 'None'}, "
+            f"reference_data={list(self.reference_data.keys()) if self.reference_data is not None else 'None'}, "
+            f"subset_data={list(self.subset_data.keys()) if self.subset_data is not None else 'None'})"
         )
 
 
@@ -269,6 +274,7 @@ def _validate_and_load_data_system(
     cofactors = {}
     ligand_networks = {}
     reference_data = {}
+    subset_data = {}
     details = None
 
     # Track all files for validation
@@ -354,6 +360,13 @@ def _validate_and_load_data_system(
             logger.debug(f"Found reference data: {filename}")
             continue
 
+        # check for reference data file (experimental*data.json)
+        if filename.startswith("subset") and filename.endswith(".json"):
+            subset_data[file_path.stem] = file_path
+            categorized_files.add(file_path)
+            logger.debug(f"Found subset: {filename}")
+            continue
+
     # Check for uncategorized files
     uncategorized = set(all_files) - categorized_files
     for file_path in uncategorized:
@@ -381,7 +394,7 @@ def _validate_and_load_data_system(
             raise ValueError(
                 f"Uncategorized JSON file '{filename}' found in system '{system_name}' "
                 f"in benchmark set '{benchmark_set}'. Expected format: "
-                f"'*network*.json' for ligand networks."
+                f"'*network*.json' for ligand networks, experimental*.json, or 'subset*.json'."
             )
 
         raise ValueError(
@@ -425,6 +438,7 @@ def _validate_and_load_data_system(
         cofactors=cofactors or None,
         ligand_networks=ligand_networks or None,
         reference_data=reference_data or None,
+        subset_data=subset_data or None,
         details=details,
     )
 
