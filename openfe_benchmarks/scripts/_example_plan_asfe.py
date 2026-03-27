@@ -83,9 +83,20 @@ def get_chemical_systems(
     exp_data: dict = json.loads(Path(ref_path).read_text())
     logger.info(f"Loaded {len(exp_data)} experimental entries from {ref_path.name}")
 
-    subset_data: dict = json.loads(Path(benchmark_sys.subset_data[SUBSET]).read_text())
+    if not hasattr(benchmark_sys, "subset_data") or benchmark_sys.subset_data is None:
+        raise ValueError(
+            f"The subset data is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}; "
+            f"expected subset '{SUBSET}'."
+        )
+    if SUBSET not in benchmark_sys.subset_data:
+        raise ValueError(
+            f"The subset '{SUBSET}' is not available for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}."
+        )
+
+    subset_path = benchmark_sys.subset_data[SUBSET]
+    subset_data: dict = json.loads(Path(subset_path).read_text())
     logger.info(
-        f"Loaded {len(subset_data)} experimental entries from {benchmark_sys.subset_data[SUBSET].name}"
+        f"Loaded {len(subset_data)} experimental entries from {subset_path.name}"
     )
 
     # Load all molecules (solutes + organic solvents) keyed by molecule name

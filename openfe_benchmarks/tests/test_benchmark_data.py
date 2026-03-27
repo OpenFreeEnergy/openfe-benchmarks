@@ -196,13 +196,13 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
 
     # make sure the subset data is present and can be loaded
     if system.subset_data:
+        ligands = process_sdf(str(system.ligands["no_charges"]), return_dict=True)
         for subset_name, subset_path in system.subset_data.items():
             with open(subset_path, "r") as f:
                 subset = json.load(f)
             assert isinstance(subset, dict), (
                 f"Subset data '{subset_name}' for {benchmark_set}/{system_name} is not a dict"
             )
-            ligands = process_sdf(str(system.ligands["no_charges"]), return_dict=True)
             for entry_key, entry in subset.items():
                 assert "solute_name" in entry, (
                     f"Subset entry '{entry_key}' in '{subset_name}' for "
@@ -212,6 +212,16 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
                     entry["solute_name"] in ligands or entry["solute_name"] == "water"
                 ), (
                     f"Solute '{entry['solute_name']}' referenced in subset '{subset_name}' "
+                    f"for {benchmark_set}/{system_name} is not found in ligands.sdf"
+                )
+                assert "solvent_name" in entry, (
+                    f"Subset entry '{entry_key}' in '{subset_name}' for "
+                    f"{benchmark_set}/{system_name} is missing 'solvent_name' key"
+                )
+                assert (
+                    entry["solvent_name"] in ligands or entry["solvent_name"] == "water"
+                ), (
+                    f"Solvent '{entry['solvent_name']}' referenced in subset '{subset_name}' "
                     f"for {benchmark_set}/{system_name} is not found in ligands.sdf"
                 )
 

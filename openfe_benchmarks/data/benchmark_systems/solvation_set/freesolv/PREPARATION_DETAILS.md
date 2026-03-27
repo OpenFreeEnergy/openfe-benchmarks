@@ -4,10 +4,10 @@ All ligands extracted from the FreeSolv database version https://github.com/Mobl
 
 ## Subsets
 
-Of the 603 systems imported from MNSol, two subsets were made:
+Of the 603 systems imported from the FreeSolv database, two subsets were made:
 
 - "subset_openff_filtered": 588
-- "subset_openff_small": 54 systems were down selected "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
+- "subset_openff_small": 54 systems were down selected from "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
 
 Rows are excluded if the solute or solvent is charged, matches a disqualifying SMIRKS (long chains, 1,3-dicarbonyls, or dissociating molecules, i.e., HBr or HCl), has undefined stereochemistry, or contains elements outside ``ALLOWED_ELEMENTS``.
 

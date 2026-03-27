@@ -17,7 +17,9 @@ from yammbs.checkmol import ChemicalEnvironment
 
 RDLogger.DisableLog("rdApp.*")
 
-NAMES_TO_SMILES = json.load(open("mnsol-name-to-smiles.json", "r"))
+_MN_SOL_JSON_PATH = pathlib.Path(__file__).parent / "mnsol-name-to-smiles.json"
+with _MN_SOL_JSON_PATH.open("r", encoding="utf-8") as _f:
+    NAMES_TO_SMILES = json.load(_f)
 
 SMIRKS_FILTERS = [
     # Long chain alkane / ether

@@ -279,8 +279,8 @@ def main():
     SMIRKS (long chains, 1,3-dicarbonyls, or dissociating molecules, i.e., HBr or HCl),
     has undefined stereochemistry, or contains elements outside
     ``ALLOWED_ELEMENTS``. The passing set is then down-selected to 2 diverse
-    entries per (solvent, chemical-environment pair). Skip counts are printed
-    to stdout.
+    entries per solute chemical environment, independent of solvent. Skip counts
+    are printed to stdout.
     """
 
     subset_filename_filtered = (
@@ -291,6 +291,7 @@ def main():
     )
     url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
     response = requests.get(url)
+    response.raise_for_status()
     freesolv = response.json()
 
     data = {}

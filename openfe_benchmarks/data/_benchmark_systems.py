@@ -394,7 +394,7 @@ def _validate_and_load_data_system(
             raise ValueError(
                 f"Uncategorized JSON file '{filename}' found in system '{system_name}' "
                 f"in benchmark set '{benchmark_set}'. Expected format: "
-                f"'*network*.json' for ligand networks, experimental*.json, or 'subset*.json'."
+                f"'*network*.json' for ligand networks, 'experimental*data.json', or 'subset*.json'."
             )
 
         raise ValueError(

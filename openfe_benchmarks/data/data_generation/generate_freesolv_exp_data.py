@@ -29,6 +29,7 @@ def main():
     # tagged to version 0.52
     url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
     response = requests.get(url)
+    response.raise_for_status()
     data = response.json()
 
     # get sdf structures

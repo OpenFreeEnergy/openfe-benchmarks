@@ -31,7 +31,7 @@ Some ligands could not be charged with all methods, the following lists the liga
 Of the 3037 systems imported from MNSol, two subsets were made:
 
 - "subset_openff_filtered": 1587 
-- "subset_openff_small": 581 systems were down selected "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
+- "subset_openff_small": 581 systems were down selected from "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
 
 Rows are excluded if the solute or solvent is water, absent from ``mnsol-name-to-smiles.json``, contains 'radical', is an explicit-solvent entry (Level1==14), is charged, is a self-solvation pair, matches a disqualifying SMIRKS (long chains, 1,3-dicarbonyls, or dissociating molecules, i.e., HBr or HCl), has undefined stereochemistry, or contains elements outside ``ALLOWED_ELEMENTS``.
 
