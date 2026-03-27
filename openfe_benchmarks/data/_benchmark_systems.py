@@ -360,7 +360,7 @@ def _validate_and_load_data_system(
             logger.debug(f"Found reference data: {filename}")
             continue
 
-        # check for reference data file (experimental*data.json)
+        # check for subset data file (subset*.json)
         if filename.startswith("subset") and filename.endswith(".json"):
             subset_data[file_path.stem] = file_path
             categorized_files.add(file_path)

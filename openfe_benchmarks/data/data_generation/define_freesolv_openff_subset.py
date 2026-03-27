@@ -2,19 +2,21 @@ import json
 from collections import defaultdict
 import requests
 
-from openff.toolkit import Molecule
-
-from gufe.tokenization import JSON_HANDLER
+from pathlib import Path
 from rdkit import RDLogger
 from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem import AllChem
 
+from openff.toolkit import Molecule
+from gufe.tokenization import JSON_HANDLER
 from yammbs import checkmol
 from yammbs.checkmol import ChemicalEnvironment
 
-RDLogger.DisableLog("rdApp.*")
+import openfe_benchmarks
 
+RDLogger.DisableLog("rdApp.*")
+PACKAGE_ROOT = Path(openfe_benchmarks.__file__).parent.parent
 SMIRKS_FILTERS = [
     # Long chain alkane / ether
     "-".join(["[#6X4,#8X2]"] * 10),
@@ -284,10 +286,12 @@ def main():
     """
 
     subset_filename_filtered = (
-        "../benchmark_systems/solvation_set/freesolv/subset_openff_filtered.json"
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/subset_openff_filtered.json"
     )
     subset_filename_small = (
-        "../benchmark_systems/solvation_set/freesolv/subset_openff_small.json"
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/subset_openff_small.json"
     )
     url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
     response = requests.get(url)
@@ -344,9 +348,9 @@ def main():
     for reason, systems in skipped_systems.items():
         print(f"    {reason}: {len(systems)}")
     print(f"Down-selected filtered systems from {len(data)} to {len(data_subset)}")
-    with open(subset_filename_filtered, "w") as f:
+    with open(str(subset_filename_filtered), "w") as f:
         json.dump(data, f, cls=JSON_HANDLER.encoder, indent=4)
-    with open(subset_filename_small, "w") as f:
+    with open(str(subset_filename_small), "w") as f:
         json.dump(data_subset, f, cls=JSON_HANDLER.encoder, indent=4)
 
 

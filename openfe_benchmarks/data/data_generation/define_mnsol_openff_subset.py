@@ -2,20 +2,23 @@ import json
 import csv
 from collections import defaultdict
 
+from pathlib import Path
 import click
 import pathlib
 from tqdm import tqdm
-
-from gufe.tokenization import JSON_HANDLER
 from rdkit import RDLogger
 from rdkit import Chem
 from rdkit import DataStructs
 from rdkit.Chem import AllChem
 
+from gufe.tokenization import JSON_HANDLER
 from yammbs import checkmol
 from yammbs.checkmol import ChemicalEnvironment
 
+import openfe_benchmarks
+
 RDLogger.DisableLog("rdApp.*")
+PACKAGE_ROOT = Path(openfe_benchmarks.__file__).parent.parent
 
 _MN_SOL_JSON_PATH = pathlib.Path(__file__).parent / "mnsol-name-to-smiles.json"
 with _MN_SOL_JSON_PATH.open("r", encoding="utf-8") as _f:
@@ -338,10 +341,12 @@ def main(mnsol_alldata: pathlib.Path):
     """
 
     subset_filename_filtered = (
-        "../benchmark_systems/solvation_set/mnsol_neutral/subset_openff_filtered.json"
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/mnsol_neutral/subset_openff_filtered.json"
     )
     subset_filename_small = (
-        "../benchmark_systems/solvation_set/mnsol_neutral/subset_openff_small.json"
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/mnsol_neutral/subset_openff_small.json"
     )
     data = {}
     skip_molecules = ["water"]
@@ -349,7 +354,7 @@ def main(mnsol_alldata: pathlib.Path):
     skipped_systems = defaultdict(list)
     with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
         reader = csv.DictReader(fh, delimiter="\t")
-        total_lines = sum(1 for _ in fh) - 1  # subtract header
+        total_lines = sum(1 for _ in fh)
         fh.seek(0)
         reader = csv.DictReader(fh, delimiter="\t")
         for row in tqdm(reader, total=total_lines):
@@ -441,9 +446,9 @@ def main(mnsol_alldata: pathlib.Path):
     for reason, systems in skipped_systems.items():
         print(f"    {reason}: {len(systems)}")
     print(f"Down-selected filtered systems from {len(data)} to {len(data_subset)}")
-    with open(subset_filename_filtered, "w") as f:
+    with open(str(subset_filename_filtered), "w") as f:
         json.dump(data, f, cls=JSON_HANDLER.encoder, indent=4)
-    with open(subset_filename_small, "w") as f:
+    with open(str(subset_filename_small), "w") as f:
         json.dump(data_subset, f, cls=JSON_HANDLER.encoder, indent=4)
 
 
