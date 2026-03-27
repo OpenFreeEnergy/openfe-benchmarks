@@ -2,7 +2,14 @@ Done by Joshua Horton on 2026-02-12
 
 All ligands extracted from the FreeSolv database version https://github.com/MobleyLab/FreeSolv/releases/tag/v0.52
 
+## Subsets
 
+Of the 603 systems imported from the FreeSolv database, two subsets were made:
+
+- "subset_openff_filtered": 588
+- "subset_openff_small": 54 systems were down selected from "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
+
+Rows are excluded if the solute or solvent is charged, matches a disqualifying SMIRKS (long chains, 1,3-dicarbonyls, or dissociating molecules, i.e., HBr or HCl), has undefined stereochemistry, or contains elements outside ``ALLOWED_ELEMENTS``.
 
 ## Notes
 

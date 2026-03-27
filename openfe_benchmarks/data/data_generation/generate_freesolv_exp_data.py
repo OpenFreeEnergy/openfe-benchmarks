@@ -1,13 +1,24 @@
 import json
 import requests
+
+from pathlib import Path
 from openff.toolkit import Molecule
 from openff.units import unit
+from openff.toolkit.utils.toolkit_registry import ToolkitRegistry
+from openff.toolkit.utils.toolkits import RDKitToolkitWrapper
 from gufe.tokenization import JSON_HANDLER
+
+from openfe_benchmarks.scripts.utils import process_sdf
+import openfe_benchmarks
+
+toolkit_registry = ToolkitRegistry([RDKitToolkitWrapper()])
 
 
 def main():
     """
     Extract the reference experimental solvation free energy data from the FreeSolv dataset and save it as a JSON file in a slightly different format with units.
+
+    InchiKeys are derived from structures in data/benchmark_systems/solvation_set/freesolv/ligands.sdf
 
     Notes
     -----
@@ -18,7 +29,17 @@ def main():
     # tagged to version 0.52
     url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
     response = requests.get(url)
+    response.raise_for_status()
     data = response.json()
+
+    # get sdf structures
+    package_root = Path(openfe_benchmarks.__file__).parent.parent
+    sdf_path = (
+        package_root
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/ligands.sdf"
+    )
+    ligands = process_sdf(str(sdf_path), return_dict=True)
+
     # water is the only solvent in the dataset
     water = Molecule.from_smiles("O")
     water_inchi = water.to_inchi(fixed_hydrogens=True)
@@ -27,7 +48,7 @@ def main():
     ref_data = {}
     for name, entry in data.items():
         # make the molecule from the provided smiles
-        off_mol = Molecule.from_smiles(entry["smiles"], allow_undefined_stereo=True)
+        off_mol = ligands[name].to_openff()
         # use the solute solvent names as the keys
         ref_data[f"{name},water"] = {
             "dg": entry["expt"] * unit.kilocalories_per_mole,
@@ -39,14 +60,22 @@ def main():
             "notes": entry["notes"],
             "solute_smiles": entry["smiles"],
             # store extra identifiers which can be used to match the molecule if we lose the name
-            "solute_inchikey": off_mol.to_inchikey(fixed_hydrogens=True),
-            "solute_inchi": off_mol.to_inchi(fixed_hydrogens=True),
+            "solute_inchikey": off_mol.to_inchikey(
+                fixed_hydrogens=True, toolkit_registry=toolkit_registry
+            ),
+            "solute_inchi": off_mol.to_inchi(
+                fixed_hydrogens=True, toolkit_registry=toolkit_registry
+            ),
             "solvent_smiles": "O",
             "solvent_inchikey": water_inchikey,
             "solvent_inchi": water_inchi,
         }
 
-    with open("experimental_solvation_free_energy_data.json", "w") as f:
+    out_path = (
+        package_root
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/experimental_solvation_free_energy_data.json"
+    )
+    with open(out_path, "w") as f:
         json.dump(ref_data, f, cls=JSON_HANDLER.encoder, indent=4)
 
 

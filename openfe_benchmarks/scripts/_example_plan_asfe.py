@@ -46,6 +46,7 @@ FORCEFIELD = "openff-2.3.0.offxml"  # Available to openff ForceField
 OUTPUT_DIR = "outputs"
 FILENAME = f"network_{BENCHMARK_SET}_{BENCHMARK_SYS}_asfe.json"
 WATER_MODEL = "tip3p"  # or opc
+SUBSET = "subset_openff_filtered"
 
 EXPECTED_NETWORKS = []
 EXPECTED_LIGANDS = set()
@@ -82,6 +83,22 @@ def get_chemical_systems(
     exp_data: dict = json.loads(Path(ref_path).read_text())
     logger.info(f"Loaded {len(exp_data)} experimental entries from {ref_path.name}")
 
+    if not hasattr(benchmark_sys, "subset_data") or benchmark_sys.subset_data is None:
+        raise ValueError(
+            f"The subset data is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}; "
+            f"expected subset '{SUBSET}'."
+        )
+    if SUBSET not in benchmark_sys.subset_data:
+        raise ValueError(
+            f"The subset '{SUBSET}' is not available for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}."
+        )
+
+    subset_path = benchmark_sys.subset_data[SUBSET]
+    subset_data: dict = json.loads(Path(subset_path).read_text())
+    logger.info(
+        f"Loaded {len(subset_data)} experimental entries from {subset_path.name}"
+    )
+
     # Load all molecules (solutes + organic solvents) keyed by molecule name
     mol_dict: dict[str, SmallMoleculeComponent] = ofebu.process_sdf(
         benchmark_sys.ligands[PARTIAL_CHARGE],
@@ -94,6 +111,8 @@ def get_chemical_systems(
 
     systems: dict[str, openfe.ChemicalSystem] = {}
     for network_name, entry in exp_data.items():
+        if network_name not in subset_data:
+            continue
         solute_inchikey, solvent_inchikey = (
             entry["solute_inchikey"],
             entry["solvent_inchikey"],

@@ -44,3 +44,9 @@ When adding new benchmark systems:
 5. (If necessary) Add new charge types to `PARTIAL_CHARGE_TYPES` in `data/__init__.py`
 6. Generate `ligands_<charge_type>.sdf` files with ``openfe_benchmarks/data/data_generation/charge_molecules.py``
 6. (If present) Generate `cofactors_<charge_type>.sdf` files with ``openfe_benchmarks/data/data_generation/charge_molecules.py``
+7. Add `experimental_*.json` as appropriate for the calculation type. Each transformation should have:
+ - a name corresponding to the alchemical network edge
+ - dg (and uncertainty is available) with "magnitude, "unit", "pint_unit_registry", ":is_custom:".
+ - reference: DOI or the like
+ - solute_*/solvent_* where * is name, smiles, inchikey, and inchi. Note that inchi* much be generated from the 3D coordinates in the ligands.sdf. See scripts in the data_generation directory for examples (For SFE data only).
+ - canonical_smiles and inchikey. Note that inchi* much be generated from the 3D coordinates in the ligands.sdf. See scripts in the data_generation directory for examples (For BFE data only).

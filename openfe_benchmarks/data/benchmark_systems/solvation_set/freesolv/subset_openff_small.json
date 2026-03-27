@@ -1,0 +1,842 @@
+{
+    "mobley_1046331,water": {
+        "solute_name": "mobley_1046331",
+        "solvent_name": "water",
+        "solute_smiles": "c1ccc(cc1)OC=O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1650157,water": {
+        "solute_name": "mobley_1650157",
+        "solvent_name": "water",
+        "solute_smiles": "CC(C)(C)O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "TertiaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1659169,water": {
+        "solute_name": "mobley_1659169",
+        "solvent_name": "water",
+        "solute_smiles": "C1COCCN1",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Dialkylether",
+            "Ether",
+            "Heterocycle",
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1708457,water": {
+        "solute_name": "mobley_1708457",
+        "solvent_name": "water",
+        "solute_smiles": "CS(=O)(=O)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Sulfone"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1728386,water": {
+        "solute_name": "mobley_1728386",
+        "solvent_name": "water",
+        "solute_smiles": "c1ccc(cc1)C(=O)N",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidPrimaryAmide"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1733799,water": {
+        "solute_name": "mobley_1733799",
+        "solvent_name": "water",
+        "solute_smiles": "c1cc(ccc1O)Br",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1792062,water": {
+        "solute_name": "mobley_1792062",
+        "solvent_name": "water",
+        "solute_smiles": "C(CBr)Br",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "AlkylBromide",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_186894,water": {
+        "solute_name": "mobley_186894",
+        "solvent_name": "water",
+        "solute_smiles": "CCCS",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkylthiol",
+            "Thiol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1893815,water": {
+        "solute_name": "mobley_1893815",
+        "solvent_name": "water",
+        "solute_smiles": "C(C(Cl)(Cl)Cl)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1896013,water": {
+        "solute_name": "mobley_1896013",
+        "solvent_name": "water",
+        "solute_smiles": "C1[C@H]([C@@H]([C@H]([C@H](O1)O)O)O)O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alcohol",
+            "Diol_1_2",
+            "Hemiacetal",
+            "Heterocycle",
+            "Hydroxy",
+            "SecondaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_194273,water": {
+        "solute_name": "mobley_194273",
+        "solvent_name": "water",
+        "solute_smiles": "CC[C@H](C)n1c(=O)c(c([nH]c1=O)C)Br",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
+            "Heterocycle",
+            "Oxohetarene"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_1963873,water": {
+        "solute_name": "mobley_1963873",
+        "solvent_name": "water",
+        "solute_smiles": "CC(=O)NC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidSecondaryAmide"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_2316618,water": {
+        "solute_name": "mobley_2316618",
+        "solvent_name": "water",
+        "solute_smiles": "c1ccc2c(c1)C(=O)c3cccc(c3C2=O)NCCO",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alcohol",
+            "Amine",
+            "Aminoalcohol_1_2",
+            "Aromatic",
+            "Carbonyl",
+            "Hydroxy",
+            "Ketone",
+            "PrimaryAlcohol",
+            "SecondaryAmine",
+            "SecondaryMixedAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_2725215,water": {
+        "solute_name": "mobley_2725215",
+        "solvent_name": "water",
+        "solute_smiles": "CCCN(CCC)c1c(cc(cc1[N+](=O)[O-])S(=O)(=O)C)[N+](=O)[O-]",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "NitroCompound",
+            "Sulfone",
+            "TertiaryAmine",
+            "TertiaryMixedAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_2789243,water": {
+        "solute_name": "mobley_2789243",
+        "solvent_name": "water",
+        "solute_smiles": "c1cc(cnc1)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_2960202,water": {
+        "solute_name": "mobley_2960202",
+        "solvent_name": "water",
+        "solute_smiles": "c1c2c(cc(c1Cl)Cl)Oc3c(c(c(c(c3Cl)Cl)Cl)Cl)O2",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "Diarylether",
+            "Ether",
+            "HalogenDeriv",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_2972906,water": {
+        "solute_name": "mobley_2972906",
+        "solvent_name": "water",
+        "solute_smiles": "c1ccsc1",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_3083321,water": {
+        "solute_name": "mobley_3083321",
+        "solvent_name": "water",
+        "solute_smiles": "COCOC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Acetal"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_3105103,water": {
+        "solute_name": "mobley_3105103",
+        "solvent_name": "water",
+        "solute_smiles": "Cc1c(c(=O)n(c(=O)[nH]1)C(C)(C)C)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv",
+            "Heterocycle",
+            "Oxohetarene"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_3682850,water": {
+        "solute_name": "mobley_3682850",
+        "solvent_name": "water",
+        "solute_smiles": "C1CCC(=O)CC1",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_3686115,water": {
+        "solute_name": "mobley_3686115",
+        "solvent_name": "water",
+        "solute_smiles": "CCOC(C)OCC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Acetal"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_4039055,water": {
+        "solute_name": "mobley_4039055",
+        "solvent_name": "water",
+        "solute_smiles": "c1c(c(=O)[nH]c(=O)[nH]1)Br",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
+            "Heterocycle",
+            "Oxohetarene"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_4059279,water": {
+        "solute_name": "mobley_4059279",
+        "solvent_name": "water",
+        "solute_smiles": "CN1CCN(CC1)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Heterocycle",
+            "TertiaryAliphAmine",
+            "TertiaryAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_4465023,water": {
+        "solute_name": "mobley_4465023",
+        "solvent_name": "water",
+        "solute_smiles": "C(=C\\Cl)\\Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_4587267,water": {
+        "solute_name": "mobley_4587267",
+        "solvent_name": "water",
+        "solute_smiles": "C([C@H]([C@H]([C@@H]([C@@H](CO)O)O)O)O)O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alcohol",
+            "Diol_1_2",
+            "Hydroxy",
+            "PrimaryAlcohol",
+            "SecondaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_4715906,water": {
+        "solute_name": "mobley_4715906",
+        "solvent_name": "water",
+        "solute_smiles": "C[C@@H]1CCCC[C@@H]1C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_525934,water": {
+        "solute_name": "mobley_525934",
+        "solvent_name": "water",
+        "solute_smiles": "CS",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkylthiol",
+            "Thiol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_5282042,water": {
+        "solute_name": "mobley_5282042",
+        "solvent_name": "water",
+        "solute_smiles": "CN(C)CCC=C1c2ccccc2CCc3c1cccc3",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "Amine",
+            "Aromatic",
+            "TertiaryAliphAmine",
+            "TertiaryAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_5518547,water": {
+        "solute_name": "mobley_5518547",
+        "solvent_name": "water",
+        "solute_smiles": "Cc1ccc(cc1)N",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_590519,water": {
+        "solute_name": "mobley_590519",
+        "solvent_name": "water",
+        "solute_smiles": "CCSSCC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Disulfide",
+            "SulfenicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6081058,water": {
+        "solute_name": "mobley_6081058",
+        "solvent_name": "water",
+        "solute_smiles": "CCCCC/C=C/C=O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aldehyde",
+            "Alkene",
+            "Carbonyl"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6091882,water": {
+        "solute_name": "mobley_6091882",
+        "solvent_name": "water",
+        "solute_smiles": "C=C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6115639,water": {
+        "solute_name": "mobley_6115639",
+        "solvent_name": "water",
+        "solute_smiles": "COP(=O)(OC)OC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "PhosphoricAcidDeriv",
+            "PhosphoricAcidEster"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6195751,water": {
+        "solute_name": "mobley_6195751",
+        "solvent_name": "water",
+        "solute_smiles": "COc1c(c(c(c(c1Cl)C=O)Cl)OC)O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aldehyde",
+            "Alkylarylether",
+            "Aromatic",
+            "ArylChloride",
+            "Carbonyl",
+            "Ether",
+            "HalogenDeriv",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6338073,water": {
+        "solute_name": "mobley_6338073",
+        "solvent_name": "water",
+        "solute_smiles": "CCNc1nc(nc(n1)SC)NC(C)(C)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "Heterocycle",
+            "SecondaryAmine",
+            "SecondaryMixedAmine",
+            "Thioether"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6522117,water": {
+        "solute_name": "mobley_6522117",
+        "solvent_name": "water",
+        "solute_smiles": "CCOP(=O)(OCC)O/C(=C/Cl)/c1ccc(cc1Cl)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv",
+            "PhosphoricAcidDeriv",
+            "PhosphoricAcidEster"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6714389,water": {
+        "solute_name": "mobley_6714389",
+        "solvent_name": "water",
+        "solute_smiles": "CN",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6733657,water": {
+        "solute_name": "mobley_6733657",
+        "solvent_name": "water",
+        "solute_smiles": "C1[C@H]([C@@H]2[C@H]([C@H]1Cl)[C@]3(C(=C([C@@]2(C3(Cl)Cl)Cl)Cl)Cl)Cl)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "AlkylChloride",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_6935906,water": {
+        "solute_name": "mobley_6935906",
+        "solvent_name": "water",
+        "solute_smiles": "CC(=CCC[C@](C)(C=C)OC(=O)C)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_7378987,water": {
+        "solute_name": "mobley_7378987",
+        "solvent_name": "water",
+        "solute_smiles": "Cn1cnc2c1c(=O)n(c(=O)n2C)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle",
+            "Oxohetarene"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_7415647,water": {
+        "solute_name": "mobley_7415647",
+        "solvent_name": "water",
+        "solute_smiles": "CN(C)C(=O)c1ccc(cc1)[N+](=O)[O-]",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidTertiaryAmide",
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_7463408,water": {
+        "solute_name": "mobley_7463408",
+        "solvent_name": "water",
+        "solute_smiles": "CCC(=O)Nc1ccc(c(c1)Cl)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidSecondaryAmide",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_7690440,water": {
+        "solute_name": "mobley_7690440",
+        "solvent_name": "water",
+        "solute_smiles": "CSSC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Disulfide",
+            "SulfenicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_7735340,water": {
+        "solute_name": "mobley_7735340",
+        "solvent_name": "water",
+        "solute_smiles": "c1cnc[nH]1",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_8011706,water": {
+        "solute_name": "mobley_8011706",
+        "solvent_name": "water",
+        "solute_smiles": "CN(C)C=O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidTertiaryAmide"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_8124669,water": {
+        "solute_name": "mobley_8124669",
+        "solvent_name": "water",
+        "solute_smiles": "CCc1cccc(c1N(COC)C(=O)CCl)CC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "AlkylChloride",
+            "Aromatic",
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidTertiaryAmide",
+            "HalogenDeriv",
+            "Hemiaminal"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_8427539,water": {
+        "solute_name": "mobley_8427539",
+        "solvent_name": "water",
+        "solute_smiles": "CCC(=O)N",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidPrimaryAmide"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_8739734,water": {
+        "solute_name": "mobley_8739734",
+        "solvent_name": "water",
+        "solute_smiles": "CC(C)C(=O)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_8983100,water": {
+        "solute_name": "mobley_8983100",
+        "solvent_name": "water",
+        "solute_smiles": "CBr",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "AlkylBromide",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_9055303,water": {
+        "solute_name": "mobley_9055303",
+        "solvent_name": "water",
+        "solute_smiles": "C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_9073553,water": {
+        "solute_name": "mobley_9073553",
+        "solvent_name": "water",
+        "solute_smiles": "CSC",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Thioether"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_9201263,water": {
+        "solute_name": "mobley_9201263",
+        "solvent_name": "water",
+        "solute_smiles": "COS(=O)(=O)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "SulfonicAcidDeriv",
+            "SulfonicAcidEster"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_9534740,water": {
+        "solute_name": "mobley_9534740",
+        "solvent_name": "water",
+        "solute_smiles": "C([C@@H]1[C@H]([C@@H]([C@H]([C@@H](O1)O)O)O)O)O",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alcohol",
+            "Diol_1_2",
+            "Hemiacetal",
+            "Heterocycle",
+            "Hydroxy",
+            "PrimaryAlcohol",
+            "SecondaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "mobley_9974966,water": {
+        "solute_name": "mobley_9974966",
+        "solvent_name": "water",
+        "solute_smiles": "CC(C)SC(C)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Thioether"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    }
+}
