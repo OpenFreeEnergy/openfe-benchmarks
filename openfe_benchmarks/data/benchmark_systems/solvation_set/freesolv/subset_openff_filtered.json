@@ -1,5 +1,6 @@
 {
-    "mobley_1743409,water": {
+    "freesolv-mobley_1743409": {
+        "freesolv_id": "mobley_1743409",
         "solute_name": "mobley_1743409",
         "solvent_name": "water",
         "solute_smiles": "CCOC(=O)CCC(=O)OCC",
@@ -13,7 +14,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1873346,water": {
+    "freesolv-mobley_1873346": {
+        "freesolv_id": "mobley_1873346",
         "solute_name": "mobley_1873346",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1",
@@ -26,7 +28,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4715906,water": {
+    "freesolv-mobley_4715906": {
+        "freesolv_id": "mobley_4715906",
         "solute_name": "mobley_4715906",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H]1CCCC[C@@H]1C",
@@ -39,7 +42,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3169935,water": {
+    "freesolv-mobley_3169935": {
+        "freesolv_id": "mobley_3169935",
         "solute_name": "mobley_3169935",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(c(c1)N)Cl",
@@ -57,7 +61,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9729792,water": {
+    "freesolv-mobley_9729792": {
+        "freesolv_id": "mobley_9729792",
         "solute_name": "mobley_9729792",
         "solvent_name": "water",
         "solute_smiles": "C1C=CC=CC=C1",
@@ -70,7 +75,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2845466,water": {
+    "freesolv-mobley_2845466": {
+        "freesolv_id": "mobley_2845466",
         "solute_name": "mobley_2845466",
         "solvent_name": "water",
         "solute_smiles": "c1c2c(cc(c1Cl)Cl)Oc3cc(c(cc3O2)Cl)Cl",
@@ -88,7 +94,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6006813,water": {
+    "freesolv-mobley_6006813": {
+        "freesolv_id": "mobley_6006813",
         "solute_name": "mobley_6006813",
         "solvent_name": "water",
         "solute_smiles": "CCCC[N+](=O)[O-]",
@@ -101,7 +108,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5445548,water": {
+    "freesolv-mobley_5445548": {
+        "freesolv_id": "mobley_5445548",
         "solute_name": "mobley_5445548",
         "solvent_name": "water",
         "solute_smiles": "CC(C)c1ccccc1",
@@ -114,7 +122,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3802803,water": {
+    "freesolv-mobley_3802803": {
+        "freesolv_id": "mobley_3802803",
         "solute_name": "mobley_3802803",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCO[N+](=O)[O-]",
@@ -127,7 +136,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4305650,water": {
+    "freesolv-mobley_4305650": {
+        "freesolv_id": "mobley_4305650",
         "solute_name": "mobley_4305650",
         "solvent_name": "water",
         "solute_smiles": "CCC#N",
@@ -140,7 +150,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1770205,water": {
+    "freesolv-mobley_1770205": {
+        "freesolv_id": "mobley_1770205",
         "solute_name": "mobley_1770205",
         "solvent_name": "water",
         "solute_smiles": "COP(=S)(OC)SCn1c(=O)c2ccccc2nn1",
@@ -158,7 +169,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5393242,water": {
+    "freesolv-mobley_5393242": {
+        "freesolv_id": "mobley_5393242",
         "solute_name": "mobley_5393242",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)Oc1cc(nc(n1)C(C)C)C",
@@ -174,7 +186,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1722522,water": {
+    "freesolv-mobley_1722522": {
+        "freesolv_id": "mobley_1722522",
         "solute_name": "mobley_1722522",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=O)OCC",
@@ -188,7 +201,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7610437,water": {
+    "freesolv-mobley_7610437": {
+        "freesolv_id": "mobley_7610437",
         "solute_name": "mobley_7610437",
         "solvent_name": "water",
         "solute_smiles": "CC[C@H](C(C)C)O",
@@ -203,7 +217,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1893937,water": {
+    "freesolv-mobley_1893937": {
+        "freesolv_id": "mobley_1893937",
         "solute_name": "mobley_1893937",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCl",
@@ -217,7 +232,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9209581,water": {
+    "freesolv-mobley_9209581": {
+        "freesolv_id": "mobley_9209581",
         "solute_name": "mobley_9209581",
         "solvent_name": "water",
         "solute_smiles": "CN(C)C",
@@ -232,7 +248,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6266306,water": {
+    "freesolv-mobley_6266306": {
+        "freesolv_id": "mobley_6266306",
         "solute_name": "mobley_6266306",
         "solvent_name": "water",
         "solute_smiles": "C1CNC1",
@@ -248,7 +265,8 @@
             "Aqueous"
         ]
     },
-    "mobley_667278,water": {
+    "freesolv-mobley_667278": {
+        "freesolv_id": "mobley_667278",
         "solute_name": "mobley_667278",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(c(c1c2cc(c(c(c2Cl)Cl)Cl)Cl)Cl)Cl)Cl",
@@ -263,7 +281,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8311303,water": {
+    "freesolv-mobley_8311303": {
+        "freesolv_id": "mobley_8311303",
         "solute_name": "mobley_8311303",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(cc1c2c(c(cc(c2Cl)Cl)Cl)Cl)Cl)Cl",
@@ -278,7 +297,8 @@
             "Aqueous"
         ]
     },
-    "mobley_352111,water": {
+    "freesolv-mobley_352111": {
+        "freesolv_id": "mobley_352111",
         "solute_name": "mobley_352111",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)OCCOC(=O)C",
@@ -292,7 +312,8 @@
             "Aqueous"
         ]
     },
-    "mobley_967099,water": {
+    "freesolv-mobley_967099": {
+        "freesolv_id": "mobley_967099",
         "solute_name": "mobley_967099",
         "solvent_name": "water",
         "solute_smiles": "CC(C)[N+](=O)[O-]",
@@ -305,7 +326,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2693089,water": {
+    "freesolv-mobley_2693089": {
+        "freesolv_id": "mobley_2693089",
         "solute_name": "mobley_2693089",
         "solvent_name": "water",
         "solute_smiles": "CC(C)Cc1cnccn1",
@@ -319,7 +341,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4964807,water": {
+    "freesolv-mobley_4964807": {
+        "freesolv_id": "mobley_4964807",
         "solute_name": "mobley_4964807",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)CO[N+](=O)[O-]",
@@ -334,7 +357,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4188615,water": {
+    "freesolv-mobley_4188615": {
+        "freesolv_id": "mobley_4188615",
         "solute_name": "mobley_4188615",
         "solvent_name": "water",
         "solute_smiles": "CN(C)C(=O)c1ccccc1",
@@ -350,7 +374,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9565165,water": {
+    "freesolv-mobley_9565165": {
+        "freesolv_id": "mobley_9565165",
         "solute_name": "mobley_9565165",
         "solvent_name": "water",
         "solute_smiles": "c1ccc-2c(c1)Cc3c2cccc3",
@@ -363,7 +388,8 @@
             "Aqueous"
         ]
     },
-    "mobley_242480,water": {
+    "freesolv-mobley_242480": {
+        "freesolv_id": "mobley_242480",
         "solute_name": "mobley_242480",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)C(=O)c3c(ccc(c3C2=O)N)N",
@@ -381,7 +407,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9717937,water": {
+    "freesolv-mobley_9717937": {
+        "freesolv_id": "mobley_9717937",
         "solute_name": "mobley_9717937",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)c2ccccc2Cl",
@@ -396,7 +423,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9201263,water": {
+    "freesolv-mobley_9201263": {
+        "freesolv_id": "mobley_9201263",
         "solute_name": "mobley_9201263",
         "solvent_name": "water",
         "solute_smiles": "COS(=O)(=O)C",
@@ -410,7 +438,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2923700,water": {
+    "freesolv-mobley_2923700": {
+        "freesolv_id": "mobley_2923700",
         "solute_name": "mobley_2923700",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccc(cc1)O",
@@ -425,7 +454,8 @@
             "Aqueous"
         ]
     },
-    "mobley_819018,water": {
+    "freesolv-mobley_819018": {
+        "freesolv_id": "mobley_819018",
         "solute_name": "mobley_819018",
         "solvent_name": "water",
         "solute_smiles": "CC(=CCC/C(=C/CO)/C)C",
@@ -441,7 +471,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3709920,water": {
+    "freesolv-mobley_3709920": {
+        "freesolv_id": "mobley_3709920",
         "solute_name": "mobley_3709920",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCC=C",
@@ -454,7 +485,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6416775,water": {
+    "freesolv-mobley_6416775": {
+        "freesolv_id": "mobley_6416775",
         "solute_name": "mobley_6416775",
         "solvent_name": "water",
         "solute_smiles": "CCCC1CCCC1",
@@ -467,7 +499,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2489709,water": {
+    "freesolv-mobley_2489709": {
+        "freesolv_id": "mobley_2489709",
         "solute_name": "mobley_2489709",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(c(c1)Cl)Cl",
@@ -482,7 +515,8 @@
             "Aqueous"
         ]
     },
-    "mobley_52782,water": {
+    "freesolv-mobley_52782": {
+        "freesolv_id": "mobley_52782",
         "solute_name": "mobley_52782",
         "solvent_name": "water",
         "solute_smiles": "C(CO[N+](=O)[O-])O[N+](=O)[O-]",
@@ -495,7 +529,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2972906,water": {
+    "freesolv-mobley_2972906": {
+        "freesolv_id": "mobley_2972906",
         "solute_name": "mobley_2972906",
         "solvent_name": "water",
         "solute_smiles": "c1ccsc1",
@@ -509,7 +544,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6620221,water": {
+    "freesolv-mobley_6620221": {
+        "freesolv_id": "mobley_6620221",
         "solute_name": "mobley_6620221",
         "solvent_name": "water",
         "solute_smiles": "CC1(Cc2cccc(c2O1)OC(=O)NC)C",
@@ -527,7 +563,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8668219,water": {
+    "freesolv-mobley_8668219": {
+        "freesolv_id": "mobley_8668219",
         "solute_name": "mobley_8668219",
         "solvent_name": "water",
         "solute_smiles": "CC[C@@H](C)C(C)C",
@@ -540,7 +577,8 @@
             "Aqueous"
         ]
     },
-    "mobley_632905,water": {
+    "freesolv-mobley_632905": {
+        "freesolv_id": "mobley_632905",
         "solute_name": "mobley_632905",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)c1ccc(cc1)OC",
@@ -557,7 +595,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1987439,water": {
+    "freesolv-mobley_1987439": {
+        "freesolv_id": "mobley_1987439",
         "solute_name": "mobley_1987439",
         "solvent_name": "water",
         "solute_smiles": "Cc1cc(cc(c1)C)C",
@@ -570,7 +609,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6091882,water": {
+    "freesolv-mobley_6091882": {
+        "freesolv_id": "mobley_6091882",
         "solute_name": "mobley_6091882",
         "solvent_name": "water",
         "solute_smiles": "C=C",
@@ -583,7 +623,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5880265,water": {
+    "freesolv-mobley_5880265": {
+        "freesolv_id": "mobley_5880265",
         "solute_name": "mobley_5880265",
         "solvent_name": "water",
         "solute_smiles": "CCCCOCCO",
@@ -600,7 +641,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3167746,water": {
+    "freesolv-mobley_3167746": {
+        "freesolv_id": "mobley_3167746",
         "solute_name": "mobley_3167746",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCC",
@@ -613,7 +655,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5079234,water": {
+    "freesolv-mobley_5079234": {
+        "freesolv_id": "mobley_5079234",
         "solute_name": "mobley_5079234",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCO",
@@ -628,7 +671,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4434915,water": {
+    "freesolv-mobley_4434915": {
+        "freesolv_id": "mobley_4434915",
         "solute_name": "mobley_4434915",
         "solvent_name": "water",
         "solute_smiles": "CCl",
@@ -642,7 +686,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7690440,water": {
+    "freesolv-mobley_7690440": {
+        "freesolv_id": "mobley_7690440",
         "solute_name": "mobley_7690440",
         "solvent_name": "water",
         "solute_smiles": "CSSC",
@@ -656,7 +701,8 @@
             "Aqueous"
         ]
     },
-    "mobley_718988,water": {
+    "freesolv-mobley_718988": {
+        "freesolv_id": "mobley_718988",
         "solute_name": "mobley_718988",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCN",
@@ -671,7 +717,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3211679,water": {
+    "freesolv-mobley_3211679": {
+        "freesolv_id": "mobley_3211679",
         "solute_name": "mobley_3211679",
         "solvent_name": "water",
         "solute_smiles": "C1CCC=CC1",
@@ -684,7 +731,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5471704,water": {
+    "freesolv-mobley_5471704": {
+        "freesolv_id": "mobley_5471704",
         "solute_name": "mobley_5471704",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CCOC(=O)C",
@@ -698,7 +746,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3686115,water": {
+    "freesolv-mobley_3686115": {
+        "freesolv_id": "mobley_3686115",
         "solute_name": "mobley_3686115",
         "solvent_name": "water",
         "solute_smiles": "CCOC(C)OCC",
@@ -711,7 +760,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9897248,water": {
+    "freesolv-mobley_9897248": {
+        "freesolv_id": "mobley_9897248",
         "solute_name": "mobley_9897248",
         "solvent_name": "water",
         "solute_smiles": "CC(=CCC/C(=C\\CO)/C)C",
@@ -727,7 +777,8 @@
             "Aqueous"
         ]
     },
-    "mobley_951560,water": {
+    "freesolv-mobley_951560": {
+        "freesolv_id": "mobley_951560",
         "solute_name": "mobley_951560",
         "solvent_name": "water",
         "solute_smiles": "C1CNCCN1",
@@ -743,7 +794,8 @@
             "Aqueous"
         ]
     },
-    "mobley_902954,water": {
+    "freesolv-mobley_902954": {
+        "freesolv_id": "mobley_902954",
         "solute_name": "mobley_902954",
         "solvent_name": "water",
         "solute_smiles": "CCCCO[N+](=O)[O-]",
@@ -756,7 +808,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6812653,water": {
+    "freesolv-mobley_6812653": {
+        "freesolv_id": "mobley_6812653",
         "solute_name": "mobley_6812653",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC",
@@ -769,7 +822,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5616693,water": {
+    "freesolv-mobley_5616693": {
+        "freesolv_id": "mobley_5616693",
         "solute_name": "mobley_5616693",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H]1CC[C@H](C(=O)C1)C(C)C",
@@ -783,7 +837,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7859387,water": {
+    "freesolv-mobley_7859387": {
+        "freesolv_id": "mobley_7859387",
         "solute_name": "mobley_7859387",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCC=O",
@@ -797,7 +852,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7578802,water": {
+    "freesolv-mobley_7578802": {
+        "freesolv_id": "mobley_7578802",
         "solute_name": "mobley_7578802",
         "solvent_name": "water",
         "solute_smiles": "C(Br)(Br)Br",
@@ -810,7 +866,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5692472,water": {
+    "freesolv-mobley_5692472": {
+        "freesolv_id": "mobley_5692472",
         "solute_name": "mobley_5692472",
         "solvent_name": "water",
         "solute_smiles": "CNC",
@@ -825,7 +882,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4035953,water": {
+    "freesolv-mobley_4035953": {
+        "freesolv_id": "mobley_4035953",
         "solute_name": "mobley_4035953",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1O",
@@ -840,7 +898,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2763835,water": {
+    "freesolv-mobley_2763835": {
+        "freesolv_id": "mobley_2763835",
         "solute_name": "mobley_2763835",
         "solvent_name": "water",
         "solute_smiles": "CCOc1ccccc1",
@@ -855,7 +914,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3589456,water": {
+    "freesolv-mobley_3589456": {
+        "freesolv_id": "mobley_3589456",
         "solute_name": "mobley_3589456",
         "solvent_name": "water",
         "solute_smiles": "COC(CCl)(OC)OC",
@@ -871,7 +931,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5917842,water": {
+    "freesolv-mobley_5917842": {
+        "freesolv_id": "mobley_5917842",
         "solute_name": "mobley_5917842",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(c(c1)OC)O",
@@ -888,7 +949,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3395921,water": {
+    "freesolv-mobley_3395921": {
+        "freesolv_id": "mobley_3395921",
         "solute_name": "mobley_3395921",
         "solvent_name": "water",
         "solute_smiles": "C1CCOCC1",
@@ -903,7 +965,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7768165,water": {
+    "freesolv-mobley_7768165": {
+        "freesolv_id": "mobley_7768165",
         "solute_name": "mobley_7768165",
         "solvent_name": "water",
         "solute_smiles": "C(CBr)Cl",
@@ -918,7 +981,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8754702,water": {
+    "freesolv-mobley_8754702": {
+        "freesolv_id": "mobley_8754702",
         "solute_name": "mobley_8754702",
         "solvent_name": "water",
         "solute_smiles": "CCCOC=O",
@@ -932,7 +996,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2929847,water": {
+    "freesolv-mobley_2929847": {
+        "freesolv_id": "mobley_2929847",
         "solute_name": "mobley_2929847",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CC(=O)O",
@@ -946,7 +1011,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3269819,water": {
+    "freesolv-mobley_3269819": {
+        "freesolv_id": "mobley_3269819",
         "solute_name": "mobley_3269819",
         "solvent_name": "water",
         "solute_smiles": "c1c(cc(c(c1Cl)Cl)Cl)c2cc(c(c(c2Cl)Cl)Cl)Cl",
@@ -961,7 +1027,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2341732,water": {
+    "freesolv-mobley_2341732": {
+        "freesolv_id": "mobley_2341732",
         "solute_name": "mobley_2341732",
         "solvent_name": "water",
         "solute_smiles": "CCCCC(=O)OC",
@@ -975,7 +1042,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4463913,water": {
+    "freesolv-mobley_4463913": {
+        "freesolv_id": "mobley_4463913",
         "solute_name": "mobley_4463913",
         "solvent_name": "water",
         "solute_smiles": "CC(OC(=O)C)OC(=O)C",
@@ -989,7 +1057,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1976156,water": {
+    "freesolv-mobley_1976156": {
+        "freesolv_id": "mobley_1976156",
         "solute_name": "mobley_1976156",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCC=O",
@@ -1003,7 +1072,8 @@
             "Aqueous"
         ]
     },
-    "mobley_129464,water": {
+    "freesolv-mobley_129464": {
+        "freesolv_id": "mobley_129464",
         "solute_name": "mobley_129464",
         "solvent_name": "water",
         "solute_smiles": "CCCCOCCCC",
@@ -1017,7 +1087,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2837389,water": {
+    "freesolv-mobley_2837389": {
+        "freesolv_id": "mobley_2837389",
         "solute_name": "mobley_2837389",
         "solvent_name": "water",
         "solute_smiles": "c1cc[nH]c1",
@@ -1031,7 +1102,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3690931,water": {
+    "freesolv-mobley_3690931": {
+        "freesolv_id": "mobley_3690931",
         "solute_name": "mobley_3690931",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=O)OCCC",
@@ -1045,7 +1117,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1821184,water": {
+    "freesolv-mobley_1821184": {
+        "freesolv_id": "mobley_1821184",
         "solute_name": "mobley_1821184",
         "solvent_name": "water",
         "solute_smiles": "Cc1c[nH]c2c1cccc2",
@@ -1059,7 +1132,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7417968,water": {
+    "freesolv-mobley_7417968": {
+        "freesolv_id": "mobley_7417968",
         "solute_name": "mobley_7417968",
         "solvent_name": "water",
         "solute_smiles": "CCOCCOC(=O)C",
@@ -1075,7 +1149,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5094777,water": {
+    "freesolv-mobley_5094777": {
+        "freesolv_id": "mobley_5094777",
         "solute_name": "mobley_5094777",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)CCC2",
@@ -1088,7 +1163,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6232400,water": {
+    "freesolv-mobley_6232400": {
+        "freesolv_id": "mobley_6232400",
         "solute_name": "mobley_6232400",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cnc1)C=O",
@@ -1104,7 +1180,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5123639,water": {
+    "freesolv-mobley_5123639": {
+        "freesolv_id": "mobley_5123639",
         "solute_name": "mobley_5123639",
         "solvent_name": "water",
         "solute_smiles": "C[C@H](CC(C)C)O",
@@ -1119,7 +1196,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1849020,water": {
+    "freesolv-mobley_1849020": {
+        "freesolv_id": "mobley_1849020",
         "solute_name": "mobley_1849020",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)SCSc1ccc(cc1)Cl",
@@ -1137,7 +1215,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9741965,water": {
+    "freesolv-mobley_9741965": {
+        "freesolv_id": "mobley_9741965",
         "solute_name": "mobley_9741965",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H](CCO[N+](=O)[O-])O[N+](=O)[O-]",
@@ -1150,7 +1229,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5390332,water": {
+    "freesolv-mobley_5390332": {
+        "freesolv_id": "mobley_5390332",
         "solute_name": "mobley_5390332",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=O)OC",
@@ -1164,7 +1244,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3715043,water": {
+    "freesolv-mobley_3715043": {
+        "freesolv_id": "mobley_3715043",
         "solute_name": "mobley_3715043",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(c2c1cccc2)C",
@@ -1177,7 +1258,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6935906,water": {
+    "freesolv-mobley_6935906": {
+        "freesolv_id": "mobley_6935906",
         "solute_name": "mobley_6935906",
         "solvent_name": "water",
         "solute_smiles": "CC(=CCC[C@](C)(C=C)OC(=O)C)C",
@@ -1192,7 +1274,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5157661,water": {
+    "freesolv-mobley_5157661": {
+        "freesolv_id": "mobley_5157661",
         "solute_name": "mobley_5157661",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C",
@@ -1205,7 +1288,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1189457,water": {
+    "freesolv-mobley_1189457": {
+        "freesolv_id": "mobley_1189457",
         "solute_name": "mobley_1189457",
         "solvent_name": "water",
         "solute_smiles": "CSc1ccccc1",
@@ -1219,7 +1303,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6334915,water": {
+    "freesolv-mobley_6334915": {
+        "freesolv_id": "mobley_6334915",
         "solute_name": "mobley_6334915",
         "solvent_name": "water",
         "solute_smiles": "COP(=O)([C@H](C(Cl)(Cl)Cl)O)OC",
@@ -1234,7 +1319,8 @@
             "Aqueous"
         ]
     },
-    "mobley_646007,water": {
+    "freesolv-mobley_646007": {
+        "freesolv_id": "mobley_646007",
         "solute_name": "mobley_646007",
         "solvent_name": "water",
         "solute_smiles": "C1CCNC1",
@@ -1250,7 +1336,8 @@
             "Aqueous"
         ]
     },
-    "mobley_755351,water": {
+    "freesolv-mobley_755351": {
+        "freesolv_id": "mobley_755351",
         "solute_name": "mobley_755351",
         "solvent_name": "water",
         "solute_smiles": "COc1cccc(c1)N",
@@ -1268,7 +1355,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7774695,water": {
+    "freesolv-mobley_7774695": {
+        "freesolv_id": "mobley_7774695",
         "solute_name": "mobley_7774695",
         "solvent_name": "water",
         "solute_smiles": "CNc1ccccc1",
@@ -1284,7 +1372,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5200358,water": {
+    "freesolv-mobley_5200358": {
+        "freesolv_id": "mobley_5200358",
         "solute_name": "mobley_5200358",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(/C=N\\OC(=O)NC)SC",
@@ -1299,7 +1388,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2789243,water": {
+    "freesolv-mobley_2789243": {
+        "freesolv_id": "mobley_2789243",
         "solute_name": "mobley_2789243",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cnc1)Cl",
@@ -1315,7 +1405,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1036761,water": {
+    "freesolv-mobley_1036761": {
+        "freesolv_id": "mobley_1036761",
         "solute_name": "mobley_1036761",
         "solvent_name": "water",
         "solute_smiles": "C1CCC(CC1)N",
@@ -1330,7 +1421,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6743808,water": {
+    "freesolv-mobley_6743808": {
+        "freesolv_id": "mobley_6743808",
         "solute_name": "mobley_6743808",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1C)O",
@@ -1345,7 +1437,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8916409,water": {
+    "freesolv-mobley_8916409": {
+        "freesolv_id": "mobley_8916409",
         "solute_name": "mobley_8916409",
         "solvent_name": "water",
         "solute_smiles": "CCOC(=O)C[C@H](C(=O)OCC)SP(=S)(OC)OC",
@@ -1362,7 +1455,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3234716,water": {
+    "freesolv-mobley_3234716": {
+        "freesolv_id": "mobley_3234716",
         "solute_name": "mobley_3234716",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)C",
@@ -1375,7 +1469,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2844990,water": {
+    "freesolv-mobley_2844990": {
+        "freesolv_id": "mobley_2844990",
         "solute_name": "mobley_2844990",
         "solvent_name": "water",
         "solute_smiles": "c1cc2c(cc1Cl)Oc3cc(c(c(c3O2)Cl)Cl)Cl",
@@ -1393,7 +1488,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1662128,water": {
+    "freesolv-mobley_1662128": {
+        "freesolv_id": "mobley_1662128",
         "solute_name": "mobley_1662128",
         "solvent_name": "water",
         "solute_smiles": "CCC=C",
@@ -1406,7 +1502,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2279874,water": {
+    "freesolv-mobley_2279874": {
+        "freesolv_id": "mobley_2279874",
         "solute_name": "mobley_2279874",
         "solvent_name": "water",
         "solute_smiles": "COC(OC)OC",
@@ -1420,7 +1517,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5346580,water": {
+    "freesolv-mobley_5346580": {
+        "freesolv_id": "mobley_5346580",
         "solute_name": "mobley_5346580",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)C(C)(C)C",
@@ -1434,7 +1532,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2577969,water": {
+    "freesolv-mobley_2577969": {
+        "freesolv_id": "mobley_2577969",
         "solute_name": "mobley_2577969",
         "solvent_name": "water",
         "solute_smiles": "c1cc2ccc3cccc4c3c2c(c1)cc4",
@@ -1447,7 +1546,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7142697,water": {
+    "freesolv-mobley_7142697": {
+        "freesolv_id": "mobley_7142697",
         "solute_name": "mobley_7142697",
         "solvent_name": "water",
         "solute_smiles": "CCCCCN",
@@ -1462,7 +1562,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5282042,water": {
+    "freesolv-mobley_5282042": {
+        "freesolv_id": "mobley_5282042",
         "solute_name": "mobley_5282042",
         "solvent_name": "water",
         "solute_smiles": "CN(C)CCC=C1c2ccccc2CCc3c1cccc3",
@@ -1479,7 +1580,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7573149,water": {
+    "freesolv-mobley_7573149": {
+        "freesolv_id": "mobley_7573149",
         "solute_name": "mobley_7573149",
         "solvent_name": "water",
         "solute_smiles": "CCCOC(=O)C",
@@ -1493,7 +1595,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3980099,water": {
+    "freesolv-mobley_3980099": {
+        "freesolv_id": "mobley_3980099",
         "solute_name": "mobley_3980099",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(c(c1)Cl)Cl)Cl",
@@ -1508,7 +1611,8 @@
             "Aqueous"
         ]
     },
-    "mobley_547634,water": {
+    "freesolv-mobley_547634": {
+        "freesolv_id": "mobley_547634",
         "solute_name": "mobley_547634",
         "solvent_name": "water",
         "solute_smiles": "Cc1cc2ccccc2cc1C",
@@ -1521,7 +1625,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3414356,water": {
+    "freesolv-mobley_3414356": {
+        "freesolv_id": "mobley_3414356",
         "solute_name": "mobley_3414356",
         "solvent_name": "water",
         "solute_smiles": "CCCC(C)(C)O",
@@ -1536,7 +1641,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9507933,water": {
+    "freesolv-mobley_9507933": {
+        "freesolv_id": "mobley_9507933",
         "solute_name": "mobley_9507933",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(nc1)C",
@@ -1550,7 +1656,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4193752,water": {
+    "freesolv-mobley_4193752": {
+        "freesolv_id": "mobley_4193752",
         "solute_name": "mobley_4193752",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)[N+](=O)[O-]",
@@ -1564,7 +1671,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7239499,water": {
+    "freesolv-mobley_7239499": {
+        "freesolv_id": "mobley_7239499",
         "solute_name": "mobley_7239499",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Oc3cccc(c3O2)Cl",
@@ -1582,7 +1690,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7983227,water": {
+    "freesolv-mobley_7983227": {
+        "freesolv_id": "mobley_7983227",
         "solute_name": "mobley_7983227",
         "solvent_name": "water",
         "solute_smiles": "CC[C@@H](C)CO",
@@ -1597,7 +1706,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1417007,water": {
+    "freesolv-mobley_1417007": {
+        "freesolv_id": "mobley_1417007",
         "solute_name": "mobley_1417007",
         "solvent_name": "water",
         "solute_smiles": "C1C=CC[C@@H]2[C@@H]1C(=O)N(C2=O)SC(Cl)(Cl)Cl",
@@ -1615,7 +1725,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8558116,water": {
+    "freesolv-mobley_8558116": {
+        "freesolv_id": "mobley_8558116",
         "solute_name": "mobley_8558116",
         "solvent_name": "water",
         "solute_smiles": "CN1CCOCC1",
@@ -1633,7 +1744,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6190089,water": {
+    "freesolv-mobley_6190089": {
+        "freesolv_id": "mobley_6190089",
         "solute_name": "mobley_6190089",
         "solvent_name": "water",
         "solute_smiles": "C(C(Cl)Cl)(Cl)Cl",
@@ -1647,7 +1759,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9414831,water": {
+    "freesolv-mobley_9414831": {
+        "freesolv_id": "mobley_9414831",
         "solute_name": "mobley_9414831",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc2c1cccc2",
@@ -1660,7 +1773,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6102880,water": {
+    "freesolv-mobley_6102880": {
+        "freesolv_id": "mobley_6102880",
         "solute_name": "mobley_6102880",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)Oc2ccccc2",
@@ -1675,7 +1789,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4218209,water": {
+    "freesolv-mobley_4218209": {
+        "freesolv_id": "mobley_4218209",
         "solute_name": "mobley_4218209",
         "solvent_name": "water",
         "solute_smiles": "COc1ccc(cc1)N",
@@ -1693,7 +1808,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4587267,water": {
+    "freesolv-mobley_4587267": {
+        "freesolv_id": "mobley_4587267",
         "solute_name": "mobley_4587267",
         "solvent_name": "water",
         "solute_smiles": "C([C@H]([C@H]([C@@H]([C@@H](CO)O)O)O)O)O",
@@ -1710,7 +1826,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6497672,water": {
+    "freesolv-mobley_6497672": {
+        "freesolv_id": "mobley_6497672",
         "solute_name": "mobley_6497672",
         "solvent_name": "water",
         "solute_smiles": "C/C=C/C=O",
@@ -1725,7 +1842,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1592519,water": {
+    "freesolv-mobley_1592519": {
+        "freesolv_id": "mobley_1592519",
         "solute_name": "mobley_1592519",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC(=O)OCC",
@@ -1739,7 +1857,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2457863,water": {
+    "freesolv-mobley_2457863": {
+        "freesolv_id": "mobley_2457863",
         "solute_name": "mobley_2457863",
         "solvent_name": "water",
         "solute_smiles": "COc1cccc(c1)O",
@@ -1756,7 +1875,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4465023,water": {
+    "freesolv-mobley_4465023": {
+        "freesolv_id": "mobley_4465023",
         "solute_name": "mobley_4465023",
         "solvent_name": "water",
         "solute_smiles": "C(=C\\Cl)\\Cl",
@@ -1770,7 +1890,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6619554,water": {
+    "freesolv-mobley_6619554": {
+        "freesolv_id": "mobley_6619554",
         "solute_name": "mobley_6619554",
         "solvent_name": "water",
         "solute_smiles": "CCCCC(=O)OCC",
@@ -1784,7 +1905,8 @@
             "Aqueous"
         ]
     },
-    "mobley_994483,water": {
+    "freesolv-mobley_994483": {
+        "freesolv_id": "mobley_994483",
         "solute_name": "mobley_994483",
         "solvent_name": "water",
         "solute_smiles": "CCBr",
@@ -1798,7 +1920,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1857976,water": {
+    "freesolv-mobley_1857976": {
+        "freesolv_id": "mobley_1857976",
         "solute_name": "mobley_1857976",
         "solvent_name": "water",
         "solute_smiles": "C(CCl)Cl",
@@ -1812,7 +1935,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4338603,water": {
+    "freesolv-mobley_4338603": {
+        "freesolv_id": "mobley_4338603",
         "solute_name": "mobley_4338603",
         "solvent_name": "water",
         "solute_smiles": "c1c(=O)[nH]c(=O)[nH]c1Cl",
@@ -1829,7 +1953,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8449031,water": {
+    "freesolv-mobley_8449031": {
+        "freesolv_id": "mobley_8449031",
         "solute_name": "mobley_8449031",
         "solvent_name": "water",
         "solute_smiles": "CCN(CC)CC",
@@ -1844,7 +1969,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1352110,water": {
+    "freesolv-mobley_1352110": {
+        "freesolv_id": "mobley_1352110",
         "solute_name": "mobley_1352110",
         "solvent_name": "water",
         "solute_smiles": "CCCCN(CC)C(=O)SCCC",
@@ -1859,7 +1985,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4149784,water": {
+    "freesolv-mobley_4149784": {
+        "freesolv_id": "mobley_4149784",
         "solute_name": "mobley_4149784",
         "solvent_name": "water",
         "solute_smiles": "c1cc2c(cc1Cl)Oc3ccc(cc3O2)Cl",
@@ -1877,7 +2004,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1019269,water": {
+    "freesolv-mobley_1019269": {
+        "freesolv_id": "mobley_1019269",
         "solute_name": "mobley_1019269",
         "solvent_name": "water",
         "solute_smiles": "CCCCO",
@@ -1892,7 +2020,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7608435,water": {
+    "freesolv-mobley_7608435": {
+        "freesolv_id": "mobley_7608435",
         "solute_name": "mobley_7608435",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCC(=O)OC",
@@ -1906,7 +2035,8 @@
             "Aqueous"
         ]
     },
-    "mobley_282648,water": {
+    "freesolv-mobley_282648": {
+        "freesolv_id": "mobley_282648",
         "solute_name": "mobley_282648",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2ccccc2c1",
@@ -1919,7 +2049,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2245668,water": {
+    "freesolv-mobley_2245668": {
+        "freesolv_id": "mobley_2245668",
         "solute_name": "mobley_2245668",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CO",
@@ -1934,7 +2065,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3867265,water": {
+    "freesolv-mobley_3867265": {
+        "freesolv_id": "mobley_3867265",
         "solute_name": "mobley_3867265",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)C",
@@ -1948,7 +2080,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7378987,water": {
+    "freesolv-mobley_7378987": {
+        "freesolv_id": "mobley_7378987",
         "solute_name": "mobley_7378987",
         "solvent_name": "water",
         "solute_smiles": "Cn1cnc2c1c(=O)n(c(=O)n2C)C",
@@ -1963,7 +2096,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6456034,water": {
+    "freesolv-mobley_6456034": {
+        "freesolv_id": "mobley_6456034",
         "solute_name": "mobley_6456034",
         "solvent_name": "water",
         "solute_smiles": "CC(C)COC(=O)C(C)C",
@@ -1977,7 +2111,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5220185,water": {
+    "freesolv-mobley_5220185": {
+        "freesolv_id": "mobley_5220185",
         "solute_name": "mobley_5220185",
         "solvent_name": "water",
         "solute_smiles": "CCc1cnccn1",
@@ -1991,7 +2126,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1893815,water": {
+    "freesolv-mobley_1893815": {
+        "freesolv_id": "mobley_1893815",
         "solute_name": "mobley_1893815",
         "solvent_name": "water",
         "solute_smiles": "C(C(Cl)(Cl)Cl)Cl",
@@ -2005,7 +2141,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7463408,water": {
+    "freesolv-mobley_7463408": {
+        "freesolv_id": "mobley_7463408",
         "solute_name": "mobley_7463408",
         "solvent_name": "water",
         "solute_smiles": "CCC(=O)Nc1ccc(c(c1)Cl)Cl",
@@ -2023,7 +2160,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2913224,water": {
+    "freesolv-mobley_2913224": {
+        "freesolv_id": "mobley_2913224",
         "solute_name": "mobley_2913224",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)Oc1ccccc1C(=O)O",
@@ -2039,7 +2177,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8883511,water": {
+    "freesolv-mobley_8883511": {
+        "freesolv_id": "mobley_8883511",
         "solute_name": "mobley_8883511",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1C=O",
@@ -2054,7 +2193,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2043882,water": {
+    "freesolv-mobley_2043882": {
+        "freesolv_id": "mobley_2043882",
         "solute_name": "mobley_2043882",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)C1CCCCC1",
@@ -2068,7 +2208,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4059279,water": {
+    "freesolv-mobley_4059279": {
+        "freesolv_id": "mobley_4059279",
         "solute_name": "mobley_4059279",
         "solvent_name": "water",
         "solute_smiles": "CN1CCN(CC1)C",
@@ -2084,7 +2225,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2960202,water": {
+    "freesolv-mobley_2960202": {
+        "freesolv_id": "mobley_2960202",
         "solute_name": "mobley_2960202",
         "solvent_name": "water",
         "solute_smiles": "c1c2c(cc(c1Cl)Cl)Oc3c(c(c(c(c3Cl)Cl)Cl)Cl)O2",
@@ -2102,7 +2244,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2178600,water": {
+    "freesolv-mobley_2178600": {
+        "freesolv_id": "mobley_2178600",
         "solute_name": "mobley_2178600",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCl",
@@ -2116,7 +2259,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6988468,water": {
+    "freesolv-mobley_6988468": {
+        "freesolv_id": "mobley_6988468",
         "solute_name": "mobley_6988468",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccccn1",
@@ -2130,7 +2274,8 @@
             "Aqueous"
         ]
     },
-    "mobley_550662,water": {
+    "freesolv-mobley_550662": {
+        "freesolv_id": "mobley_550662",
         "solute_name": "mobley_550662",
         "solvent_name": "water",
         "solute_smiles": "CC(OC)(OC)OC",
@@ -2144,7 +2289,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8260524,water": {
+    "freesolv-mobley_8260524": {
+        "freesolv_id": "mobley_8260524",
         "solute_name": "mobley_8260524",
         "solvent_name": "water",
         "solute_smiles": "CC#C",
@@ -2157,7 +2303,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3572203,water": {
+    "freesolv-mobley_3572203": {
+        "freesolv_id": "mobley_3572203",
         "solute_name": "mobley_3572203",
         "solvent_name": "water",
         "solute_smiles": "CCCCCOC(=O)CC",
@@ -2171,7 +2318,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2782339,water": {
+    "freesolv-mobley_2782339": {
+        "freesolv_id": "mobley_2782339",
         "solute_name": "mobley_2782339",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)C(=O)NC2=O",
@@ -2188,7 +2336,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7176290,water": {
+    "freesolv-mobley_7176290": {
+        "freesolv_id": "mobley_7176290",
         "solute_name": "mobley_7176290",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)O)[N+](=O)[O-]",
@@ -2204,7 +2353,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9100956,water": {
+    "freesolv-mobley_9100956": {
+        "freesolv_id": "mobley_9100956",
         "solute_name": "mobley_9100956",
         "solvent_name": "water",
         "solute_smiles": "CC1CCCCC1",
@@ -2217,7 +2367,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6911232,water": {
+    "freesolv-mobley_6911232": {
+        "freesolv_id": "mobley_6911232",
         "solute_name": "mobley_6911232",
         "solvent_name": "water",
         "solute_smiles": "CCOC",
@@ -2231,7 +2382,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3738859,water": {
+    "freesolv-mobley_3738859": {
+        "freesolv_id": "mobley_3738859",
         "solute_name": "mobley_3738859",
         "solvent_name": "water",
         "solute_smiles": "CCCCCBr",
@@ -2245,7 +2397,8 @@
             "Aqueous"
         ]
     },
-    "mobley_186894,water": {
+    "freesolv-mobley_186894": {
+        "freesolv_id": "mobley_186894",
         "solute_name": "mobley_186894",
         "solvent_name": "water",
         "solute_smiles": "CCCS",
@@ -2259,7 +2412,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7532833,water": {
+    "freesolv-mobley_7532833": {
+        "freesolv_id": "mobley_7532833",
         "solute_name": "mobley_7532833",
         "solvent_name": "water",
         "solute_smiles": "CC#N",
@@ -2272,7 +2426,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5520946,water": {
+    "freesolv-mobley_5520946": {
+        "freesolv_id": "mobley_5520946",
         "solute_name": "mobley_5520946",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)S",
@@ -2287,7 +2442,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2881590,water": {
+    "freesolv-mobley_2881590": {
+        "freesolv_id": "mobley_2881590",
         "solute_name": "mobley_2881590",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CO[N+](=O)[O-]",
@@ -2300,7 +2456,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3265457,water": {
+    "freesolv-mobley_3265457": {
+        "freesolv_id": "mobley_3265457",
         "solute_name": "mobley_3265457",
         "solvent_name": "water",
         "solute_smiles": "COc1cc(c(c(c1O)OC)Cl)C=O",
@@ -2321,7 +2478,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9913368,water": {
+    "freesolv-mobley_9913368": {
+        "freesolv_id": "mobley_9913368",
         "solute_name": "mobley_9913368",
         "solvent_name": "water",
         "solute_smiles": "C(=C/Cl)\\Cl",
@@ -2335,7 +2493,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1563176,water": {
+    "freesolv-mobley_1563176": {
+        "freesolv_id": "mobley_1563176",
         "solute_name": "mobley_1563176",
         "solvent_name": "water",
         "solute_smiles": "CCCCS",
@@ -2349,7 +2508,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4287564,water": {
+    "freesolv-mobley_4287564": {
+        "freesolv_id": "mobley_4287564",
         "solute_name": "mobley_4287564",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccn1",
@@ -2363,7 +2523,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2402487,water": {
+    "freesolv-mobley_2402487": {
+        "freesolv_id": "mobley_2402487",
         "solute_name": "mobley_2402487",
         "solvent_name": "water",
         "solute_smiles": "CCOC(=O)CC(=O)OCC",
@@ -2377,7 +2538,8 @@
             "Aqueous"
         ]
     },
-    "mobley_820789,water": {
+    "freesolv-mobley_820789": {
+        "freesolv_id": "mobley_820789",
         "solute_name": "mobley_820789",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=O)O",
@@ -2391,7 +2553,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9794857,water": {
+    "freesolv-mobley_9794857": {
+        "freesolv_id": "mobley_9794857",
         "solute_name": "mobley_9794857",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)OC",
@@ -2405,7 +2568,8 @@
             "Aqueous"
         ]
     },
-    "mobley_627267,water": {
+    "freesolv-mobley_627267": {
+        "freesolv_id": "mobley_627267",
         "solute_name": "mobley_627267",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CBr",
@@ -2419,7 +2583,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5935995,water": {
+    "freesolv-mobley_5935995": {
+        "freesolv_id": "mobley_5935995",
         "solute_name": "mobley_5935995",
         "solvent_name": "water",
         "solute_smiles": "CCC(C)(C)C",
@@ -2432,7 +2597,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8823527,water": {
+    "freesolv-mobley_8823527": {
+        "freesolv_id": "mobley_8823527",
         "solute_name": "mobley_8823527",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(cc1Cl)c2cc(c(c(c2)Cl)Cl)Cl)Cl",
@@ -2447,7 +2613,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7758918,water": {
+    "freesolv-mobley_7758918": {
+        "freesolv_id": "mobley_7758918",
         "solute_name": "mobley_7758918",
         "solvent_name": "water",
         "solute_smiles": "CCC(=O)O",
@@ -2461,7 +2628,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8208692,water": {
+    "freesolv-mobley_8208692": {
+        "freesolv_id": "mobley_8208692",
         "solute_name": "mobley_8208692",
         "solvent_name": "water",
         "solute_smiles": "c1c(c(c(c(c1Cl)Cl)Cl)Cl)c2c(cc(c(c2Cl)Cl)Cl)Cl",
@@ -2476,7 +2644,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8785107,water": {
+    "freesolv-mobley_8785107": {
+        "freesolv_id": "mobley_8785107",
         "solute_name": "mobley_8785107",
         "solvent_name": "water",
         "solute_smiles": "C[C@H]1CC[C@@H](O1)C",
@@ -2491,7 +2660,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2659552,water": {
+    "freesolv-mobley_2659552": {
+        "freesolv_id": "mobley_2659552",
         "solute_name": "mobley_2659552",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)C(=O)N(C)C",
@@ -2507,7 +2677,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3053621,water": {
+    "freesolv-mobley_3053621": {
+        "freesolv_id": "mobley_3053621",
         "solute_name": "mobley_3053621",
         "solvent_name": "water",
         "solute_smiles": "c1ccccc1",
@@ -2520,7 +2691,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9055303,water": {
+    "freesolv-mobley_9055303": {
+        "freesolv_id": "mobley_9055303",
         "solute_name": "mobley_9055303",
         "solvent_name": "water",
         "solute_smiles": "C",
@@ -2533,7 +2705,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3187514,water": {
+    "freesolv-mobley_3187514": {
+        "freesolv_id": "mobley_3187514",
         "solute_name": "mobley_3187514",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1N",
@@ -2549,7 +2722,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6175884,water": {
+    "freesolv-mobley_6175884": {
+        "freesolv_id": "mobley_6175884",
         "solute_name": "mobley_6175884",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)C=O",
@@ -2564,7 +2738,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2925352,water": {
+    "freesolv-mobley_2925352": {
+        "freesolv_id": "mobley_2925352",
         "solute_name": "mobley_2925352",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)O",
@@ -2579,7 +2754,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5371840,water": {
+    "freesolv-mobley_5371840": {
+        "freesolv_id": "mobley_5371840",
         "solute_name": "mobley_5371840",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Oc3ccc(cc3O2)Cl",
@@ -2597,7 +2773,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4762983,water": {
+    "freesolv-mobley_4762983": {
+        "freesolv_id": "mobley_4762983",
         "solute_name": "mobley_4762983",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC=C",
@@ -2610,7 +2787,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2390199,water": {
+    "freesolv-mobley_2390199": {
+        "freesolv_id": "mobley_2390199",
         "solute_name": "mobley_2390199",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=O)CCC",
@@ -2624,7 +2802,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1760914,water": {
+    "freesolv-mobley_1760914": {
+        "freesolv_id": "mobley_1760914",
         "solute_name": "mobley_1760914",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1Cl",
@@ -2639,7 +2818,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4043951,water": {
+    "freesolv-mobley_4043951": {
+        "freesolv_id": "mobley_4043951",
         "solute_name": "mobley_4043951",
         "solvent_name": "water",
         "solute_smiles": "CCCC=C",
@@ -2652,7 +2832,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1396156,water": {
+    "freesolv-mobley_1396156": {
+        "freesolv_id": "mobley_1396156",
         "solute_name": "mobley_1396156",
         "solvent_name": "water",
         "solute_smiles": "c1(c(c(c(c(c1Cl)Cl)Cl)Cl)Cl)N(=O)=O",
@@ -2668,7 +2849,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1903702,water": {
+    "freesolv-mobley_1903702": {
+        "freesolv_id": "mobley_1903702",
         "solute_name": "mobley_1903702",
         "solvent_name": "water",
         "solute_smiles": "CC[C@H](C)O",
@@ -2683,7 +2865,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5747188,water": {
+    "freesolv-mobley_5747188": {
+        "freesolv_id": "mobley_5747188",
         "solute_name": "mobley_5747188",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1[N+](=O)[O-]",
@@ -2697,7 +2880,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7393673,water": {
+    "freesolv-mobley_7393673": {
+        "freesolv_id": "mobley_7393673",
         "solute_name": "mobley_7393673",
         "solvent_name": "water",
         "solute_smiles": "COc1ccc(cc1)C(=O)OC",
@@ -2714,7 +2898,8 @@
             "Aqueous"
         ]
     },
-    "mobley_929676,water": {
+    "freesolv-mobley_929676": {
+        "freesolv_id": "mobley_929676",
         "solute_name": "mobley_929676",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCBr",
@@ -2728,7 +2913,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9883303,water": {
+    "freesolv-mobley_9883303": {
+        "freesolv_id": "mobley_9883303",
         "solute_name": "mobley_9883303",
         "solvent_name": "water",
         "solute_smiles": "CCC[C@H](C)CC",
@@ -2741,7 +2927,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9185328,water": {
+    "freesolv-mobley_9185328": {
+        "freesolv_id": "mobley_9185328",
         "solute_name": "mobley_9185328",
         "solvent_name": "water",
         "solute_smiles": "CCCN",
@@ -2756,7 +2943,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3761215,water": {
+    "freesolv-mobley_3761215": {
+        "freesolv_id": "mobley_3761215",
         "solute_name": "mobley_3761215",
         "solvent_name": "water",
         "solute_smiles": "CC(Cl)(Cl)Cl",
@@ -2769,7 +2957,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2484519,water": {
+    "freesolv-mobley_2484519": {
+        "freesolv_id": "mobley_2484519",
         "solute_name": "mobley_2484519",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)CCl",
@@ -2784,7 +2973,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3047364,water": {
+    "freesolv-mobley_3047364": {
+        "freesolv_id": "mobley_3047364",
         "solute_name": "mobley_3047364",
         "solvent_name": "water",
         "solute_smiles": "CCNc1nc(nc(n1)SC)NC(C)C",
@@ -2802,7 +2992,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8614858,water": {
+    "freesolv-mobley_8614858": {
+        "freesolv_id": "mobley_8614858",
         "solute_name": "mobley_8614858",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCC",
@@ -2815,7 +3006,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8765203,water": {
+    "freesolv-mobley_8765203": {
+        "freesolv_id": "mobley_8765203",
         "solute_name": "mobley_8765203",
         "solvent_name": "water",
         "solute_smiles": "CC(=C)C=C",
@@ -2828,7 +3020,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5708811,water": {
+    "freesolv-mobley_5708811": {
+        "freesolv_id": "mobley_5708811",
         "solute_name": "mobley_5708811",
         "solvent_name": "water",
         "solute_smiles": "COc1c(ccc(c1C(=O)O)Cl)Cl",
@@ -2847,7 +3040,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8885088,water": {
+    "freesolv-mobley_8885088": {
+        "freesolv_id": "mobley_8885088",
         "solute_name": "mobley_8885088",
         "solvent_name": "water",
         "solute_smiles": "C1CC=CC1",
@@ -2860,7 +3054,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8798016,water": {
+    "freesolv-mobley_8798016": {
+        "freesolv_id": "mobley_8798016",
         "solute_name": "mobley_8798016",
         "solvent_name": "water",
         "solute_smiles": "c1cnccc1C=O",
@@ -2876,7 +3071,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6081058,water": {
+    "freesolv-mobley_6081058": {
+        "freesolv_id": "mobley_6081058",
         "solute_name": "mobley_6081058",
         "solvent_name": "water",
         "solute_smiles": "CCCCC/C=C/C=O",
@@ -2891,7 +3087,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2518989,water": {
+    "freesolv-mobley_2518989": {
+        "freesolv_id": "mobley_2518989",
         "solute_name": "mobley_2518989",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)S[C@@H](CCl)N1C(=O)c2ccccc2C1=O",
@@ -2913,7 +3110,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5977084,water": {
+    "freesolv-mobley_5977084": {
+        "freesolv_id": "mobley_5977084",
         "solute_name": "mobley_5977084",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccnc1",
@@ -2927,7 +3125,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1636752,water": {
+    "freesolv-mobley_1636752": {
+        "freesolv_id": "mobley_1636752",
         "solute_name": "mobley_1636752",
         "solvent_name": "water",
         "solute_smiles": "CO",
@@ -2942,7 +3141,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6060301,water": {
+    "freesolv-mobley_6060301": {
+        "freesolv_id": "mobley_6060301",
         "solute_name": "mobley_6060301",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCN",
@@ -2957,7 +3157,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7066554,water": {
+    "freesolv-mobley_7066554": {
+        "freesolv_id": "mobley_7066554",
         "solute_name": "mobley_7066554",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1O)Cl",
@@ -2974,7 +3175,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9257453,water": {
+    "freesolv-mobley_9257453": {
+        "freesolv_id": "mobley_9257453",
         "solute_name": "mobley_9257453",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(cc1O)Cl)Cl",
@@ -2991,7 +3193,8 @@
             "Aqueous"
         ]
     },
-    "mobley_588781,water": {
+    "freesolv-mobley_588781": {
+        "freesolv_id": "mobley_588781",
         "solute_name": "mobley_588781",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCc1ccccc1",
@@ -3004,7 +3207,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9740891,water": {
+    "freesolv-mobley_9740891": {
+        "freesolv_id": "mobley_9740891",
         "solute_name": "mobley_9740891",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(c(c1)Cl)C#N)Cl",
@@ -3020,7 +3224,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1571523,water": {
+    "freesolv-mobley_1571523": {
+        "freesolv_id": "mobley_1571523",
         "solute_name": "mobley_1571523",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1C)O",
@@ -3035,7 +3240,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7977115,water": {
+    "freesolv-mobley_7977115": {
+        "freesolv_id": "mobley_7977115",
         "solute_name": "mobley_7977115",
         "solvent_name": "water",
         "solute_smiles": "CCC[C@H](CC)O",
@@ -3050,7 +3256,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2771569,water": {
+    "freesolv-mobley_2771569": {
+        "freesolv_id": "mobley_2771569",
         "solute_name": "mobley_2771569",
         "solvent_name": "water",
         "solute_smiles": "CN1CCNCC1",
@@ -3068,7 +3275,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4219614,water": {
+    "freesolv-mobley_4219614": {
+        "freesolv_id": "mobley_4219614",
         "solute_name": "mobley_4219614",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(c(c1Cl)Cl)Cl)Cl",
@@ -3083,7 +3291,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3999471,water": {
+    "freesolv-mobley_3999471": {
+        "freesolv_id": "mobley_3999471",
         "solute_name": "mobley_3999471",
         "solvent_name": "water",
         "solute_smiles": "CC(Cl)Cl",
@@ -3097,7 +3306,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3843583,water": {
+    "freesolv-mobley_3843583": {
+        "freesolv_id": "mobley_3843583",
         "solute_name": "mobley_3843583",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)cccc2N",
@@ -3113,7 +3323,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5063386,water": {
+    "freesolv-mobley_5063386": {
+        "freesolv_id": "mobley_5063386",
         "solute_name": "mobley_5063386",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(c(c1)[N+](=O)[O-])O",
@@ -3129,7 +3340,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6804509,water": {
+    "freesolv-mobley_6804509": {
+        "freesolv_id": "mobley_6804509",
         "solute_name": "mobley_6804509",
         "solvent_name": "water",
         "solute_smiles": "c1c(c(cc(c1Cl)Cl)Cl)Cl",
@@ -3144,7 +3356,8 @@
             "Aqueous"
         ]
     },
-    "mobley_194273,water": {
+    "freesolv-mobley_194273": {
+        "freesolv_id": "mobley_194273",
         "solute_name": "mobley_194273",
         "solvent_name": "water",
         "solute_smiles": "CC[C@H](C)n1c(=O)c(c([nH]c1=O)C)Br",
@@ -3161,7 +3374,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3515580,water": {
+    "freesolv-mobley_3515580": {
+        "freesolv_id": "mobley_3515580",
         "solute_name": "mobley_3515580",
         "solvent_name": "water",
         "solute_smiles": "COc1ccccc1O",
@@ -3178,7 +3392,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5665561,water": {
+    "freesolv-mobley_5665561": {
+        "freesolv_id": "mobley_5665561",
         "solute_name": "mobley_5665561",
         "solvent_name": "water",
         "solute_smiles": "Cc1cc(c2ccccc2c1)C",
@@ -3191,7 +3406,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6861308,water": {
+    "freesolv-mobley_6861308": {
+        "freesolv_id": "mobley_6861308",
         "solute_name": "mobley_6861308",
         "solvent_name": "water",
         "solute_smiles": "CN(C)C(=O)Nc1ccccc1",
@@ -3205,7 +3421,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6195751,water": {
+    "freesolv-mobley_6195751": {
+        "freesolv_id": "mobley_6195751",
         "solute_name": "mobley_6195751",
         "solvent_name": "water",
         "solute_smiles": "COc1c(c(c(c(c1Cl)C=O)Cl)OC)O",
@@ -3226,7 +3443,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2123854,water": {
+    "freesolv-mobley_2123854": {
+        "freesolv_id": "mobley_2123854",
         "solute_name": "mobley_2123854",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1C#N)O",
@@ -3242,7 +3460,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2850833,water": {
+    "freesolv-mobley_2850833": {
+        "freesolv_id": "mobley_2850833",
         "solute_name": "mobley_2850833",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(c(c1)C=O)O",
@@ -3259,7 +3478,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7010316,water": {
+    "freesolv-mobley_7010316": {
+        "freesolv_id": "mobley_7010316",
         "solute_name": "mobley_7010316",
         "solvent_name": "water",
         "solute_smiles": "C1CCC(CC1)O",
@@ -3274,7 +3494,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8118832,water": {
+    "freesolv-mobley_8118832": {
+        "freesolv_id": "mobley_8118832",
         "solute_name": "mobley_8118832",
         "solvent_name": "water",
         "solute_smiles": "C=CCO",
@@ -3290,7 +3511,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4780078,water": {
+    "freesolv-mobley_4780078": {
+        "freesolv_id": "mobley_4780078",
         "solute_name": "mobley_4780078",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(c(c1)C)O",
@@ -3305,7 +3527,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7542832,water": {
+    "freesolv-mobley_7542832": {
+        "freesolv_id": "mobley_7542832",
         "solute_name": "mobley_7542832",
         "solvent_name": "water",
         "solute_smiles": "CCCOCCC",
@@ -3319,7 +3542,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6978427,water": {
+    "freesolv-mobley_6978427": {
+        "freesolv_id": "mobley_6978427",
         "solute_name": "mobley_6978427",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)C1CCCCC1",
@@ -3333,7 +3557,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7814642,water": {
+    "freesolv-mobley_7814642": {
+        "freesolv_id": "mobley_7814642",
         "solute_name": "mobley_7814642",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(cc1Cl)Cl)Cl",
@@ -3348,7 +3573,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2636578,water": {
+    "freesolv-mobley_2636578": {
+        "freesolv_id": "mobley_2636578",
         "solute_name": "mobley_2636578",
         "solvent_name": "water",
         "solute_smiles": "C(CO[N+](=O)[O-])CO[N+](=O)[O-]",
@@ -3361,7 +3587,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5747981,water": {
+    "freesolv-mobley_5747981": {
+        "freesolv_id": "mobley_5747981",
         "solute_name": "mobley_5747981",
         "solvent_name": "water",
         "solute_smiles": "COCC(OC)(OC)OC",
@@ -3377,7 +3604,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6303022,water": {
+    "freesolv-mobley_6303022": {
+        "freesolv_id": "mobley_6303022",
         "solute_name": "mobley_6303022",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccncc1",
@@ -3391,7 +3619,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6338073,water": {
+    "freesolv-mobley_6338073": {
+        "freesolv_id": "mobley_6338073",
         "solute_name": "mobley_6338073",
         "solvent_name": "water",
         "solute_smiles": "CCNc1nc(nc(n1)SC)NC(C)(C)C",
@@ -3409,7 +3638,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2310185,water": {
+    "freesolv-mobley_2310185": {
+        "freesolv_id": "mobley_2310185",
         "solute_name": "mobley_2310185",
         "solvent_name": "water",
         "solute_smiles": "CCO",
@@ -3424,7 +3654,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7497999,water": {
+    "freesolv-mobley_7497999": {
+        "freesolv_id": "mobley_7497999",
         "solute_name": "mobley_7497999",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)c1ccccc1",
@@ -3439,7 +3670,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4584540,water": {
+    "freesolv-mobley_4584540": {
+        "freesolv_id": "mobley_4584540",
         "solute_name": "mobley_4584540",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(n1)C",
@@ -3453,7 +3685,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2295058,water": {
+    "freesolv-mobley_2295058": {
+        "freesolv_id": "mobley_2295058",
         "solute_name": "mobley_2295058",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)c1ccc(cc1)O",
@@ -3470,7 +3703,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5600967,water": {
+    "freesolv-mobley_5600967": {
+        "freesolv_id": "mobley_5600967",
         "solute_name": "mobley_5600967",
         "solvent_name": "water",
         "solute_smiles": "CN(C)C(=O)c1ccc(cc1)OC",
@@ -3488,7 +3722,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1899443,water": {
+    "freesolv-mobley_1899443": {
+        "freesolv_id": "mobley_1899443",
         "solute_name": "mobley_1899443",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=C)C",
@@ -3501,7 +3736,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7150646,water": {
+    "freesolv-mobley_7150646": {
+        "freesolv_id": "mobley_7150646",
         "solute_name": "mobley_7150646",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1Br)Br",
@@ -3516,7 +3752,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4603202,water": {
+    "freesolv-mobley_4603202": {
+        "freesolv_id": "mobley_4603202",
         "solute_name": "mobley_4603202",
         "solvent_name": "water",
         "solute_smiles": "C(CCl)OCCCl",
@@ -3532,7 +3769,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9015240,water": {
+    "freesolv-mobley_9015240": {
+        "freesolv_id": "mobley_9015240",
         "solute_name": "mobley_9015240",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCBr",
@@ -3546,7 +3784,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1659169,water": {
+    "freesolv-mobley_1659169": {
+        "freesolv_id": "mobley_1659169",
         "solute_name": "mobley_1659169",
         "solvent_name": "water",
         "solute_smiles": "C1COCCN1",
@@ -3564,7 +3803,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3525176,water": {
+    "freesolv-mobley_3525176": {
+        "freesolv_id": "mobley_3525176",
         "solute_name": "mobley_3525176",
         "solvent_name": "water",
         "solute_smiles": "CCCCCc1ccccc1",
@@ -3577,7 +3817,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6359156,water": {
+    "freesolv-mobley_6359156": {
+        "freesolv_id": "mobley_6359156",
         "solute_name": "mobley_6359156",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)c2cc(ccc2Cl)Cl",
@@ -3592,7 +3833,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8739734,water": {
+    "freesolv-mobley_8739734": {
+        "freesolv_id": "mobley_8739734",
         "solute_name": "mobley_8739734",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C(=O)C",
@@ -3606,7 +3848,8 @@
             "Aqueous"
         ]
     },
-    "mobley_397645,water": {
+    "freesolv-mobley_397645": {
+        "freesolv_id": "mobley_397645",
         "solute_name": "mobley_397645",
         "solvent_name": "water",
         "solute_smiles": "CCOC(=O)c1ccccc1",
@@ -3621,7 +3864,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3573480,water": {
+    "freesolv-mobley_3573480": {
+        "freesolv_id": "mobley_3573480",
         "solute_name": "mobley_3573480",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC(=O)C",
@@ -3635,7 +3879,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2996632,water": {
+    "freesolv-mobley_2996632": {
+        "freesolv_id": "mobley_2996632",
         "solute_name": "mobley_2996632",
         "solvent_name": "water",
         "solute_smiles": "C(Cl)(Cl)Cl",
@@ -3648,7 +3893,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4561957,water": {
+    "freesolv-mobley_4561957": {
+        "freesolv_id": "mobley_4561957",
         "solute_name": "mobley_4561957",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C(C)C",
@@ -3661,7 +3907,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1235151,water": {
+    "freesolv-mobley_1235151": {
+        "freesolv_id": "mobley_1235151",
         "solute_name": "mobley_1235151",
         "solvent_name": "water",
         "solute_smiles": "CCCCC[N+](=O)[O-]",
@@ -3674,7 +3921,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8764620,water": {
+    "freesolv-mobley_8764620": {
+        "freesolv_id": "mobley_8764620",
         "solute_name": "mobley_8764620",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cnc1)C#N",
@@ -3689,7 +3937,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7039935,water": {
+    "freesolv-mobley_7039935": {
+        "freesolv_id": "mobley_7039935",
         "solute_name": "mobley_7039935",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)cccc2O",
@@ -3704,7 +3953,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4479135,water": {
+    "freesolv-mobley_4479135": {
+        "freesolv_id": "mobley_4479135",
         "solute_name": "mobley_4479135",
         "solvent_name": "water",
         "solute_smiles": "C=C(c1ccccc1)c2ccccc2",
@@ -3718,7 +3968,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4924862,water": {
+    "freesolv-mobley_4924862": {
+        "freesolv_id": "mobley_4924862",
         "solute_name": "mobley_4924862",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CCOC=O",
@@ -3732,7 +3983,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2661134,water": {
+    "freesolv-mobley_2661134": {
+        "freesolv_id": "mobley_2661134",
         "solute_name": "mobley_2661134",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)O)C#N",
@@ -3748,7 +4000,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6235784,water": {
+    "freesolv-mobley_6235784": {
+        "freesolv_id": "mobley_6235784",
         "solute_name": "mobley_6235784",
         "solvent_name": "water",
         "solute_smiles": "CC[C@H](C)Cl",
@@ -3762,7 +4015,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5499659,water": {
+    "freesolv-mobley_5499659": {
+        "freesolv_id": "mobley_5499659",
         "solute_name": "mobley_5499659",
         "solvent_name": "water",
         "solute_smiles": "Cn1ccnc1",
@@ -3776,7 +4030,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1502181,water": {
+    "freesolv-mobley_1502181": {
+        "freesolv_id": "mobley_1502181",
         "solute_name": "mobley_1502181",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCC(=O)C",
@@ -3790,7 +4045,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9626434,water": {
+    "freesolv-mobley_9626434": {
+        "freesolv_id": "mobley_9626434",
         "solute_name": "mobley_9626434",
         "solvent_name": "water",
         "solute_smiles": "CCOCCO",
@@ -3807,7 +4063,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9434451,water": {
+    "freesolv-mobley_9434451": {
+        "freesolv_id": "mobley_9434451",
         "solute_name": "mobley_9434451",
         "solvent_name": "water",
         "solute_smiles": "CC(C)Br",
@@ -3821,7 +4078,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8320545,water": {
+    "freesolv-mobley_8320545": {
+        "freesolv_id": "mobley_8320545",
         "solute_name": "mobley_8320545",
         "solvent_name": "water",
         "solute_smiles": "CC[N+](=O)[O-]",
@@ -3834,7 +4092,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6739648,water": {
+    "freesolv-mobley_6739648": {
+        "freesolv_id": "mobley_6739648",
         "solute_name": "mobley_6739648",
         "solvent_name": "water",
         "solute_smiles": "C1COCCO1",
@@ -3849,7 +4108,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2451097,water": {
+    "freesolv-mobley_2451097": {
+        "freesolv_id": "mobley_2451097",
         "solute_name": "mobley_2451097",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)C#N",
@@ -3863,7 +4123,8 @@
             "Aqueous"
         ]
     },
-    "mobley_637522,water": {
+    "freesolv-mobley_637522": {
+        "freesolv_id": "mobley_637522",
         "solute_name": "mobley_637522",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2cc3ccccc3cc2c1",
@@ -3876,7 +4137,8 @@
             "Aqueous"
         ]
     },
-    "mobley_766666,water": {
+    "freesolv-mobley_766666": {
+        "freesolv_id": "mobley_766666",
         "solute_name": "mobley_766666",
         "solvent_name": "water",
         "solute_smiles": "C(=C(Cl)Cl)Cl",
@@ -3889,7 +4151,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4983965,water": {
+    "freesolv-mobley_4983965": {
+        "freesolv_id": "mobley_4983965",
         "solute_name": "mobley_4983965",
         "solvent_name": "water",
         "solute_smiles": "CCSCC",
@@ -3902,7 +4165,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9653690,water": {
+    "freesolv-mobley_9653690": {
+        "freesolv_id": "mobley_9653690",
         "solute_name": "mobley_9653690",
         "solvent_name": "water",
         "solute_smiles": "CC1=CC[C@H](C[C@@H]1O)C(=C)C",
@@ -3918,7 +4182,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4553008,water": {
+    "freesolv-mobley_4553008": {
+        "freesolv_id": "mobley_4553008",
         "solute_name": "mobley_4553008",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1Cl)Cl",
@@ -3933,7 +4198,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5510474,water": {
+    "freesolv-mobley_5510474": {
+        "freesolv_id": "mobley_5510474",
         "solute_name": "mobley_5510474",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Oc3c(c(c(c(c3Cl)Cl)Cl)Cl)O2",
@@ -3951,7 +4217,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8691603,water": {
+    "freesolv-mobley_8691603": {
+        "freesolv_id": "mobley_8691603",
         "solute_name": "mobley_8691603",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1)O",
@@ -3966,7 +4233,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5056289,water": {
+    "freesolv-mobley_5056289": {
+        "freesolv_id": "mobley_5056289",
         "solute_name": "mobley_5056289",
         "solvent_name": "water",
         "solute_smiles": "C[C@H]1CCCO1",
@@ -3981,7 +4249,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5006685,water": {
+    "freesolv-mobley_5006685": {
+        "freesolv_id": "mobley_5006685",
         "solute_name": "mobley_5006685",
         "solvent_name": "water",
         "solute_smiles": "CC(=C)[C@H]1CCC(=CC1)C=O",
@@ -3996,7 +4265,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1363784,water": {
+    "freesolv-mobley_1363784": {
+        "freesolv_id": "mobley_1363784",
         "solute_name": "mobley_1363784",
         "solvent_name": "water",
         "solute_smiles": "Cc1cc(cnc1)C",
@@ -4010,7 +4280,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3060426,water": {
+    "freesolv-mobley_3060426": {
+        "freesolv_id": "mobley_3060426",
         "solute_name": "mobley_3060426",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CCC(C)(C)C",
@@ -4023,7 +4294,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5052949,water": {
+    "freesolv-mobley_5052949": {
+        "freesolv_id": "mobley_5052949",
         "solute_name": "mobley_5052949",
         "solvent_name": "water",
         "solute_smiles": "CCCSCCC",
@@ -4036,7 +4308,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6430250,water": {
+    "freesolv-mobley_6430250": {
+        "freesolv_id": "mobley_6430250",
         "solute_name": "mobley_6430250",
         "solvent_name": "water",
         "solute_smiles": "CCCc1ccccc1",
@@ -4049,7 +4322,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4936555,water": {
+    "freesolv-mobley_4936555": {
+        "freesolv_id": "mobley_4936555",
         "solute_name": "mobley_4936555",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1C)Nc2ccccc2C(=O)O",
@@ -4067,7 +4341,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4883284,water": {
+    "freesolv-mobley_4883284": {
+        "freesolv_id": "mobley_4883284",
         "solute_name": "mobley_4883284",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)N",
@@ -4083,7 +4358,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1905088,water": {
+    "freesolv-mobley_1905088": {
+        "freesolv_id": "mobley_1905088",
         "solute_name": "mobley_1905088",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)CBr",
@@ -4098,7 +4374,8 @@
             "Aqueous"
         ]
     },
-    "mobley_197466,water": {
+    "freesolv-mobley_197466": {
+        "freesolv_id": "mobley_197466",
         "solute_name": "mobley_197466",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)C1CC1",
@@ -4112,7 +4389,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5110043,water": {
+    "freesolv-mobley_5110043": {
+        "freesolv_id": "mobley_5110043",
         "solute_name": "mobley_5110043",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc2cc(ccc2c1)C",
@@ -4125,7 +4403,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1733799,water": {
+    "freesolv-mobley_1733799": {
+        "freesolv_id": "mobley_1733799",
         "solute_name": "mobley_1733799",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1O)Br",
@@ -4142,7 +4421,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9112978,water": {
+    "freesolv-mobley_9112978": {
+        "freesolv_id": "mobley_9112978",
         "solute_name": "mobley_9112978",
         "solvent_name": "water",
         "solute_smiles": "CC/C=C\\C",
@@ -4155,7 +4435,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5627459,water": {
+    "freesolv-mobley_5627459": {
+        "freesolv_id": "mobley_5627459",
         "solute_name": "mobley_5627459",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C=O",
@@ -4169,7 +4450,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4683624,water": {
+    "freesolv-mobley_4683624": {
+        "freesolv_id": "mobley_4683624",
         "solute_name": "mobley_4683624",
         "solvent_name": "water",
         "solute_smiles": "CCCc1ccc(cc1)O",
@@ -4184,7 +4466,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8337977,water": {
+    "freesolv-mobley_8337977": {
+        "freesolv_id": "mobley_8337977",
         "solute_name": "mobley_8337977",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CC(=O)C",
@@ -4198,7 +4481,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7463799,water": {
+    "freesolv-mobley_7463799": {
+        "freesolv_id": "mobley_7463799",
         "solute_name": "mobley_7463799",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)CCCO",
@@ -4214,7 +4498,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8057732,water": {
+    "freesolv-mobley_8057732": {
+        "freesolv_id": "mobley_8057732",
         "solute_name": "mobley_8057732",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)Cl)O",
@@ -4231,7 +4516,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8011706,water": {
+    "freesolv-mobley_8011706": {
+        "freesolv_id": "mobley_8011706",
         "solute_name": "mobley_8011706",
         "solvent_name": "water",
         "solute_smiles": "CN(C)C=O",
@@ -4246,7 +4532,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9007496,water": {
+    "freesolv-mobley_9007496": {
+        "freesolv_id": "mobley_9007496",
         "solute_name": "mobley_9007496",
         "solvent_name": "water",
         "solute_smiles": "CNC(=O)Oc1cccc2c1cccc2",
@@ -4261,7 +4548,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1075836,water": {
+    "freesolv-mobley_1075836": {
+        "freesolv_id": "mobley_1075836",
         "solute_name": "mobley_1075836",
         "solvent_name": "water",
         "solute_smiles": "CCC(=O)OC",
@@ -4275,7 +4563,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8492526,water": {
+    "freesolv-mobley_8492526": {
+        "freesolv_id": "mobley_8492526",
         "solute_name": "mobley_8492526",
         "solvent_name": "water",
         "solute_smiles": "CCCCC=O",
@@ -4289,7 +4578,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6571751,water": {
+    "freesolv-mobley_6571751": {
+        "freesolv_id": "mobley_6571751",
         "solute_name": "mobley_6571751",
         "solvent_name": "water",
         "solute_smiles": "CC1=CCCCC1",
@@ -4302,7 +4592,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4630641,water": {
+    "freesolv-mobley_4630641": {
+        "freesolv_id": "mobley_4630641",
         "solute_name": "mobley_4630641",
         "solvent_name": "water",
         "solute_smiles": "COCCOC",
@@ -4316,7 +4607,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2487143,water": {
+    "freesolv-mobley_2487143": {
+        "freesolv_id": "mobley_2487143",
         "solute_name": "mobley_2487143",
         "solvent_name": "water",
         "solute_smiles": "CCCCC(=O)C",
@@ -4330,7 +4622,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3040612,water": {
+    "freesolv-mobley_3040612": {
+        "freesolv_id": "mobley_3040612",
         "solute_name": "mobley_3040612",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccccc1C",
@@ -4343,7 +4636,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3682850,water": {
+    "freesolv-mobley_3682850": {
+        "freesolv_id": "mobley_3682850",
         "solute_name": "mobley_3682850",
         "solvent_name": "water",
         "solute_smiles": "C1CCC(=O)CC1",
@@ -4357,7 +4651,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3144334,water": {
+    "freesolv-mobley_3144334": {
+        "freesolv_id": "mobley_3144334",
         "solute_name": "mobley_3144334",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(c(c1)O)C",
@@ -4372,7 +4667,8 @@
             "Aqueous"
         ]
     },
-    "mobley_778352,water": {
+    "freesolv-mobley_778352": {
+        "freesolv_id": "mobley_778352",
         "solute_name": "mobley_778352",
         "solvent_name": "water",
         "solute_smiles": "CC=C(C)C",
@@ -4385,7 +4681,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1800170,water": {
+    "freesolv-mobley_1800170": {
+        "freesolv_id": "mobley_1800170",
         "solute_name": "mobley_1800170",
         "solvent_name": "water",
         "solute_smiles": "CCS",
@@ -4399,7 +4696,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1929982,water": {
+    "freesolv-mobley_1929982": {
+        "freesolv_id": "mobley_1929982",
         "solute_name": "mobley_1929982",
         "solvent_name": "water",
         "solute_smiles": "S",
@@ -4412,7 +4710,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9407874,water": {
+    "freesolv-mobley_9407874": {
+        "freesolv_id": "mobley_9407874",
         "solute_name": "mobley_9407874",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCC(=O)C",
@@ -4426,7 +4725,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2972345,water": {
+    "freesolv-mobley_2972345": {
+        "freesolv_id": "mobley_2972345",
         "solute_name": "mobley_2972345",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Cc3ccccc3C2",
@@ -4439,7 +4739,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3034976,water": {
+    "freesolv-mobley_3034976": {
+        "freesolv_id": "mobley_3034976",
         "solute_name": "mobley_3034976",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)O",
@@ -4453,7 +4754,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5571660,water": {
+    "freesolv-mobley_5571660": {
+        "freesolv_id": "mobley_5571660",
         "solute_name": "mobley_5571660",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1N)C",
@@ -4469,7 +4771,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1792062,water": {
+    "freesolv-mobley_1792062": {
+        "freesolv_id": "mobley_1792062",
         "solute_name": "mobley_1792062",
         "solvent_name": "water",
         "solute_smiles": "C(CBr)Br",
@@ -4483,7 +4786,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1967551,water": {
+    "freesolv-mobley_1967551": {
+        "freesolv_id": "mobley_1967551",
         "solute_name": "mobley_1967551",
         "solvent_name": "water",
         "solute_smiles": "CC=O",
@@ -4497,7 +4801,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3969312,water": {
+    "freesolv-mobley_3969312": {
+        "freesolv_id": "mobley_3969312",
         "solute_name": "mobley_3969312",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)C=O",
@@ -4512,7 +4817,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7099614,water": {
+    "freesolv-mobley_7099614": {
+        "freesolv_id": "mobley_7099614",
         "solute_name": "mobley_7099614",
         "solvent_name": "water",
         "solute_smiles": "C=CCCl",
@@ -4527,7 +4833,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3746675,water": {
+    "freesolv-mobley_3746675": {
+        "freesolv_id": "mobley_3746675",
         "solute_name": "mobley_3746675",
         "solvent_name": "water",
         "solute_smiles": "CC(=C)c1ccccc1",
@@ -4541,7 +4848,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6474572,water": {
+    "freesolv-mobley_6474572": {
+        "freesolv_id": "mobley_6474572",
         "solute_name": "mobley_6474572",
         "solvent_name": "water",
         "solute_smiles": "C=CCl",
@@ -4555,7 +4863,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2078467,water": {
+    "freesolv-mobley_2078467": {
+        "freesolv_id": "mobley_2078467",
         "solute_name": "mobley_2078467",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H](c1ccc(cc1)CC(C)C)C(=O)O",
@@ -4570,7 +4879,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9617923,water": {
+    "freesolv-mobley_9617923": {
+        "freesolv_id": "mobley_9617923",
         "solute_name": "mobley_9617923",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCC(=O)C",
@@ -4584,7 +4894,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5759258,water": {
+    "freesolv-mobley_5759258": {
+        "freesolv_id": "mobley_5759258",
         "solute_name": "mobley_5759258",
         "solvent_name": "water",
         "solute_smiles": "CCCCCO",
@@ -4599,7 +4910,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6239320,water": {
+    "freesolv-mobley_6239320": {
+        "freesolv_id": "mobley_6239320",
         "solute_name": "mobley_6239320",
         "solvent_name": "water",
         "solute_smiles": "c1(=O)[nH]c(=O)[nH]c(=O)[nH]1",
@@ -4614,7 +4926,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1079207,water": {
+    "freesolv-mobley_1079207": {
+        "freesolv_id": "mobley_1079207",
         "solute_name": "mobley_1079207",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)Cl)Cl",
@@ -4629,7 +4942,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2261979,water": {
+    "freesolv-mobley_2261979": {
+        "freesolv_id": "mobley_2261979",
         "solute_name": "mobley_2261979",
         "solvent_name": "water",
         "solute_smiles": "c1cc2cccc3c2c(c1)CC3",
@@ -4642,7 +4956,8 @@
             "Aqueous"
         ]
     },
-    "mobley_20524,water": {
+    "freesolv-mobley_20524": {
+        "freesolv_id": "mobley_20524",
         "solute_name": "mobley_20524",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)O",
@@ -4657,7 +4972,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5467162,water": {
+    "freesolv-mobley_5467162": {
+        "freesolv_id": "mobley_5467162",
         "solute_name": "mobley_5467162",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)c1ccc(cc1)O",
@@ -4672,7 +4988,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4494568,water": {
+    "freesolv-mobley_4494568": {
+        "freesolv_id": "mobley_4494568",
         "solute_name": "mobley_4494568",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)Br",
@@ -4687,7 +5004,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1424265,water": {
+    "freesolv-mobley_1424265": {
+        "freesolv_id": "mobley_1424265",
         "solute_name": "mobley_1424265",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1)C",
@@ -4700,7 +5018,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8899867,water": {
+    "freesolv-mobley_8899867": {
+        "freesolv_id": "mobley_8899867",
         "solute_name": "mobley_8899867",
         "solvent_name": "water",
         "solute_smiles": "C1CCC(C1)O",
@@ -4715,7 +5034,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4613090,water": {
+    "freesolv-mobley_4613090": {
+        "freesolv_id": "mobley_4613090",
         "solute_name": "mobley_4613090",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)Cn2ccnc2",
@@ -4729,7 +5049,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8789864,water": {
+    "freesolv-mobley_8789864": {
+        "freesolv_id": "mobley_8789864",
         "solute_name": "mobley_8789864",
         "solvent_name": "water",
         "solute_smiles": "COC(CC#N)(OC)OC",
@@ -4744,7 +5065,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6917738,water": {
+    "freesolv-mobley_6917738": {
+        "freesolv_id": "mobley_6917738",
         "solute_name": "mobley_6917738",
         "solvent_name": "water",
         "solute_smiles": "COCCN",
@@ -4761,7 +5083,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6727159,water": {
+    "freesolv-mobley_6727159": {
+        "freesolv_id": "mobley_6727159",
         "solute_name": "mobley_6727159",
         "solvent_name": "water",
         "solute_smiles": "C(CO[N+](=O)[O-])O",
@@ -4777,7 +5100,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5286200,water": {
+    "freesolv-mobley_5286200": {
+        "freesolv_id": "mobley_5286200",
         "solute_name": "mobley_5286200",
         "solvent_name": "water",
         "solute_smiles": "C(CCCl)CCl",
@@ -4791,7 +5115,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3777264,water": {
+    "freesolv-mobley_3777264": {
+        "freesolv_id": "mobley_3777264",
         "solute_name": "mobley_3777264",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)[N+](=O)[O-])N",
@@ -4808,7 +5133,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1735893,water": {
+    "freesolv-mobley_1735893": {
+        "freesolv_id": "mobley_1735893",
         "solute_name": "mobley_1735893",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC(=O)O",
@@ -4822,7 +5148,8 @@
             "Aqueous"
         ]
     },
-    "mobley_511661,water": {
+    "freesolv-mobley_511661": {
+        "freesolv_id": "mobley_511661",
         "solute_name": "mobley_511661",
         "solvent_name": "water",
         "solute_smiles": "C=CC=C",
@@ -4835,7 +5162,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2316618,water": {
+    "freesolv-mobley_2316618": {
+        "freesolv_id": "mobley_2316618",
         "solute_name": "mobley_2316618",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)C(=O)c3cccc(c3C2=O)NCCO",
@@ -4857,7 +5185,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7326982,water": {
+    "freesolv-mobley_7326982": {
+        "freesolv_id": "mobley_7326982",
         "solute_name": "mobley_7326982",
         "solvent_name": "water",
         "solute_smiles": "CC(C)O",
@@ -4872,7 +5201,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5310099,water": {
+    "freesolv-mobley_5310099": {
+        "freesolv_id": "mobley_5310099",
         "solute_name": "mobley_5310099",
         "solvent_name": "water",
         "solute_smiles": "CCCCC=C",
@@ -4885,7 +5215,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9557440,water": {
+    "freesolv-mobley_9557440": {
+        "freesolv_id": "mobley_9557440",
         "solute_name": "mobley_9557440",
         "solvent_name": "water",
         "solute_smiles": "c1c(c(=O)[nH]c(=O)[nH]1)Cl",
@@ -4902,7 +5233,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7047032,water": {
+    "freesolv-mobley_7047032": {
+        "freesolv_id": "mobley_7047032",
         "solute_name": "mobley_7047032",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)Cl",
@@ -4916,7 +5248,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2049967,water": {
+    "freesolv-mobley_2049967": {
+        "freesolv_id": "mobley_2049967",
         "solute_name": "mobley_2049967",
         "solvent_name": "water",
         "solute_smiles": "CCSC",
@@ -4929,7 +5262,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5816127,water": {
+    "freesolv-mobley_5816127": {
+        "freesolv_id": "mobley_5816127",
         "solute_name": "mobley_5816127",
         "solvent_name": "water",
         "solute_smiles": "COCCO",
@@ -4946,7 +5280,8 @@
             "Aqueous"
         ]
     },
-    "mobley_299266,water": {
+    "freesolv-mobley_299266": {
+        "freesolv_id": "mobley_299266",
         "solute_name": "mobley_299266",
         "solvent_name": "water",
         "solute_smiles": "CC(=C)C",
@@ -4959,7 +5294,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5852491,water": {
+    "freesolv-mobley_5852491": {
+        "freesolv_id": "mobley_5852491",
         "solute_name": "mobley_5852491",
         "solvent_name": "water",
         "solute_smiles": "CC1CCCC1",
@@ -4972,7 +5308,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9534740,water": {
+    "freesolv-mobley_9534740": {
+        "freesolv_id": "mobley_9534740",
         "solute_name": "mobley_9534740",
         "solvent_name": "water",
         "solute_smiles": "C([C@@H]1[C@H]([C@@H]([C@H]([C@@H](O1)O)O)O)O)O",
@@ -4991,7 +5328,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2689721,water": {
+    "freesolv-mobley_2689721": {
+        "freesolv_id": "mobley_2689721",
         "solute_name": "mobley_2689721",
         "solvent_name": "water",
         "solute_smiles": "C1CCCCC1",
@@ -5004,7 +5342,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1160109,water": {
+    "freesolv-mobley_1160109": {
+        "freesolv_id": "mobley_1160109",
         "solute_name": "mobley_1160109",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H]1CC[C@H](CC1=O)C(=C)C",
@@ -5019,7 +5358,8 @@
             "Aqueous"
         ]
     },
-    "mobley_49274,water": {
+    "freesolv-mobley_49274": {
+        "freesolv_id": "mobley_49274",
         "solute_name": "mobley_49274",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC#C",
@@ -5032,7 +5372,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4039055,water": {
+    "freesolv-mobley_4039055": {
+        "freesolv_id": "mobley_4039055",
         "solute_name": "mobley_4039055",
         "solvent_name": "water",
         "solute_smiles": "c1c(c(=O)[nH]c(=O)[nH]1)Br",
@@ -5049,7 +5390,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7106722,water": {
+    "freesolv-mobley_7106722": {
+        "freesolv_id": "mobley_7106722",
         "solute_name": "mobley_7106722",
         "solvent_name": "water",
         "solute_smiles": "CCCC(C)C",
@@ -5062,7 +5404,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3201701,water": {
+    "freesolv-mobley_3201701": {
+        "freesolv_id": "mobley_3201701",
         "solute_name": "mobley_3201701",
         "solvent_name": "water",
         "solute_smiles": "Cc1c(nc(nc1OC(=O)N(C)C)N(C)C)C",
@@ -5081,7 +5424,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2126135,water": {
+    "freesolv-mobley_2126135": {
+        "freesolv_id": "mobley_2126135",
         "solute_name": "mobley_2126135",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccccc1O",
@@ -5096,7 +5440,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6353617,water": {
+    "freesolv-mobley_6353617": {
+        "freesolv_id": "mobley_6353617",
         "solute_name": "mobley_6353617",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)c1cccnc1",
@@ -5112,7 +5457,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7943327,water": {
+    "freesolv-mobley_7943327": {
+        "freesolv_id": "mobley_7943327",
         "solute_name": "mobley_7943327",
         "solvent_name": "water",
         "solute_smiles": "CCC(=O)OCC",
@@ -5126,7 +5472,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4687447,water": {
+    "freesolv-mobley_4687447": {
+        "freesolv_id": "mobley_4687447",
         "solute_name": "mobley_4687447",
         "solvent_name": "water",
         "solute_smiles": "CCCOCCO",
@@ -5143,7 +5490,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1875719,water": {
+    "freesolv-mobley_1875719": {
+        "freesolv_id": "mobley_1875719",
         "solute_name": "mobley_1875719",
         "solvent_name": "water",
         "solute_smiles": "CCC(=O)CC",
@@ -5157,7 +5505,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9460824,water": {
+    "freesolv-mobley_9460824": {
+        "freesolv_id": "mobley_9460824",
         "solute_name": "mobley_9460824",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)SCSCC",
@@ -5172,7 +5521,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4395315,water": {
+    "freesolv-mobley_4395315": {
+        "freesolv_id": "mobley_4395315",
         "solute_name": "mobley_4395315",
         "solvent_name": "water",
         "solute_smiles": "Cc1cc(ccc1Cl)O",
@@ -5189,7 +5539,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9121449,water": {
+    "freesolv-mobley_9121449": {
+        "freesolv_id": "mobley_9121449",
         "solute_name": "mobley_9121449",
         "solvent_name": "water",
         "solute_smiles": "CCC#C",
@@ -5202,7 +5553,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4690963,water": {
+    "freesolv-mobley_4690963": {
+        "freesolv_id": "mobley_4690963",
         "solute_name": "mobley_4690963",
         "solvent_name": "water",
         "solute_smiles": "CCOCCOCC",
@@ -5216,7 +5568,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3318135,water": {
+    "freesolv-mobley_3318135": {
+        "freesolv_id": "mobley_3318135",
         "solute_name": "mobley_3318135",
         "solvent_name": "water",
         "solute_smiles": "CCCCC(=O)CCCC",
@@ -5230,7 +5583,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8048190,water": {
+    "freesolv-mobley_8048190": {
+        "freesolv_id": "mobley_8048190",
         "solute_name": "mobley_8048190",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)N",
@@ -5245,7 +5599,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1615431,water": {
+    "freesolv-mobley_1615431": {
+        "freesolv_id": "mobley_1615431",
         "solute_name": "mobley_1615431",
         "solvent_name": "water",
         "solute_smiles": "CC(C)OC(C)C",
@@ -5259,7 +5614,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1781152,water": {
+    "freesolv-mobley_1781152": {
+        "freesolv_id": "mobley_1781152",
         "solute_name": "mobley_1781152",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)C(=O)OC",
@@ -5273,7 +5629,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7860938,water": {
+    "freesolv-mobley_7860938": {
+        "freesolv_id": "mobley_7860938",
         "solute_name": "mobley_7860938",
         "solvent_name": "water",
         "solute_smiles": "CCCCNCCCC",
@@ -5288,7 +5645,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6973347,water": {
+    "freesolv-mobley_6973347": {
+        "freesolv_id": "mobley_6973347",
         "solute_name": "mobley_6973347",
         "solvent_name": "water",
         "solute_smiles": "CCOC(=O)C",
@@ -5302,7 +5660,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6794076,water": {
+    "freesolv-mobley_6794076": {
+        "freesolv_id": "mobley_6794076",
         "solute_name": "mobley_6794076",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)c1ccncc1",
@@ -5318,7 +5677,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9974966,water": {
+    "freesolv-mobley_9974966": {
+        "freesolv_id": "mobley_9974966",
         "solute_name": "mobley_9974966",
         "solvent_name": "water",
         "solute_smiles": "CC(C)SC(C)C",
@@ -5331,7 +5691,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3264884,water": {
+    "freesolv-mobley_3264884": {
+        "freesolv_id": "mobley_3264884",
         "solute_name": "mobley_3264884",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2cc(ccc2c1)N",
@@ -5347,7 +5708,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6257907,water": {
+    "freesolv-mobley_6257907": {
+        "freesolv_id": "mobley_6257907",
         "solute_name": "mobley_6257907",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)Cl)N",
@@ -5365,7 +5727,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2492140,water": {
+    "freesolv-mobley_2492140": {
+        "freesolv_id": "mobley_2492140",
         "solute_name": "mobley_2492140",
         "solvent_name": "water",
         "solute_smiles": "C(C(Cl)(Cl)Cl)(Cl)Cl",
@@ -5379,7 +5742,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4850657,water": {
+    "freesolv-mobley_4850657": {
+        "freesolv_id": "mobley_4850657",
         "solute_name": "mobley_4850657",
         "solvent_name": "water",
         "solute_smiles": "CS(=O)(=O)Cl",
@@ -5393,7 +5757,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6522117,water": {
+    "freesolv-mobley_6522117": {
+        "freesolv_id": "mobley_6522117",
         "solute_name": "mobley_6522117",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=O)(OCC)O/C(=C/Cl)/c1ccc(cc1Cl)Cl",
@@ -5411,7 +5776,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1674094,water": {
+    "freesolv-mobley_1674094": {
+        "freesolv_id": "mobley_1674094",
         "solute_name": "mobley_1674094",
         "solvent_name": "water",
         "solute_smiles": "CCCCC#C",
@@ -5424,7 +5790,8 @@
             "Aqueous"
         ]
     },
-    "mobley_313406,water": {
+    "freesolv-mobley_313406": {
+        "freesolv_id": "mobley_313406",
         "solute_name": "mobley_313406",
         "solvent_name": "water",
         "solute_smiles": "CCCO",
@@ -5439,7 +5806,8 @@
             "Aqueous"
         ]
     },
-    "mobley_525934,water": {
+    "freesolv-mobley_525934": {
+        "freesolv_id": "mobley_525934",
         "solute_name": "mobley_525934",
         "solvent_name": "water",
         "solute_smiles": "CS",
@@ -5453,7 +5821,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3325209,water": {
+    "freesolv-mobley_3325209": {
+        "freesolv_id": "mobley_3325209",
         "solute_name": "mobley_3325209",
         "solvent_name": "water",
         "solute_smiles": "COC(c1ccccc1)(OC)OC",
@@ -5468,7 +5837,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7326706,water": {
+    "freesolv-mobley_7326706": {
+        "freesolv_id": "mobley_7326706",
         "solute_name": "mobley_7326706",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)Oc1c(cc(c(n1)Cl)Cl)Cl",
@@ -5486,7 +5856,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7869158,water": {
+    "freesolv-mobley_7869158": {
+        "freesolv_id": "mobley_7869158",
         "solute_name": "mobley_7869158",
         "solvent_name": "water",
         "solute_smiles": "CC[C@H](C)O[N+](=O)[O-]",
@@ -5499,7 +5870,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2269032,water": {
+    "freesolv-mobley_2269032": {
+        "freesolv_id": "mobley_2269032",
         "solute_name": "mobley_2269032",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H](c1ccc2cc(ccc2c1)OC)C(=O)O",
@@ -5516,7 +5888,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3639400,water": {
+    "freesolv-mobley_3639400": {
+        "freesolv_id": "mobley_3639400",
         "solute_name": "mobley_3639400",
         "solvent_name": "water",
         "solute_smiles": "CCCCCl",
@@ -5530,7 +5903,8 @@
             "Aqueous"
         ]
     },
-    "mobley_172879,water": {
+    "freesolv-mobley_172879": {
+        "freesolv_id": "mobley_172879",
         "solute_name": "mobley_172879",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Oc3ccccc3O2",
@@ -5546,7 +5920,8 @@
             "Aqueous"
         ]
     },
-    "mobley_486214,water": {
+    "freesolv-mobley_486214": {
+        "freesolv_id": "mobley_486214",
         "solute_name": "mobley_486214",
         "solvent_name": "water",
         "solute_smiles": "COc1cccc(c1O)OC",
@@ -5563,7 +5938,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3976574,water": {
+    "freesolv-mobley_3976574": {
+        "freesolv_id": "mobley_3976574",
         "solute_name": "mobley_3976574",
         "solvent_name": "water",
         "solute_smiles": "c1cc2c(cc1Cl)Oc3c(c(c(c(c3Cl)Cl)Cl)Cl)O2",
@@ -5581,7 +5957,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5518547,water": {
+    "freesolv-mobley_5518547": {
+        "freesolv_id": "mobley_5518547",
         "solute_name": "mobley_5518547",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)N",
@@ -5597,7 +5974,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3269565,water": {
+    "freesolv-mobley_3269565": {
+        "freesolv_id": "mobley_3269565",
         "solute_name": "mobley_3269565",
         "solvent_name": "water",
         "solute_smiles": "CC(C)OC",
@@ -5611,7 +5989,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1139153,water": {
+    "freesolv-mobley_1139153": {
+        "freesolv_id": "mobley_1139153",
         "solute_name": "mobley_1139153",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CC(C)(C)C",
@@ -5624,7 +6003,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2517158,water": {
+    "freesolv-mobley_2517158": {
+        "freesolv_id": "mobley_2517158",
         "solute_name": "mobley_2517158",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCBr",
@@ -5638,7 +6018,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6854178,water": {
+    "freesolv-mobley_6854178": {
+        "freesolv_id": "mobley_6854178",
         "solute_name": "mobley_6854178",
         "solvent_name": "water",
         "solute_smiles": "CC(C)OC=O",
@@ -5652,7 +6033,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6201330,water": {
+    "freesolv-mobley_6201330": {
+        "freesolv_id": "mobley_6201330",
         "solute_name": "mobley_6201330",
         "solvent_name": "water",
         "solute_smiles": "CCCOC(=O)c1ccc(cc1)O",
@@ -5669,7 +6051,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1858644,water": {
+    "freesolv-mobley_1858644": {
+        "freesolv_id": "mobley_1858644",
         "solute_name": "mobley_1858644",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)CCO",
@@ -5685,7 +6068,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8573194,water": {
+    "freesolv-mobley_8573194": {
+        "freesolv_id": "mobley_8573194",
         "solute_name": "mobley_8573194",
         "solvent_name": "water",
         "solute_smiles": "CCCC=O",
@@ -5699,7 +6083,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9246351,water": {
+    "freesolv-mobley_9246351": {
+        "freesolv_id": "mobley_9246351",
         "solute_name": "mobley_9246351",
         "solvent_name": "water",
         "solute_smiles": "C(Br)Br",
@@ -5713,7 +6098,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7017274,water": {
+    "freesolv-mobley_7017274": {
+        "freesolv_id": "mobley_7017274",
         "solute_name": "mobley_7017274",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)ccc3c2cccc3",
@@ -5726,7 +6112,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5311804,water": {
+    "freesolv-mobley_5311804": {
+        "freesolv_id": "mobley_5311804",
         "solute_name": "mobley_5311804",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)CO",
@@ -5742,7 +6129,8 @@
             "Aqueous"
         ]
     },
-    "mobley_628951,water": {
+    "freesolv-mobley_628951": {
+        "freesolv_id": "mobley_628951",
         "solute_name": "mobley_628951",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(c(c1)Cl)c2c(cccc2Cl)Cl)Cl",
@@ -5757,7 +6145,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1046331,water": {
+    "freesolv-mobley_1046331": {
+        "freesolv_id": "mobley_1046331",
         "solute_name": "mobley_1046331",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)OC=O",
@@ -5772,7 +6161,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6309289,water": {
+    "freesolv-mobley_6309289": {
+        "freesolv_id": "mobley_6309289",
         "solute_name": "mobley_6309289",
         "solvent_name": "water",
         "solute_smiles": "C1CCNCC1",
@@ -5788,7 +6178,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1144156,water": {
+    "freesolv-mobley_1144156": {
+        "freesolv_id": "mobley_1144156",
         "solute_name": "mobley_1144156",
         "solvent_name": "water",
         "solute_smiles": "CCOCC",
@@ -5802,7 +6193,8 @@
             "Aqueous"
         ]
     },
-    "mobley_296847,water": {
+    "freesolv-mobley_296847": {
+        "freesolv_id": "mobley_296847",
         "solute_name": "mobley_296847",
         "solvent_name": "water",
         "solute_smiles": "c1ccncc1",
@@ -5816,7 +6208,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4375719,water": {
+    "freesolv-mobley_4375719": {
+        "freesolv_id": "mobley_4375719",
         "solute_name": "mobley_4375719",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCC",
@@ -5829,7 +6222,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7261305,water": {
+    "freesolv-mobley_7261305": {
+        "freesolv_id": "mobley_7261305",
         "solute_name": "mobley_7261305",
         "solvent_name": "water",
         "solute_smiles": "NN",
@@ -5842,7 +6236,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8861672,water": {
+    "freesolv-mobley_8861672": {
+        "freesolv_id": "mobley_8861672",
         "solute_name": "mobley_8861672",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccnc(c1)C",
@@ -5856,7 +6251,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3083321,water": {
+    "freesolv-mobley_3083321": {
+        "freesolv_id": "mobley_3083321",
         "solute_name": "mobley_3083321",
         "solvent_name": "water",
         "solute_smiles": "COCOC",
@@ -5869,7 +6265,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9510785,water": {
+    "freesolv-mobley_9510785": {
+        "freesolv_id": "mobley_9510785",
         "solute_name": "mobley_9510785",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)c2cc(c(c(c2Cl)Cl)Cl)Cl",
@@ -5884,7 +6281,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7912193,water": {
+    "freesolv-mobley_7912193": {
+        "freesolv_id": "mobley_7912193",
         "solute_name": "mobley_7912193",
         "solvent_name": "water",
         "solute_smiles": "CCCCOC(=O)c1ccc(cc1)O",
@@ -5901,7 +6299,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7375018,water": {
+    "freesolv-mobley_7375018": {
+        "freesolv_id": "mobley_7375018",
         "solute_name": "mobley_7375018",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCCC(=O)C",
@@ -5915,7 +6314,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3274817,water": {
+    "freesolv-mobley_3274817": {
+        "freesolv_id": "mobley_3274817",
         "solute_name": "mobley_3274817",
         "solvent_name": "water",
         "solute_smiles": "CC[C@@H](C)c1cc(cc(c1O)[N+](=O)[O-])[N+](=O)[O-]",
@@ -5931,7 +6331,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4639255,water": {
+    "freesolv-mobley_4639255": {
+        "freesolv_id": "mobley_4639255",
         "solute_name": "mobley_4639255",
         "solvent_name": "water",
         "solute_smiles": "C(CO)O",
@@ -5947,7 +6348,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6248915,water": {
+    "freesolv-mobley_6248915": {
+        "freesolv_id": "mobley_6248915",
         "solute_name": "mobley_6248915",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCN",
@@ -5962,7 +6364,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1855337,water": {
+    "freesolv-mobley_1855337": {
+        "freesolv_id": "mobley_1855337",
         "solute_name": "mobley_1855337",
         "solvent_name": "water",
         "solute_smiles": "c1c(cc(c(c1Cl)Cl)Cl)Cl",
@@ -5977,7 +6380,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7599023,water": {
+    "freesolv-mobley_7599023": {
+        "freesolv_id": "mobley_7599023",
         "solute_name": "mobley_7599023",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)Br",
@@ -5992,7 +6396,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6632459,water": {
+    "freesolv-mobley_6632459": {
+        "freesolv_id": "mobley_6632459",
         "solute_name": "mobley_6632459",
         "solvent_name": "water",
         "solute_smiles": "CCC=O",
@@ -6006,7 +6411,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1261349,water": {
+    "freesolv-mobley_1261349": {
+        "freesolv_id": "mobley_1261349",
         "solute_name": "mobley_1261349",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)C",
@@ -6019,7 +6425,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8436428,water": {
+    "freesolv-mobley_8436428": {
+        "freesolv_id": "mobley_8436428",
         "solute_name": "mobley_8436428",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CC(C)C",
@@ -6032,7 +6439,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3775790,water": {
+    "freesolv-mobley_3775790": {
+        "freesolv_id": "mobley_3775790",
         "solute_name": "mobley_3775790",
         "solvent_name": "water",
         "solute_smiles": "Cn1cccc1",
@@ -6046,7 +6454,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5449201,water": {
+    "freesolv-mobley_5449201": {
+        "freesolv_id": "mobley_5449201",
         "solute_name": "mobley_5449201",
         "solvent_name": "water",
         "solute_smiles": "CCCCC",
@@ -6059,7 +6468,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9478823,water": {
+    "freesolv-mobley_9478823": {
+        "freesolv_id": "mobley_9478823",
         "solute_name": "mobley_9478823",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccccc1C",
@@ -6072,7 +6482,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1034539,water": {
+    "freesolv-mobley_1034539": {
+        "freesolv_id": "mobley_1034539",
         "solute_name": "mobley_1034539",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(cc1c2cc(c(c(c2Cl)Cl)Cl)Cl)Cl)Cl",
@@ -6087,7 +6498,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2364370,water": {
+    "freesolv-mobley_2364370": {
+        "freesolv_id": "mobley_2364370",
         "solute_name": "mobley_2364370",
         "solvent_name": "water",
         "solute_smiles": "CCCCOC(=O)C",
@@ -6101,7 +6513,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4893032,water": {
+    "freesolv-mobley_4893032": {
+        "freesolv_id": "mobley_4893032",
         "solute_name": "mobley_4893032",
         "solvent_name": "water",
         "solute_smiles": "CCCCC#N",
@@ -6114,7 +6527,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1881249,water": {
+    "freesolv-mobley_1881249": {
+        "freesolv_id": "mobley_1881249",
         "solute_name": "mobley_1881249",
         "solvent_name": "water",
         "solute_smiles": "CCCC(=O)C",
@@ -6128,7 +6542,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6896128,water": {
+    "freesolv-mobley_6896128": {
+        "freesolv_id": "mobley_6896128",
         "solute_name": "mobley_6896128",
         "solvent_name": "water",
         "solute_smiles": "CCCC[C@@H](C)CC",
@@ -6141,7 +6556,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2725802,water": {
+    "freesolv-mobley_2725802": {
+        "freesolv_id": "mobley_2725802",
         "solute_name": "mobley_2725802",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)N1CCCC1",
@@ -6157,7 +6573,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6733657,water": {
+    "freesolv-mobley_6733657": {
+        "freesolv_id": "mobley_6733657",
         "solute_name": "mobley_6733657",
         "solvent_name": "water",
         "solute_smiles": "C1[C@H]([C@@H]2[C@H]([C@H]1Cl)[C@]3(C(=C([C@@]2(C3(Cl)Cl)Cl)Cl)Cl)Cl)Cl",
@@ -6172,7 +6589,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2005792,water": {
+    "freesolv-mobley_2005792": {
+        "freesolv_id": "mobley_2005792",
         "solute_name": "mobley_2005792",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)c2ccccc2",
@@ -6185,7 +6603,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2008055,water": {
+    "freesolv-mobley_2008055": {
+        "freesolv_id": "mobley_2008055",
         "solute_name": "mobley_2008055",
         "solvent_name": "water",
         "solute_smiles": "CC",
@@ -6198,7 +6617,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5690766,water": {
+    "freesolv-mobley_5690766": {
+        "freesolv_id": "mobley_5690766",
         "solute_name": "mobley_5690766",
         "solvent_name": "water",
         "solute_smiles": "C=CCCC=C",
@@ -6211,7 +6631,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9733743,water": {
+    "freesolv-mobley_9733743": {
+        "freesolv_id": "mobley_9733743",
         "solute_name": "mobley_9733743",
         "solvent_name": "water",
         "solute_smiles": "CCCCN",
@@ -6226,7 +6647,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1944394,water": {
+    "freesolv-mobley_1944394": {
+        "freesolv_id": "mobley_1944394",
         "solute_name": "mobley_1944394",
         "solvent_name": "water",
         "solute_smiles": "CN(C)CCOC(c1ccccc1)c2ccccc2",
@@ -6244,7 +6666,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8827942,water": {
+    "freesolv-mobley_8827942": {
+        "freesolv_id": "mobley_8827942",
         "solute_name": "mobley_8827942",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Oc3c(cc(c(c3O2)Cl)Cl)Cl",
@@ -6262,7 +6685,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4934872,water": {
+    "freesolv-mobley_4934872": {
+        "freesolv_id": "mobley_4934872",
         "solute_name": "mobley_4934872",
         "solvent_name": "water",
         "solute_smiles": "CCOC(OCC)Oc1ccccc1",
@@ -6277,7 +6701,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2613240,water": {
+    "freesolv-mobley_2613240": {
+        "freesolv_id": "mobley_2613240",
         "solute_name": "mobley_2613240",
         "solvent_name": "water",
         "solute_smiles": "COc1ccccc1OC",
@@ -6292,7 +6717,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7298388,water": {
+    "freesolv-mobley_7298388": {
+        "freesolv_id": "mobley_7298388",
         "solute_name": "mobley_7298388",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1)[N+](=O)[O-]",
@@ -6306,7 +6732,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3762186,water": {
+    "freesolv-mobley_3762186": {
+        "freesolv_id": "mobley_3762186",
         "solute_name": "mobley_3762186",
         "solvent_name": "water",
         "solute_smiles": "C(Cl)Cl",
@@ -6320,7 +6747,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6714389,water": {
+    "freesolv-mobley_6714389": {
+        "freesolv_id": "mobley_6714389",
         "solute_name": "mobley_6714389",
         "solvent_name": "water",
         "solute_smiles": "CN",
@@ -6335,7 +6763,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5326154,water": {
+    "freesolv-mobley_5326154": {
+        "freesolv_id": "mobley_5326154",
         "solute_name": "mobley_5326154",
         "solvent_name": "water",
         "solute_smiles": "CN(C)c1ccccc1",
@@ -6351,7 +6780,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9197172,water": {
+    "freesolv-mobley_9197172": {
+        "freesolv_id": "mobley_9197172",
         "solute_name": "mobley_9197172",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCC=C",
@@ -6364,7 +6794,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2493732,water": {
+    "freesolv-mobley_2493732": {
+        "freesolv_id": "mobley_2493732",
         "solute_name": "mobley_2493732",
         "solvent_name": "water",
         "solute_smiles": "C=C(Cl)Cl",
@@ -6378,7 +6809,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8426916,water": {
+    "freesolv-mobley_8426916": {
+        "freesolv_id": "mobley_8426916",
         "solute_name": "mobley_8426916",
         "solvent_name": "water",
         "solute_smiles": "CCNCC",
@@ -6393,7 +6825,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7227357,water": {
+    "freesolv-mobley_7227357": {
+        "freesolv_id": "mobley_7227357",
         "solute_name": "mobley_7227357",
         "solvent_name": "water",
         "solute_smiles": "CCC(CC)O",
@@ -6408,7 +6841,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4371692,water": {
+    "freesolv-mobley_4371692": {
+        "freesolv_id": "mobley_4371692",
         "solute_name": "mobley_4371692",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)C(=O)c3c(ccc(c3C2=O)O)N",
@@ -6428,7 +6862,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8705848,water": {
+    "freesolv-mobley_8705848": {
+        "freesolv_id": "mobley_8705848",
         "solute_name": "mobley_8705848",
         "solvent_name": "water",
         "solute_smiles": "CC(C)NC(C)C",
@@ -6443,7 +6878,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2859600,water": {
+    "freesolv-mobley_2859600": {
+        "freesolv_id": "mobley_2859600",
         "solute_name": "mobley_2859600",
         "solvent_name": "water",
         "solute_smiles": "C=Cc1ccccc1",
@@ -6457,7 +6893,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4177472,water": {
+    "freesolv-mobley_4177472": {
+        "freesolv_id": "mobley_4177472",
         "solute_name": "mobley_4177472",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C(C)C(C)C",
@@ -6470,7 +6907,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8207196,water": {
+    "freesolv-mobley_8207196": {
+        "freesolv_id": "mobley_8207196",
         "solute_name": "mobley_8207196",
         "solvent_name": "water",
         "solute_smiles": "CCNc1nc(nc(n1)Cl)NCC",
@@ -6489,7 +6927,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6082662,water": {
+    "freesolv-mobley_6082662": {
+        "freesolv_id": "mobley_6082662",
         "solute_name": "mobley_6082662",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1N)N(=O)=O",
@@ -6506,7 +6945,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7015518,water": {
+    "freesolv-mobley_7015518": {
+        "freesolv_id": "mobley_7015518",
         "solute_name": "mobley_7015518",
         "solvent_name": "water",
         "solute_smiles": "COC",
@@ -6520,7 +6960,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5026370,water": {
+    "freesolv-mobley_5026370": {
+        "freesolv_id": "mobley_5026370",
         "solute_name": "mobley_5026370",
         "solvent_name": "water",
         "solute_smiles": "c1cnccc1C#N",
@@ -6535,7 +6976,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2183616,water": {
+    "freesolv-mobley_2183616": {
+        "freesolv_id": "mobley_2183616",
         "solute_name": "mobley_2183616",
         "solvent_name": "water",
         "solute_smiles": "CC[C@H](C)c1ccccc1",
@@ -6548,7 +6990,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2068538,water": {
+    "freesolv-mobley_2068538": {
+        "freesolv_id": "mobley_2068538",
         "solute_name": "mobley_2068538",
         "solvent_name": "water",
         "solute_smiles": "CCC",
@@ -6561,7 +7004,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8578590,water": {
+    "freesolv-mobley_8578590": {
+        "freesolv_id": "mobley_8578590",
         "solute_name": "mobley_8578590",
         "solvent_name": "water",
         "solute_smiles": "CS(=O)C",
@@ -6574,7 +7018,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2725215,water": {
+    "freesolv-mobley_2725215": {
+        "freesolv_id": "mobley_2725215",
         "solute_name": "mobley_2725215",
         "solvent_name": "water",
         "solute_smiles": "CCCN(CCC)c1c(cc(cc1[N+](=O)[O-])S(=O)(=O)C)[N+](=O)[O-]",
@@ -6592,7 +7037,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3183805,water": {
+    "freesolv-mobley_3183805": {
+        "freesolv_id": "mobley_3183805",
         "solute_name": "mobley_3183805",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(c(c1)C)C",
@@ -6605,7 +7051,8 @@
             "Aqueous"
         ]
     },
-    "mobley_63712,water": {
+    "freesolv-mobley_63712": {
+        "freesolv_id": "mobley_63712",
         "solute_name": "mobley_63712",
         "solvent_name": "water",
         "solute_smiles": "CN1CCCCC1",
@@ -6621,7 +7068,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1717215,water": {
+    "freesolv-mobley_1717215": {
+        "freesolv_id": "mobley_1717215",
         "solute_name": "mobley_1717215",
         "solvent_name": "water",
         "solute_smiles": "COC=O",
@@ -6635,7 +7083,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8427539,water": {
+    "freesolv-mobley_8427539": {
+        "freesolv_id": "mobley_8427539",
         "solute_name": "mobley_8427539",
         "solvent_name": "water",
         "solute_smiles": "CCC(=O)N",
@@ -6650,7 +7099,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1278715,water": {
+    "freesolv-mobley_1278715": {
+        "freesolv_id": "mobley_1278715",
         "solute_name": "mobley_1278715",
         "solvent_name": "water",
         "solute_smiles": "C(C(Cl)(Cl)Cl)(Cl)(Cl)Cl",
@@ -6663,7 +7113,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9671033,water": {
+    "freesolv-mobley_9671033": {
+        "freesolv_id": "mobley_9671033",
         "solute_name": "mobley_9671033",
         "solvent_name": "water",
         "solute_smiles": "CCC[N+](=O)[O-]",
@@ -6676,7 +7127,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1728386,water": {
+    "freesolv-mobley_1728386": {
+        "freesolv_id": "mobley_1728386",
         "solute_name": "mobley_1728386",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)C(=O)N",
@@ -6692,7 +7144,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3546460,water": {
+    "freesolv-mobley_3546460": {
+        "freesolv_id": "mobley_3546460",
         "solute_name": "mobley_3546460",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCO",
@@ -6707,7 +7160,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2802855,water": {
+    "freesolv-mobley_2802855": {
+        "freesolv_id": "mobley_2802855",
         "solute_name": "mobley_2802855",
         "solvent_name": "water",
         "solute_smiles": "CCCCBr",
@@ -6721,7 +7175,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1650157,water": {
+    "freesolv-mobley_1650157": {
+        "freesolv_id": "mobley_1650157",
         "solute_name": "mobley_1650157",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)O",
@@ -6736,7 +7191,8 @@
             "Aqueous"
         ]
     },
-    "mobley_252413,water": {
+    "freesolv-mobley_252413": {
+        "freesolv_id": "mobley_252413",
         "solute_name": "mobley_252413",
         "solvent_name": "water",
         "solute_smiles": "CCCC(C)(C)C",
@@ -6749,7 +7205,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3982371,water": {
+    "freesolv-mobley_3982371": {
+        "freesolv_id": "mobley_3982371",
         "solute_name": "mobley_3982371",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)OC",
@@ -6763,7 +7220,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1922649,water": {
+    "freesolv-mobley_1922649": {
+        "freesolv_id": "mobley_1922649",
         "solute_name": "mobley_1922649",
         "solvent_name": "water",
         "solute_smiles": "COP(=S)(OC)Oc1ccc(cc1)[N+](=O)[O-]",
@@ -6779,7 +7237,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7676709,water": {
+    "freesolv-mobley_7676709": {
+        "freesolv_id": "mobley_7676709",
         "solute_name": "mobley_7676709",
         "solvent_name": "water",
         "solute_smiles": "CC1=CC(=O)[C@@H](CC1)C(C)C",
@@ -6794,7 +7253,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6981465,water": {
+    "freesolv-mobley_6981465": {
+        "freesolv_id": "mobley_6981465",
         "solute_name": "mobley_6981465",
         "solvent_name": "water",
         "solute_smiles": "CC(C)OC(=O)C",
@@ -6808,7 +7268,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8467917,water": {
+    "freesolv-mobley_8467917": {
+        "freesolv_id": "mobley_8467917",
         "solute_name": "mobley_8467917",
         "solvent_name": "water",
         "solute_smiles": "CCCC/C=C/C",
@@ -6821,7 +7282,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1896013,water": {
+    "freesolv-mobley_1896013": {
+        "freesolv_id": "mobley_1896013",
         "solute_name": "mobley_1896013",
         "solvent_name": "water",
         "solute_smiles": "C1[C@H]([C@@H]([C@H]([C@H](O1)O)O)O)O",
@@ -6839,7 +7301,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5263791,water": {
+    "freesolv-mobley_5263791": {
+        "freesolv_id": "mobley_5263791",
         "solute_name": "mobley_5263791",
         "solvent_name": "water",
         "solute_smiles": "CCc1cccc2c1cccc2",
@@ -6852,7 +7315,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8124669,water": {
+    "freesolv-mobley_8124669": {
+        "freesolv_id": "mobley_8124669",
         "solute_name": "mobley_8124669",
         "solvent_name": "water",
         "solute_smiles": "CCc1cccc(c1N(COC)C(=O)CCl)CC",
@@ -6871,7 +7335,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6688723,water": {
+    "freesolv-mobley_6688723": {
+        "freesolv_id": "mobley_6688723",
         "solute_name": "mobley_6688723",
         "solvent_name": "water",
         "solute_smiles": "COc1c(cc(c(c1O)OC)Cl)Cl",
@@ -6890,7 +7355,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3210206,water": {
+    "freesolv-mobley_3210206": {
+        "freesolv_id": "mobley_3210206",
         "solute_name": "mobley_3210206",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H](CO[N+](=O)[O-])O[N+](=O)[O-]",
@@ -6903,7 +7369,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7364468,water": {
+    "freesolv-mobley_7364468": {
+        "freesolv_id": "mobley_7364468",
         "solute_name": "mobley_7364468",
         "solvent_name": "water",
         "solute_smiles": "CC1=CC(=O)CC(C1)(C)C",
@@ -6918,7 +7385,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8713762,water": {
+    "freesolv-mobley_8713762": {
+        "freesolv_id": "mobley_8713762",
         "solute_name": "mobley_8713762",
         "solvent_name": "water",
         "solute_smiles": "CCCN(CCC)C(=O)SCCC",
@@ -6933,7 +7401,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5561855,water": {
+    "freesolv-mobley_5561855": {
+        "freesolv_id": "mobley_5561855",
         "solute_name": "mobley_5561855",
         "solvent_name": "water",
         "solute_smiles": "c1cc(c(c(c1)Cl)c2c(cc(cc2Cl)Cl)Cl)Cl",
@@ -6948,7 +7417,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9281946,water": {
+    "freesolv-mobley_9281946": {
+        "freesolv_id": "mobley_9281946",
         "solute_name": "mobley_9281946",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)Oc1ccc(cc1)[N+](=O)[O-]",
@@ -6964,7 +7434,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2354112,water": {
+    "freesolv-mobley_2354112": {
+        "freesolv_id": "mobley_2354112",
         "solute_name": "mobley_2354112",
         "solvent_name": "water",
         "solute_smiles": "CCc1cccc(c1)O",
@@ -6979,7 +7450,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8882696,water": {
+    "freesolv-mobley_8882696": {
+        "freesolv_id": "mobley_8882696",
         "solute_name": "mobley_8882696",
         "solvent_name": "water",
         "solute_smiles": "C1CCOC1",
@@ -6994,7 +7466,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1323538,water": {
+    "freesolv-mobley_1323538": {
+        "freesolv_id": "mobley_1323538",
         "solute_name": "mobley_1323538",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=O)(OCC)OCC",
@@ -7008,7 +7481,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5072416,water": {
+    "freesolv-mobley_5072416": {
+        "freesolv_id": "mobley_5072416",
         "solute_name": "mobley_5072416",
         "solvent_name": "water",
         "solute_smiles": "COc1ccccc1N",
@@ -7026,7 +7500,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6115639,water": {
+    "freesolv-mobley_6115639": {
+        "freesolv_id": "mobley_6115639",
         "solute_name": "mobley_6115639",
         "solvent_name": "water",
         "solute_smiles": "COP(=O)(OC)OC",
@@ -7040,7 +7515,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2143011,water": {
+    "freesolv-mobley_2143011": {
+        "freesolv_id": "mobley_2143011",
         "solute_name": "mobley_2143011",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C=C",
@@ -7053,7 +7529,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3968043,water": {
+    "freesolv-mobley_3968043": {
+        "freesolv_id": "mobley_3968043",
         "solute_name": "mobley_3968043",
         "solvent_name": "water",
         "solute_smiles": "C1CCC(=O)C1",
@@ -7067,7 +7544,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6929123,water": {
+    "freesolv-mobley_6929123": {
+        "freesolv_id": "mobley_6929123",
         "solute_name": "mobley_6929123",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)CCl",
@@ -7083,7 +7561,8 @@
             "Aqueous"
         ]
     },
-    "mobley_900088,water": {
+    "freesolv-mobley_900088": {
+        "freesolv_id": "mobley_900088",
         "solute_name": "mobley_900088",
         "solvent_name": "water",
         "solute_smiles": "CC(=C)C(=C)C",
@@ -7096,7 +7575,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4845722,water": {
+    "freesolv-mobley_4845722": {
+        "freesolv_id": "mobley_4845722",
         "solute_name": "mobley_4845722",
         "solvent_name": "water",
         "solute_smiles": "c1(c(c(c(c(c1Cl)Cl)Cl)Cl)Cl)Cl",
@@ -7111,7 +7591,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7295828,water": {
+    "freesolv-mobley_7295828": {
+        "freesolv_id": "mobley_7295828",
         "solute_name": "mobley_7295828",
         "solvent_name": "water",
         "solute_smiles": "COc1ccccc1",
@@ -7126,7 +7607,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4699732,water": {
+    "freesolv-mobley_4699732": {
+        "freesolv_id": "mobley_4699732",
         "solute_name": "mobley_4699732",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H](CCl)Cl",
@@ -7140,7 +7622,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1977493,water": {
+    "freesolv-mobley_1977493": {
+        "freesolv_id": "mobley_1977493",
         "solute_name": "mobley_1977493",
         "solvent_name": "water",
         "solute_smiles": "CCCCl",
@@ -7154,7 +7637,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4694328,water": {
+    "freesolv-mobley_4694328": {
+        "freesolv_id": "mobley_4694328",
         "solute_name": "mobley_4694328",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCC=O",
@@ -7168,7 +7652,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5538249,water": {
+    "freesolv-mobley_5538249": {
+        "freesolv_id": "mobley_5538249",
         "solute_name": "mobley_5538249",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)c2c(cc(cc2Cl)Cl)Cl",
@@ -7183,7 +7668,8 @@
             "Aqueous"
         ]
     },
-    "mobley_430089,water": {
+    "freesolv-mobley_430089": {
+        "freesolv_id": "mobley_430089",
         "solute_name": "mobley_430089",
         "solvent_name": "water",
         "solute_smiles": "CCCC#C",
@@ -7196,7 +7682,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5003962,water": {
+    "freesolv-mobley_5003962": {
+        "freesolv_id": "mobley_5003962",
         "solute_name": "mobley_5003962",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)C(=O)c3ccc(cc3C2=O)N",
@@ -7214,7 +7701,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1469079,water": {
+    "freesolv-mobley_1469079": {
+        "freesolv_id": "mobley_1469079",
         "solute_name": "mobley_1469079",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)Oc3cc(c(cc3O2)Cl)Cl",
@@ -7232,7 +7720,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9821936,water": {
+    "freesolv-mobley_9821936": {
+        "freesolv_id": "mobley_9821936",
         "solute_name": "mobley_9821936",
         "solvent_name": "water",
         "solute_smiles": "c12c(c(c(c(c1Cl)Cl)Cl)Cl)Oc3c(c(c(c(c3Cl)Cl)Cl)Cl)O2",
@@ -7250,7 +7739,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9624458,water": {
+    "freesolv-mobley_9624458": {
+        "freesolv_id": "mobley_9624458",
         "solute_name": "mobley_9624458",
         "solvent_name": "water",
         "solute_smiles": "C(CCl)CCl",
@@ -7264,7 +7754,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2784376,water": {
+    "freesolv-mobley_2784376": {
+        "freesolv_id": "mobley_2784376",
         "solute_name": "mobley_2784376",
         "solvent_name": "water",
         "solute_smiles": "C1CC1",
@@ -7277,7 +7768,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7415647,water": {
+    "freesolv-mobley_7415647": {
+        "freesolv_id": "mobley_7415647",
         "solute_name": "mobley_7415647",
         "solvent_name": "water",
         "solute_smiles": "CN(C)C(=O)c1ccc(cc1)[N+](=O)[O-]",
@@ -7294,7 +7786,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8983100,water": {
+    "freesolv-mobley_8983100": {
+        "freesolv_id": "mobley_8983100",
         "solute_name": "mobley_8983100",
         "solvent_name": "water",
         "solute_smiles": "CBr",
@@ -7308,7 +7801,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8052240,water": {
+    "freesolv-mobley_8052240": {
+        "freesolv_id": "mobley_8052240",
         "solute_name": "mobley_8052240",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)C(=O)c3cccc(c3C2=O)N",
@@ -7326,7 +7820,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7708038,water": {
+    "freesolv-mobley_7708038": {
+        "freesolv_id": "mobley_7708038",
         "solute_name": "mobley_7708038",
         "solvent_name": "water",
         "solute_smiles": "CCCBr",
@@ -7340,7 +7835,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3105103,water": {
+    "freesolv-mobley_3105103": {
+        "freesolv_id": "mobley_3105103",
         "solute_name": "mobley_3105103",
         "solvent_name": "water",
         "solute_smiles": "Cc1c(c(=O)n(c(=O)[nH]1)C(C)(C)C)Cl",
@@ -7357,7 +7853,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5890803,water": {
+    "freesolv-mobley_5890803": {
+        "freesolv_id": "mobley_5890803",
         "solute_name": "mobley_5890803",
         "solvent_name": "water",
         "solute_smiles": "CCCOC(=O)CC",
@@ -7371,7 +7868,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9114381,water": {
+    "freesolv-mobley_9114381": {
+        "freesolv_id": "mobley_9114381",
         "solute_name": "mobley_9114381",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)CC#N",
@@ -7386,7 +7884,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4252724,water": {
+    "freesolv-mobley_4252724": {
+        "freesolv_id": "mobley_4252724",
         "solute_name": "mobley_4252724",
         "solvent_name": "water",
         "solute_smiles": "CC(C)Cc1ccccc1",
@@ -7399,7 +7898,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9246215,water": {
+    "freesolv-mobley_9246215": {
+        "freesolv_id": "mobley_9246215",
         "solute_name": "mobley_9246215",
         "solvent_name": "water",
         "solute_smiles": "C=CCC=C",
@@ -7412,7 +7912,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4013838,water": {
+    "freesolv-mobley_4013838": {
+        "freesolv_id": "mobley_4013838",
         "solute_name": "mobley_4013838",
         "solvent_name": "water",
         "solute_smiles": "CC(C)C(=O)C(C)C",
@@ -7426,7 +7927,8 @@
             "Aqueous"
         ]
     },
-    "mobley_349850,water": {
+    "freesolv-mobley_349850": {
+        "freesolv_id": "mobley_349850",
         "solute_name": "mobley_349850",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)C(=O)C",
@@ -7441,7 +7943,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5948990,water": {
+    "freesolv-mobley_5948990": {
+        "freesolv_id": "mobley_5948990",
         "solute_name": "mobley_5948990",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(c(c1)N)[N+](=O)[O-]",
@@ -7458,7 +7961,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7203421,water": {
+    "freesolv-mobley_7203421": {
+        "freesolv_id": "mobley_7203421",
         "solute_name": "mobley_7203421",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC(=O)N",
@@ -7473,7 +7977,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5631798,water": {
+    "freesolv-mobley_5631798": {
+        "freesolv_id": "mobley_5631798",
         "solute_name": "mobley_5631798",
         "solvent_name": "water",
         "solute_smiles": "N",
@@ -7486,7 +7991,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2294995,water": {
+    "freesolv-mobley_2294995": {
+        "freesolv_id": "mobley_2294995",
         "solute_name": "mobley_2294995",
         "solvent_name": "water",
         "solute_smiles": "CCOC=O",
@@ -7500,7 +8006,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6198745,water": {
+    "freesolv-mobley_6198745": {
+        "freesolv_id": "mobley_6198745",
         "solute_name": "mobley_6198745",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)OCC(COC(=O)C)OC(=O)C",
@@ -7514,7 +8021,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1952272,water": {
+    "freesolv-mobley_1952272": {
+        "freesolv_id": "mobley_1952272",
         "solute_name": "mobley_1952272",
         "solvent_name": "water",
         "solute_smiles": "C[N+](=O)[O-]",
@@ -7527,7 +8035,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2146331,water": {
+    "freesolv-mobley_2146331": {
+        "freesolv_id": "mobley_2146331",
         "solute_name": "mobley_2146331",
         "solvent_name": "water",
         "solute_smiles": "C=O",
@@ -7541,7 +8050,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5952846,water": {
+    "freesolv-mobley_5952846": {
+        "freesolv_id": "mobley_5952846",
         "solute_name": "mobley_5952846",
         "solvent_name": "water",
         "solute_smiles": "C(=C(Cl)Cl)(Cl)Cl",
@@ -7554,7 +8064,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8522124,water": {
+    "freesolv-mobley_8522124": {
+        "freesolv_id": "mobley_8522124",
         "solute_name": "mobley_8522124",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCC#C",
@@ -7567,7 +8078,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8746821,water": {
+    "freesolv-mobley_8746821": {
+        "freesolv_id": "mobley_8746821",
         "solute_name": "mobley_8746821",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccnc1C",
@@ -7581,7 +8093,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4620651,water": {
+    "freesolv-mobley_4620651": {
+        "freesolv_id": "mobley_4620651",
         "solute_name": "mobley_4620651",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)C1CC1",
@@ -7595,7 +8108,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3452749,water": {
+    "freesolv-mobley_3452749": {
+        "freesolv_id": "mobley_3452749",
         "solute_name": "mobley_3452749",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1C)C",
@@ -7608,7 +8122,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1520842,water": {
+    "freesolv-mobley_1520842": {
+        "freesolv_id": "mobley_1520842",
         "solute_name": "mobley_1520842",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccncc1",
@@ -7622,7 +8137,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2371092,water": {
+    "freesolv-mobley_2371092": {
+        "freesolv_id": "mobley_2371092",
         "solute_name": "mobley_2371092",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccncc1C",
@@ -7636,7 +8152,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3259411,water": {
+    "freesolv-mobley_3259411": {
+        "freesolv_id": "mobley_3259411",
         "solute_name": "mobley_3259411",
         "solvent_name": "water",
         "solute_smiles": "C(C(CO)O)O",
@@ -7653,7 +8170,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7893124,water": {
+    "freesolv-mobley_7893124": {
+        "freesolv_id": "mobley_7893124",
         "solute_name": "mobley_7893124",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)c1ccccc1",
@@ -7666,7 +8184,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5857,water": {
+    "freesolv-mobley_5857": {
+        "freesolv_id": "mobley_5857",
         "solute_name": "mobley_5857",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2c(c1)cccn2",
@@ -7680,7 +8199,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8221999,water": {
+    "freesolv-mobley_8221999": {
+        "freesolv_id": "mobley_8221999",
         "solute_name": "mobley_8221999",
         "solvent_name": "water",
         "solute_smiles": "CCCC#N",
@@ -7693,7 +8213,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7009711,water": {
+    "freesolv-mobley_7009711": {
+        "freesolv_id": "mobley_7009711",
         "solute_name": "mobley_7009711",
         "solvent_name": "water",
         "solute_smiles": "Cc1cc(cc(c1)O)C",
@@ -7708,7 +8229,8 @@
             "Aqueous"
         ]
     },
-    "mobley_303222,water": {
+    "freesolv-mobley_303222": {
+        "freesolv_id": "mobley_303222",
         "solute_name": "mobley_303222",
         "solvent_name": "water",
         "solute_smiles": "CC=C",
@@ -7721,7 +8243,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9073553,water": {
+    "freesolv-mobley_9073553": {
+        "freesolv_id": "mobley_9073553",
         "solute_name": "mobley_9073553",
         "solvent_name": "water",
         "solute_smiles": "CSC",
@@ -7734,7 +8257,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1708457,water": {
+    "freesolv-mobley_1708457": {
+        "freesolv_id": "mobley_1708457",
         "solute_name": "mobley_1708457",
         "solvent_name": "water",
         "solute_smiles": "CS(=O)(=O)C",
@@ -7747,7 +8271,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2410897,water": {
+    "freesolv-mobley_2410897": {
+        "freesolv_id": "mobley_2410897",
         "solute_name": "mobley_2410897",
         "solvent_name": "water",
         "solute_smiles": "CCN",
@@ -7762,7 +8287,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5456566,water": {
+    "freesolv-mobley_5456566": {
+        "freesolv_id": "mobley_5456566",
         "solute_name": "mobley_5456566",
         "solvent_name": "water",
         "solute_smiles": "c1(c(c(c(c(c1Cl)Cl)Cl)Cl)Cl)c2c(c(c(c(c2Cl)Cl)Cl)Cl)Cl",
@@ -7777,7 +8303,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2523689,water": {
+    "freesolv-mobley_2523689": {
+        "freesolv_id": "mobley_2523689",
         "solute_name": "mobley_2523689",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)n2c(=O)c(c(cn2)N)Cl",
@@ -7797,7 +8324,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3323117,water": {
+    "freesolv-mobley_3323117": {
+        "freesolv_id": "mobley_3323117",
         "solute_name": "mobley_3323117",
         "solvent_name": "water",
         "solute_smiles": "C1CC[S+2](C1)([O-])[O-]",
@@ -7811,7 +8339,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1827204,water": {
+    "freesolv-mobley_1827204": {
+        "freesolv_id": "mobley_1827204",
         "solute_name": "mobley_1827204",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC=O",
@@ -7825,7 +8354,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7688753,water": {
+    "freesolv-mobley_7688753": {
+        "freesolv_id": "mobley_7688753",
         "solute_name": "mobley_7688753",
         "solvent_name": "water",
         "solute_smiles": "c1cc(cc(c1)O)C=O",
@@ -7842,7 +8372,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3663158,water": {
+    "freesolv-mobley_3663158": {
+        "freesolv_id": "mobley_3663158",
         "solute_name": "mobley_3663158",
         "solvent_name": "water",
         "solute_smiles": "c1ccc2cc(ccc2c1)O",
@@ -7857,7 +8388,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8966374,water": {
+    "freesolv-mobley_8966374": {
+        "freesolv_id": "mobley_8966374",
         "solute_name": "mobley_8966374",
         "solvent_name": "water",
         "solute_smiles": "Cc1cnccn1",
@@ -7871,7 +8403,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1244778,water": {
+    "freesolv-mobley_1244778": {
+        "freesolv_id": "mobley_1244778",
         "solute_name": "mobley_1244778",
         "solvent_name": "water",
         "solute_smiles": "C1CCCC(CC1)O",
@@ -7886,7 +8419,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2422586,water": {
+    "freesolv-mobley_2422586": {
+        "freesolv_id": "mobley_2422586",
         "solute_name": "mobley_2422586",
         "solvent_name": "water",
         "solute_smiles": "CCCOC",
@@ -7900,7 +8434,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7455579,water": {
+    "freesolv-mobley_7455579": {
+        "freesolv_id": "mobley_7455579",
         "solute_name": "mobley_7455579",
         "solvent_name": "water",
         "solute_smiles": "CC(C)COC=O",
@@ -7914,7 +8449,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1923244,water": {
+    "freesolv-mobley_1923244": {
+        "freesolv_id": "mobley_1923244",
         "solute_name": "mobley_1923244",
         "solvent_name": "water",
         "solute_smiles": "CCCC",
@@ -7927,7 +8463,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2099370,water": {
+    "freesolv-mobley_2099370": {
+        "freesolv_id": "mobley_2099370",
         "solute_name": "mobley_2099370",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H](c1cccc(c1)C(=O)c2ccccc2)C(=O)O",
@@ -7944,7 +8481,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4792268,water": {
+    "freesolv-mobley_4792268": {
+        "freesolv_id": "mobley_4792268",
         "solute_name": "mobley_4792268",
         "solvent_name": "water",
         "solute_smiles": "CCCCC(=O)O",
@@ -7958,7 +8496,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1328465,water": {
+    "freesolv-mobley_1328465": {
+        "freesolv_id": "mobley_1328465",
         "solute_name": "mobley_1328465",
         "solvent_name": "water",
         "solute_smiles": "C(C(Cl)Cl)Cl",
@@ -7972,7 +8511,8 @@
             "Aqueous"
         ]
     },
-    "mobley_6359135,water": {
+    "freesolv-mobley_6359135": {
+        "freesolv_id": "mobley_6359135",
         "solute_name": "mobley_6359135",
         "solvent_name": "water",
         "solute_smiles": "C(Cl)(Cl)(Cl)Cl",
@@ -7985,7 +8525,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1803862,water": {
+    "freesolv-mobley_1803862": {
+        "freesolv_id": "mobley_1803862",
         "solute_name": "mobley_1803862",
         "solvent_name": "water",
         "solute_smiles": "CCC(C)C",
@@ -7998,7 +8539,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3359593,water": {
+    "freesolv-mobley_3359593": {
+        "freesolv_id": "mobley_3359593",
         "solute_name": "mobley_3359593",
         "solvent_name": "water",
         "solute_smiles": "CCCc1ccc(c(c1)OC)O",
@@ -8015,7 +8557,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9705941,water": {
+    "freesolv-mobley_9705941": {
+        "freesolv_id": "mobley_9705941",
         "solute_name": "mobley_9705941",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccs1",
@@ -8029,7 +8572,8 @@
             "Aqueous"
         ]
     },
-    "mobley_590519,water": {
+    "freesolv-mobley_590519": {
+        "freesolv_id": "mobley_590519",
         "solute_name": "mobley_590519",
         "solvent_name": "water",
         "solute_smiles": "CCSSCC",
@@ -8043,7 +8587,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4884177,water": {
+    "freesolv-mobley_4884177": {
+        "freesolv_id": "mobley_4884177",
         "solute_name": "mobley_4884177",
         "solvent_name": "water",
         "solute_smiles": "CCc1cccnc1",
@@ -8057,7 +8602,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9838013,water": {
+    "freesolv-mobley_9838013": {
+        "freesolv_id": "mobley_9838013",
         "solute_name": "mobley_9838013",
         "solvent_name": "water",
         "solute_smiles": "CCC(C)(C)O",
@@ -8072,7 +8618,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1231151,water": {
+    "freesolv-mobley_1231151": {
+        "freesolv_id": "mobley_1231151",
         "solute_name": "mobley_1231151",
         "solvent_name": "water",
         "solute_smiles": "CC(C)Cl",
@@ -8086,7 +8633,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1449384,water": {
+    "freesolv-mobley_1449384": {
+        "freesolv_id": "mobley_1449384",
         "solute_name": "mobley_1449384",
         "solvent_name": "water",
         "solute_smiles": "Cc1ccc(cc1)C(C)C",
@@ -8099,7 +8647,8 @@
             "Aqueous"
         ]
     },
-    "mobley_859464,water": {
+    "freesolv-mobley_859464": {
+        "freesolv_id": "mobley_859464",
         "solute_name": "mobley_859464",
         "solvent_name": "water",
         "solute_smiles": "CC(C)COC(=O)C",
@@ -8113,7 +8662,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4043987,water": {
+    "freesolv-mobley_4043987": {
+        "freesolv_id": "mobley_4043987",
         "solute_name": "mobley_4043987",
         "solvent_name": "water",
         "solute_smiles": "CCCCC(C)C",
@@ -8126,7 +8676,8 @@
             "Aqueous"
         ]
     },
-    "mobley_9942801,water": {
+    "freesolv-mobley_9942801": {
+        "freesolv_id": "mobley_9942801",
         "solute_name": "mobley_9942801",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccc(cc1)C",
@@ -8139,7 +8690,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5760563,water": {
+    "freesolv-mobley_5760563": {
+        "freesolv_id": "mobley_5760563",
         "solute_name": "mobley_5760563",
         "solvent_name": "water",
         "solute_smiles": "COS(=O)(=O)OC",
@@ -8153,7 +8705,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8723116,water": {
+    "freesolv-mobley_8723116": {
+        "freesolv_id": "mobley_8723116",
         "solute_name": "mobley_8723116",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1N)Cl",
@@ -8171,7 +8724,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1755375,water": {
+    "freesolv-mobley_1755375": {
+        "freesolv_id": "mobley_1755375",
         "solute_name": "mobley_1755375",
         "solvent_name": "water",
         "solute_smiles": "Cc1cccc(c1O)C",
@@ -8186,7 +8740,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7157427,water": {
+    "freesolv-mobley_7157427": {
+        "freesolv_id": "mobley_7157427",
         "solute_name": "mobley_7157427",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCl",
@@ -8200,7 +8755,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1178614,water": {
+    "freesolv-mobley_1178614": {
+        "freesolv_id": "mobley_1178614",
         "solute_name": "mobley_1178614",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(c(c1)O)Cl",
@@ -8217,7 +8773,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2958326,water": {
+    "freesolv-mobley_2958326": {
+        "freesolv_id": "mobley_2958326",
         "solute_name": "mobley_2958326",
         "solvent_name": "water",
         "solute_smiles": "CCCNCCC",
@@ -8232,7 +8789,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2481002,water": {
+    "freesolv-mobley_2481002": {
+        "freesolv_id": "mobley_2481002",
         "solute_name": "mobley_2481002",
         "solvent_name": "water",
         "solute_smiles": "C([N+](=O)[O-])(Cl)(Cl)Cl",
@@ -8246,7 +8804,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8809190,water": {
+    "freesolv-mobley_8809190": {
+        "freesolv_id": "mobley_8809190",
         "solute_name": "mobley_8809190",
         "solvent_name": "water",
         "solute_smiles": "CCCCc1ccccc1",
@@ -8259,7 +8818,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7913234,water": {
+    "freesolv-mobley_7913234": {
+        "freesolv_id": "mobley_7913234",
         "solute_name": "mobley_7913234",
         "solvent_name": "water",
         "solute_smiles": "CCCCOC[C@H](C)O",
@@ -8276,7 +8836,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2792521,water": {
+    "freesolv-mobley_2792521": {
+        "freesolv_id": "mobley_2792521",
         "solute_name": "mobley_2792521",
         "solvent_name": "water",
         "solute_smiles": "CCC/C=C/C=O",
@@ -8291,7 +8852,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3727287,water": {
+    "freesolv-mobley_3727287": {
+        "freesolv_id": "mobley_3727287",
         "solute_name": "mobley_3727287",
         "solvent_name": "water",
         "solute_smiles": "C1=CC(=O)C=CC1=O",
@@ -8306,7 +8868,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1017962,water": {
+    "freesolv-mobley_1017962": {
+        "freesolv_id": "mobley_1017962",
         "solute_name": "mobley_1017962",
         "solvent_name": "water",
         "solute_smiles": "CCCCCC(=O)OC",
@@ -8320,7 +8883,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7988076,water": {
+    "freesolv-mobley_7988076": {
+        "freesolv_id": "mobley_7988076",
         "solute_name": "mobley_7988076",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1C=O)O",
@@ -8337,7 +8901,8 @@
             "Aqueous"
         ]
     },
-    "mobley_3968739,water": {
+    "freesolv-mobley_3968739": {
+        "freesolv_id": "mobley_3968739",
         "solute_name": "mobley_3968739",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)c1ccccc1",
@@ -8352,7 +8917,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7754849,water": {
+    "freesolv-mobley_7754849": {
+        "freesolv_id": "mobley_7754849",
         "solute_name": "mobley_7754849",
         "solvent_name": "water",
         "solute_smiles": "CCOP(=S)(OCC)SCSP(=S)(OCC)OCC",
@@ -8367,7 +8933,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2609604,water": {
+    "freesolv-mobley_2609604": {
+        "freesolv_id": "mobley_2609604",
         "solute_name": "mobley_2609604",
         "solvent_name": "water",
         "solute_smiles": "CCC(C)(C)CC",
@@ -8380,7 +8947,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5732611,water": {
+    "freesolv-mobley_5732611": {
+        "freesolv_id": "mobley_5732611",
         "solute_name": "mobley_5732611",
         "solvent_name": "water",
         "solute_smiles": "Cc1c[nH]cn1",
@@ -8394,7 +8962,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4609460,water": {
+    "freesolv-mobley_4609460": {
+        "freesolv_id": "mobley_4609460",
         "solute_name": "mobley_4609460",
         "solvent_name": "water",
         "solute_smiles": "CCOC(=O)c1ccc(cc1)O",
@@ -8411,7 +8980,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8006582,water": {
+    "freesolv-mobley_8006582": {
+        "freesolv_id": "mobley_8006582",
         "solute_name": "mobley_8006582",
         "solvent_name": "water",
         "solute_smiles": "C1CCCC1",
@@ -8424,7 +8994,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2751110,water": {
+    "freesolv-mobley_2751110": {
+        "freesolv_id": "mobley_2751110",
         "solute_name": "mobley_2751110",
         "solvent_name": "water",
         "solute_smiles": "c1cc(ccc1[N+](=O)[O-])O",
@@ -8440,7 +9011,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2198613,water": {
+    "freesolv-mobley_2198613": {
+        "freesolv_id": "mobley_2198613",
         "solute_name": "mobley_2198613",
         "solvent_name": "water",
         "solute_smiles": "CCCl",
@@ -8454,7 +9026,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2864987,water": {
+    "freesolv-mobley_2864987": {
+        "freesolv_id": "mobley_2864987",
         "solute_name": "mobley_2864987",
         "solvent_name": "water",
         "solute_smiles": "CCC[C@@H](C)O",
@@ -8469,7 +9042,8 @@
             "Aqueous"
         ]
     },
-    "mobley_36119,water": {
+    "freesolv-mobley_36119": {
+        "freesolv_id": "mobley_36119",
         "solute_name": "mobley_36119",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCCCO",
@@ -8484,7 +9058,8 @@
             "Aqueous"
         ]
     },
-    "mobley_4291494,water": {
+    "freesolv-mobley_4291494": {
+        "freesolv_id": "mobley_4291494",
         "solute_name": "mobley_4291494",
         "solvent_name": "water",
         "solute_smiles": "c1ccnc(c1)Cl",
@@ -8500,7 +9075,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1328936,water": {
+    "freesolv-mobley_1328936": {
+        "freesolv_id": "mobley_1328936",
         "solute_name": "mobley_1328936",
         "solvent_name": "water",
         "solute_smiles": "COC(=O)c1ccc(cc1)[N+](=O)[O-]",
@@ -8516,7 +9092,8 @@
             "Aqueous"
         ]
     },
-    "mobley_468867,water": {
+    "freesolv-mobley_468867": {
+        "freesolv_id": "mobley_468867",
         "solute_name": "mobley_468867",
         "solvent_name": "water",
         "solute_smiles": "C1=C[C@@H]([C@@H]2[C@H]1[C@@]3(C(=C([C@]2(C3(Cl)Cl)Cl)Cl)Cl)Cl)Cl",
@@ -8531,7 +9108,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7608462,water": {
+    "freesolv-mobley_7608462": {
+        "freesolv_id": "mobley_7608462",
         "solute_name": "mobley_7608462",
         "solvent_name": "water",
         "solute_smiles": "c1ccc(cc1)Cl",
@@ -8546,7 +9124,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2681549,water": {
+    "freesolv-mobley_2681549": {
+        "freesolv_id": "mobley_2681549",
         "solute_name": "mobley_2681549",
         "solvent_name": "water",
         "solute_smiles": "c1c(cc(cc1Cl)Cl)Cl",
@@ -8561,7 +9140,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8127829,water": {
+    "freesolv-mobley_8127829": {
+        "freesolv_id": "mobley_8127829",
         "solute_name": "mobley_8127829",
         "solvent_name": "water",
         "solute_smiles": "CCc1ccccc1",
@@ -8574,7 +9154,8 @@
             "Aqueous"
         ]
     },
-    "mobley_1963873,water": {
+    "freesolv-mobley_1963873": {
+        "freesolv_id": "mobley_1963873",
         "solute_name": "mobley_1963873",
         "solvent_name": "water",
         "solute_smiles": "CC(=O)NC",
@@ -8589,7 +9170,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7735340,water": {
+    "freesolv-mobley_7735340": {
+        "freesolv_id": "mobley_7735340",
         "solute_name": "mobley_7735340",
         "solvent_name": "water",
         "solute_smiles": "c1cnc[nH]1",
@@ -8603,7 +9185,8 @@
             "Aqueous"
         ]
     },
-    "mobley_7769613,water": {
+    "freesolv-mobley_7769613": {
+        "freesolv_id": "mobley_7769613",
         "solute_name": "mobley_7769613",
         "solvent_name": "water",
         "solute_smiles": "CC(C)(C)Br",
@@ -8617,7 +9200,8 @@
             "Aqueous"
         ]
     },
-    "mobley_5973402,water": {
+    "freesolv-mobley_5973402": {
+        "freesolv_id": "mobley_5973402",
         "solute_name": "mobley_5973402",
         "solvent_name": "water",
         "solute_smiles": "CC(C)CCO",
@@ -8632,7 +9216,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8337722,water": {
+    "freesolv-mobley_8337722": {
+        "freesolv_id": "mobley_8337722",
         "solute_name": "mobley_8337722",
         "solvent_name": "water",
         "solute_smiles": "C[C@@H]1CC[C@H]([C@@H](C1)O)C(C)C",
@@ -8647,7 +9232,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2213823,water": {
+    "freesolv-mobley_2213823": {
+        "freesolv_id": "mobley_2213823",
         "solute_name": "mobley_2213823",
         "solvent_name": "water",
         "solute_smiles": "CCC(C)CC",
@@ -8660,7 +9246,8 @@
             "Aqueous"
         ]
     },
-    "mobley_8514745,water": {
+    "freesolv-mobley_8514745": {
+        "freesolv_id": "mobley_8514745",
         "solute_name": "mobley_8514745",
         "solvent_name": "water",
         "solute_smiles": "CCCCCOC(=O)C",
@@ -8674,7 +9261,8 @@
             "Aqueous"
         ]
     },
-    "mobley_2607611,water": {
+    "freesolv-mobley_2607611": {
+        "freesolv_id": "mobley_2607611",
         "solute_name": "mobley_2607611",
         "solvent_name": "water",
         "solute_smiles": "CCCCCCOC(=O)C",

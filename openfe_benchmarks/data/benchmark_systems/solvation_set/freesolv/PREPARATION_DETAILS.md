@@ -6,10 +6,20 @@ All ligands extracted from the FreeSolv database version https://github.com/Mobl
 
 Of the 603 systems imported from the FreeSolv database, two subsets were made:
 
-- "subset_openff_filtered": 588
-- "subset_openff_small": 54 systems were down selected from "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
+- Filtered systems: 588
+- Overlapping FreeSolv solutes with MNSol: 189
+- Final aligned subset rows: 201
+- Missing chemical environments: 18
 
-Rows are excluded if the solute or solvent is charged, matches a disqualifying SMIRKS (long chains, 1,3-dicarbonyls, or dissociating molecules, i.e., HBr or HCl), has undefined stereochemistry, or contains elements outside ``ALLOWED_ELEMENTS``.
+Missing environments:
+
+CarbonylHydrate, Hemiaminal, Aminal, Thioacetal, Cyanate, Isocyanate, AlkylFluoride, ArylFluoride, Thioaldehyde, Thioketone, Thiourea, Thiocyanate, Isothiocyanate, ThiocarboxylicAcid, ThiocarboxylicAcidEster, SulfonicAcidEster, PhosphonicAcid, PhosphoricAcid
+
+Subset files and regeneration script:
+
+- subset_openff_mnsolv_aligned_filtered.json
+- subset_openff_mnsolv_aligned_small.json
+- ../../../data_generation/define_freesolv_mnsolv_openff_subsets.py
 
 ## Notes
 

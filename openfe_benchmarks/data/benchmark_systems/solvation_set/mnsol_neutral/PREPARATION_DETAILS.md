@@ -30,10 +30,21 @@ Some ligands could not be charged with all methods, the following lists the liga
 
 Of the 3037 systems imported from MNSol, two subsets were made:
 
-- "subset_openff_filtered": 1587 
-- "subset_openff_small": 581 systems were down selected from "subset_openff_filtered" using Morgan fingerprint Tanimoto distance and specifying inclusion of checkmol functional groups.
+- Input rows: 3037
+- Filtered systems: 1587
+- Overlapping MNSol solutes with FreeSolv: 189
+- Final aligned subset rows: 340
+- Missing chemical environments: 22
 
-Rows are excluded if the solute or solvent is water, absent from ``mnsol-name-to-smiles.json``, contains 'radical', is an explicit-solvent entry (Level1==14), is charged, is a self-solvation pair, matches a disqualifying SMIRKS (long chains, 1,3-dicarbonyls, or dissociating molecules, i.e., HBr or HCl), has undefined stereochemistry, or contains elements outside ``ALLOWED_ELEMENTS``.
+Missing environments:
+
+CarbonylHydrate, Hemiacetal, Acetal, Hemiaminal, Aminal, Thioacetal, Cyanate, Isocyanate, AlkylFluoride, ArylFluoride, Thioaldehyde, Thioketone, Disulfide, Thiourea, Thiocyanate, Isothiocyanate, ThiocarboxylicAcid, ThiocarboxylicAcidEster, SulfonicAcidEster, Sulfone, PhosphonicAcid, PhosphoricAcid
+
+Subset files and regeneration script:
+
+- subset_openff_mnsolv_aligned_filtered.json
+- subset_openff_mnsolv_aligned_small.json
+- ../../../data_generation/define_freesolv_mnsolv_openff_subsets.py
 
 ## Notes
 
