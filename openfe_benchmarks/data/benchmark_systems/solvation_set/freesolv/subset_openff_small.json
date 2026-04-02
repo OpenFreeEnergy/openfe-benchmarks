@@ -797,6 +797,23 @@
             "Aqueous"
         ]
     },
+    "freesolv-mobley_2725802": {
+        "freesolv_id": "mobley_2725802",
+        "solute_name": "mobley_2725802",
+        "solvent_name": "water",
+        "solute_smiles": "CC(=O)N1CCCC1",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidTertiaryAmide",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
     "freesolv-mobley_2763835": {
         "freesolv_id": "mobley_2763835",
         "solute_name": "mobley_2763835",
@@ -1025,6 +1042,25 @@
             "Aqueous"
         ]
     },
+    "freesolv-mobley_3047364": {
+        "freesolv_id": "mobley_3047364",
+        "solute_name": "mobley_3047364",
+        "solvent_name": "water",
+        "solute_smiles": "CCNc1nc(nc(n1)SC)NC(C)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "Heterocycle",
+            "SecondaryAmine",
+            "SecondaryMixedAmine",
+            "Thioether"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
     "freesolv-mobley_3053621": {
         "freesolv_id": "mobley_3053621",
         "solute_name": "mobley_3053621",
@@ -1095,6 +1131,26 @@
             "Aromatic",
             "PrimaryAmine",
             "PrimaryAromAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "freesolv-mobley_3201701": {
+        "freesolv_id": "mobley_3201701",
+        "solute_name": "mobley_3201701",
+        "solvent_name": "water",
+        "solute_smiles": "Cc1c(nc(nc1OC(=O)N(C)C)N(C)C)C",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "CarbamicAcidDeriv",
+            "CarbamicAcidEster",
+            "Heterocycle",
+            "TertiaryAmine",
+            "TertiaryMixedAmine"
         ],
         "solvent_env": [
             "Aqueous"
@@ -1370,23 +1426,6 @@
         "solute_charge": 0,
         "solute_env": [
             "Alkene"
-        ],
-        "solvent_env": [
-            "Aqueous"
-        ]
-    },
-    "freesolv-mobley_4059279": {
-        "freesolv_id": "mobley_4059279",
-        "solute_name": "mobley_4059279",
-        "solvent_name": "water",
-        "solute_smiles": "CN1CCN(CC1)C",
-        "solvent_smiles": "O",
-        "solute_charge": 0,
-        "solute_env": [
-            "Amine",
-            "Heterocycle",
-            "TertiaryAliphAmine",
-            "TertiaryAmine"
         ],
         "solvent_env": [
             "Aqueous"
@@ -1676,6 +1715,24 @@
         "solute_env": [
             "Aromatic",
             "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "freesolv-mobley_5282042": {
+        "freesolv_id": "mobley_5282042",
+        "solute_name": "mobley_5282042",
+        "solvent_name": "water",
+        "solute_smiles": "CN(C)CCC=C1c2ccccc2CCc3c1cccc3",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "Amine",
+            "Aromatic",
+            "TertiaryAliphAmine",
+            "TertiaryAmine"
         ],
         "solvent_env": [
             "Aqueous"
@@ -2028,6 +2085,25 @@
         "solute_charge": 0,
         "solute_env": [
             "Aromatic"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "freesolv-mobley_6522117": {
+        "freesolv_id": "mobley_6522117",
+        "solute_name": "mobley_6522117",
+        "solvent_name": "water",
+        "solute_smiles": "CCOP(=O)(OCC)O/C(=C/Cl)/c1ccc(cc1Cl)Cl",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "Alkene",
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv",
+            "PhosphoricAcidDeriv",
+            "PhosphoricAcidEster"
         ],
         "solvent_env": [
             "Aqueous"
@@ -2653,6 +2729,22 @@
             "Amine",
             "SecondaryAliphAmine",
             "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Aqueous"
+        ]
+    },
+    "freesolv-mobley_8427539": {
+        "freesolv_id": "mobley_8427539",
+        "solute_name": "mobley_8427539",
+        "solvent_name": "water",
+        "solute_smiles": "CCC(=O)N",
+        "solvent_smiles": "O",
+        "solute_charge": 0,
+        "solute_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidPrimaryAmide"
         ],
         "solvent_env": [
             "Aqueous"

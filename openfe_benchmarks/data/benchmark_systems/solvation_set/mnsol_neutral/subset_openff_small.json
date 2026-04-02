@@ -1,281 +1,4 @@
 {
-    "mnsol-0001": {
-        "mnsol No.": "0001",
-        "solute_name": "n-octane",
-        "solvent_name": "2methylpyridine",
-        "solute_smiles": "CCCCCCCC",
-        "solvent_smiles": "Cc1ccccn1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alkane"
-        ],
-        "solvent_env": [
-            "Aromatic",
-            "Heterocycle"
-        ]
-    },
-    "mnsol-0002": {
-        "mnsol No.": "0002",
-        "solute_name": "toluene",
-        "solvent_name": "2methylpyridine",
-        "solute_smiles": "Cc1ccccc1",
-        "solvent_smiles": "Cc1ccccn1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "Aromatic",
-            "Heterocycle"
-        ]
-    },
-    "mnsol-0003": {
-        "mnsol No.": "0003",
-        "solute_name": "ethanol",
-        "solvent_name": "2methylpyridine",
-        "solute_smiles": "CCO",
-        "solvent_smiles": "Cc1ccccn1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "Aromatic",
-            "Heterocycle"
-        ]
-    },
-    "mnsol-0004": {
-        "mnsol No.": "0004",
-        "solute_name": "1,4-dioxane",
-        "solvent_name": "2methylpyridine",
-        "solute_smiles": "C1COCCO1",
-        "solvent_smiles": "Cc1ccccn1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Dialkylether",
-            "Ether",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "Aromatic",
-            "Heterocycle"
-        ]
-    },
-    "mnsol-0006": {
-        "mnsol No.": "0006",
-        "solute_name": "2-methylpyridine",
-        "solvent_name": "2methylpyridine",
-        "solute_smiles": "Cc1ccccn1",
-        "solvent_smiles": "Cc1ccccn1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "Aromatic",
-            "Heterocycle"
-        ]
-    },
-    "mnsol-0007": {
-        "mnsol No.": "0007",
-        "solute_name": "naphthalene",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "c1ccc2ccccc2c1",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0008": {
-        "mnsol No.": "0008",
-        "solute_name": "phenol",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "c1ccc(cc1)O",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0009": {
-        "mnsol No.": "0009",
-        "solute_name": "m-cresol",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "Cc1cccc(c1)O",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0010": {
-        "mnsol No.": "0010",
-        "solute_name": "aceticacid",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "CC(=O)O",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0011": {
-        "mnsol No.": "0011",
-        "solute_name": "propanoicacid",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "CCC(=O)O",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0012": {
-        "mnsol No.": "0012",
-        "solute_name": "butanoicacid",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "CCCC(=O)O",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0013": {
-        "mnsol No.": "0013",
-        "solute_name": "trimethylamine",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "CN(C)C",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "TertiaryAliphAmine",
-            "TertiaryAmine"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0014": {
-        "mnsol No.": "0014",
-        "solute_name": "diethylamine",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "CCNCC",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "SecondaryAliphAmine",
-            "SecondaryAmine"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0015": {
-        "mnsol No.": "0015",
-        "solute_name": "pyridine",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "c1ccncc1",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0016": {
-        "mnsol No.": "0016",
-        "solute_name": "aniline",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "c1ccc(cc1)N",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0017": {
-        "mnsol No.": "0017",
-        "solute_name": "ammonia",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "N",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0018": {
-        "mnsol No.": "0018",
-        "solute_name": "methylamine",
-        "solvent_name": "4methyl2pentanone",
-        "solute_smiles": "CN",
-        "solvent_smiles": "CC(C)CC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "PrimaryAliphAmine",
-            "PrimaryAmine"
-        ],
-        "solvent_env": [
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
     "mnsol-0019": {
         "mnsol No.": "0019",
         "solute_name": "4-methyl-2-pentanone",
@@ -292,54 +15,21 @@
             "Ketone"
         ]
     },
-    "mnsol-0026": {
-        "mnsol No.": "0026",
-        "solute_name": "nitromethane",
-        "solvent_name": "aceticacid",
-        "solute_smiles": "C[N+](=O)[O-]",
-        "solvent_smiles": "CC(=O)O",
-        "solute_charge": "0",
-        "solute_env": [
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ]
-    },
-    "mnsol-0038": {
-        "mnsol No.": "0038",
-        "solute_name": "2-butanone",
+    "mnsol-0040": {
+        "mnsol No.": "0040",
+        "solute_name": "aceticacid",
         "solvent_name": "acetophenone",
-        "solute_smiles": "CCC(=O)C",
+        "solute_smiles": "CC(=O)O",
         "solvent_smiles": "CC(=O)c1ccccc1",
         "solute_charge": "0",
         "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "Aromatic",
-            "Carbonyl",
-            "Ketone"
-        ]
-    },
-    "mnsol-0048": {
-        "mnsol No.": "0048",
-        "solute_name": "aceticacid",
-        "solvent_name": "aniline",
-        "solute_smiles": "CC(=O)O",
-        "solvent_smiles": "c1ccc(cc1)N",
-        "solute_charge": "0",
-        "solute_env": [
             "CarboxylicAcid",
             "CarboxylicAcidDeriv"
         ],
         "solvent_env": [
-            "Amine",
             "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
+            "Carbonyl",
+            "Ketone"
         ]
     },
     "mnsol-0049": {
@@ -360,69 +50,6 @@
             "PrimaryAromAmine"
         ]
     },
-    "mnsol-0058": {
-        "mnsol No.": "0058",
-        "solute_name": "2-butanone",
-        "solvent_name": "anisole",
-        "solute_smiles": "CCC(=O)C",
-        "solvent_smiles": "COc1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "Alkylarylether",
-            "Aromatic",
-            "Ether"
-        ]
-    },
-    "mnsol-0059": {
-        "mnsol No.": "0059",
-        "solute_name": "butylamine",
-        "solvent_name": "anisole",
-        "solute_smiles": "CCCCN",
-        "solvent_smiles": "COc1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "PrimaryAliphAmine",
-            "PrimaryAmine"
-        ],
-        "solvent_env": [
-            "Alkylarylether",
-            "Aromatic",
-            "Ether"
-        ]
-    },
-    "mnsol-0061": {
-        "mnsol No.": "0061",
-        "solute_name": "n-pentane",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCC",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alkane"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0062": {
-        "mnsol No.": "0062",
-        "solute_name": "n-hexane",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCCC",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alkane"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0064": {
         "mnsol No.": "0064",
         "solute_name": "cyclohexane",
@@ -432,22 +59,6 @@
         "solute_charge": "0",
         "solute_env": [
             "Alkane"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0067": {
-        "mnsol No.": "0067",
-        "solute_name": "methanol",
-        "solvent_name": "benzene",
-        "solute_smiles": "CO",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
         ],
         "solvent_env": [
             "Aromatic"
@@ -485,22 +96,6 @@
             "Aromatic"
         ]
     },
-    "mnsol-0071": {
-        "mnsol No.": "0071",
-        "solute_name": "1-butanol",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCO",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0072": {
         "mnsol No.": "0072",
         "solute_name": "t-butanol",
@@ -517,163 +112,6 @@
             "Aromatic"
         ]
     },
-    "mnsol-0073": {
-        "mnsol No.": "0073",
-        "solute_name": "1-pentanol",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCCO",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0074": {
-        "mnsol No.": "0074",
-        "solute_name": "phenol",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1ccc(cc1)O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0075": {
-        "mnsol No.": "0075",
-        "solute_name": "1-hexanol",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCCCO",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0076": {
-        "mnsol No.": "0076",
-        "solute_name": "o-cresol",
-        "solvent_name": "benzene",
-        "solute_smiles": "Cc1ccccc1O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0077": {
-        "mnsol No.": "0077",
-        "solute_name": "m-cresol",
-        "solvent_name": "benzene",
-        "solute_smiles": "Cc1cccc(c1)O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0078": {
-        "mnsol No.": "0078",
-        "solute_name": "p-cresol",
-        "solvent_name": "benzene",
-        "solute_smiles": "Cc1ccc(cc1)O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0079": {
-        "mnsol No.": "0079",
-        "solute_name": "1-heptanol",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCCCCO",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0081": {
-        "mnsol No.": "0081",
-        "solute_name": "acetone",
-        "solvent_name": "benzene",
-        "solute_smiles": "CC(=O)C",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0083": {
-        "mnsol No.": "0083",
-        "solute_name": "2-pentanone",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCC(=O)C",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0084": {
-        "mnsol No.": "0084",
-        "solute_name": "2-hexanone",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCC(=O)C",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0085": {
         "mnsol No.": "0085",
         "solute_name": "2-heptanone",
@@ -684,51 +122,6 @@
         "solute_env": [
             "Carbonyl",
             "Ketone"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0088": {
-        "mnsol No.": "0088",
-        "solute_name": "butanoicacid",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCC(=O)O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0089": {
-        "mnsol No.": "0089",
-        "solute_name": "pentanoicacid",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCC(=O)O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0090": {
-        "mnsol No.": "0090",
-        "solute_name": "hexanoicacid",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCCC(=O)O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
         ],
         "solvent_env": [
             "Aromatic"
@@ -854,22 +247,6 @@
             "Aromatic"
         ]
     },
-    "mnsol-0099": {
-        "mnsol No.": "0099",
-        "solute_name": "ethylamine",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCN",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "PrimaryAliphAmine",
-            "PrimaryAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0100": {
         "mnsol No.": "0100",
         "solute_name": "dimethylamine",
@@ -902,22 +279,6 @@
             "Aromatic"
         ]
     },
-    "mnsol-0102": {
-        "mnsol No.": "0102",
-        "solute_name": "trimethylamine",
-        "solvent_name": "benzene",
-        "solute_smiles": "CN(C)C",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "TertiaryAliphAmine",
-            "TertiaryAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0103": {
         "mnsol No.": "0103",
         "solute_name": "diethylamine",
@@ -945,38 +306,6 @@
             "Amine",
             "SecondaryAliphAmine",
             "SecondaryAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0105": {
-        "mnsol No.": "0105",
-        "solute_name": "pyridine",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1ccncc1",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0106": {
-        "mnsol No.": "0106",
-        "solute_name": "aniline",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1ccc(cc1)N",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
         ],
         "solvent_env": [
             "Aromatic"
@@ -1029,39 +358,6 @@
             "Aromatic"
         ]
     },
-    "mnsol-0111": {
-        "mnsol No.": "0111",
-        "solute_name": "nitrobenzene",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1ccc(cc1)[N+](=O)[O-]",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0112": {
-        "mnsol No.": "0112",
-        "solute_name": "m-hydroxybenzaldehyde",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1cc(cc(c1)O)C=O",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aldehyde",
-            "Aromatic",
-            "Carbonyl",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0113": {
         "mnsol No.": "0113",
         "solute_name": "p-hydroxybenzaldehyde",
@@ -1080,101 +376,6 @@
             "Aromatic"
         ]
     },
-    "mnsol-0114": {
-        "mnsol No.": "0114",
-        "solute_name": "p-bromophenol",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1cc(ccc1O)Br",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "ArylBromide",
-            "HalogenDeriv",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0115": {
-        "mnsol No.": "0115",
-        "solute_name": "ammonia",
-        "solvent_name": "benzene",
-        "solute_smiles": "N",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0117": {
-        "mnsol No.": "0117",
-        "solute_name": "trimethylphosphate",
-        "solvent_name": "benzene",
-        "solute_smiles": "COP(=O)(OC)OC",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "PhosphoricAcidDeriv",
-            "PhosphoricAcidEster"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0118": {
-        "mnsol No.": "0118",
-        "solute_name": "triethylphosphate",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCOP(=O)(OCC)OCC",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "PhosphoricAcidDeriv",
-            "PhosphoricAcidEster"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0120": {
-        "mnsol No.": "0120",
-        "solute_name": "piperidine",
-        "solvent_name": "benzene",
-        "solute_smiles": "C1CCNCC1",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Heterocycle",
-            "SecondaryAliphAmine",
-            "SecondaryAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0121": {
-        "mnsol No.": "0121",
-        "solute_name": "methylamine",
-        "solvent_name": "benzene",
-        "solute_smiles": "CN",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "PrimaryAliphAmine",
-            "PrimaryAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
     "mnsol-0122": {
         "mnsol No.": "0122",
         "solute_name": "hydrazine",
@@ -1184,70 +385,6 @@
         "solute_charge": "0",
         "solute_env": [
             "Hydrazine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0123": {
-        "mnsol No.": "0123",
-        "solute_name": "1-octanol",
-        "solvent_name": "benzene",
-        "solute_smiles": "CCCCCCCCO",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0124": {
-        "mnsol No.": "0124",
-        "solute_name": "methylbenzoate",
-        "solvent_name": "benzene",
-        "solute_smiles": "COC(=O)c1ccccc1",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0125": {
-        "mnsol No.": "0125",
-        "solute_name": "1,1-dimethyl-3-phenylurea",
-        "solvent_name": "benzene",
-        "solute_smiles": "CN(C)C(=O)Nc1ccccc1",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Urea"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0127": {
-        "mnsol No.": "0127",
-        "solute_name": "dimethyl4-nitrophenylthiophosphate",
-        "solvent_name": "benzene",
-        "solute_smiles": "COP(=S)(OC)Oc1ccc(cc1)[N+](=O)[O-]",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "NitroCompound",
-            "ThiophosphoricAcidDeriv",
-            "ThiophosphoricAcidEster"
         ],
         "solvent_env": [
             "Aromatic"
@@ -1268,67 +405,15 @@
             "Aromatic"
         ]
     },
-    "mnsol-0131": {
-        "mnsol No.": "0131",
-        "solute_name": "benzamide",
-        "solvent_name": "benzene",
-        "solute_smiles": "c1ccc(cc1)C(=O)N",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidPrimaryAmide"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0132": {
-        "mnsol No.": "0132",
-        "solute_name": "2-methylaniline",
-        "solvent_name": "benzene",
-        "solute_smiles": "Cc1ccccc1N",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0134": {
-        "mnsol No.": "0134",
-        "solute_name": "4-methylaniline",
-        "solvent_name": "benzene",
-        "solute_smiles": "Cc1ccc(cc1)N",
-        "solvent_smiles": "c1ccccc1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
-        ],
-        "solvent_env": [
-            "Aromatic"
-        ]
-    },
-    "mnsol-0147": {
-        "mnsol No.": "0147",
-        "solute_name": "formaldehyde",
+    "mnsol-0144": {
+        "mnsol No.": "0144",
+        "solute_name": "toluene",
         "solvent_name": "benzylalcohol",
-        "solute_smiles": "C=O",
+        "solute_smiles": "Cc1ccccc1",
         "solvent_smiles": "c1ccc(cc1)CO",
         "solute_charge": "0",
         "solute_env": [
-            "Aldehyde",
-            "Carbonyl"
+            "Aromatic"
         ],
         "solvent_env": [
             "Alcohol",
@@ -1337,92 +422,12 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-0187": {
-        "mnsol No.": "0187",
-        "solute_name": "methanol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "CO",
-        "solvent_smiles": "C(Br)(Br)Br",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0188": {
-        "mnsol No.": "0188",
-        "solute_name": "ethanol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "CCO",
-        "solvent_smiles": "C(Br)(Br)Br",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0189": {
-        "mnsol No.": "0189",
-        "solute_name": "1-propanol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "CCCO",
-        "solvent_smiles": "C(Br)(Br)Br",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0190": {
-        "mnsol No.": "0190",
-        "solute_name": "1-butanol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "CCCCO",
-        "solvent_smiles": "C(Br)(Br)Br",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0191": {
-        "mnsol No.": "0191",
-        "solute_name": "1-pentanol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "CCCCCO",
-        "solvent_smiles": "C(Br)(Br)Br",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0193": {
-        "mnsol No.": "0193",
+    "mnsol-0161": {
+        "mnsol No.": "0161",
         "solute_name": "1-hexanol",
-        "solvent_name": "bromoform",
+        "solvent_name": "bromobenzene",
         "solute_smiles": "CCCCCCO",
-        "solvent_smiles": "C(Br)(Br)Br",
+        "solvent_smiles": "c1ccc(cc1)Br",
         "solute_charge": "0",
         "solute_env": [
             "Alcohol",
@@ -1430,22 +435,61 @@
             "PrimaryAlcohol"
         ],
         "solvent_env": [
+            "Aromatic",
+            "ArylBromide",
             "HalogenDeriv"
         ]
     },
-    "mnsol-0194": {
-        "mnsol No.": "0194",
-        "solute_name": "o-cresol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "Cc1ccccc1O",
-        "solvent_smiles": "C(Br)(Br)Br",
+    "mnsol-0166": {
+        "mnsol No.": "0166",
+        "solute_name": "2-butanone",
+        "solvent_name": "bromobenzene",
+        "solute_smiles": "CCC(=O)C",
+        "solvent_smiles": "c1ccc(cc1)Br",
         "solute_charge": "0",
         "solute_env": [
-            "Aromatic",
-            "Hydroxy",
-            "Phenol"
+            "Carbonyl",
+            "Ketone"
         ],
         "solvent_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0168": {
+        "mnsol No.": "0168",
+        "solute_name": "ethylacetate",
+        "solvent_name": "bromobenzene",
+        "solute_smiles": "CCOC(=O)C",
+        "solvent_smiles": "c1ccc(cc1)Br",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0179": {
+        "mnsol No.": "0179",
+        "solute_name": "4-methylaniline",
+        "solvent_name": "bromobenzene",
+        "solute_smiles": "Cc1ccc(cc1)N",
+        "solvent_smiles": "c1ccc(cc1)Br",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "ArylBromide",
             "HalogenDeriv"
         ]
     },
@@ -1465,40 +509,6 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0198": {
-        "mnsol No.": "0198",
-        "solute_name": "p-bromophenol",
-        "solvent_name": "bromoform",
-        "solute_smiles": "c1cc(ccc1O)Br",
-        "solvent_smiles": "C(Br)(Br)Br",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "ArylBromide",
-            "HalogenDeriv",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0199": {
-        "mnsol No.": "0199",
-        "solute_name": "methylacetate",
-        "solvent_name": "bromooctane",
-        "solute_smiles": "CC(=O)OC",
-        "solvent_smiles": "CCCCCCCCBr",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "AlkylBromide",
-            "HalogenDeriv"
-        ]
-    },
     "mnsol-0200": {
         "mnsol No.": "0200",
         "solute_name": "ethylacetate",
@@ -1515,98 +525,16 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0201": {
-        "mnsol No.": "0201",
-        "solute_name": "propylacetate",
-        "solvent_name": "bromooctane",
-        "solute_smiles": "CCCOC(=O)C",
-        "solvent_smiles": "CCCCCCCCBr",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "AlkylBromide",
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0202": {
-        "mnsol No.": "0202",
-        "solute_name": "butylacetate",
-        "solvent_name": "bromooctane",
-        "solute_smiles": "CCCCOC(=O)C",
-        "solvent_smiles": "CCCCCCCCBr",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "AlkylBromide",
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0203": {
-        "mnsol No.": "0203",
-        "solute_name": "pentylacetate",
-        "solvent_name": "bromooctane",
-        "solute_smiles": "CCCCCOC(=O)C",
-        "solvent_smiles": "CCCCCCCCBr",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "AlkylBromide",
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0205": {
-        "mnsol No.": "0205",
-        "solute_name": "benzene",
+    "mnsol-0212": {
+        "mnsol No.": "0212",
+        "solute_name": "formaldehyde",
         "solvent_name": "butanol",
-        "solute_smiles": "c1ccccc1",
+        "solute_smiles": "C=O",
         "solvent_smiles": "CCCCO",
         "solute_charge": "0",
         "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
-    "mnsol-0207": {
-        "mnsol No.": "0207",
-        "solute_name": "ethylbenzene",
-        "solvent_name": "butanol",
-        "solute_smiles": "CCc1ccccc1",
-        "solvent_smiles": "CCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
-    "mnsol-0210": {
-        "mnsol No.": "0210",
-        "solute_name": "1,2-ethanediol",
-        "solvent_name": "butanol",
-        "solute_smiles": "C(CO)O",
-        "solvent_smiles": "CCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alcohol",
-            "Diol_1_2",
-            "Hydroxy",
-            "PrimaryAlcohol"
+            "Aldehyde",
+            "Carbonyl"
         ],
         "solvent_env": [
             "Alcohol",
@@ -1619,23 +547,6 @@
         "solute_name": "pentanoicacid",
         "solvent_name": "butanol",
         "solute_smiles": "CCCCC(=O)O",
-        "solvent_smiles": "CCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcid",
-            "CarboxylicAcidDeriv"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
-    "mnsol-0218": {
-        "mnsol No.": "0218",
-        "solute_name": "hexanoicacid",
-        "solvent_name": "butanol",
-        "solute_smiles": "CCCCCC(=O)O",
         "solvent_smiles": "CCCCO",
         "solute_charge": "0",
         "solute_env": [
@@ -1666,17 +577,17 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-0220": {
-        "mnsol No.": "0220",
-        "solute_name": "propylamine",
+    "mnsol-0221": {
+        "mnsol No.": "0221",
+        "solute_name": "diethylamine",
         "solvent_name": "butanol",
-        "solute_smiles": "CCCN",
+        "solute_smiles": "CCNCC",
         "solvent_smiles": "CCCCO",
         "solute_charge": "0",
         "solute_env": [
             "Amine",
-            "PrimaryAliphAmine",
-            "PrimaryAmine"
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
         ],
         "solvent_env": [
             "Alcohol",
@@ -1684,35 +595,101 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-0237": {
-        "mnsol No.": "0237",
-        "solute_name": "g-butyrolactone",
+    "mnsol-0229": {
+        "mnsol No.": "0229",
+        "solute_name": "formaldehyde",
         "solvent_name": "butanone",
-        "solute_smiles": "C1CC(=O)OC1",
+        "solute_smiles": "C=O",
         "solvent_smiles": "CCC(=O)C",
         "solute_charge": "0",
         "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster",
-            "Heterocycle",
-            "Lactone"
+            "Aldehyde",
+            "Carbonyl"
         ],
         "solvent_env": [
             "Carbonyl",
             "Ketone"
         ]
     },
-    "mnsol-0249": {
-        "mnsol No.": "0249",
-        "solute_name": "p-cresol",
+    "mnsol-0233": {
+        "mnsol No.": "0233",
+        "solute_name": "butanoicacid",
+        "solvent_name": "butanone",
+        "solute_smiles": "CCCC(=O)O",
+        "solvent_smiles": "CCC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Carbonyl",
+            "Ketone"
+        ]
+    },
+    "mnsol-0239": {
+        "mnsol No.": "0239",
+        "solute_name": "methanol",
         "solvent_name": "butylacetate",
-        "solute_smiles": "Cc1ccc(cc1)O",
+        "solute_smiles": "CO",
+        "solvent_smiles": "CCCCOC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0241": {
+        "mnsol No.": "0241",
+        "solute_name": "1,2-ethanediol",
+        "solvent_name": "butylacetate",
+        "solute_smiles": "C(CO)O",
+        "solvent_smiles": "CCCCOC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Diol_1_2",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0253": {
+        "mnsol No.": "0253",
+        "solute_name": "pyridine",
+        "solvent_name": "butylacetate",
+        "solute_smiles": "c1ccncc1",
         "solvent_smiles": "CCCCOC(=O)C",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
-            "Hydroxy",
-            "Phenol"
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0254": {
+        "mnsol No.": "0254",
+        "solute_name": "aniline",
+        "solvent_name": "butylacetate",
+        "solute_smiles": "c1ccc(cc1)N",
+        "solvent_smiles": "CCCCOC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
         ],
         "solvent_env": [
             "CarboxylicAcidDeriv",
@@ -1736,29 +713,11 @@
             "CarboxylicAcidEster"
         ]
     },
-    "mnsol-0258": {
-        "mnsol No.": "0258",
-        "solute_name": "4-methylaniline",
-        "solvent_name": "butylacetate",
-        "solute_smiles": "Cc1ccc(cc1)N",
-        "solvent_smiles": "CCCCOC(=O)C",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
-        ],
-        "solvent_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ]
-    },
-    "mnsol-0263": {
-        "mnsol No.": "0263",
-        "solute_name": "3,3-dimethylbutanone",
+    "mnsol-0262": {
+        "mnsol No.": "0262",
+        "solute_name": "2-hexanone",
         "solvent_name": "butylbenzene",
-        "solute_smiles": "CC(=O)C(C)(C)C",
+        "solute_smiles": "CCCCC(=O)C",
         "solvent_smiles": "CCCCc1ccccc1",
         "solute_charge": "0",
         "solute_env": [
@@ -1769,88 +728,45 @@
             "Aromatic"
         ]
     },
-    "mnsol-0270": {
-        "mnsol No.": "0270",
-        "solute_name": "n-octane",
-        "solvent_name": "carbondisulfide",
-        "solute_smiles": "CCCCCCCC",
-        "solvent_smiles": "C(=S)=S",
+    "mnsol-0266": {
+        "mnsol No.": "0266",
+        "solute_name": "methylpentanoate",
+        "solvent_name": "butylbenzene",
+        "solute_smiles": "CCCCC(=O)OC",
+        "solvent_smiles": "CCCCc1ccccc1",
         "solute_charge": "0",
         "solute_env": [
-            "Alkane"
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
         ],
         "solvent_env": [
-            "Co2Deriv"
-        ]
-    },
-    "mnsol-0271": {
-        "mnsol No.": "0271",
-        "solute_name": "toluene",
-        "solvent_name": "carbondisulfide",
-        "solute_smiles": "Cc1ccccc1",
-        "solvent_smiles": "C(=S)=S",
-        "solute_charge": "0",
-        "solute_env": [
             "Aromatic"
+        ]
+    },
+    "mnsol-0280": {
+        "mnsol No.": "0280",
+        "solute_name": "propylacetate",
+        "solvent_name": "carbondisulfide",
+        "solute_smiles": "CCCOC(=O)C",
+        "solvent_smiles": "C(=S)=S",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
         ],
         "solvent_env": [
             "Co2Deriv"
         ]
     },
-    "mnsol-0274": {
-        "mnsol No.": "0274",
-        "solute_name": "1,4-dioxane",
+    "mnsol-0284": {
+        "mnsol No.": "0284",
+        "solute_name": "hydrogenperoxide",
         "solvent_name": "carbondisulfide",
-        "solute_smiles": "C1COCCO1",
+        "solute_smiles": "OO",
         "solvent_smiles": "C(=S)=S",
         "solute_charge": "0",
         "solute_env": [
-            "Dialkylether",
-            "Ether",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "Co2Deriv"
-        ]
-    },
-    "mnsol-0275": {
-        "mnsol No.": "0275",
-        "solute_name": "acetone",
-        "solvent_name": "carbondisulfide",
-        "solute_smiles": "CC(=O)C",
-        "solvent_smiles": "C(=S)=S",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "Co2Deriv"
-        ]
-    },
-    "mnsol-0281": {
-        "mnsol No.": "0281",
-        "solute_name": "1-nitropropane",
-        "solvent_name": "carbondisulfide",
-        "solute_smiles": "CCC[N+](=O)[O-]",
-        "solvent_smiles": "C(=S)=S",
-        "solute_charge": "0",
-        "solute_env": [
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "Co2Deriv"
-        ]
-    },
-    "mnsol-0282": {
-        "mnsol No.": "0282",
-        "solute_name": "nitromethane",
-        "solvent_name": "carbondisulfide",
-        "solute_smiles": "C[N+](=O)[O-]",
-        "solvent_smiles": "C(=S)=S",
-        "solute_charge": "0",
-        "solute_env": [
-            "NitroCompound"
+            "Hydroperoxide"
         ],
         "solvent_env": [
             "Co2Deriv"
@@ -1898,62 +814,6 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0291": {
-        "mnsol No.": "0291",
-        "solute_name": "ethylbenzene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCc1ccccc1",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0292": {
-        "mnsol No.": "0292",
-        "solute_name": "o-xylene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "Cc1ccccc1C",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0293": {
-        "mnsol No.": "0293",
-        "solute_name": "m-xylene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "Cc1cccc(c1)C",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0294": {
-        "mnsol No.": "0294",
-        "solute_name": "naphthalene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc2ccccc2c1",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
     "mnsol-0298": {
         "mnsol No.": "0298",
         "solute_name": "isopropanol",
@@ -1970,17 +830,17 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0300": {
-        "mnsol No.": "0300",
-        "solute_name": "t-butanol",
+    "mnsol-0299": {
+        "mnsol No.": "0299",
+        "solute_name": "1-butanol",
         "solvent_name": "carbontet",
-        "solute_smiles": "CC(C)(C)O",
+        "solute_smiles": "CCCCO",
         "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
         "solute_charge": "0",
         "solute_env": [
             "Alcohol",
             "Hydroxy",
-            "TertiaryAlcohol"
+            "PrimaryAlcohol"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2002,22 +862,6 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0309": {
-        "mnsol No.": "0309",
-        "solute_name": "benzaldehyde",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc(cc1)C=O",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aldehyde",
-            "Aromatic",
-            "Carbonyl"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
     "mnsol-0312": {
         "mnsol No.": "0312",
         "solute_name": "cyclopentanone",
@@ -2028,112 +872,6 @@
         "solute_env": [
             "Carbonyl",
             "Ketone"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0313": {
-        "mnsol No.": "0313",
-        "solute_name": "2-pentanone",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCCC(=O)C",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0314": {
-        "mnsol No.": "0314",
-        "solute_name": "2-hexanone",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCCCC(=O)C",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0315": {
-        "mnsol No.": "0315",
-        "solute_name": "2-heptanone",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCCCCC(=O)C",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0316": {
-        "mnsol No.": "0316",
-        "solute_name": "acetophenone",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CC(=O)c1ccccc1",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Carbonyl",
-            "Ketone"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0322": {
-        "mnsol No.": "0322",
-        "solute_name": "methylpropanoate",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCC(=O)OC",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0325": {
-        "mnsol No.": "0325",
-        "solute_name": "methylpentanoate",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCCCC(=O)OC",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0327": {
-        "mnsol No.": "0327",
-        "solute_name": "methylhexanoate",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCCCCC(=O)OC",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidEster"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2155,142 +893,17 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0333": {
-        "mnsol No.": "0333",
-        "solute_name": "butylamine",
+    "mnsol-0331": {
+        "mnsol No.": "0331",
+        "solute_name": "propylamine",
         "solvent_name": "carbontet",
-        "solute_smiles": "CCCCN",
+        "solute_smiles": "CCCN",
         "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
         "solute_charge": "0",
         "solute_env": [
             "Amine",
             "PrimaryAliphAmine",
             "PrimaryAmine"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0337": {
-        "mnsol No.": "0337",
-        "solute_name": "N-methylaniline",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CNc1ccccc1",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "SecondaryAmine",
-            "SecondaryMixedAmine"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0338": {
-        "mnsol No.": "0338",
-        "solute_name": "benzonitrile",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc(cc1)C#N",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Nitrile"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0339": {
-        "mnsol No.": "0339",
-        "solute_name": "1-nitropropane",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCC[N+](=O)[O-]",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0340": {
-        "mnsol No.": "0340",
-        "solute_name": "nitrobenzene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc(cc1)[N+](=O)[O-]",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0341": {
-        "mnsol No.": "0341",
-        "solute_name": "2-methyl-1-nitrobenzene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "Cc1ccccc1[N+](=O)[O-]",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0342": {
-        "mnsol No.": "0342",
-        "solute_name": "thioanisole",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CSc1ccccc1",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Thioether"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0343": {
-        "mnsol No.": "0343",
-        "solute_name": "p-hydroxybenzaldehyde",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1cc(ccc1C=O)O",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aldehyde",
-            "Aromatic",
-            "Carbonyl",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0345": {
-        "mnsol No.": "0345",
-        "solute_name": "chlorobenzene",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc(cc1)Cl",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "ArylChloride",
-            "HalogenDeriv"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2312,42 +925,11 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0347": {
-        "mnsol No.": "0347",
-        "solute_name": "bromobenzene",
+    "mnsol-0353": {
+        "mnsol No.": "0353",
+        "solute_name": "tripropylphosphate",
         "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc(cc1)Br",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "ArylBromide",
-            "HalogenDeriv"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0351": {
-        "mnsol No.": "0351",
-        "solute_name": "trimethylphosphate",
-        "solvent_name": "carbontet",
-        "solute_smiles": "COP(=O)(OC)OC",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "PhosphoricAcidDeriv",
-            "PhosphoricAcidEster"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0352": {
-        "mnsol No.": "0352",
-        "solute_name": "triethylphosphate",
-        "solvent_name": "carbontet",
-        "solute_smiles": "CCOP(=O)(OCC)OCC",
+        "solute_smiles": "CCCOP(=O)(OCCC)OCCC",
         "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
         "solute_charge": "0",
         "solute_env": [
@@ -2374,29 +956,80 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0358": {
-        "mnsol No.": "0358",
-        "solute_name": "benzamide",
-        "solvent_name": "carbontet",
-        "solute_smiles": "c1ccc(cc1)C(=O)N",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
+    "mnsol-0365": {
+        "mnsol No.": "0365",
+        "solute_name": "toluene",
+        "solvent_name": "chlorobenzene",
+        "solute_smiles": "Cc1ccccc1",
+        "solvent_smiles": "c1ccc(cc1)Cl",
         "solute_charge": "0",
         "solute_env": [
-            "Aromatic",
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidPrimaryAmide"
+            "Aromatic"
         ],
         "solvent_env": [
+            "Aromatic",
+            "ArylChloride",
             "HalogenDeriv"
         ]
     },
-    "mnsol-0359": {
-        "mnsol No.": "0359",
-        "solute_name": "2-methylaniline",
-        "solvent_name": "carbontet",
-        "solute_smiles": "Cc1ccccc1N",
-        "solvent_smiles": "C(Cl)(Cl)(Cl)Cl",
+    "mnsol-0373": {
+        "mnsol No.": "0373",
+        "solute_name": "o-cresol",
+        "solvent_name": "chlorobenzene",
+        "solute_smiles": "Cc1ccccc1O",
+        "solvent_smiles": "c1ccc(cc1)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0379": {
+        "mnsol No.": "0379",
+        "solute_name": "2-pentanone",
+        "solvent_name": "chlorobenzene",
+        "solute_smiles": "CCCC(=O)C",
+        "solvent_smiles": "c1ccc(cc1)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0384": {
+        "mnsol No.": "0384",
+        "solute_name": "methylacetate",
+        "solvent_name": "chlorobenzene",
+        "solute_smiles": "CC(=O)OC",
+        "solvent_smiles": "c1ccc(cc1)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0395": {
+        "mnsol No.": "0395",
+        "solute_name": "aniline",
+        "solvent_name": "chlorobenzene",
+        "solute_smiles": "c1ccc(cc1)N",
+        "solvent_smiles": "c1ccc(cc1)Cl",
         "solute_charge": "0",
         "solute_env": [
             "Amine",
@@ -2405,6 +1038,8 @@
             "PrimaryAromAmine"
         ],
         "solvent_env": [
+            "Aromatic",
+            "ArylChloride",
             "HalogenDeriv"
         ]
     },
@@ -2422,18 +1057,45 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0412": {
-        "mnsol No.": "0412",
-        "solute_name": "1,2-ethanediol",
+    "mnsol-0407": {
+        "mnsol No.": "0407",
+        "solute_name": "o-xylene",
         "solvent_name": "chloroform",
-        "solute_smiles": "C(CO)O",
+        "solute_smiles": "Cc1ccccc1C",
+        "solvent_smiles": "C(Cl)(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0408": {
+        "mnsol No.": "0408",
+        "solute_name": "m-xylene",
+        "solvent_name": "chloroform",
+        "solute_smiles": "Cc1cccc(c1)C",
+        "solvent_smiles": "C(Cl)(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0416": {
+        "mnsol No.": "0416",
+        "solute_name": "t-butanol",
+        "solvent_name": "chloroform",
+        "solute_smiles": "CC(C)(C)O",
         "solvent_smiles": "C(Cl)(Cl)Cl",
         "solute_charge": "0",
         "solute_env": [
             "Alcohol",
-            "Diol_1_2",
             "Hydroxy",
-            "PrimaryAlcohol"
+            "TertiaryAlcohol"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2454,21 +1116,6 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0427": {
-        "mnsol No.": "0427",
-        "solute_name": "formaldehyde",
-        "solvent_name": "chloroform",
-        "solute_smiles": "C=O",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aldehyde",
-            "Carbonyl"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
     "mnsol-0428": {
         "mnsol No.": "0428",
         "solute_name": "acetaldehyde",
@@ -2479,6 +1126,22 @@
         "solute_env": [
             "Aldehyde",
             "Carbonyl"
+        ],
+        "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0448": {
+        "mnsol No.": "0448",
+        "solute_name": "propylamine",
+        "solvent_name": "chloroform",
+        "solute_smiles": "CCCN",
+        "solvent_smiles": "C(Cl)(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2524,66 +1187,6 @@
         "solute_env": [
             "Aromatic",
             "Heterocycle"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0456": {
-        "mnsol No.": "0456",
-        "solute_name": "4-methylpyridine",
-        "solvent_name": "chloroform",
-        "solute_smiles": "Cc1ccncc1",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0457": {
-        "mnsol No.": "0457",
-        "solute_name": "2,6-dimethylpyridine",
-        "solvent_name": "chloroform",
-        "solute_smiles": "Cc1cccc(n1)C",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0458": {
-        "mnsol No.": "0458",
-        "solute_name": "acetonitrile",
-        "solvent_name": "chloroform",
-        "solute_smiles": "CC#N",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Nitrile"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0462": {
-        "mnsol No.": "0462",
-        "solute_name": "thiophenol",
-        "solvent_name": "chloroform",
-        "solute_smiles": "c1ccc(cc1)S",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Arylthiol",
-            "Thiol"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2653,6 +1256,21 @@
             "HalogenDeriv"
         ]
     },
+    "mnsol-0478": {
+        "mnsol No.": "0478",
+        "solute_name": "trimethylphosphate",
+        "solvent_name": "chloroform",
+        "solute_smiles": "COP(=O)(OC)OC",
+        "solvent_smiles": "C(Cl)(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "PhosphoricAcidDeriv",
+            "PhosphoricAcidEster"
+        ],
+        "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
     "mnsol-0481": {
         "mnsol No.": "0481",
         "solute_name": "piperidine",
@@ -2665,20 +1283,6 @@
             "Heterocycle",
             "SecondaryAliphAmine",
             "SecondaryAmine"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0483": {
-        "mnsol No.": "0483",
-        "solute_name": "hydrazine",
-        "solvent_name": "chloroform",
-        "solute_smiles": "NN",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Hydrazine"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2730,37 +1334,6 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0488": {
-        "mnsol No.": "0488",
-        "solute_name": "tetrahydropyran",
-        "solvent_name": "chloroform",
-        "solute_smiles": "C1CCOCC1",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Dialkylether",
-            "Ether",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0489": {
-        "mnsol No.": "0489",
-        "solute_name": "thiophene",
-        "solvent_name": "chloroform",
-        "solute_smiles": "c1ccsc1",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Heterocycle"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
     "mnsol-0490": {
         "mnsol No.": "0490",
         "solute_name": "ethylphenylether",
@@ -2787,23 +1360,6 @@
         "solute_env": [
             "Aromatic",
             "Urea"
-        ],
-        "solvent_env": [
-            "HalogenDeriv"
-        ]
-    },
-    "mnsol-0496": {
-        "mnsol No.": "0496",
-        "solute_name": "dimethyl4-nitrophenylthiophosphate",
-        "solvent_name": "chloroform",
-        "solute_smiles": "COP(=S)(OC)Oc1ccc(cc1)[N+](=O)[O-]",
-        "solvent_smiles": "C(Cl)(Cl)Cl",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "NitroCompound",
-            "ThiophosphoricAcidDeriv",
-            "ThiophosphoricAcidEster"
         ],
         "solvent_env": [
             "HalogenDeriv"
@@ -2839,21 +1395,117 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-0509": {
-        "mnsol No.": "0509",
-        "solute_name": "5-bromouracil",
+    "mnsol-0502": {
+        "mnsol No.": "0502",
+        "solute_name": "benzamide",
         "solvent_name": "chloroform",
-        "solute_smiles": "C1=C(C(=O)NC(=O)N1)Br",
+        "solute_smiles": "c1ccc(cc1)C(=O)N",
         "solvent_smiles": "C(Cl)(Cl)Cl",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
-            "ArylBromide",
-            "HalogenDeriv",
-            "Heterocycle",
-            "Oxohetarene"
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidPrimaryAmide"
         ],
         "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0503": {
+        "mnsol No.": "0503",
+        "solute_name": "2-methylaniline",
+        "solvent_name": "chloroform",
+        "solute_smiles": "Cc1ccccc1N",
+        "solvent_smiles": "C(Cl)(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
+        ],
+        "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0511": {
+        "mnsol No.": "0511",
+        "solute_name": "acetone",
+        "solvent_name": "chlorohexane",
+        "solute_smiles": "CC(=O)C",
+        "solvent_smiles": "CCCCCCCl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0514": {
+        "mnsol No.": "0514",
+        "solute_name": "2-hexanone",
+        "solvent_name": "chlorohexane",
+        "solute_smiles": "CCCCC(=O)C",
+        "solvent_smiles": "CCCCCCCl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0515": {
+        "mnsol No.": "0515",
+        "solute_name": "3,3-dimethylbutanone",
+        "solvent_name": "chlorohexane",
+        "solute_smiles": "CC(=O)C(C)(C)C",
+        "solvent_smiles": "CCCCCCCl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0519": {
+        "mnsol No.": "0519",
+        "solute_name": "propylacetate",
+        "solvent_name": "chlorohexane",
+        "solute_smiles": "CCCOC(=O)C",
+        "solvent_smiles": "CCCCCCCl",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-0521": {
+        "mnsol No.": "0521",
+        "solute_name": "butylacetate",
+        "solvent_name": "chlorohexane",
+        "solute_smiles": "CCCCOC(=O)C",
+        "solvent_smiles": "CCCCCCCl",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
             "HalogenDeriv"
         ]
     },
@@ -2899,11 +1551,11 @@
             "Alkane"
         ]
     },
-    "mnsol-0530": {
-        "mnsol No.": "0530",
-        "solute_name": "o-xylene",
+    "mnsol-0527": {
+        "mnsol No.": "0527",
+        "solute_name": "benzene",
         "solvent_name": "cyclohexane",
-        "solute_smiles": "Cc1ccccc1C",
+        "solute_smiles": "c1ccccc1",
         "solvent_smiles": "C1CCCCC1",
         "solute_charge": "0",
         "solute_env": [
@@ -2913,15 +1565,95 @@
             "Alkane"
         ]
     },
-    "mnsol-0531": {
-        "mnsol No.": "0531",
-        "solute_name": "m-xylene",
+    "mnsol-0532": {
+        "mnsol No.": "0532",
+        "solute_name": "naphthalene",
         "solvent_name": "cyclohexane",
-        "solute_smiles": "Cc1cccc(c1)C",
+        "solute_smiles": "c1ccc2ccccc2c1",
         "solvent_smiles": "C1CCCCC1",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0533": {
+        "mnsol No.": "0533",
+        "solute_name": "methanol",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "CO",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0536": {
+        "mnsol No.": "0536",
+        "solute_name": "isopropanol",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "CC(C)O",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "SecondaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0537": {
+        "mnsol No.": "0537",
+        "solute_name": "1-butanol",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "CCCCO",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0539": {
+        "mnsol No.": "0539",
+        "solute_name": "1-pentanol",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "CCCCCO",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0540": {
+        "mnsol No.": "0540",
+        "solute_name": "phenol",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "c1ccc(cc1)O",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
         ],
         "solvent_env": [
             "Alkane"
@@ -2936,22 +1668,6 @@
         "solute_charge": "0",
         "solute_env": [
             "Dialkylether",
-            "Ether"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0548": {
-        "mnsol No.": "0548",
-        "solute_name": "anisole",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "COc1ccccc1",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Alkylarylether",
-            "Aromatic",
             "Ether"
         ],
         "solvent_env": [
@@ -3004,17 +1720,16 @@
             "Alkane"
         ]
     },
-    "mnsol-0557": {
-        "mnsol No.": "0557",
-        "solute_name": "acetophenone",
+    "mnsol-0571": {
+        "mnsol No.": "0571",
+        "solute_name": "pyridine",
         "solvent_name": "cyclohexane",
-        "solute_smiles": "CC(=O)c1ccccc1",
+        "solute_smiles": "c1ccncc1",
         "solvent_smiles": "C1CCCCC1",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
-            "Carbonyl",
-            "Ketone"
+            "Heterocycle"
         ],
         "solvent_env": [
             "Alkane"
@@ -3025,6 +1740,53 @@
         "solute_name": "3-methylpyridine",
         "solvent_name": "cyclohexane",
         "solute_smiles": "Cc1cccnc1",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0575": {
+        "mnsol No.": "0575",
+        "solute_name": "4-methylpyridine",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "Cc1ccncc1",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0576": {
+        "mnsol No.": "0576",
+        "solute_name": "N-methylaniline",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "CNc1ccccc1",
+        "solvent_smiles": "C1CCCCC1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "SecondaryAmine",
+            "SecondaryMixedAmine"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0577": {
+        "mnsol No.": "0577",
+        "solute_name": "2,6-dimethylpyridine",
+        "solvent_name": "cyclohexane",
+        "solute_smiles": "Cc1cccc(n1)C",
         "solvent_smiles": "C1CCCCC1",
         "solute_charge": "0",
         "solute_env": [
@@ -3049,36 +1811,6 @@
             "Alkane"
         ]
     },
-    "mnsol-0579": {
-        "mnsol No.": "0579",
-        "solute_name": "benzonitrile",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "c1ccc(cc1)C#N",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Nitrile"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0582": {
-        "mnsol No.": "0582",
-        "solute_name": "2-methyl-1-nitrobenzene",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "Cc1ccccc1[N+](=O)[O-]",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "NitroCompound"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
     "mnsol-0583": {
         "mnsol No.": "0583",
         "solute_name": "1-propanethiol",
@@ -3089,21 +1821,6 @@
         "solute_env": [
             "Alkylthiol",
             "Thiol"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0584": {
-        "mnsol No.": "0584",
-        "solute_name": "thioanisole",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "CSc1ccccc1",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "Thioether"
         ],
         "solvent_env": [
             "Alkane"
@@ -3141,41 +1858,11 @@
             "Alkane"
         ]
     },
-    "mnsol-0589": {
-        "mnsol No.": "0589",
-        "solute_name": "trichloroethene",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "C(=C(Cl)Cl)Cl",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "HalogenDeriv"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
     "mnsol-0590": {
         "mnsol No.": "0590",
         "solute_name": "chlorobenzene",
         "solvent_name": "cyclohexane",
         "solute_smiles": "c1ccc(cc1)Cl",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "ArylChloride",
-            "HalogenDeriv"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0591": {
-        "mnsol No.": "0591",
-        "solute_name": "1,4-dichlorobenzene",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "c1cc(ccc1Cl)Cl",
         "solvent_smiles": "C1CCCCC1",
         "solute_charge": "0",
         "solute_env": [
@@ -3198,37 +1885,6 @@
             "Aromatic",
             "ArylBromide",
             "HalogenDeriv"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0598": {
-        "mnsol No.": "0598",
-        "solute_name": "tripropylphosphate",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "CCCOP(=O)(OCCC)OCCC",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "PhosphoricAcidDeriv",
-            "PhosphoricAcidEster"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0600": {
-        "mnsol No.": "0600",
-        "solute_name": "tetrahydropyran",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "C1CCOCC1",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Dialkylether",
-            "Ether",
-            "Heterocycle"
         ],
         "solvent_env": [
             "Alkane"
@@ -3296,33 +1952,16 @@
             "Alkane"
         ]
     },
-    "mnsol-0611": {
-        "mnsol No.": "0611",
-        "solute_name": "3-methylaniline",
-        "solvent_name": "cyclohexane",
-        "solute_smiles": "Cc1cccc(c1)N",
-        "solvent_smiles": "C1CCCCC1",
-        "solute_charge": "0",
-        "solute_env": [
-            "Amine",
-            "Aromatic",
-            "PrimaryAmine",
-            "PrimaryAromAmine"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
-    "mnsol-0715": {
-        "mnsol No.": "0715",
-        "solute_name": "2-butanone",
+    "mnsol-0716": {
+        "mnsol No.": "0716",
+        "solute_name": "aceticacid",
         "solvent_name": "dibutylether",
-        "solute_smiles": "CCC(=O)C",
+        "solute_smiles": "CC(=O)O",
         "solvent_smiles": "CCCCOCCCC",
         "solute_charge": "0",
         "solute_env": [
-            "Carbonyl",
-            "Ketone"
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
         ],
         "solvent_env": [
             "Dialkylether",
@@ -3345,16 +1984,126 @@
             "Ether"
         ]
     },
-    "mnsol-0722": {
-        "mnsol No.": "0722",
-        "solute_name": "2-ethylpyrazine",
+    "mnsol-0721": {
+        "mnsol No.": "0721",
+        "solute_name": "2-methylpyridine",
         "solvent_name": "dibutylether",
-        "solute_smiles": "CCc1cnccn1",
+        "solute_smiles": "Cc1ccccn1",
         "solvent_smiles": "CCCCOCCCC",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
             "Heterocycle"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0724": {
+        "mnsol No.": "0724",
+        "solute_name": "nitromethane",
+        "solvent_name": "dibutylether",
+        "solute_smiles": "C[N+](=O)[O-]",
+        "solvent_smiles": "CCCCOCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0768": {
+        "mnsol No.": "0768",
+        "solute_name": "ethylbenzene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "CCc1ccccc1",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0769": {
+        "mnsol No.": "0769",
+        "solute_name": "o-xylene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "Cc1ccccc1C",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0770": {
+        "mnsol No.": "0770",
+        "solute_name": "m-xylene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "Cc1cccc(c1)C",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0771": {
+        "mnsol No.": "0771",
+        "solute_name": "naphthalene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "c1ccc2ccccc2c1",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0774": {
+        "mnsol No.": "0774",
+        "solute_name": "1,2-ethanediol",
+        "solvent_name": "diethylether",
+        "solute_smiles": "C(CO)O",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Diol_1_2",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0778": {
+        "mnsol No.": "0778",
+        "solute_name": "t-butanol",
+        "solvent_name": "diethylether",
+        "solute_smiles": "CC(C)(C)O",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "TertiaryAlcohol"
         ],
         "solvent_env": [
             "Dialkylether",
@@ -3372,6 +2121,23 @@
             "Alcohol",
             "Hydroxy",
             "SecondaryAlcohol"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0783": {
+        "mnsol No.": "0783",
+        "solute_name": "m-cresol",
+        "solvent_name": "diethylether",
+        "solute_smiles": "Cc1cccc(c1)O",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
         ],
         "solvent_env": [
             "Dialkylether",
@@ -3410,6 +2176,56 @@
             "Ether"
         ]
     },
+    "mnsol-0792": {
+        "mnsol No.": "0792",
+        "solute_name": "acetophenone",
+        "solvent_name": "diethylether",
+        "solute_smiles": "CC(=O)c1ccccc1",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0796": {
+        "mnsol No.": "0796",
+        "solute_name": "pentanoicacid",
+        "solvent_name": "diethylether",
+        "solute_smiles": "CCCCC(=O)O",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0802": {
+        "mnsol No.": "0802",
+        "solute_name": "butylamine",
+        "solvent_name": "diethylether",
+        "solute_smiles": "CCCCN",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
     "mnsol-0804": {
         "mnsol No.": "0804",
         "solute_name": "dipropylamine",
@@ -3421,6 +2237,54 @@
             "Amine",
             "SecondaryAliphAmine",
             "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0808": {
+        "mnsol No.": "0808",
+        "solute_name": "benzonitrile",
+        "solvent_name": "diethylether",
+        "solute_smiles": "c1ccc(cc1)C#N",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Nitrile"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0809": {
+        "mnsol No.": "0809",
+        "solute_name": "nitrobenzene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "c1ccc(cc1)[N+](=O)[O-]",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0810": {
+        "mnsol No.": "0810",
+        "solute_name": "2-methyl-1-nitrobenzene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "Cc1ccccc1[N+](=O)[O-]",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "NitroCompound"
         ],
         "solvent_env": [
             "Dialkylether",
@@ -3464,6 +2328,59 @@
             "Ether"
         ]
     },
+    "mnsol-0813": {
+        "mnsol No.": "0813",
+        "solute_name": "m-hydroxybenzaldehyde",
+        "solvent_name": "diethylether",
+        "solute_smiles": "c1cc(cc(c1)O)C=O",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Aromatic",
+            "Carbonyl",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0816": {
+        "mnsol No.": "0816",
+        "solute_name": "1,4-dichlorobenzene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "c1cc(ccc1Cl)Cl",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0817": {
+        "mnsol No.": "0817",
+        "solute_name": "bromobenzene",
+        "solvent_name": "diethylether",
+        "solute_smiles": "c1ccc(cc1)Br",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
     "mnsol-0820": {
         "mnsol No.": "0820",
         "solute_name": "hydrogensulfide",
@@ -3496,6 +2413,23 @@
             "Ether"
         ]
     },
+    "mnsol-0825": {
+        "mnsol No.": "0825",
+        "solute_name": "1-octanol",
+        "solvent_name": "diethylether",
+        "solute_smiles": "CCCCCCCCO",
+        "solvent_smiles": "CCOCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
     "mnsol-0827": {
         "mnsol No.": "0827",
         "solute_name": "N,N-dimethylformamide",
@@ -3513,36 +2447,99 @@
             "Ether"
         ]
     },
-    "mnsol-0831": {
-        "mnsol No.": "0831",
-        "solute_name": "formamide",
-        "solvent_name": "diethylether",
-        "solute_smiles": "C(=O)N",
-        "solvent_smiles": "CCOCC",
+    "mnsol-0839": {
+        "mnsol No.": "0839",
+        "solute_name": "naphthalene",
+        "solvent_name": "diisopropylether",
+        "solute_smiles": "c1ccc2ccccc2c1",
+        "solvent_smiles": "CC(C)OC(C)C",
         "solute_charge": "0",
         "solute_env": [
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidPrimaryAmide"
+            "Aromatic"
         ],
         "solvent_env": [
             "Dialkylether",
             "Ether"
         ]
     },
-    "mnsol-0834": {
-        "mnsol No.": "0834",
-        "solute_name": "5-bromouracil",
-        "solvent_name": "diethylether",
-        "solute_smiles": "C1=C(C(=O)NC(=O)N1)Br",
-        "solvent_smiles": "CCOCC",
+    "mnsol-0841": {
+        "mnsol No.": "0841",
+        "solute_name": "phenol",
+        "solvent_name": "diisopropylether",
+        "solute_smiles": "c1ccc(cc1)O",
+        "solvent_smiles": "CC(C)OC(C)C",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
-            "ArylBromide",
-            "HalogenDeriv",
-            "Heterocycle",
-            "Oxohetarene"
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0846": {
+        "mnsol No.": "0846",
+        "solute_name": "propanoicacid",
+        "solvent_name": "diisopropylether",
+        "solute_smiles": "CCC(=O)O",
+        "solvent_smiles": "CC(C)OC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0847": {
+        "mnsol No.": "0847",
+        "solute_name": "butanoicacid",
+        "solvent_name": "diisopropylether",
+        "solute_smiles": "CCCC(=O)O",
+        "solvent_smiles": "CC(C)OC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0849": {
+        "mnsol No.": "0849",
+        "solute_name": "hexanoicacid",
+        "solvent_name": "diisopropylether",
+        "solute_smiles": "CCCCCC(=O)O",
+        "solvent_smiles": "CC(C)OC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Dialkylether",
+            "Ether"
+        ]
+    },
+    "mnsol-0854": {
+        "mnsol No.": "0854",
+        "solute_name": "p-hydroxybenzaldehyde",
+        "solvent_name": "diisopropylether",
+        "solute_smiles": "c1cc(ccc1C=O)O",
+        "solvent_smiles": "CC(C)OC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Aromatic",
+            "Carbonyl",
+            "Hydroxy",
+            "Phenol"
         ],
         "solvent_env": [
             "Dialkylether",
@@ -3565,6 +2562,22 @@
             "Ether"
         ]
     },
+    "mnsol-0859": {
+        "mnsol No.": "0859",
+        "solute_name": "n-octane",
+        "solvent_name": "dimethylacetamide",
+        "solute_smiles": "CCCCCCCC",
+        "solvent_smiles": "CC(=O)N(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidTertiaryAmide"
+        ]
+    },
     "mnsol-0865": {
         "mnsol No.": "0865",
         "solute_name": "N,N-dimethylacetamide",
@@ -3583,21 +2596,157 @@
             "CarboxylicAcidTertiaryAmide"
         ]
     },
-    "mnsol-0930": {
-        "mnsol No.": "0930",
-        "solute_name": "uracil",
+    "mnsol-0878": {
+        "mnsol No.": "0878",
+        "solute_name": "2,6-dimethylpyridine",
+        "solvent_name": "dimethylpyridine",
+        "solute_smiles": "Cc1cccc(n1)C",
+        "solvent_smiles": "Cc1cccnc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "Heterocycle"
+        ]
+    },
+    "mnsol-0899": {
+        "mnsol No.": "0899",
+        "solute_name": "chlorobenzene",
+        "solvent_name": "ethanol",
+        "solute_smiles": "c1ccc(cc1)Cl",
+        "solvent_smiles": "CCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-0913": {
+        "mnsol No.": "0913",
+        "solute_name": "1,2-ethanediol",
         "solvent_name": "ethylacetate",
-        "solute_smiles": "C1=CNC(=O)NC1=O",
+        "solute_smiles": "C(CO)O",
+        "solvent_smiles": "CCOC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Diol_1_2",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0926": {
+        "mnsol No.": "0926",
+        "solute_name": "1-octanol",
+        "solvent_name": "ethylacetate",
+        "solute_smiles": "CCCCCCCCO",
+        "solvent_smiles": "CCOC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0928": {
+        "mnsol No.": "0928",
+        "solute_name": "4-methylaniline",
+        "solvent_name": "ethylacetate",
+        "solute_smiles": "Cc1ccc(cc1)N",
+        "solvent_smiles": "CCOC(=O)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0932": {
+        "mnsol No.": "0932",
+        "solute_name": "5-bromouracil",
+        "solvent_name": "ethylacetate",
+        "solute_smiles": "C1=C(C(=O)NC(=O)N1)Br",
         "solvent_smiles": "CCOC(=O)C",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
             "Heterocycle",
             "Oxohetarene"
         ],
         "solvent_env": [
             "CarboxylicAcidDeriv",
             "CarboxylicAcidEster"
+        ]
+    },
+    "mnsol-0942": {
+        "mnsol No.": "0942",
+        "solute_name": "1-heptanol",
+        "solvent_name": "ethylbenzene",
+        "solute_smiles": "CCCCCCCO",
+        "solvent_smiles": "CCc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-0943": {
+        "mnsol No.": "0943",
+        "solute_name": "acetone",
+        "solvent_name": "ethylbenzene",
+        "solute_smiles": "CC(=O)C",
+        "solvent_smiles": "CCc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-0956": {
+        "mnsol No.": "0956",
+        "solute_name": "ethylamine",
+        "solvent_name": "ethylbenzene",
+        "solute_smiles": "CCN",
+        "solvent_smiles": "CCc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Aromatic"
         ]
     },
     "mnsol-0975": {
@@ -3609,6 +2758,20 @@
         "solute_charge": "0",
         "solute_env": [
             "Alkane"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0976": {
+        "mnsol No.": "0976",
+        "solute_name": "benzene",
+        "solvent_name": "heptane",
+        "solute_smiles": "c1ccccc1",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
         ],
         "solvent_env": [
             "Alkane"
@@ -3637,6 +2800,99 @@
         "solute_charge": "0",
         "solute_env": [
             "Aromatic"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0990": {
+        "mnsol No.": "0990",
+        "solute_name": "o-cresol",
+        "solvent_name": "heptane",
+        "solute_smiles": "Cc1ccccc1O",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-0994": {
+        "mnsol No.": "0994",
+        "solute_name": "anisole",
+        "solvent_name": "heptane",
+        "solute_smiles": "COc1ccccc1",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkylarylether",
+            "Aromatic",
+            "Ether"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1002": {
+        "mnsol No.": "1002",
+        "solute_name": "acetophenone",
+        "solvent_name": "heptane",
+        "solute_smiles": "CC(=O)c1ccccc1",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1005": {
+        "mnsol No.": "1005",
+        "solute_name": "pentanoicacid",
+        "solvent_name": "heptane",
+        "solute_smiles": "CCCCC(=O)O",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1020": {
+        "mnsol No.": "1020",
+        "solute_name": "acetonitrile",
+        "solvent_name": "heptane",
+        "solute_smiles": "CC#N",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Nitrile"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1024": {
+        "mnsol No.": "1024",
+        "solute_name": "chlorobenzene",
+        "solvent_name": "heptane",
+        "solute_smiles": "c1ccc(cc1)Cl",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
         ],
         "solvent_env": [
             "Alkane"
@@ -3674,21 +2930,6 @@
             "Alkane"
         ]
     },
-    "mnsol-1031": {
-        "mnsol No.": "1031",
-        "solute_name": "tripropylphosphate",
-        "solvent_name": "heptane",
-        "solute_smiles": "CCCOP(=O)(OCCC)OCCC",
-        "solvent_smiles": "CCCCCCC",
-        "solute_charge": "0",
-        "solute_env": [
-            "PhosphoricAcidDeriv",
-            "PhosphoricAcidEster"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
     "mnsol-1032": {
         "mnsol No.": "1032",
         "solute_name": "2-octanone",
@@ -3719,11 +2960,28 @@
             "Alkane"
         ]
     },
-    "mnsol-1038": {
-        "mnsol No.": "1038",
-        "solute_name": "3-methylaniline",
+    "mnsol-1036": {
+        "mnsol No.": "1036",
+        "solute_name": "benzamide",
         "solvent_name": "heptane",
-        "solute_smiles": "Cc1cccc(c1)N",
+        "solute_smiles": "c1ccc(cc1)C(=O)N",
+        "solvent_smiles": "CCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidPrimaryAmide"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1039": {
+        "mnsol No.": "1039",
+        "solute_name": "4-methylaniline",
+        "solvent_name": "heptane",
+        "solute_smiles": "Cc1ccc(cc1)N",
         "solvent_smiles": "CCCCCCC",
         "solute_charge": "0",
         "solute_env": [
@@ -3736,19 +2994,19 @@
             "Alkane"
         ]
     },
-    "mnsol-1040": {
-        "mnsol No.": "1040",
-        "solute_name": "N-methyl-2-pyrrolidinone",
+    "mnsol-1042": {
+        "mnsol No.": "1042",
+        "solute_name": "5-bromouracil",
         "solvent_name": "heptane",
-        "solute_smiles": "CN1CCCC1=O",
+        "solute_smiles": "C1=C(C(=O)NC(=O)N1)Br",
         "solvent_smiles": "CCCCCCC",
         "solute_charge": "0",
         "solute_env": [
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidTertiaryAmide",
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
             "Heterocycle",
-            "Lactam"
+            "Oxohetarene"
         ],
         "solvent_env": [
             "Alkane"
@@ -3763,6 +3021,97 @@
         "solute_charge": "0",
         "solute_env": [
             "Alkane"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1267": {
+        "mnsol No.": "1267",
+        "solute_name": "ethylbenzene",
+        "solvent_name": "hexane",
+        "solute_smiles": "CCc1ccccc1",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1268": {
+        "mnsol No.": "1268",
+        "solute_name": "o-xylene",
+        "solvent_name": "hexane",
+        "solute_smiles": "Cc1ccccc1C",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1270": {
+        "mnsol No.": "1270",
+        "solute_name": "p-xylene",
+        "solvent_name": "hexane",
+        "solute_smiles": "Cc1ccc(cc1)C",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1281": {
+        "mnsol No.": "1281",
+        "solute_name": "1,4-dioxane",
+        "solvent_name": "hexane",
+        "solute_smiles": "C1COCCO1",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Dialkylether",
+            "Ether",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1282": {
+        "mnsol No.": "1282",
+        "solute_name": "benzaldehyde",
+        "solvent_name": "hexane",
+        "solute_smiles": "c1ccc(cc1)C=O",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Aromatic",
+            "Carbonyl"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1303": {
+        "mnsol No.": "1303",
+        "solute_name": "aniline",
+        "solvent_name": "hexane",
+        "solute_smiles": "c1ccc(cc1)N",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
         ],
         "solvent_env": [
             "Alkane"
@@ -3796,20 +3145,6 @@
             "Alkane"
         ]
     },
-    "mnsol-1309": {
-        "mnsol No.": "1309",
-        "solute_name": "chloroform",
-        "solvent_name": "hexane",
-        "solute_smiles": "C(Cl)(Cl)Cl",
-        "solvent_smiles": "CCCCCC",
-        "solute_charge": "0",
-        "solute_env": [
-            "HalogenDeriv"
-        ],
-        "solvent_env": [
-            "Alkane"
-        ]
-    },
     "mnsol-1312": {
         "mnsol No.": "1312",
         "solute_name": "bromoform",
@@ -3824,6 +3159,73 @@
             "Alkane"
         ]
     },
+    "mnsol-1313": {
+        "mnsol No.": "1313",
+        "solute_name": "bromobenzene",
+        "solvent_name": "hexane",
+        "solute_smiles": "c1ccc(cc1)Br",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1314": {
+        "mnsol No.": "1314",
+        "solute_name": "p-bromophenol",
+        "solvent_name": "hexane",
+        "solute_smiles": "c1cc(ccc1O)Br",
+        "solvent_smiles": "CCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1324": {
+        "mnsol No.": "1324",
+        "solute_name": "ethylbenzene",
+        "solvent_name": "hexanol",
+        "solute_smiles": "CCc1ccccc1",
+        "solvent_smiles": "CCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1330": {
+        "mnsol No.": "1330",
+        "solute_name": "formaldehyde",
+        "solvent_name": "hexanol",
+        "solute_smiles": "C=O",
+        "solvent_smiles": "CCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Carbonyl"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1356": {
         "mnsol No.": "1356",
         "solute_name": "butanal",
@@ -3834,6 +3236,23 @@
         "solute_env": [
             "Aldehyde",
             "Carbonyl"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1361": {
+        "mnsol No.": "1361",
+        "solute_name": "hexanoicacid",
+        "solvent_name": "isobutanol",
+        "solute_smiles": "CCCCCC(=O)O",
+        "solvent_smiles": "CC(C)CO",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
         ],
         "solvent_env": [
             "Alcohol",
@@ -3858,6 +3277,57 @@
             "Alcohol",
             "Hydroxy",
             "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1369": {
+        "mnsol No.": "1369",
+        "solute_name": "piperidine",
+        "solvent_name": "isobutanol",
+        "solute_smiles": "C1CCNCC1",
+        "solvent_smiles": "CC(C)CO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Heterocycle",
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1370": {
+        "mnsol No.": "1370",
+        "solute_name": "methylamine",
+        "solvent_name": "isobutanol",
+        "solute_smiles": "CN",
+        "solvent_smiles": "CC(C)CO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1374": {
+        "mnsol No.": "1374",
+        "solute_name": "n-hexane",
+        "solvent_name": "isooctane",
+        "solute_smiles": "CCCCCC",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Alkane"
         ]
     },
     "mnsol-1376": {
@@ -3902,6 +3372,67 @@
             "Alkane"
         ]
     },
+    "mnsol-1381": {
+        "mnsol No.": "1381",
+        "solute_name": "m-xylene",
+        "solvent_name": "isooctane",
+        "solute_smiles": "Cc1cccc(c1)C",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1385": {
+        "mnsol No.": "1385",
+        "solute_name": "1-pentanol",
+        "solvent_name": "isooctane",
+        "solute_smiles": "CCCCCO",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1389": {
+        "mnsol No.": "1389",
+        "solute_name": "p-cresol",
+        "solvent_name": "isooctane",
+        "solute_smiles": "Cc1ccc(cc1)O",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1391": {
+        "mnsol No.": "1391",
+        "solute_name": "butanal",
+        "solvent_name": "isooctane",
+        "solute_smiles": "CCCC=O",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Carbonyl"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
     "mnsol-1392": {
         "mnsol No.": "1392",
         "solute_name": "pentanal",
@@ -3912,6 +3443,35 @@
         "solute_env": [
             "Aldehyde",
             "Carbonyl"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1396": {
+        "mnsol No.": "1396",
+        "solute_name": "2-hexanone",
+        "solvent_name": "isooctane",
+        "solute_smiles": "CCCCC(=O)C",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1399": {
+        "mnsol No.": "1399",
+        "solute_name": "1-nitropropane",
+        "solvent_name": "isooctane",
+        "solute_smiles": "CCC[N+](=O)[O-]",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "NitroCompound"
         ],
         "solvent_env": [
             "Alkane"
@@ -3961,6 +3521,135 @@
             "Alkane"
         ]
     },
+    "mnsol-1403": {
+        "mnsol No.": "1403",
+        "solute_name": "methylbenzoate",
+        "solvent_name": "isooctane",
+        "solute_smiles": "COC(=O)c1ccccc1",
+        "solvent_smiles": "CCCCCC(C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1415": {
+        "mnsol No.": "1415",
+        "solute_name": "2-pentanone",
+        "solvent_name": "isopropylbenzene",
+        "solute_smiles": "CCCC(=O)C",
+        "solvent_smiles": "CC(C)c1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1427": {
+        "mnsol No.": "1427",
+        "solute_name": "pentylacetate",
+        "solvent_name": "isopropylbenzene",
+        "solute_smiles": "CCCCCOC(=O)C",
+        "solvent_smiles": "CC(C)c1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1428": {
+        "mnsol No.": "1428",
+        "solute_name": "butylamine",
+        "solvent_name": "isopropylbenzene",
+        "solute_smiles": "CCCCN",
+        "solvent_smiles": "CC(C)c1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1441": {
+        "mnsol No.": "1441",
+        "solute_name": "1,4-dioxane",
+        "solvent_name": "mcresol",
+        "solute_smiles": "C1COCCO1",
+        "solvent_smiles": "CC1=CC(=CC=C1)O",
+        "solute_charge": "0",
+        "solute_env": [
+            "Dialkylether",
+            "Ether",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ]
+    },
+    "mnsol-1446": {
+        "mnsol No.": "1446",
+        "solute_name": "2-pentanone",
+        "solvent_name": "mesitylene",
+        "solute_smiles": "CCCC(=O)C",
+        "solvent_smiles": "Cc1cc(cc(c1)C)C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1459": {
+        "mnsol No.": "1459",
+        "solute_name": "ethanol",
+        "solvent_name": "methylenechloride",
+        "solute_smiles": "CCO",
+        "solvent_smiles": "C(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-1461": {
+        "mnsol No.": "1461",
+        "solute_name": "p-cresol",
+        "solvent_name": "methylenechloride",
+        "solute_smiles": "Cc1ccc(cc1)O",
+        "solvent_smiles": "C(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
     "mnsol-1464": {
         "mnsol No.": "1464",
         "solute_name": "dichloromethane",
@@ -3977,22 +3666,149 @@
             "HalogenDeriv"
         ]
     },
-    "mnsol-1474": {
-        "mnsol No.": "1474",
-        "solute_name": "N-methylformamide",
+    "mnsol-1465": {
+        "mnsol No.": "1465",
+        "solute_name": "p-bromophenol",
+        "solvent_name": "methylenechloride",
+        "solute_smiles": "c1cc(ccc1O)Br",
+        "solvent_smiles": "C(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "AlkylChloride",
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-1468": {
+        "mnsol No.": "1468",
+        "solute_name": "n-octane",
         "solvent_name": "methylformamide",
-        "solute_smiles": "CNC=O",
+        "solute_smiles": "CCCCCCCC",
         "solvent_smiles": "CNC=O",
         "solute_charge": "0",
         "solute_env": [
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidSecondaryAmide"
+            "Alkane"
         ],
         "solvent_env": [
             "CarboxylicAcidAmide",
             "CarboxylicAcidDeriv",
             "CarboxylicAcidSecondaryAmide"
+        ]
+    },
+    "mnsol-1473": {
+        "mnsol No.": "1473",
+        "solute_name": "nitromethane",
+        "solvent_name": "methylformamide",
+        "solute_smiles": "C[N+](=O)[O-]",
+        "solvent_smiles": "CNC=O",
+        "solute_charge": "0",
+        "solute_env": [
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "CarboxylicAcidAmide",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidSecondaryAmide"
+        ]
+    },
+    "mnsol-1478": {
+        "mnsol No.": "1478",
+        "solute_name": "m-cresol",
+        "solvent_name": "nitrobenzene",
+        "solute_smiles": "Cc1cccc(c1)O",
+        "solvent_smiles": "c1ccc(cc1)[N+](=O)[O-]",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "NitroCompound"
+        ]
+    },
+    "mnsol-1494": {
+        "mnsol No.": "1494",
+        "solute_name": "2-butanone",
+        "solvent_name": "nitroethane",
+        "solute_smiles": "CCC(=O)C",
+        "solvent_smiles": "CC[N+](=O)[O-]",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "NitroCompound"
+        ]
+    },
+    "mnsol-1500": {
+        "mnsol No.": "1500",
+        "solute_name": "1,4-dioxane",
+        "solvent_name": "nitromethane",
+        "solute_smiles": "C1COCCO1",
+        "solvent_smiles": "C[N+](=O)[O-]",
+        "solute_charge": "0",
+        "solute_env": [
+            "Dialkylether",
+            "Ether",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "NitroCompound"
+        ]
+    },
+    "mnsol-1510": {
+        "mnsol No.": "1510",
+        "solute_name": "1-hexanol",
+        "solvent_name": "nonane",
+        "solute_smiles": "CCCCCCO",
+        "solvent_smiles": "CCCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1518": {
+        "mnsol No.": "1518",
+        "solute_name": "methylacetate",
+        "solvent_name": "nonane",
+        "solute_smiles": "CC(=O)OC",
+        "solvent_smiles": "CCCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1524": {
+        "mnsol No.": "1524",
+        "solute_name": "methylhexanoate",
+        "solvent_name": "nonane",
+        "solute_smiles": "CCCCCC(=O)OC",
+        "solvent_smiles": "CCCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Alkane"
         ]
     },
     "mnsol-1529": {
@@ -4004,6 +3820,132 @@
         "solute_charge": "0",
         "solute_env": [
             "Alkane"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1543": {
+        "mnsol No.": "1543",
+        "solute_name": "ethanol",
+        "solvent_name": "octane",
+        "solute_smiles": "CCO",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1547": {
+        "mnsol No.": "1547",
+        "solute_name": "phenol",
+        "solvent_name": "octane",
+        "solute_smiles": "c1ccc(cc1)O",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1549": {
+        "mnsol No.": "1549",
+        "solute_name": "o-cresol",
+        "solvent_name": "octane",
+        "solute_smiles": "Cc1ccccc1O",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1553": {
+        "mnsol No.": "1553",
+        "solute_name": "acetone",
+        "solvent_name": "octane",
+        "solute_smiles": "CC(=O)C",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1566": {
+        "mnsol No.": "1566",
+        "solute_name": "pentylacetate",
+        "solvent_name": "octane",
+        "solute_smiles": "CCCCCOC(=O)C",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1567": {
+        "mnsol No.": "1567",
+        "solute_name": "ethylamine",
+        "solvent_name": "octane",
+        "solute_smiles": "CCN",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1574": {
+        "mnsol No.": "1574",
+        "solute_name": "2-ethylpyrazine",
+        "solvent_name": "octane",
+        "solute_smiles": "CCc1cnccn1",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1575": {
+        "mnsol No.": "1575",
+        "solute_name": "2-methylaniline",
+        "solvent_name": "octane",
+        "solute_smiles": "Cc1ccccc1N",
+        "solvent_smiles": "CCCCCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
         ],
         "solvent_env": [
             "Alkane"
@@ -4062,6 +4004,38 @@
         "solute_name": "n-butane",
         "solvent_name": "octanol",
         "solute_smiles": "CCCC",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1582": {
+        "mnsol No.": "1582",
+        "solute_name": "n-pentane",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCCCC",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1583": {
+        "mnsol No.": "1583",
+        "solute_name": "n-hexane",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCCCCC",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
@@ -4153,6 +4127,22 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1590": {
+        "mnsol No.": "1590",
+        "solute_name": "cyclohexane",
+        "solvent_name": "octanol",
+        "solute_smiles": "C1CCCCC1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1591": {
         "mnsol No.": "1591",
         "solute_name": "methylcyclohexane",
@@ -4222,6 +4212,22 @@
         "solute_name": "2-methylpropene",
         "solvent_name": "octanol",
         "solute_smiles": "CC(=C)C",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkene"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1596": {
+        "mnsol No.": "1596",
+        "solute_name": "1-butene",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCC=C",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
@@ -4329,6 +4335,24 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1621": {
+        "mnsol No.": "1621",
+        "solute_name": "m-cresol",
+        "solvent_name": "octanol",
+        "solute_smiles": "Cc1cccc(c1)O",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1625": {
         "mnsol No.": "1625",
         "solute_name": "dimethylether",
@@ -4357,6 +4381,23 @@
             "Dialkylether",
             "Ether",
             "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1628": {
+        "mnsol No.": "1628",
+        "solute_name": "diethylether",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCOCC",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Dialkylether",
+            "Ether"
         ],
         "solvent_env": [
             "Alcohol",
@@ -4432,6 +4473,24 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1633": {
+        "mnsol No.": "1633",
+        "solute_name": "anisole",
+        "solvent_name": "octanol",
+        "solute_smiles": "COc1ccccc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkylarylether",
+            "Aromatic",
+            "Ether"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1635": {
         "mnsol No.": "1635",
         "solute_name": "propanal",
@@ -4458,6 +4517,24 @@
         "solute_charge": "0",
         "solute_env": [
             "Aldehyde",
+            "Carbonyl"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1637": {
+        "mnsol No.": "1637",
+        "solute_name": "benzaldehyde",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1ccc(cc1)C=O",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Aromatic",
             "Carbonyl"
         ],
         "solvent_env": [
@@ -4500,11 +4577,63 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1646": {
+        "mnsol No.": "1646",
+        "solute_name": "acetophenone",
+        "solvent_name": "octanol",
+        "solute_smiles": "CC(=O)c1ccccc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1649": {
+        "mnsol No.": "1649",
+        "solute_name": "butanoicacid",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCCC(=O)O",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1652": {
         "mnsol No.": "1652",
         "solute_name": "methylformate",
         "solvent_name": "octanol",
         "solute_smiles": "COC=O",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1654": {
+        "mnsol No.": "1654",
+        "solute_name": "methylpropanoate",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCC(=O)OC",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
@@ -4553,6 +4682,146 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1664": {
+        "mnsol No.": "1664",
+        "solute_name": "butylamine",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCCCN",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1665": {
+        "mnsol No.": "1665",
+        "solute_name": "diethylamine",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCNCC",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1667": {
+        "mnsol No.": "1667",
+        "solute_name": "pyridine",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1ccncc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1668": {
+        "mnsol No.": "1668",
+        "solute_name": "2-methylpyrazine",
+        "solvent_name": "octanol",
+        "solute_smiles": "Cc1cnccn1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1670": {
+        "mnsol No.": "1670",
+        "solute_name": "2-methylpyridine",
+        "solvent_name": "octanol",
+        "solute_smiles": "Cc1ccccn1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1671": {
+        "mnsol No.": "1671",
+        "solute_name": "3-methylpyridine",
+        "solvent_name": "octanol",
+        "solute_smiles": "Cc1cccnc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1672": {
+        "mnsol No.": "1672",
+        "solute_name": "4-methylpyridine",
+        "solvent_name": "octanol",
+        "solute_smiles": "Cc1ccncc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1673": {
+        "mnsol No.": "1673",
+        "solute_name": "N-methylaniline",
+        "solvent_name": "octanol",
+        "solute_smiles": "CNc1ccccc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Aromatic",
+            "SecondaryAmine",
+            "SecondaryMixedAmine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1675": {
         "mnsol No.": "1675",
         "solute_name": "propionitrile",
@@ -4577,6 +4846,23 @@
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
+            "Nitrile"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1677": {
+        "mnsol No.": "1677",
+        "solute_name": "benzonitrile",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1ccc(cc1)C#N",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
             "Nitrile"
         ],
         "solvent_env": [
@@ -4633,16 +4919,49 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1685": {
-        "mnsol No.": "1685",
-        "solute_name": "thiophenol",
+    "mnsol-1682": {
+        "mnsol No.": "1682",
+        "solute_name": "nitrobenzene",
         "solvent_name": "octanol",
-        "solute_smiles": "c1ccc(cc1)S",
+        "solute_smiles": "c1ccc(cc1)[N+](=O)[O-]",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
-            "Arylthiol",
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1683": {
+        "mnsol No.": "1683",
+        "solute_name": "2-methyl-1-nitrobenzene",
+        "solvent_name": "octanol",
+        "solute_smiles": "Cc1ccccc1[N+](=O)[O-]",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1684": {
+        "mnsol No.": "1684",
+        "solute_name": "1-propanethiol",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCCS",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkylthiol",
             "Thiol"
         ],
         "solvent_env": [
@@ -4677,6 +4996,25 @@
         "solute_charge": "0",
         "solute_env": [
             "Thioether"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1689": {
+        "mnsol No.": "1689",
+        "solute_name": "allylalcohol",
+        "solvent_name": "octanol",
+        "solute_smiles": "C=CCO",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Alkene",
+            "Hydroxy",
+            "PrimaryAlcohol"
         ],
         "solvent_env": [
             "Alcohol",
@@ -4725,6 +5063,46 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1692": {
+        "mnsol No.": "1692",
+        "solute_name": "m-hydroxybenzaldehyde",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1cc(cc(c1)O)C=O",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Aromatic",
+            "Carbonyl",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1693": {
+        "mnsol No.": "1693",
+        "solute_name": "p-hydroxybenzaldehyde",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1cc(ccc1C=O)O",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aldehyde",
+            "Aromatic",
+            "Carbonyl",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1697": {
         "mnsol No.": "1697",
         "solute_name": "dichloromethane",
@@ -4734,6 +5112,22 @@
         "solute_charge": "0",
         "solute_env": [
             "AlkylChloride",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1698": {
+        "mnsol No.": "1698",
+        "solute_name": "chloroform",
+        "solvent_name": "octanol",
+        "solute_smiles": "C(Cl)(Cl)Cl",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
             "HalogenDeriv"
         ],
         "solvent_env": [
@@ -4860,14 +5254,34 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1706": {
-        "mnsol No.": "1706",
-        "solute_name": "trichloroethene",
+    "mnsol-1708": {
+        "mnsol No.": "1708",
+        "solute_name": "1,2-dichlorobenzene",
         "solvent_name": "octanol",
-        "solute_smiles": "C(=C(Cl)Cl)Cl",
+        "solute_smiles": "c1ccc(c(c1)Cl)Cl",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
+            "Aromatic",
+            "ArylChloride",
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1709": {
+        "mnsol No.": "1709",
+        "solute_name": "1,4-dichlorobenzene",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1cc(ccc1Cl)Cl",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylChloride",
             "HalogenDeriv"
         ],
         "solvent_env": [
@@ -5045,6 +5459,39 @@
             "PrimaryAlcohol"
         ]
     },
+    "mnsol-1737": {
+        "mnsol No.": "1737",
+        "solute_name": "hydrazine",
+        "solvent_name": "octanol",
+        "solute_smiles": "NN",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Hydrazine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1738": {
+        "mnsol No.": "1738",
+        "solute_name": "2-ethylpyrazine",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCc1cnccn1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
     "mnsol-1740": {
         "mnsol No.": "1740",
         "solute_name": "2-octanone",
@@ -5055,6 +5502,59 @@
         "solute_env": [
             "Carbonyl",
             "Ketone"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1741": {
+        "mnsol No.": "1741",
+        "solute_name": "methylbenzoate",
+        "solvent_name": "octanol",
+        "solute_smiles": "COC(=O)c1ccccc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1744": {
+        "mnsol No.": "1744",
+        "solute_name": "ethylphenylether",
+        "solvent_name": "octanol",
+        "solute_smiles": "CCOc1ccccc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkylarylether",
+            "Aromatic",
+            "Ether"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1746": {
+        "mnsol No.": "1746",
+        "solute_name": "1,1-dimethyl-3-phenylurea",
+        "solvent_name": "octanol",
+        "solute_smiles": "CN(C)C(=O)Nc1ccccc1",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Urea"
         ],
         "solvent_env": [
             "Alcohol",
@@ -5081,36 +5581,16 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1757": {
-        "mnsol No.": "1757",
-        "solute_name": "2,2-dichloroethenyldimethylphosphate",
+    "mnsol-1760": {
+        "mnsol No.": "1760",
+        "solute_name": "dimethyl4-nitrophenylthiophosphate",
         "solvent_name": "octanol",
-        "solute_smiles": "COP(=O)(OC)OC=C(Cl)Cl",
-        "solvent_smiles": "CCCCCCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "HalogenDeriv",
-            "PhosphoricAcidDeriv",
-            "PhosphoricAcidEster"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
-    "mnsol-1763": {
-        "mnsol No.": "1763",
-        "solute_name": "dimethyl4-bromo-2,5-dichlorophenylthiophosphate",
-        "solvent_name": "octanol",
-        "solute_smiles": "COP(=S)(OC)Oc1c(Cl)cc(Br)c(Cl)c1",
+        "solute_smiles": "COP(=S)(OC)Oc1ccc(cc1)[N+](=O)[O-]",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
             "Aromatic",
-            "ArylBromide",
-            "ArylChloride",
-            "HalogenDeriv",
+            "NitroCompound",
             "ThiophosphoricAcidDeriv",
             "ThiophosphoricAcidEster"
         ],
@@ -5120,11 +5600,11 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1769": {
-        "mnsol No.": "1769",
-        "solute_name": "N,N-dimethylacetamide",
+    "mnsol-1767": {
+        "mnsol No.": "1767",
+        "solute_name": "N,N-dimethylformamide",
         "solvent_name": "octanol",
-        "solute_smiles": "CC(=O)N(C)C",
+        "solute_smiles": "CN(C)C=O",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
@@ -5155,14 +5635,49 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1781": {
-        "mnsol No.": "1781",
-        "solute_name": "formamide",
+    "mnsol-1771": {
+        "mnsol No.": "1771",
+        "solute_name": "pyrrole",
         "solvent_name": "octanol",
-        "solute_smiles": "C(=O)N",
+        "solute_smiles": "c1cc[nH]c1",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1772": {
+        "mnsol No.": "1772",
+        "solute_name": "quinoline",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1ccc2c(c1)cccn2",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Heterocycle"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1777": {
+        "mnsol No.": "1777",
+        "solute_name": "benzamide",
+        "solvent_name": "octanol",
+        "solute_smiles": "c1ccc(cc1)C(=O)N",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
             "CarboxylicAcidAmide",
             "CarboxylicAcidDeriv",
             "CarboxylicAcidPrimaryAmide"
@@ -5173,39 +5688,18 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1782": {
-        "mnsol No.": "1782",
-        "solute_name": "2-pyrrolidinone",
+    "mnsol-1778": {
+        "mnsol No.": "1778",
+        "solute_name": "2-methylaniline",
         "solvent_name": "octanol",
-        "solute_smiles": "C1CC(=O)NC1",
+        "solute_smiles": "Cc1ccccc1N",
         "solvent_smiles": "CCCCCCCCO",
         "solute_charge": "0",
         "solute_env": [
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidSecondaryAmide",
-            "Heterocycle",
-            "Lactam"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
-    "mnsol-1783": {
-        "mnsol No.": "1783",
-        "solute_name": "N-methyl-2-pyrrolidinone",
-        "solvent_name": "octanol",
-        "solute_smiles": "CN1CCCC1=O",
-        "solvent_smiles": "CCCCCCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidTertiaryAmide",
-            "Heterocycle",
-            "Lactam"
+            "Amine",
+            "Aromatic",
+            "PrimaryAmine",
+            "PrimaryAromAmine"
         ],
         "solvent_env": [
             "Alcohol",
@@ -5223,6 +5717,26 @@
         "solute_env": [
             "Aromatic",
             "ArylChloride",
+            "HalogenDeriv",
+            "Heterocycle",
+            "Oxohetarene"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1788": {
+        "mnsol No.": "1788",
+        "solute_name": "5-bromouracil",
+        "solvent_name": "octanol",
+        "solute_smiles": "C1=C(C(=O)NC(=O)N1)Br",
+        "solvent_smiles": "CCCCCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
             "HalogenDeriv",
             "Heterocycle",
             "Oxohetarene"
@@ -5406,44 +5920,6 @@
             "PrimaryAlcohol"
         ]
     },
-    "mnsol-1808": {
-        "mnsol No.": "1808",
-        "solute_name": "sulfolane",
-        "solvent_name": "octanol",
-        "solute_smiles": "C1CCS(=O)(=O)C1",
-        "solvent_smiles": "CCCCCCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "Heterocycle",
-            "Sulfone"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
-    "mnsol-1812": {
-        "mnsol No.": "1812",
-        "solute_name": "N-(2-hydroxyphenyl)acetamide",
-        "solvent_name": "octanol",
-        "solute_smiles": "CC(=O)Nc1ccccc1O",
-        "solvent_smiles": "CCCCCCCCO",
-        "solute_charge": "0",
-        "solute_env": [
-            "Aromatic",
-            "CarboxylicAcidAmide",
-            "CarboxylicAcidDeriv",
-            "CarboxylicAcidSecondaryAmide",
-            "Hydroxy",
-            "Phenol"
-        ],
-        "solvent_env": [
-            "Alcohol",
-            "Hydroxy",
-            "PrimaryAlcohol"
-        ]
-    },
     "mnsol-1835": {
         "mnsol No.": "1835",
         "solute_name": "1,2-dichlorobenzene",
@@ -5462,6 +5938,527 @@
             "HalogenDeriv"
         ]
     },
+    "mnsol-1851": {
+        "mnsol No.": "1851",
+        "solute_name": "n-pentane",
+        "solvent_name": "pentane",
+        "solute_smiles": "CCCCC",
+        "solvent_smiles": "CCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1852": {
+        "mnsol No.": "1852",
+        "solute_name": "methanol",
+        "solvent_name": "pentane",
+        "solute_smiles": "CO",
+        "solvent_smiles": "CCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1856": {
+        "mnsol No.": "1856",
+        "solute_name": "1-pentanol",
+        "solvent_name": "pentane",
+        "solute_smiles": "CCCCCO",
+        "solvent_smiles": "CCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1875": {
+        "mnsol No.": "1875",
+        "solute_name": "chloroform",
+        "solvent_name": "pentane",
+        "solute_smiles": "C(Cl)(Cl)Cl",
+        "solvent_smiles": "CCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1876": {
+        "mnsol No.": "1876",
+        "solute_name": "bromoform",
+        "solvent_name": "pentane",
+        "solute_smiles": "C(Br)(Br)Br",
+        "solvent_smiles": "CCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "HalogenDeriv"
+        ],
+        "solvent_env": [
+            "Alkane"
+        ]
+    },
+    "mnsol-1883": {
+        "mnsol No.": "1883",
+        "solute_name": "p-cresol",
+        "solvent_name": "pentanol",
+        "solute_smiles": "Cc1ccc(cc1)O",
+        "solvent_smiles": "CCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1897": {
+        "mnsol No.": "1897",
+        "solute_name": "methylamine",
+        "solvent_name": "pentanol",
+        "solute_smiles": "CN",
+        "solvent_smiles": "CCCCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1915": {
+        "mnsol No.": "1915",
+        "solute_name": "toluene",
+        "solvent_name": "phenylether",
+        "solute_smiles": "Cc1ccccc1",
+        "solvent_smiles": "c1ccc(cc1)Oc2ccccc2",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "Diarylether",
+            "Ether"
+        ]
+    },
+    "mnsol-1923": {
+        "mnsol No.": "1923",
+        "solute_name": "1-propanol",
+        "solvent_name": "propanol",
+        "solute_smiles": "CCCO",
+        "solvent_smiles": "CCCO",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ]
+    },
+    "mnsol-1931": {
+        "mnsol No.": "1931",
+        "solute_name": "2-butanone",
+        "solvent_name": "pyridine",
+        "solute_smiles": "CCC(=O)C",
+        "solvent_smiles": "c1ccncc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic",
+            "Heterocycle"
+        ]
+    },
+    "mnsol-1952": {
+        "mnsol No.": "1952",
+        "solute_name": "2-heptanone",
+        "solvent_name": "tbutylbenzene",
+        "solute_smiles": "CCCCCC(=O)C",
+        "solvent_smiles": "CC(C)(C)C1=CC=CC=C1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1957": {
+        "mnsol No.": "1957",
+        "solute_name": "methylpentanoate",
+        "solvent_name": "tbutylbenzene",
+        "solute_smiles": "CCCCC(=O)OC",
+        "solvent_smiles": "CC(C)(C)C1=CC=CC=C1",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1958": {
+        "mnsol No.": "1958",
+        "solute_name": "butylacetate",
+        "solvent_name": "tbutylbenzene",
+        "solute_smiles": "CCCCOC(=O)C",
+        "solvent_smiles": "CC(C)(C)C1=CC=CC=C1",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1965": {
+        "mnsol No.": "1965",
+        "solute_name": "methylpropanoate",
+        "solvent_name": "tetrachloroethene",
+        "solute_smiles": "CCC(=O)OC",
+        "solvent_smiles": "C(=C(Cl)Cl)(Cl)Cl",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "HalogenDeriv"
+        ]
+    },
+    "mnsol-1985": {
+        "mnsol No.": "1985",
+        "solute_name": "nitromethane",
+        "solvent_name": "tetrahydrothiophenedioxide",
+        "solute_smiles": "C[N+](=O)[O-]",
+        "solvent_smiles": "C1CCS(=O)(=O)C1",
+        "solute_charge": "0",
+        "solute_env": [
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Heterocycle",
+            "Sulfone"
+        ]
+    },
+    "mnsol-1995": {
+        "mnsol No.": "1995",
+        "solute_name": "n-octane",
+        "solvent_name": "toluene",
+        "solute_smiles": "CCCCCCCC",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alkane"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-1999": {
+        "mnsol No.": "1999",
+        "solute_name": "1-propanol",
+        "solvent_name": "toluene",
+        "solute_smiles": "CCCO",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2003": {
+        "mnsol No.": "2003",
+        "solute_name": "1-hexanol",
+        "solvent_name": "toluene",
+        "solute_smiles": "CCCCCCO",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2012": {
+        "mnsol No.": "2012",
+        "solute_name": "3,3-dimethylbutanone",
+        "solvent_name": "toluene",
+        "solute_smiles": "CC(=O)C(C)(C)C",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2013": {
+        "mnsol No.": "2013",
+        "solute_name": "2-heptanone",
+        "solvent_name": "toluene",
+        "solute_smiles": "CCCCCC(=O)C",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Carbonyl",
+            "Ketone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2018": {
+        "mnsol No.": "2018",
+        "solute_name": "hexanoicacid",
+        "solvent_name": "toluene",
+        "solute_smiles": "CCCCCC(=O)O",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2036": {
+        "mnsol No.": "2036",
+        "solute_name": "1-nitropropane",
+        "solvent_name": "toluene",
+        "solute_smiles": "CCC[N+](=O)[O-]",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "NitroCompound"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2037": {
+        "mnsol No.": "2037",
+        "solute_name": "p-bromophenol",
+        "solvent_name": "toluene",
+        "solute_smiles": "c1cc(ccc1O)Br",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Aromatic",
+            "ArylBromide",
+            "HalogenDeriv",
+            "Hydroxy",
+            "Phenol"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2038": {
+        "mnsol No.": "2038",
+        "solute_name": "ammonia",
+        "solvent_name": "toluene",
+        "solute_smiles": "N",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2040": {
+        "mnsol No.": "2040",
+        "solute_name": "methylamine",
+        "solvent_name": "toluene",
+        "solute_smiles": "CN",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "PrimaryAliphAmine",
+            "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2043": {
+        "mnsol No.": "2043",
+        "solute_name": "g-butyrolactone",
+        "solvent_name": "toluene",
+        "solute_smiles": "C1CC(=O)OC1",
+        "solvent_smiles": "Cc1ccccc1",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster",
+            "Heterocycle",
+            "Lactone"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2049": {
+        "mnsol No.": "2049",
+        "solute_name": "1-butanol",
+        "solvent_name": "tributylphosphate",
+        "solute_smiles": "CCCCO",
+        "solvent_smiles": "CCCCOP(=O)(OCCCC)OCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "PhosphoricAcidDeriv",
+            "PhosphoricAcidEster"
+        ]
+    },
+    "mnsol-2060": {
+        "mnsol No.": "2060",
+        "solute_name": "2-methoxyethanol",
+        "solvent_name": "tributylphosphate",
+        "solute_smiles": "COCCO",
+        "solvent_smiles": "CCCCOP(=O)(OCCCC)OCCCC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Dialkylether",
+            "Ether",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "PhosphoricAcidDeriv",
+            "PhosphoricAcidEster"
+        ]
+    },
+    "mnsol-2064": {
+        "mnsol No.": "2064",
+        "solute_name": "ethanol",
+        "solvent_name": "triethylamine",
+        "solute_smiles": "CCO",
+        "solvent_smiles": "CCN(CC)CC",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Amine",
+            "TertiaryAliphAmine",
+            "TertiaryAmine"
+        ]
+    },
+    "mnsol-2495": {
+        "mnsol No.": "2495",
+        "solute_name": "1-heptanol",
+        "solvent_name": "xylene",
+        "solute_smiles": "CCCCCCCO",
+        "solvent_smiles": "Cc1ccccc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Alcohol",
+            "Hydroxy",
+            "PrimaryAlcohol"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2504": {
+        "mnsol No.": "2504",
+        "solute_name": "propanoicacid",
+        "solvent_name": "xylene",
+        "solute_smiles": "CCC(=O)O",
+        "solvent_smiles": "Cc1ccccc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcid",
+            "CarboxylicAcidDeriv"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2514": {
+        "mnsol No.": "2514",
+        "solute_name": "methylhexanoate",
+        "solvent_name": "xylene",
+        "solute_smiles": "CCCCCC(=O)OC",
+        "solvent_smiles": "Cc1ccccc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "CarboxylicAcidDeriv",
+            "CarboxylicAcidEster"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2517": {
+        "mnsol No.": "2517",
+        "solute_name": "dimethylamine",
+        "solvent_name": "xylene",
+        "solute_smiles": "CNC",
+        "solvent_smiles": "Cc1ccccc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
     "mnsol-2521": {
         "mnsol No.": "2521",
         "solute_name": "pentylamine",
@@ -5473,6 +6470,39 @@
             "Amine",
             "PrimaryAliphAmine",
             "PrimaryAmine"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2522": {
+        "mnsol No.": "2522",
+        "solute_name": "dipropylamine",
+        "solvent_name": "xylene",
+        "solute_smiles": "CCCNCCC",
+        "solvent_smiles": "Cc1ccccc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
+        ],
+        "solvent_env": [
+            "Aromatic"
+        ]
+    },
+    "mnsol-2527": {
+        "mnsol No.": "2527",
+        "solute_name": "piperidine",
+        "solvent_name": "xylene",
+        "solute_smiles": "C1CCNCC1",
+        "solvent_smiles": "Cc1ccccc1C",
+        "solute_charge": "0",
+        "solute_env": [
+            "Amine",
+            "Heterocycle",
+            "SecondaryAliphAmine",
+            "SecondaryAmine"
         ],
         "solvent_env": [
             "Aromatic"

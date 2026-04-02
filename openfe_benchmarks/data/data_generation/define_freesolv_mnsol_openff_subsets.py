@@ -1,0 +1,1626 @@
+"""Build aligned MNSol and FreeSolv benchmark subsets with UMAP-guided selection.
+
+This script produces two output files per dataset:
+  - ``subset_openff_filtered.json``  — the full filtered pool (all valid records)
+  - ``subset_openff_small.json``     — the curated subset chosen by the algorithm below
+
+MNSol subset selection
+----------------------
+Phase 1 — FreeSolv-overlap seeding
+    Solutes confirmed to overlap with FreeSolv (via OpenFF SMILES isomorphism)
+    are guaranteed inclusion. Up to ``max_rows_per_solute`` rows per solute are
+    chosen by UMAP MaxMin to maximise solvent diversity.
+
+Phase 2 — checkmol environment coverage
+    For each checkmol ``ChemicalEnvironment`` still below ``n_per_environment``
+    representatives, additional rows are added from the full filtered pool via
+    greedy UMAP MaxMin.
+
+Phase 3 — uniform UMAP fill
+    Remaining budget (``max_subset_size`` minus current size) is filled by
+    greedy MaxMin over the 2D UMAP(Jaccard) embedding of OR-combined
+    solute+solvent Morgan fingerprints, maximizing pair-space coverage.
+
+Phase 4 — gap rebalancing
+    Up to ``max_swaps`` swap iterations move points from dense UMAP clusters
+    into sparse regions. Each swap removes the selected point closest to any
+    other selected neighbor and replaces it with the unselected point that
+    covers the largest remaining gap, subject to:
+      - per-environment hard floor of ``n_per_environment - 1``
+      - per-solute cap of ``max_rows_per_solute``
+    Swaps are scored by (cap_penalty, env_scarcity, gap_distance). A tabu set
+    prevents oscillation.
+
+FreeSolv subset selection
+-------------------------
+FreeSolv has only water as solvent, so environment coverage uses solute
+environments only. MNSol-overlapping solutes are seeded first; remaining budget
+is filled by ``fill_environment_coverage`` targeting ``n_per_environment`` per
+environment.
+
+Differences from openff-sage subsets
+-------------------------------------
+The openff-sage MNSol subset does not use UMAP-guided selection or gap
+rebalancing; its FreeSolv subset is primarily an MNSol overlap-membership filter
+without an independent chemical-space fill stage.
+"""
+
+import csv
+import json
+import pathlib
+import warnings
+from collections import defaultdict
+from pathlib import Path
+from typing import Any
+
+import click
+import requests
+from gufe.tokenization import JSON_HANDLER
+from openff.toolkit import Molecule
+from rdkit import Chem
+from rdkit import DataStructs
+from rdkit import RDLogger
+from rdkit.Chem import AllChem
+import numpy as np
+import umap
+from tqdm import tqdm
+from yammbs import checkmol
+from yammbs.checkmol import ChemicalEnvironment
+
+import openfe_benchmarks
+
+RDLogger.DisableLog("rdApp.*")
+# Collect noisy third-party warnings and print them once at the end.
+_warning_log: list[warnings.WarningMessage] = []
+
+PACKAGE_ROOT = Path(openfe_benchmarks.__file__).parent.parent
+MNSOL_SOLVENTS_PER_SOLUTE = 3
+
+_MN_SOL_JSON_PATH = pathlib.Path(__file__).parent / "mnsol-name-to-smiles.json"
+with _MN_SOL_JSON_PATH.open("r", encoding="utf-8") as _f:
+    NAMES_TO_SMILES = json.load(_f)
+
+SMIRKS_FILTERS = [
+    # Long chain alkane / ether
+    "-".join(["[#6X4,#8X2]"] * 10),
+    # 1,3 carbonyls with at least one ketone carbonyl
+    "[#6](=[#8])-[#6](-[#1])(-[#1])-[#6](=[#8])-[#6]",
+    # Things which dissociate
+    "[H]-[Cl]",
+    "[H]-[Br]",
+]
+
+SMIRKS_FILTER_MOLS = [Chem.MolFromSmarts(s) for s in SMIRKS_FILTERS]
+ALLOWED_ELEMENTS = {"C", "O", "N", "Cl", "Br", "H", "S", "P"}
+
+CHEMICAL_ENVIRONMENTS = [
+    ChemicalEnvironment.Alkane,
+    ChemicalEnvironment.Alkene,
+    ChemicalEnvironment.Alcohol,
+    ChemicalEnvironment.CarbonylHydrate,
+    ChemicalEnvironment.Hemiacetal,
+    ChemicalEnvironment.Acetal,
+    ChemicalEnvironment.Hemiaminal,
+    ChemicalEnvironment.Aminal,
+    ChemicalEnvironment.Thioacetal,
+    ChemicalEnvironment.CarboxylicAcidEster,
+    ChemicalEnvironment.Ether,
+    ChemicalEnvironment.Aldehyde,
+    ChemicalEnvironment.Ketone,
+    ChemicalEnvironment.Aromatic,
+    ChemicalEnvironment.CarboxylicAcidPrimaryAmide,
+    ChemicalEnvironment.CarboxylicAcidSecondaryAmide,
+    ChemicalEnvironment.CarboxylicAcidTertiaryAmide,
+    ChemicalEnvironment.PrimaryAmine,
+    ChemicalEnvironment.SecondaryAmine,
+    ChemicalEnvironment.TertiaryAmine,
+    ChemicalEnvironment.Cyanate,
+    ChemicalEnvironment.Isocyanate,
+    ChemicalEnvironment.Heterocycle,
+    ChemicalEnvironment.AlkylFluoride,
+    ChemicalEnvironment.ArylFluoride,
+    ChemicalEnvironment.AlkylChloride,
+    ChemicalEnvironment.ArylChloride,
+    ChemicalEnvironment.AlkylBromide,
+    ChemicalEnvironment.ArylBromide,
+    ChemicalEnvironment.Thiol,
+    ChemicalEnvironment.Thioaldehyde,
+    ChemicalEnvironment.Thioketone,
+    ChemicalEnvironment.Thioether,
+    ChemicalEnvironment.Disulfide,
+    ChemicalEnvironment.Thiourea,
+    ChemicalEnvironment.Thiocyanate,
+    ChemicalEnvironment.Isothiocyanate,
+    ChemicalEnvironment.ThiocarboxylicAcid,
+    ChemicalEnvironment.ThiocarboxylicAcidEster,
+    ChemicalEnvironment.SulfonicAcidEster,
+    ChemicalEnvironment.Sulfone,
+    ChemicalEnvironment.PhosphonicAcid,
+    ChemicalEnvironment.PhosphoricAcid,
+    ChemicalEnvironment.PhosphoricAcidEster,
+]
+
+
+def contains_any_filter_smirks(smiles: str) -> bool:
+    """Return True if the SMILES matches any SMIRKS/SMARTS filter pattern."""
+    try:
+        mol = Chem.MolFromSmiles(smiles, sanitize=True)
+    except Exception:
+        return False
+
+    if mol is None:
+        return False
+
+    # Make hydrogens explicit so patterns containing [#1]/[H] can match.
+    mol = Chem.AddHs(mol)
+
+    return any(
+        pattern is not None and mol.HasSubstructMatch(pattern)
+        for pattern in SMIRKS_FILTER_MOLS
+    )
+
+
+def has_undefined_stereochemistry(smiles: str) -> bool:
+    """Return True if a sanitized RDKit molecule has unspecified stereochemistry."""
+    try:
+        mol = Chem.MolFromSmiles(smiles, sanitize=True)
+    except Exception:
+        return False
+
+    if mol is None:
+        return False
+
+    Chem.AssignStereochemistry(mol, cleanIt=True, force=True)
+    chiral_centers = Chem.FindMolChiralCenters(
+        mol, includeUnassigned=True, useLegacyImplementation=False
+    )
+    if any(tag == "?" for _, tag in chiral_centers):
+        return True
+
+    return any(
+        stereo_info.specified == Chem.rdchem.StereoSpecified.Unspecified
+        for stereo_info in Chem.FindPotentialStereo(mol)
+    )
+
+
+def has_only_allowed_elements(
+    smiles: str, allowed_elements: set[str] = ALLOWED_ELEMENTS
+) -> bool:
+    """Return True if the molecule contains only the allowed element symbols."""
+    try:
+        mol = Chem.MolFromSmiles(smiles, sanitize=True)
+    except Exception:
+        return False
+
+    if mol is None:
+        return False
+
+    mol = Chem.AddHs(mol)
+    return all(atom.GetSymbol() in allowed_elements for atom in mol.GetAtoms())
+
+
+def get_checkmol_environments(smiles: str) -> set[ChemicalEnvironment]:
+    """Return the set of checkmol chemical environments for a SMILES."""
+    try:
+        mol = Chem.MolFromSmiles(smiles, sanitize=True)
+    except Exception:
+        return set()
+
+    if mol is None:
+        return set()
+
+    candidate_functions = (
+        "find_chemical_environments",
+        "get_chemical_environments",
+        "chemical_environments",
+        "analyze_functional_groups",
+    )
+    for fn_name in candidate_functions:
+        fn = getattr(checkmol, fn_name, None)
+        if fn is None:
+            continue
+
+        for arg in (smiles, mol):
+            try:
+                result = fn(arg)
+            except Exception:
+                continue
+
+            if result is None:
+                continue
+
+            environments: set[ChemicalEnvironment] = set()
+            if isinstance(result, dict):
+                items = [k for k, v in result.items() if v]
+            else:
+                items = list(result)
+
+            for item in items:
+                if isinstance(item, ChemicalEnvironment):
+                    environments.add(item)
+                elif isinstance(item, str):
+                    try:
+                        environments.add(ChemicalEnvironment[item])
+                    except Exception:
+                        try:
+                            environments.add(ChemicalEnvironment(item))
+                        except Exception:
+                            pass
+
+            return environments
+
+    return set()
+
+
+def canonicalize_smiles(smiles: str) -> str | None:
+    """Return an RDKit canonical isomeric SMILES for matching."""
+    try:
+        mol = Chem.MolFromSmiles(smiles, sanitize=True)
+    except Exception:
+        return None
+
+    if mol is None:
+        return None
+
+    return Chem.MolToSmiles(mol, isomericSmiles=True)
+
+
+def make_openff_molecule(smiles: str) -> Molecule | None:
+    """Build an OpenFF Molecule for isomorphism checks."""
+    try:
+        return Molecule.from_smiles(smiles, allow_undefined_stereo=True)
+    except Exception:
+        return None
+
+
+def molecules_are_isomorphic(mol_a: Molecule, mol_b: Molecule) -> bool:
+    """Check OpenFF isomorphism while being tolerant to toolkit API differences."""
+    return Molecule.are_isomorphic(mol_a, mol_b, return_atom_map=False)[0]
+
+
+def solute_fingerprint(smiles: str):
+    """Return a Morgan fingerprint used for diversity tie-breaking."""
+    if smiles is None:
+        return None
+
+    try:
+        mol = Chem.MolFromSmiles(smiles, sanitize=True)
+    except Exception:
+        return None
+
+    if mol is None:
+        return None
+
+    return AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=2048)
+
+
+def pair_fingerprint(solute_smiles: str, solvent_smiles: str):
+    """Return an OR-combined solute/solvent Morgan fingerprint for a system pair.
+
+    Combining both component fingerprints into a single bit vector captures
+    pair-level chemical diversity and matches the space used in UMAP analysis.
+    """
+    fp_solute = solute_fingerprint(solute_smiles)
+    fp_solvent = solute_fingerprint(solvent_smiles)
+    if fp_solute is None or fp_solvent is None:
+        return None
+    combined = DataStructs.ExplicitBitVect(2048)
+    combined |= fp_solute
+    combined |= fp_solvent
+    return combined
+
+
+def select_diverse_keys(
+    candidate_keys: list[str],
+    already_selected_keys: set[str],
+    fp_by_key: dict[str, Any],
+    order_map: dict[str, int],
+    n_to_select: int,
+) -> list[str]:
+    """Select keys maximizing minimum distance to already selected entries."""
+    available = [k for k in candidate_keys if k not in already_selected_keys]
+    chosen: list[str] = []
+
+    while available and len(chosen) < n_to_select:
+        reference_keys = [*already_selected_keys, *chosen]
+
+        if not reference_keys:
+            best_key = min(available, key=lambda k: order_map[k])
+        else:
+
+            def min_distance_to_references(key: str) -> float:
+                fp = fp_by_key.get(key)
+                if fp is None:
+                    return 0.0
+
+                distances = []
+                for ref_key in reference_keys:
+                    ref_fp = fp_by_key.get(ref_key)
+                    if ref_fp is None:
+                        distances.append(0.0)
+                    else:
+                        similarity = DataStructs.TanimotoSimilarity(fp, ref_fp)
+                        distances.append(1.0 - similarity)
+
+                return min(distances) if distances else 0.0
+
+            best_key = max(
+                available,
+                key=lambda k: (min_distance_to_references(k), -order_map[k]),
+            )
+
+        chosen.append(best_key)
+        available.remove(best_key)
+
+    return chosen
+
+
+def fill_environment_coverage(
+    data: dict[str, dict],
+    seed_keys: set[str],
+    n_per_environment: int,
+    max_rows_per_solute: int | None = None,
+    environment_mode: str = "solvent_solute_pairs",
+) -> tuple[dict[str, dict], list[str], list[str]]:
+    """Fill environment coverage using a SelectSubstances-like loop.
+
+    The selection iterates over either:
+
+    - solvent/solute environment tuples (``environment_mode='solvent_solute_pairs'``)
+    - solute-only environments (``environment_mode='solute_only'``)
+
+    It then selects up to ``n_per_environment`` systems per target using
+    fingerprint diversity and removes newly selected systems from the candidate
+    pool before moving to the next target.
+    """
+    target_environment_names = [env.name for env in CHEMICAL_ENVIRONMENTS]
+    ordered_keys = list(data)
+
+    def build_environment_tuples() -> list[tuple[str, str]]:
+        return [
+            *[(env_name, env_name) for env_name in target_environment_names],
+            *[
+                pair
+                for i, env_i in enumerate(target_environment_names)
+                for pair in [
+                    (env_i, env_j) for env_j in target_environment_names[i + 1 :]
+                ]
+            ],
+        ]
+
+    def matches_environment_tuple(
+        record: dict, environment_tuple: tuple[str, str]
+    ) -> bool:
+        solvent_envs = set(record.get("solvent_env", []))
+        solute_envs = set(record.get("solute_env", []))
+        env_a, env_b = environment_tuple
+
+        if env_a == env_b:
+            return env_a in solvent_envs and env_a in solute_envs
+
+        return (env_a in solvent_envs and env_b in solute_envs) or (
+            env_b in solvent_envs and env_a in solute_envs
+        )
+
+    environment_tuples = build_environment_tuples()
+    if environment_mode not in {"solvent_solute_pairs", "solute_only"}:
+        raise ValueError(
+            "environment_mode must be 'solvent_solute_pairs' or 'solute_only'"
+        )
+
+    fp_by_key = {key: solute_fingerprint(data[key]["solute_smiles"]) for key in data}
+    order_map = {key: i for i, key in enumerate(ordered_keys)}
+    key_to_envs = {key: set(data[key].get("solute_env", [])) for key in data}
+    key_to_solute = {key: data[key]["solute_name"] for key in data}
+
+    selected: set[str] = {key for key in seed_keys if key in data}
+    component_pool_keys = [key for key in ordered_keys if key not in selected]
+    coverage_additions: list[str] = []
+    solute_counts = defaultdict(int)
+    for key in selected:
+        solute_counts[key_to_solute[key]] += 1
+
+    def count_for_environment(env_name: str) -> int:
+        return sum(1 for key in selected if env_name in key_to_envs[key])
+
+    def count_for_environment_tuple(environment_tuple: tuple[str, str]) -> int:
+        return sum(
+            1
+            for key in selected
+            if matches_environment_tuple(data[key], environment_tuple)
+        )
+
+    if environment_mode == "solute_only":
+        for env_name in target_environment_names:
+            needed = n_per_environment - count_for_environment(env_name)
+            if needed <= 0:
+                continue
+
+            candidate_keys = [
+                key
+                for key in component_pool_keys
+                if env_name in key_to_envs[key]
+                and (
+                    max_rows_per_solute is None
+                    or solute_counts[key_to_solute[key]] < max_rows_per_solute
+                )
+            ]
+
+            picked = select_diverse_keys(
+                candidate_keys,
+                selected,
+                fp_by_key,
+                order_map,
+                needed,
+            )
+
+            selected.update(picked)
+            coverage_additions.extend(picked)
+            for key in picked:
+                solute_counts[key_to_solute[key]] += 1
+            if picked:
+                picked_set = set(picked)
+                component_pool_keys = [
+                    key for key in component_pool_keys if key not in picked_set
+                ]
+
+    else:
+        for environment_tuple in environment_tuples:
+            needed = n_per_environment - count_for_environment_tuple(environment_tuple)
+            if needed <= 0:
+                continue
+
+            candidate_keys = [
+                key
+                for key in component_pool_keys
+                if matches_environment_tuple(data[key], environment_tuple)
+                and (
+                    max_rows_per_solute is None
+                    or solute_counts[key_to_solute[key]] < max_rows_per_solute
+                )
+            ]
+
+            picked = select_diverse_keys(
+                candidate_keys,
+                selected,
+                fp_by_key,
+                order_map,
+                needed,
+            )
+
+            selected.update(picked)
+            coverage_additions.extend(picked)
+            for key in picked:
+                solute_counts[key_to_solute[key]] += 1
+            if picked:
+                picked_set = set(picked)
+                component_pool_keys = [
+                    key for key in component_pool_keys if key not in picked_set
+                ]
+
+    missing_environments = [
+        env_name
+        for env_name in target_environment_names
+        if count_for_environment(env_name) < n_per_environment
+    ]
+
+    selected_data = {key: data[key] for key in sorted(selected)}
+    return selected_data, sorted(coverage_additions), missing_environments
+
+
+def build_filtered_mnsol_records(
+    mnsol_alldata: pathlib.Path,
+) -> tuple[dict[str, dict], dict[str, list[str]]]:
+    """Load and filter MNSol rows with the same gates as the existing script."""
+    data: dict[str, dict] = {}
+    skipped_systems = defaultdict(list)
+    skip_molecules = ["water"]
+
+    with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
+        total_lines = sum(1 for _ in fh)
+        fh.seek(0)
+        reader = csv.DictReader(fh, delimiter="\t")
+        for row in tqdm(reader, total=total_lines):
+            if not row or not row.get("FileHandle"):
+                continue
+
+            index_raw = row.get("No.")
+            if index_raw is None:
+                continue
+            index = f"{int(index_raw):04d}"
+            key = f"mnsol-{index}"
+            solute_name = row.get("SoluteName", "").strip().strip('"')
+            solvent_name = row.get("Solvent", "").strip().strip('"')
+            group = row.get("Level1", "").strip().strip('"')
+            charge = row.get("Charge", "").strip().strip('"')
+
+            checks = [
+                (solute_name in skip_molecules, "solute in skip_molecules"),
+                (solvent_name in skip_molecules, "solvent in skip_molecules"),
+                (solute_name not in NAMES_TO_SMILES, "no solute smiles"),
+                (solvent_name not in NAMES_TO_SMILES, "no solvent smiles"),
+                ("radical" in solute_name, "solute is a radical"),
+                (group == "14", "explicit solvent"),
+                (charge != "0", "charged system"),
+                (solute_name == solvent_name, "solute and solvent are the same"),
+            ]
+            skip_reason = next(
+                (reason for condition, reason in checks if condition), None
+            )
+            if skip_reason:
+                skipped_systems[skip_reason].append(index)
+                continue
+
+            solute_smiles = NAMES_TO_SMILES[solute_name]
+            solvent_smiles = NAMES_TO_SMILES[solvent_name]
+            checks = [
+                (
+                    contains_any_filter_smirks(solute_smiles),
+                    "solute has disqualifying smirks",
+                ),
+                (
+                    contains_any_filter_smirks(solvent_smiles),
+                    "solvent has disqualifying smirks",
+                ),
+                (
+                    has_undefined_stereochemistry(solvent_smiles),
+                    "solvent has undefined stereochemistry",
+                ),
+                (
+                    has_undefined_stereochemistry(solute_smiles),
+                    "solute has undefined stereochemistry",
+                ),
+                (
+                    not has_only_allowed_elements(solvent_smiles),
+                    "solvent elements outside chemical space",
+                ),
+                (
+                    not has_only_allowed_elements(solute_smiles),
+                    "solute elements outside chemical space",
+                ),
+            ]
+            skip_reason = next(
+                (reason for condition, reason in checks if condition), None
+            )
+            if skip_reason:
+                skipped_systems[skip_reason].append(index)
+                continue
+
+            data[key] = {
+                "mnsol No.": key.split("-")[1],
+                "solute_name": solute_name,
+                "solvent_name": solvent_name,
+                "solute_smiles": solute_smiles,
+                "solvent_smiles": solvent_smiles,
+                "solute_charge": charge,
+                "solute_env": sorted(
+                    env.name for env in get_checkmol_environments(solute_smiles)
+                ),
+                "solvent_env": sorted(
+                    env.name for env in get_checkmol_environments(solvent_smiles)
+                ),
+            }
+
+    return data, skipped_systems
+
+
+def build_filtered_freesolv_records() -> tuple[dict[str, dict], dict[str, list[str]]]:
+    """Load and filter FreeSolv rows with the same gates as the existing script."""
+    url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
+    response = requests.get(url)
+    response.raise_for_status()
+    freesolv = response.json()
+
+    data: dict[str, dict] = {}
+    skipped_systems = defaultdict(list)
+    for name, entry in freesolv.items():
+        offmol_solute = make_openff_molecule(entry["smiles"])
+        if offmol_solute is None:
+            skipped_systems["invalid openff solute"].append(name)
+            continue
+
+        charge = sum(a.GetFormalCharge() for a in offmol_solute.to_rdkit().GetAtoms())
+        checks = [
+            (charge != 0, "charged system"),
+            (
+                contains_any_filter_smirks(entry["smiles"]),
+                "solute has disqualifying smirks",
+            ),
+            (
+                has_undefined_stereochemistry(entry["smiles"]),
+                "solute has undefined stereochemistry",
+            ),
+            (
+                not has_only_allowed_elements(entry["smiles"]),
+                "solute elements outside chemical space",
+            ),
+        ]
+        skip_reason = next((reason for condition, reason in checks if condition), None)
+        if skip_reason:
+            skipped_systems[skip_reason].append(name)
+            continue
+
+        key = f"freesolv-{name}"
+        data[key] = {
+            "freesolv_id": name,
+            "solute_name": name,
+            "solvent_name": "water",
+            "solute_smiles": entry["smiles"],
+            "solvent_smiles": "O",
+            "solute_charge": charge,
+            "solute_env": sorted(
+                env.name for env in get_checkmol_environments(entry["smiles"])
+            ),
+            "solvent_env": sorted(env.name for env in get_checkmol_environments("O")),
+        }
+
+    return data, skipped_systems
+
+
+def find_overlapping_solutes(
+    mnsol_data: dict[str, dict], freesolv_data: dict[str, dict]
+) -> tuple[set[str], set[str]]:
+    """Find overlapping solutes across MNSol and FreeSolv using OpenFF isomorphism."""
+    mnsol_solute_to_smiles = {
+        record["solute_name"]: record["solute_smiles"] for record in mnsol_data.values()
+    }
+    freesolv_solute_to_smiles = {
+        record["solute_name"]: record["solute_smiles"]
+        for record in freesolv_data.values()
+    }
+
+    mnsol_mols = {
+        name: make_openff_molecule(smiles)
+        for name, smiles in mnsol_solute_to_smiles.items()
+    }
+    freesolv_mols = {
+        name: make_openff_molecule(smiles)
+        for name, smiles in freesolv_solute_to_smiles.items()
+    }
+
+    freesolv_by_canonical = defaultdict(list)
+    for name, smiles in freesolv_solute_to_smiles.items():
+        canonical = canonicalize_smiles(smiles)
+        if canonical is not None:
+            freesolv_by_canonical[canonical].append(name)
+
+    overlapping_mnsol_solutes: set[str] = set()
+    overlapping_freesolv_solutes: set[str] = set()
+
+    for mnsol_name, mnsol_smiles in mnsol_solute_to_smiles.items():
+        mnsol_mol = mnsol_mols.get(mnsol_name)
+        if mnsol_mol is None:
+            continue
+
+        canonical = canonicalize_smiles(mnsol_smiles)
+        candidate_freesolv_names = []
+        if canonical is not None:
+            candidate_freesolv_names = freesolv_by_canonical.get(canonical, [])
+
+        if not candidate_freesolv_names:
+            candidate_freesolv_names = list(freesolv_solute_to_smiles)
+
+        for freesolv_name in candidate_freesolv_names:
+            freesolv_mol = freesolv_mols.get(freesolv_name)
+            if freesolv_mol is None:
+                continue
+
+            if molecules_are_isomorphic(mnsol_mol, freesolv_mol):
+                overlapping_mnsol_solutes.add(mnsol_name)
+                overlapping_freesolv_solutes.add(freesolv_name)
+
+    return overlapping_mnsol_solutes, overlapping_freesolv_solutes
+
+
+def find_multi_solvent_mnsol_solutes(mnsol_data: dict[str, dict]) -> set[str]:
+    """Return MNSol solutes that appear with more than one solvent."""
+    solvents_by_solute = defaultdict(set)
+    for record in mnsol_data.values():
+        solvents_by_solute[record["solute_name"]].add(record["solvent_name"])
+
+    return {
+        solute_name
+        for solute_name, solvents in solvents_by_solute.items()
+        if len(solvents) > 1
+    }
+
+
+def select_diverse_keys_umap(
+    candidate_keys: list[str],
+    already_selected_keys: set[str],
+    umap_coords: dict[str, np.ndarray],
+    order_map: dict[str, int],
+    n_to_select: int,
+) -> list[str]:
+    """Greedy MaxMin selection in UMAP 2D space.
+
+    At each step picks the candidate whose minimum Euclidean distance to any
+    already-selected point is largest, maximizing spread across the embedding.
+    When no references exist yet, the record with the smallest insertion index
+    is chosen for determinism.
+    """
+    available = [k for k in candidate_keys if k not in already_selected_keys]
+    if not available or n_to_select <= 0:
+        return []
+
+    chosen: list[str] = []
+    # Keep an incremental min-distance array to avoid re-scanning all refs each step.
+    # min_dist[i] = min Euclidean distance from available[i] to any reference so far.
+    avail_coords = np.stack([umap_coords[k] for k in available])  # (n_avail, 2)
+    ref_keys = list(already_selected_keys)
+    if ref_keys:
+        ref_coords = np.stack([umap_coords[k] for k in ref_keys])  # (n_ref, 2)
+        diffs = avail_coords[:, None, :] - ref_coords[None, :, :]  # (n_avail, n_ref, 2)
+        min_dist = np.sqrt((diffs**2).sum(axis=-1)).min(axis=1)  # (n_avail,)
+    else:
+        min_dist = np.full(len(available), np.inf)
+
+    while available and len(chosen) < n_to_select:
+        if np.isinf(min_dist).all():
+            # No references yet: pick lowest insertion-order key
+            best_idx = min(range(len(available)), key=lambda i: order_map[available[i]])
+        else:
+            best_idx = int(np.argmax(min_dist))
+
+        best_key = available[best_idx]
+        chosen.append(best_key)
+
+        # Update min_dist: replace with distance to the newly chosen point
+        new_ref = umap_coords[best_key]  # (2,)
+        new_dists = np.sqrt(((avail_coords - new_ref) ** 2).sum(axis=1))  # (n_avail,)
+        min_dist = np.minimum(min_dist, new_dists)
+
+        # Remove chosen point from tracking arrays
+        available.pop(best_idx)
+        avail_coords = np.delete(avail_coords, best_idx, axis=0)
+        min_dist = np.delete(min_dist, best_idx)
+
+    return chosen
+
+
+def rebalance_umap_coverage(
+    selected: set[str],
+    all_valid_keys: list[str],
+    umap_coords: dict[str, np.ndarray],
+    key_to_envs: dict[str, set[str]],
+    key_to_solute: dict[str, str],
+    n_per_environment: int,
+    max_rows_per_solute: int,
+    max_swaps: int = 500,
+) -> set[str]:
+    """Swap over-represented points for under-represented ones to fill UMAP gaps.
+
+    After the initial selection phases there can be residual dense clusters
+    (e.g. many similar alkane/solvent pairs grouped together) leaving sparse
+    regions of pair chemical space uncovered.  This function addresses that
+    by iterating up to *max_swaps* times:
+
+    1. Build the list of the 50 unselected candidates with the largest minimum
+       UMAP distance to any selected point (the biggest gap candidates).
+    2. For each gap candidate p_in (largest gap first), score every selected
+       point as a potential swap-out using a weighted penalty:
+
+         penalty(env) = 10^(n_per_env - n_actual + 1)
+
+       where n_actual is the current count of that environment in the selection.
+       This gives near-zero penalty when an environment is well above the target
+       and grows steeply as n_actual approaches n_per_env.  An absolute hard
+       floor prevents any environment from dropping below n_per_env - 1.
+       Ties are broken by nearest-neighbour UMAP distance (most crowded =
+       smallest nn_dist preferred for removal).
+
+    3. Cap handling: the per-solute cap is treated as a penalty rather than a
+       hard gate on the swap-out search.  For each (p_in, p_out) pair the
+       combined score is (cap_penalty, env_scarcity, nn_dist):
+
+         cap_penalty = 0  if p_out is same solute as p_in (count-neutral), or
+                            p_in's solute is still below cap (no violation)
+         cap_penalty = 1  if adding p_in would exceed cap by exactly one
+                            (cross-solute fallback, used only when
+                            same-solute and cap-neutral options are worse)
+         hard-blocked     if adding p_in would exceed cap by more than one
+
+       This means same-solute swaps are always preferred, but cross-solute
+       swaps that bring a new (solute, solvent) pair to a sparse UMAP region
+       are permitted at the cost of temporarily putting one solute at cap+1.
+
+    4. If no valid swap-out exists for the current gap candidate, continue to
+       the next gap candidate rather than stopping the whole phase.
+
+    5. Stall detection: if _MAX_STALL consecutive outer iterations all fail to
+       find any swap, stop early (the remaining gaps cannot be filled under the
+       current constraints).
+
+    Why max_swaps had no visible effect previously
+    -----------------------------------------------
+    The old implementation used a fixed neighbourhood radius to identify
+    "crowded" selected points and broke out of the inner loop as soon as it
+    found a selected point with zero neighbours in that radius.  Because most
+    selected points sat outside that radius (the radius was calibrated for
+    global density, not local clusters), the inner loop exited immediately on
+    every iteration without finding a valid swap-out.  This caused swaps_made
+    to stay at 0 regardless of max_swaps.  Additionally, on the first failed
+    gap candidate the outer loop broke instead of trying alternatives, so
+    increasing max_swaps had no effect at all.
+
+    The set size is unchanged; only its distribution in UMAP space improves.
+    """
+    selected = set(selected)  # work on a copy
+    target_env_names = [env.name for env in CHEMICAL_ENVIRONMENTS]
+
+    env_counts: dict[str, int] = {
+        env: sum(1 for k in selected if env in key_to_envs.get(k, set()))
+        for env in target_env_names
+    }
+    solute_counts: defaultdict[str, int] = defaultdict(int)
+    for k in selected:
+        solute_counts[key_to_solute[k]] += 1
+
+    unselected = [k for k in all_valid_keys if k not in selected]
+
+    def _swap_out_penalty(cand_key: str, p_in_envs: set[str]) -> float:
+        """Scarcity-weighted penalty for removing cand_key from the selection.
+
+        Returns the maximum scarcity score over all tracked environments covered
+        by cand_key:
+
+            scarcity(env) = n_per_environment / n_actual   (in [0, 1])
+
+        Approaches 1 when an environment is barely at target; near 0 when
+        abundant.  This correctly dominates the sort: rare-env-covering points
+        are last to be removed.
+
+        Returns inf if the swap would drop any environment below the hard floor
+        of n_per_environment - 1, absolutely blocking that candidate.
+        """
+        max_pen = 0.0
+        for env in key_to_envs.get(cand_key, set()):
+            if env not in env_counts:
+                continue
+            n_actual = env_counts[env]
+            if n_actual == 0:
+                continue
+            n_after = n_actual - 1 + (1 if env in p_in_envs else 0)
+            if n_after < n_per_environment - 1:
+                return float("inf")  # hard floor: never drop below n-1
+            pen = n_per_environment / n_actual  # in (0, 1]; higher = scarcer
+            if pen > max_pen:
+                max_pen = pen
+        return max_pen
+
+    # Report gap statistics before rebalancing.
+    sel_coords_init = np.stack([umap_coords[k] for k in selected])
+    unsel_coords_init = (
+        np.stack([umap_coords[k] for k in unselected]) if unselected else None
+    )
+    if unsel_coords_init is not None:
+        d_init = np.sqrt(
+            ((unsel_coords_init[:, None, :] - sel_coords_init[None, :, :]) ** 2).sum(
+                axis=-1
+            )
+        ).min(axis=1)
+        print(
+            f"  Phase 4 start: max_gap={d_init.max():.3f}  "
+            f"mean_gap={d_init.mean():.3f}  "
+            f"p90_gap={np.percentile(d_init, 90):.3f}"
+        )
+
+    swaps_made = 0
+    same_solute_swaps = 0
+    cross_solute_swaps = 0
+    blocked_all_inf = 0  # gap candidates where all swap-out options are env-blocked
+    swap_gaps: list[float] = []  # gap distance at the moment of each successful swap
+    swap_env_pens: list[float] = []  # env_penalty of the chosen swap-out
+    swap_cap_pens: list[float] = []  # cap_penalty (0 or 1) of the chosen swap-out
+    stall_count = 0
+    _MAX_STALL = 15  # stop when this many consecutive outer iterations all fail
+    # Tabu: recently-swapped-out keys cannot be swapped back in for _TABU_TTL
+    # iterations, preventing pointless oscillation between equivalent structures.
+    _TABU_TTL = 5
+    tabu: dict[str, int] = {}  # key -> swap_iter at which it expires
+
+    for swap_iter in range(max_swaps):
+        if not unselected:
+            break
+
+        sel_list = list(selected)
+        sel_coords = np.stack([umap_coords[k] for k in sel_list])  # (n_sel, 2)
+        unsel_coords = np.stack([umap_coords[k] for k in unselected])  # (n_unsel, 2)
+
+        # Expire tabu entries whose TTL has passed.
+        tabu = {k: exp for k, exp in tabu.items() if exp > swap_iter}
+        tabu_set = set(tabu)
+
+        # Mark tabu keys as having zero gap so they are never chosen as p_in.
+        # Gap: min UMAP distance from each unselected point to any selected point.
+        diff_gap = unsel_coords[:, None, :] - sel_coords[None, :, :]  # (n_u, n_s, 2)
+        gap_dists = np.sqrt((diff_gap**2).sum(axis=-1)).min(axis=1)  # (n_u,)
+        for ti, tk in enumerate(unselected):
+            if tk in tabu_set:
+                gap_dists[ti] = 0.0  # suppress from gap ranking
+
+        # NN distance for selected points: smallest = most redundant = best to remove.
+        diff_sel = sel_coords[:, None, :] - sel_coords[None, :, :]  # (n_s, n_s, 2)
+        pair_dists = np.sqrt((diff_sel**2).sum(axis=-1))  # (n_s, n_s)
+        np.fill_diagonal(pair_dists, np.inf)
+        nn_dist = pair_dists.min(axis=1)  # (n_s,)
+
+        swap_done = False
+
+        # Try gap candidates from largest to smallest (capped at 50 for speed).
+        for gap_rank, gap_idx in enumerate(np.argsort(-gap_dists)[:50]):
+            if gap_dists[gap_idx] < 1e-6:
+                break  # no real gap left
+
+            p_in = unselected[gap_idx]
+            p_in_envs = key_to_envs.get(p_in, set())
+            p_in_solute = key_to_solute[p_in]
+            p_in_count = solute_counts[p_in_solute]
+
+            # Score each candidate: (cap_penalty, env_penalty, nn_dist).
+            # cap_penalty=0 → same-solute (neutral) or p_in not at cap (no violation).
+            # cap_penalty=1 → cross-solute swap that would put p_in's solute at cap+1.
+            # cap_penalty=inf → would exceed cap+1 (hard block, never allowed).
+            # env_penalty = scarcity of the env being removed (lower = easier to remove).
+            # nn_dist = crowdedness tie-breaker (smaller = more redundant in UMAP space).
+            scored: list[tuple[float, float, float, int]] = []
+            n_inf = 0
+            worst_env_blocking: str = ""
+            for i, k in enumerate(sel_list):
+                k_solute = key_to_solute[k]
+                if k_solute == p_in_solute:
+                    cap_pen = 0.0  # same-solute: count unchanged
+                elif p_in_count < max_rows_per_solute:
+                    cap_pen = 0.0  # p_in not yet at cap: cross-solute fine
+                elif p_in_count == max_rows_per_solute:
+                    cap_pen = 1.0  # would go to cap+1: allowed as fallback
+                else:
+                    continue  # already over cap+1: hard block
+
+                env_pen = _swap_out_penalty(k, p_in_envs)
+                if env_pen < float("inf"):
+                    scored.append((cap_pen, env_pen, nn_dist[i], i))
+                else:
+                    n_inf += 1
+                    if not worst_env_blocking:
+                        for env in key_to_envs.get(k, set()):
+                            if env not in env_counts:
+                                continue
+                            n_actual = env_counts[env]
+                            n_after = n_actual - 1 + (1 if env in p_in_envs else 0)
+                            if n_after < n_per_environment - 1:
+                                worst_env_blocking = f"{env}(count={n_actual},floor={n_per_environment - 1})"
+                                break
+
+            if not scored:
+                blocked_all_inf += 1
+                continue
+
+            scored.sort()
+            best_cap_pen, best_env_pen, best_nn, best_out_idx = scored[0]
+            p_out = sel_list[best_out_idx]
+            p_out_envs = key_to_envs.get(p_out, set())
+            p_out_solute = key_to_solute[p_out]
+            is_same_solute = p_out_solute == p_in_solute
+
+            # Accumulate per-swap statistics.
+            swap_gaps.append(float(gap_dists[gap_idx]))
+            swap_env_pens.append(best_env_pen)
+            swap_cap_pens.append(best_cap_pen)
+
+            # Execute swap.
+            selected.discard(p_out)
+            selected.add(p_in)
+            unselected.pop(gap_idx)
+            unselected.append(p_out)
+
+            for env in p_out_envs:
+                if env in env_counts:
+                    env_counts[env] -= 1
+            for env in p_in_envs:
+                if env in env_counts:
+                    env_counts[env] += 1
+            if is_same_solute:
+                same_solute_swaps += 1
+            else:
+                cross_solute_swaps += 1
+                solute_counts[p_out_solute] -= 1
+                solute_counts[p_in_solute] += 1
+
+            swaps_made += 1
+            stall_count = 0
+            swap_done = True
+            tabu[p_out] = (
+                swap_iter + _TABU_TTL
+            )  # block p_out from re-entry for TTL iters
+            break  # recompute gaps with updated selection
+
+        if not swap_done:
+            stall_count += 1
+            if stall_count >= _MAX_STALL:
+                print(
+                    f"  Phase 4: stalled after {_MAX_STALL} consecutive no-swap iterations."
+                )
+                break
+
+    # Report gap statistics after rebalancing.
+    if unselected:
+        sel_coords_final = np.stack([umap_coords[k] for k in selected])
+        unsel_coords_final = np.stack([umap_coords[k] for k in unselected])
+        d_final = np.sqrt(
+            ((unsel_coords_final[:, None, :] - sel_coords_final[None, :, :]) ** 2).sum(
+                axis=-1
+            )
+        ).min(axis=1)
+        print(
+            f"  Phase 4 end:   max_gap={d_final.max():.3f}  "
+            f"mean_gap={d_final.mean():.3f}  "
+            f"p90_gap={np.percentile(d_final, 90):.3f}"
+        )
+
+    _a = np.array(swap_gaps) if swap_gaps else np.array([0.0])
+    _e = np.array(swap_env_pens) if swap_env_pens else np.array([0.0])
+    cap1_swaps = int(sum(1 for c in swap_cap_pens if c > 0))
+    print(
+        f"  Phase 4: {swaps_made}/{max_swaps} swaps "
+        f"(same-solute={same_solute_swaps}, cross-solute={cross_solute_swaps}, "
+        f"cap+1={cap1_swaps}) | "
+        f"skipped: all_env_blocked={blocked_all_inf}\n"
+        f"    gap at swap:  min={_a.min():.3f}  mean={_a.mean():.3f}  "
+        f"max={_a.max():.3f}  p90={np.percentile(_a, 90):.3f}\n"
+        f"    env_pen:      min={_e.min():.3f}  mean={_e.mean():.3f}  "
+        f"max={_e.max():.3f}  p90={np.percentile(_e, 90):.3f}"
+    )
+    if swaps_made > 0 and cross_solute_swaps == 0:
+        # Every swap replaced one solvent partner for a solute already in the
+        # subset.  This typically means the unselected pool is saturated at the
+        # per-solute cap, leaving no room to introduce genuinely new solutes.
+        # Adjustable parameters that change this outcome:
+        #   --max-rows-per-solute N   raise the per-solute cap (currently
+        #                             {max_rows_per_solute}); a higher value
+        #                             allows cross-solute swaps but reduces
+        #                             solute diversity.
+        #   --max-subset-size N       increase the subset budget so more novel
+        #                             solutes can be added in Phases 2/3 before
+        #                             Phase 4 is reached.
+        #   --max-swaps N             more swap iterations (currently
+        #                             {max_swaps}) give Phase 4 more chances to
+        #                             find rare cross-solute opportunities.
+        print(
+            f"  Phase 4 note: all {swaps_made} swaps were same-solute "
+            f"(solvent-partner changes only). This usually means the unselected pool "
+            f"is saturated at the per-solute cap={max_rows_per_solute}. "
+            f"To allow cross-solute swaps, consider:\n"
+            f"    --max-rows-per-solute  raise from {max_rows_per_solute} "
+            f"(e.g. 4 or 5)\n"
+            f"    --max-subset-size      raise from current value to add more\n"
+            f"                           unique solutes in earlier phases"
+        )
+    return selected
+
+
+def build_mnsol_subset(
+    data: dict[str, dict],
+    overlapping_mnsol_solutes: set[str],
+    n_per_environment: int,
+    max_size: int,
+    max_rows_per_solute: int,
+    umap_n_neighbors: int = 15,
+    umap_min_dist: float = 0.1,
+    random_state: int = 42,
+    max_swaps: int = 500,
+) -> tuple[dict[str, dict], list[str]]:
+    """Build MNSol subset with uniform UMAP pair-space coverage.
+
+    Selection proceeds in four phases, all using greedy MaxMin in the 2D
+    UMAP(Jaccard) embedding of pair (solute OR solvent) Morgan fingerprints.
+    SAGE data is never consulted.
+
+    Phase 1 — Seed (FreeSolv alignment)
+        For each FreeSolv-overlapping solute, add up to *max_rows_per_solute*
+        rows choosing solvents by UMAP MaxMin so diverse solvents are included
+        first (needed for transfer free energy estimates).
+
+    Phase 2 — Environment coverage
+        For each checkmol target environment with fewer than *n_per_environment*
+        representatives, add the most UMAP-distant eligible candidate that
+        respects the per-solute cap.
+
+    Phase 3 — Uniform fill
+        Add records up to *max_size* using UMAP MaxMin, still respecting the
+        per-solute cap so multi-solvent solutes are not over-represented.
+
+    Phase 4 — Rebalance
+        Swap over-represented points from dense clusters for unselected points
+        in sparse regions, without reducing any environment count below
+        *n_per_environment* or violating the per-solute cap.
+
+    Returns
+    -------
+    selected_data : dict
+        Subset records keyed by MNSol key.
+    missing_environments : list[str]
+        Target environment names that still have fewer than *n_per_environment*
+        representatives after selection.
+    """
+    # --- Build pair fingerprints and UMAP embedding ---
+    ordered_keys = sorted(data, key=lambda k: int(k.split("-")[1]))
+    order_map = {key: i for i, key in enumerate(ordered_keys)}
+
+    valid_keys: list[str] = []
+    fp_rows: list[np.ndarray] = []
+    pair_fps: dict[str, Any] = {}
+    for key in ordered_keys:
+        fp = pair_fingerprint(data[key]["solute_smiles"], data[key]["solvent_smiles"])
+        if fp is None:
+            continue
+        arr = np.zeros(2048, dtype=np.float32)
+        DataStructs.ConvertToNumpyArray(fp, arr)
+        valid_keys.append(key)
+        fp_rows.append(arr)
+        pair_fps[key] = fp
+
+    if not valid_keys:
+        return {}, [env.name for env in CHEMICAL_ENVIRONMENTS]
+
+    fp_matrix = np.vstack(fp_rows)  # (n_valid, 2048)
+
+    print(f"  Running UMAP(jaccard) on {len(valid_keys)} filtered MNSol records...")
+    reducer = umap.UMAP(
+        n_components=2,
+        metric="jaccard",
+        n_neighbors=umap_n_neighbors,
+        min_dist=umap_min_dist,
+        random_state=random_state,
+    )
+    coords_2d = reducer.fit_transform(fp_matrix)  # (n_valid, 2)
+    umap_coords: dict[str, np.ndarray] = {
+        key: coords_2d[i] for i, key in enumerate(valid_keys)
+    }
+
+    key_to_solute = {key: data[key]["solute_name"] for key in valid_keys}
+    # Phases 2–4 track both solute and solvent environments so that the
+    # coverage fill and swap penalty apply to the full pair chemistry.
+    # FreeSolv uses solute-only tracking (fill_environment_coverage) because
+    # FreeSolv has only water as a solvent and solvent coverage is not meaningful.
+    key_to_envs = {
+        key: set(data[key].get("solute_env", []))
+        | set(data[key].get("solvent_env", []))
+        for key in valid_keys
+    }
+
+    selected: set[str] = set()
+    solute_counts: defaultdict[str, int] = defaultdict(int)
+
+    def can_add(key: str) -> bool:
+        return (
+            key not in selected
+            and solute_counts[key_to_solute[key]] < max_rows_per_solute
+        )
+
+    # --- Phase 1: Seed with FreeSolv-overlapping solutes ---
+    keys_by_overlap_solute: dict[str, list[str]] = defaultdict(list)
+    for key in valid_keys:
+        if key_to_solute[key] in overlapping_mnsol_solutes:
+            keys_by_overlap_solute[key_to_solute[key]].append(key)
+
+    print(
+        f"  Phase 1: seeding {len(keys_by_overlap_solute)} FreeSolv-overlap solutes..."
+    )
+    for solute_name in sorted(keys_by_overlap_solute):
+        if len(selected) >= max_size:
+            break
+        candidates = [k for k in keys_by_overlap_solute[solute_name] if can_add(k)]
+        n = min(max_rows_per_solute, max_size - len(selected))
+        picked = select_diverse_keys_umap(
+            candidates, selected, umap_coords, order_map, n
+        )
+        for k in picked:
+            selected.add(k)
+            solute_counts[key_to_solute[k]] += 1
+
+    # --- Phase 2: Fill environment coverage ---
+    target_env_names = [env.name for env in CHEMICAL_ENVIRONMENTS]
+
+    def env_count(env_name: str) -> int:
+        return sum(1 for k in selected if env_name in key_to_envs.get(k, set()))
+
+    print(f"  Phase 2: filling environment coverage ({n_per_environment} per env)...")
+    coverage_count_before = len(selected)
+    for env_name in target_env_names:
+        if len(selected) >= max_size:
+            break
+        needed = n_per_environment - env_count(env_name)
+        if needed <= 0:
+            continue
+        candidates = [
+            k
+            for k in valid_keys
+            if env_name in key_to_envs.get(k, set()) and can_add(k)
+        ]
+        n = min(needed, max_size - len(selected))
+        picked = select_diverse_keys_umap(
+            candidates, selected, umap_coords, order_map, n
+        )
+        for k in picked:
+            selected.add(k)
+            solute_counts[key_to_solute[k]] += 1
+
+    coverage_additions = len(selected) - coverage_count_before
+
+    # --- Phase 3: Uniform UMAP fill up to max_size ---
+    if len(selected) < max_size:
+        candidates = [k for k in valid_keys if can_add(k)]
+        remaining = max_size - len(selected)
+        print(f"  Phase 3: UMAP MaxMin fill ({remaining} slots remaining)...")
+        picked = select_diverse_keys_umap(
+            candidates, selected, umap_coords, order_map, remaining
+        )
+        for k in picked:
+            selected.add(k)
+            solute_counts[key_to_solute[k]] += 1
+
+    # --- Phase 4: Rebalance gaps in UMAP space ---
+    print("  Phase 4: rebalancing UMAP coverage...")
+    selected = rebalance_umap_coverage(
+        selected,
+        valid_keys,
+        umap_coords,
+        key_to_envs,
+        key_to_solute,
+        n_per_environment=n_per_environment,
+        max_rows_per_solute=max_rows_per_solute,
+        max_swaps=max_swaps,
+    )
+
+    missing_environments = [
+        env_name
+        for env_name in target_env_names
+        if sum(1 for k in selected if env_name in key_to_envs.get(k, set()))
+        < n_per_environment
+    ]
+
+    print(
+        f"\nMNSol subset: total={len(selected)} "
+        f"coverage_additions={coverage_additions} missing_env={len(missing_environments)}"
+    )
+
+    _pool_env_counts = {
+        env_name: sum(1 for k in valid_keys if env_name in key_to_envs.get(k, set()))
+        for env_name in missing_environments
+    }
+    _mnsol_absent = sorted(e for e in missing_environments if _pool_env_counts[e] == 0)
+    _mnsol_pool_limited = sorted(
+        e for e in missing_environments if 0 < _pool_env_counts[e] < n_per_environment
+    )
+    _mnsol_budget_limited = sorted(
+        e for e in missing_environments if _pool_env_counts[e] >= n_per_environment
+    )
+    print(
+        f"  missing env breakdown — absent from pool: {len(_mnsol_absent)}  "
+        f"pool-limited (<{n_per_environment} in pool): {len(_mnsol_pool_limited)}  "
+        f"budget-limited (>={n_per_environment} in pool, not selected): {len(_mnsol_budget_limited)}"
+    )
+    if _mnsol_absent:
+        print(f"    absent: {', '.join(_mnsol_absent)}")
+    if _mnsol_pool_limited:
+        print(f"    pool-limited: {', '.join(_mnsol_pool_limited)}")
+    if _mnsol_budget_limited:
+        print(f"    budget-limited: {', '.join(_mnsol_budget_limited)}")
+
+    selected_data = {key: data[key] for key in sorted(selected)}
+    return selected_data, missing_environments
+
+
+@click.command()
+@click.option(
+    "--mnsol-alldata",
+    type=click.Path(exists=True, dir_okay=True, path_type=pathlib.Path),
+    required=True,
+    help="Path to MNSol_alldata.txt",
+)
+@click.option(
+    "--n-per-environment",
+    default=3,
+    show_default=True,
+    type=int,
+    help="Target count per checkmol environment (phases 2 of MNSol selection and FreeSolv fill).",
+)
+@click.option(
+    "--max-subset-size",
+    default=400,
+    show_default=True,
+    type=int,
+    help="Hard ceiling on MNSol subset size.",
+)
+@click.option(
+    "--max-rows-per-solute",
+    default=MNSOL_SOLVENTS_PER_SOLUTE,
+    show_default=True,
+    type=int,
+    help=(
+        "Maximum rows per unique solute in the MNSol subset. "
+        "Keeping this >= 2 preserves multi-solvent pairs for transfer free energy."
+    ),
+)
+@click.option(
+    "--umap-n-neighbors",
+    default=15,
+    show_default=True,
+    type=int,
+    help="UMAP n_neighbors used for the pair-space embedding.",
+)
+@click.option(
+    "--umap-min-dist",
+    default=0.1,
+    show_default=True,
+    type=float,
+    help="UMAP min_dist used for the pair-space embedding.",
+)
+@click.option(
+    "--max-swaps",
+    default=500,
+    show_default=True,
+    type=int,
+    help=(
+        "Maximum number of swap iterations in Phase 4. Each swap moves one point "
+        "from a dense cluster to the largest remaining gap in UMAP pair space, "
+        "subject to environment-coverage and per-solute-cap constraints."
+    ),
+)
+def main(
+    mnsol_alldata: pathlib.Path,
+    n_per_environment: int,
+    max_subset_size: int,
+    max_rows_per_solute: int,
+    umap_n_neighbors: int,
+    umap_min_dist: float,
+    max_swaps: int,
+):
+    """Create aligned FreeSolv/MNSol subsets.
+
+    Writes four JSON files:
+      subset_openff_filtered.json  (MNSol full filtered pool)
+      subset_openff_small.json     (MNSol curated subset)
+      subset_openff_filtered.json  (FreeSolv full filtered pool)
+      subset_openff_small.json     (FreeSolv curated subset)
+
+    MNSol selection — four phases, SAGE data never consulted:
+      Phase 1 — seed FreeSolv-overlapping solutes (UMAP MaxMin over solvents).
+      Phase 2 — fill checkmol environment coverage to n_per_environment (UMAP MaxMin).
+      Phase 3 — fill remaining budget with uniform UMAP MaxMin over pair space.
+      Phase 4 — swap dense-cluster points into UMAP gaps (up to max_swaps iterations).
+
+    FreeSolv selection seeds from MNSol-overlapping solutes then fills
+    environment coverage independently (solute environments only; solvent is always water).
+    """
+
+    mnsol_filtered_path = (
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/mnsol_neutral/subset_openff_filtered.json"
+    )
+    mnsol_subset_path = (
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/mnsol_neutral/subset_openff_small.json"
+    )
+    freesolv_filtered_path = (
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/subset_openff_filtered.json"
+    )
+    freesolv_subset_path = (
+        PACKAGE_ROOT
+        / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/subset_openff_small.json"
+    )
+
+    mnsol_data, mnsol_skips = build_filtered_mnsol_records(mnsol_alldata)
+    freesolv_data, freesolv_skips = build_filtered_freesolv_records()
+
+    overlapping_mnsol_solutes, overlapping_freesolv_solutes = find_overlapping_solutes(
+        mnsol_data, freesolv_data
+    )
+
+    mnsol_unique_solutes = {rec["solute_name"] for rec in mnsol_data.values()}
+    freesolv_unique_solutes = {rec["solute_name"] for rec in freesolv_data.values()}
+
+    print("=== Pool summary ===")
+    print(
+        f"MNSol:    {len(mnsol_data)} systems, {len(mnsol_unique_solutes)} unique solutes"
+    )
+    print(
+        f"FreeSolv: {len(freesolv_data)} systems, {len(freesolv_unique_solutes)} unique solutes"
+    )
+    print(
+        f"Solute overlap (SMILES isomorphism): "
+        f"{len(overlapping_mnsol_solutes)} MNSol / "
+        f"{len(overlapping_freesolv_solutes)} FreeSolv"
+    )
+
+    print("\nMNSol skip summary:")
+    for reason, systems in sorted(mnsol_skips.items()):
+        print(f"    {reason}: {len(systems)}")
+    print("FreeSolv skip summary:")
+    for reason, systems in sorted(freesolv_skips.items()):
+        print(f"    {reason}: {len(systems)}")
+
+    print("\nBuilding MNSol subset (UMAP-guided, no SAGE data)...")
+    mnsol_subset, mnsol_missing = build_mnsol_subset(
+        mnsol_data,
+        overlapping_mnsol_solutes,
+        n_per_environment=n_per_environment,
+        max_size=max_subset_size,
+        max_rows_per_solute=max_rows_per_solute,
+        umap_n_neighbors=umap_n_neighbors,
+        umap_min_dist=umap_min_dist,
+        max_swaps=max_swaps,
+    )
+
+    freesolv_seed_keys = {
+        key
+        for key, record in freesolv_data.items()
+        if record["solute_name"] in overlapping_freesolv_solutes
+    }
+    freesolv_subset, freesolv_added_for_coverage, freesolv_missing = (
+        fill_environment_coverage(
+            freesolv_data,
+            freesolv_seed_keys,
+            n_per_environment=n_per_environment,
+            environment_mode="solute_only",
+        )
+    )
+
+    print(
+        f"FreeSolv subset: total={len(freesolv_subset)} "
+        f"coverage_additions={len(freesolv_added_for_coverage)} "
+        f"missing_env={len(freesolv_missing)}\n"
+    )
+    if mnsol_missing:
+        print(f"MNSol missing environments: {', '.join(mnsol_missing)}")
+    if freesolv_missing:
+        print(f"FreeSolv missing environments: {', '.join(freesolv_missing)}")
+
+    _freesolv_key_to_envs = {
+        key: set(freesolv_data[key].get("solute_env", [])) for key in freesolv_data
+    }
+    _freesolv_pool_env_counts = {
+        env_name: sum(1 for k in freesolv_data if env_name in _freesolv_key_to_envs[k])
+        for env_name in freesolv_missing
+    }
+    _freesolv_absent = sorted(
+        e for e in freesolv_missing if _freesolv_pool_env_counts[e] == 0
+    )
+    _freesolv_pool_limited = sorted(
+        e
+        for e in freesolv_missing
+        if 0 < _freesolv_pool_env_counts[e] < n_per_environment
+    )
+    _freesolv_budget_limited = sorted(
+        e for e in freesolv_missing if _freesolv_pool_env_counts[e] >= n_per_environment
+    )
+    print(
+        f"FreeSolv env breakdown — absent from pool: {len(_freesolv_absent)}  "
+        f"pool-limited (<{n_per_environment} in pool): {len(_freesolv_pool_limited)}  "
+        f"budget-limited (>={n_per_environment} in pool, not selected): {len(_freesolv_budget_limited)}"
+    )
+    if _freesolv_absent:
+        print(f"  absent: {', '.join(_freesolv_absent)}")
+    if _freesolv_pool_limited:
+        print(f"  pool-limited: {', '.join(_freesolv_pool_limited)}")
+    if _freesolv_budget_limited:
+        print(f"  budget-limited: {', '.join(_freesolv_budget_limited)}")
+
+    # --- Final statistics ---
+    # Pool row counts per solute (from the full filtered pool)
+    pool_solute_counts: dict[str, int] = {}
+    for rec in mnsol_data.values():
+        sname = rec["solute_name"]
+        pool_solute_counts[sname] = pool_solute_counts.get(sname, 0) + 1
+
+    # MNSol solute repetition in subset
+    mnsol_subset_solute_counts: dict[str, int] = {}
+    for rec in mnsol_subset.values():
+        sname = rec["solute_name"]
+        mnsol_subset_solute_counts[sname] = mnsol_subset_solute_counts.get(sname, 0) + 1
+
+    n_unique_mnsol = len(mnsol_subset_solute_counts)
+    n_repeated = sum(1 for c in mnsol_subset_solute_counts.values() if c > 1)
+    repeat_counts = sorted(mnsol_subset_solute_counts.values(), reverse=True)
+    max_repeats = repeat_counts[0] if repeat_counts else 0
+    dist: dict[int, int] = {}
+    for c in repeat_counts:
+        dist[c] = dist.get(c, 0) + 1
+
+    # For each selection-count bucket, classify solutes by why they weren't selected more:
+    #   data-limited  → selected == pool rows (no more rows exist)
+    #   at cap        → selected == max_rows_per_solute (cap prevented more; pool has additional rows)
+    #   selection-limited → selected < pool rows AND selected < cap (more available but not chosen)
+    bucket_breakdown: dict[int, dict[str, int]] = {}
+    for sname, sel_count in mnsol_subset_solute_counts.items():
+        pool_count = pool_solute_counts.get(sname, sel_count)
+        if sel_count not in bucket_breakdown:
+            bucket_breakdown[sel_count] = {
+                "data_limited": 0,
+                "at_cap": 0,
+                "selection_limited": 0,
+            }
+        if sel_count >= pool_count:
+            bucket_breakdown[sel_count]["data_limited"] += 1
+        elif sel_count >= max_rows_per_solute:
+            bucket_breakdown[sel_count]["at_cap"] += 1
+        else:
+            bucket_breakdown[sel_count]["selection_limited"] += 1
+
+    # MNSol/FreeSolv solute overlap in the final subsets
+    # Use the SMILES-isomorphism-verified overlap sets (name spaces differ between datasets)
+    mnsol_subset_solutes = {rec["solute_name"] for rec in mnsol_subset.values()}
+    freesolv_subset_solutes = {rec["solute_name"] for rec in freesolv_subset.values()}
+    # overlapping_mnsol_solutes: MNSol-name keys confirmed to match a FreeSolv molecule
+    # overlapping_freesolv_solutes: FreeSolv-ID keys confirmed to match an MNSol molecule
+    overlap_in_mnsol_subset = mnsol_subset_solutes & overlapping_mnsol_solutes
+    overlap_in_freesolv_subset = freesolv_subset_solutes & overlapping_freesolv_solutes
+
+    print("\n=== Final statistics ===")
+    print(
+        f"MNSol subset:   {len(mnsol_subset)} systems, "
+        f"{n_unique_mnsol} unique solutes, "
+        f"{n_repeated} solutes appear more than once (max {max_repeats}x)"
+    )
+    print(f"  Solute repetition (cap={max_rows_per_solute}):")
+    for sel_count, n_solutes in sorted(dist.items()):
+        bd = bucket_breakdown.get(sel_count, {})
+        data_lim = bd.get("data_limited", 0)
+        at_cap = bd.get("at_cap", 0)
+        sel_lim = bd.get("selection_limited", 0)
+        parts = []
+        if data_lim:
+            parts.append(f"{data_lim} data-limited (pool exhausted)")
+        if at_cap:
+            parts.append(f"{at_cap} at cap (pool has more)")
+        if sel_lim:
+            parts.append(f"{sel_lim} selection-limited (pool has more, under cap)")
+        breakdown_str = f"  [{', '.join(parts)}]" if parts else ""
+        print(f"    {sel_count}x: {n_solutes} solutes{breakdown_str}")
+
+    print(
+        f"FreeSolv subset: {len(freesolv_subset)} systems, "
+        f"{len(freesolv_subset_solutes)} unique solutes"
+    )
+    print(
+        f"Solute overlap (MNSol subset ∩ FreeSolv pool): "
+        f"{len(overlap_in_mnsol_subset)} / {n_unique_mnsol} MNSol solutes "
+        f"({100 * len(overlap_in_mnsol_subset) / n_unique_mnsol:.1f}%)"
+    )
+    print(
+        f"Solute overlap (FreeSolv subset ∩ MNSol pool): "
+        f"{len(overlap_in_freesolv_subset)} / {len(freesolv_subset_solutes)} FreeSolv solutes "
+        f"({100 * len(overlap_in_freesolv_subset) / max(len(freesolv_subset_solutes), 1):.1f}%)"
+    )
+    if overlap_in_mnsol_subset:
+        print(
+            f"  MNSol overlapping solutes: {', '.join(sorted(overlap_in_mnsol_subset))}"
+        )
+
+    with open(str(mnsol_filtered_path), "w", encoding="utf-8") as f:
+        json.dump(mnsol_data, f, cls=JSON_HANDLER.encoder, indent=4)
+    with open(str(mnsol_subset_path), "w", encoding="utf-8") as f:
+        json.dump(mnsol_subset, f, cls=JSON_HANDLER.encoder, indent=4)
+
+    with open(str(freesolv_filtered_path), "w", encoding="utf-8") as f:
+        json.dump(freesolv_data, f, cls=JSON_HANDLER.encoder, indent=4)
+    with open(str(freesolv_subset_path), "w", encoding="utf-8") as f:
+        json.dump(freesolv_subset, f, cls=JSON_HANDLER.encoder, indent=4)
+
+
+if __name__ == "__main__":
+    with warnings.catch_warnings(record=True) as _warning_log:
+        warnings.simplefilter("always")
+        main(standalone_mode=False)
+    if _warning_log:
+        print(f"\n--- {len(_warning_log)} suppressed warning(s) ---")
+        seen: set[str] = set()
+        for w in _warning_log:
+            key = f"{w.category.__name__}: {w.message}"
+            if key not in seen:
+                seen.add(key)
+                print(
+                    f"  [{w.category.__name__}] {w.message} ({w.filename}:{w.lineno})"
+                )
