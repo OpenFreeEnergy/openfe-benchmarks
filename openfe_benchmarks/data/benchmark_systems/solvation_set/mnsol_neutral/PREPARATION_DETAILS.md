@@ -18,11 +18,12 @@ After filtering, **2468 systems** are retained.
 
 ## Partial Charges
 
-Experimental data: [generate_mnsol_data.py](../../../data_generation/generate_mnsol_data.py). Uncertainties set to 0.2 kcal/mol (MNSol recommendation). Licensing prevents bundling experimental values; regenerate locally after obtaining the dataset.
+- Licensing prevented including MNSol experimental values. After properly obtaining the dataset, a user can locally generate the needed experimental data file with the [generate_mnsol_data.py](../../../data_generation/generate_mnsol_data.py) script.
+- Experimental uncertainties are set to 0.2 kcal/mol for all neutral entries, following the recommendation in the MNSol documentation.
 
-Charges: [charge_mnsol.py](../../../data_generation/charge_mnsol.py) using [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml).
+Charges were generated using the [charge_mnsol.py](../../../data_generation/charge_mnsol.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
+Some ligands could not be charged with all methods, the following lists the ligands that could not be charged with each method:
 
-Charging failures:
 - `am1bcc_oe`, `am1bcc_at`, `am1bccelf10_oe`: hydrogen
 - `nagl_off`: hydrogen, tetramethylsilane
 
