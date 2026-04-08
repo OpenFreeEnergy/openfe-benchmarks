@@ -110,8 +110,8 @@ def get_chemical_systems(
     )
 
     systems: dict[str, openfe.ChemicalSystem] = {}
-    for network_name, entry in exp_data.items():
-        if network_name not in subset_data:
+    for transformation_name, entry in exp_data.items():
+        if transformation_name not in subset_data:
             continue
         solute_inchikey, solvent_inchikey = (
             entry["solute_inchikey"],
@@ -122,7 +122,7 @@ def get_chemical_systems(
             solute = WATER
         elif solute_inchikey not in mol_dict:
             logger.warning(
-                f"Solute '{solute_inchikey}' not found in SDF; skipping network '{network_name}'"
+                f"Solute '{solute_inchikey}' not found in SDF; skipping network '{transformation_name}'"
             )
             continue
         else:
@@ -132,7 +132,7 @@ def get_chemical_systems(
             solvent = ExtendedSolventComponent()
         elif solvent_inchikey not in mol_dict:
             logger.warning(
-                f"Solvent '{solvent_inchikey}' not found in SDF; skipping network '{network_name}'"
+                f"Solvent '{solvent_inchikey}' not found in SDF; skipping network '{transformation_name}'"
             )
             continue
         else:
@@ -140,11 +140,11 @@ def get_chemical_systems(
                 solvent_molecule=mol_dict[solvent_inchikey]
             )
 
-        systems[network_name] = openfe.ChemicalSystem(
+        systems[transformation_name] = openfe.ChemicalSystem(
             {"solute": solute, "solvent": solvent},
-            name=network_name,
+            name=transformation_name,
         )
-        EXPECTED_NETWORKS.append(network_name)
+        EXPECTED_NETWORKS.append(transformation_name)
         if solute_inchikey != "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
             EXPECTED_LIGANDS.add(solute_inchikey)
         if solvent_inchikey != "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
