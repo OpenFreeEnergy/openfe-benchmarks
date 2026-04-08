@@ -253,7 +253,7 @@ def get_checkmol_environments(smiles: str) -> set[ChemicalEnvironment]:
 
 
 def canonicalize_smiles(smiles: str) -> str | None:
-    """Return an RDKit canonical isomeric SMILES for matching."""
+    """Return an RDKit canonical SMILES for matching."""
     try:
         mol = Chem.MolFromSmiles(smiles, sanitize=True)
     except Exception:
@@ -262,13 +262,26 @@ def canonicalize_smiles(smiles: str) -> str | None:
     if mol is None:
         return None
 
-    return Chem.MolToSmiles(mol, isomericSmiles=True)
+    return Chem.MolToSmiles(mol)
 
 
 def make_openff_molecule(smiles: str) -> Molecule | None:
     """Build an OpenFF Molecule for isomorphism checks."""
     try:
         return Molecule.from_smiles(smiles, allow_undefined_stereo=True)
+    except Exception:
+        return None
+
+
+def to_cmiles(smiles: str) -> str | None:
+    """Return CMILES for a SMILES string."""
+
+    try:
+        rdmol = Chem.MolFromSmiles(smiles)
+        if rdmol is None:
+            return None
+        rdmol = Chem.AddHs(rdmol)
+        return Chem.MolToSmiles(rdmol, canonical=True)
     except Exception:
         return None
 
@@ -586,19 +599,19 @@ def build_filtered_mnsol_records(
                 skipped_systems[skip_reason].append(index)
                 continue
 
+            solute_cmiles = to_cmiles(solute_smiles)
+            solvent_cmiles = to_cmiles(solvent_smiles)
+            if solute_cmiles is None or solvent_cmiles is None:
+                skipped_systems["failed cmiles conversion"].append(index)
+                continue
+
             data[key] = {
                 "mnsol No.": key.split("-")[1],
                 "solute_name": solute_name,
                 "solvent_name": solvent_name,
-                "solute_smiles": solute_smiles,
-                "solvent_smiles": solvent_smiles,
+                "solute_smiles": solute_cmiles,
+                "solvent_smiles": solvent_cmiles,
                 "solute_charge": charge,
-                "solute_env": sorted(
-                    env.name for env in get_checkmol_environments(solute_smiles)
-                ),
-                "solvent_env": sorted(
-                    env.name for env in get_checkmol_environments(solvent_smiles)
-                ),
             }
 
     return data, skipped_systems
@@ -640,18 +653,20 @@ def build_filtered_freesolv_records() -> tuple[dict[str, dict], dict[str, list[s
             skipped_systems[skip_reason].append(name)
             continue
 
-        key = f"freesolv-{name}"
+        solute_cmiles = to_cmiles(entry["smiles"])
+        solvent_cmiles = to_cmiles("O")
+        if solute_cmiles is None or solvent_cmiles is None:
+            skipped_systems["failed cmiles conversion"].append(name)
+            continue
+
+        key = f"{name},water"
         data[key] = {
             "freesolv_id": name,
             "solute_name": name,
             "solvent_name": "water",
-            "solute_smiles": entry["smiles"],
-            "solvent_smiles": "O",
+            "solute_smiles": solute_cmiles,
+            "solvent_smiles": solvent_cmiles,
             "solute_charge": charge,
-            "solute_env": sorted(
-                env.name for env in get_checkmol_environments(entry["smiles"])
-            ),
-            "solvent_env": sorted(env.name for env in get_checkmol_environments("O")),
         }
 
     return data, skipped_systems
