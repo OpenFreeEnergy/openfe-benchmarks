@@ -3,6 +3,9 @@
 # This file provides tags for benchmark systems based on the files available, e.g., protein or cofactor.
 # Other tags indicate experimental data present, labeled as exp_bfe and exp_sfe appropriately.
 
+bayer_macrocycles:
+  brd4: ["protein","bfe"]
+  ftase: ["protein","bfe"]
 charge_annihilation_set:
   cdk2: ["protein","bfe"]
   dlk: ["protein", "bfe"]
