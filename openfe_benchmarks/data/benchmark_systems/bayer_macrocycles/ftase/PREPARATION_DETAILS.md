@@ -26,3 +26,6 @@ Done by J. Bluck
 <li>Run input through validation script
 <li>Scrub files of sensitive information
 </ol>
+
+Partial charges for the cofactors were generated with the "charge_offmol.py" script.
+Ligands were charged using the "charge_molecules.py" script.
