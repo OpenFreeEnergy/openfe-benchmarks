@@ -12,6 +12,8 @@ import logging
 from pathlib import Path
 
 from openff.units import unit
+from openff.toolkit.utils.toolkit_registry import ToolkitRegistry
+from openff.toolkit.utils.toolkits import RDKitToolkitWrapper
 import openfe
 from openfe import SmallMoleculeComponent
 
@@ -24,6 +26,8 @@ from openfe_benchmarks.data import get_benchmark_data_system
 from openfe_benchmarks.scripts import utils as ofebu
 
 logger = logging.getLogger(__name__)
+
+toolkit_registry = ToolkitRegistry([RDKitToolkitWrapper()])
 
 
 def _configure_example_logging(level=logging.INFO):
@@ -88,16 +92,17 @@ def get_chemical_systems(
             f"The subset data is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}; "
             f"expected subset '{SUBSET}'."
         )
-    if SUBSET not in benchmark_sys.subset_data:
-        raise ValueError(
-            f"The subset '{SUBSET}' is not available for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}."
-        )
-
-    subset_path = benchmark_sys.subset_data[SUBSET]
-    subset_data: dict = json.loads(Path(subset_path).read_text())
-    logger.info(
-        f"Loaded {len(subset_data)} experimental entries from {subset_path.name}"
-    )
+    if SUBSET is not None:
+        if SUBSET not in benchmark_sys.subset_data:
+            raise ValueError(
+                f"The subset '{SUBSET}' is not available for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}."
+            )
+        else:
+            subset_path = benchmark_sys.subset_data[SUBSET]
+            subset_data: dict = json.loads(Path(subset_path).read_text())
+            logger.info(
+                f"Loaded {len(subset_data)} experimental entries from {subset_path.name}"
+            )
 
     # Load all molecules (solutes + organic solvents) keyed by molecule name
     mol_dict: dict[str, SmallMoleculeComponent] = ofebu.process_sdf(
@@ -111,7 +116,7 @@ def get_chemical_systems(
 
     systems: dict[str, openfe.ChemicalSystem] = {}
     for transformation_name, entry in exp_data.items():
-        if transformation_name not in subset_data:
+        if SUBSET is not None and transformation_name not in subset_data:
             continue
         solute_inchikey, solvent_inchikey = (
             entry["solute_inchikey"],
@@ -459,7 +464,7 @@ def compile_transformations(
             "aqueous"
             if system_solvated_solute.components["solvent"]
             .solvent_molecule.to_openff()
-            .to_inchikey(fixed_hydrogens=True)
+            .to_inchikey(fixed_hydrogens=True, toolkit_registry=toolkit_registry)
             == "XLYOFNOQVPJJNP-UHFFFAOYNA-N"  # water
             else "nonaqueous"
         )
@@ -576,7 +581,9 @@ def validate_asfe_network(network_file: Path) -> list[str]:
     found_ligands: set[str] = set()
     for chem_system in alchemical_network.nodes:
         for ligand in chem_system.get_components_of_type(openfe.SmallMoleculeComponent):
-            ligand_inchikey = ligand.to_openff().to_inchikey(fixed_hydrogens=True)
+            ligand_inchikey = ligand.to_openff().to_inchikey(
+                fixed_hydrogens=True, toolkit_registry=toolkit_registry
+            )
             if ligand_inchikey == "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
                 continue
             found_ligands.add(ligand_inchikey)
@@ -591,7 +598,9 @@ def validate_asfe_network(network_file: Path) -> list[str]:
             )
         for solvent in chem_system.get_components_of_type(ExtendedSolventComponent):
             ligand = solvent.solvent_molecule
-            ligand_inchikey = ligand.to_openff().to_inchikey(fixed_hydrogens=True)
+            ligand_inchikey = ligand.to_openff().to_inchikey(
+                fixed_hydrogens=True, toolkit_registry=toolkit_registry
+            )
             if ligand_inchikey == "XLYOFNOQVPJJNP-UHFFFAOYNA-N":  # water
                 continue
             found_ligands.add(ligand_inchikey)
