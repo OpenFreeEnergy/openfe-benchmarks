@@ -134,6 +134,8 @@ def compile_network_transformations(
 
         protocol_settings = SepTopProtocol.default_settings()
         protocol_settings.forcefield_settings.small_molecule_forcefield = FORCEFIELD
+        # Disable the alchemical dispersion correction for now since this
+        # simulations would otherwise be very slow
         protocol_settings.alchemical_settings.disable_alchemical_dispersion_correction = True
         protocol_settings.protocol_repeats = 1
         transformation_protocol = SepTopProtocol(settings=protocol_settings)
@@ -183,7 +185,7 @@ def validate_rbfe_network(network_file):
     """Validate RBFE network against BenchmarkData expectations.
 
     Checks:
-    - Exact number of edges (2 per ligand pair: complex + solvent)
+    - Exact number of edges
     - Transformations match expected ligand network
     - Each transformation has protein, solvent, and cofactors (if present)
     - Ligand charges match expected values from BenchmarkData
