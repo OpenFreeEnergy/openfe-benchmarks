@@ -5,7 +5,7 @@
 
 bayer_macrocycles:
   brd4: ["protein","bfe"]
-  ftase: ["protein","bfe"]
+  ftase: ["protein", "cofactor", "bfe"]
 charge_annihilation_set:
   cdk2: ["protein","bfe"]
   dlk: ["protein", "bfe"]
