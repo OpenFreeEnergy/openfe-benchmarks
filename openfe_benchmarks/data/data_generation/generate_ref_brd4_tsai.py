@@ -36,11 +36,11 @@ def main(csv_name: str, out_dir: pathlib.Path, input_sdf: pathlib.Path):
     ref_dg_data = pd.read_csv(csv_name)
     # load the ligands with openff toolkit to extract the identifiers
     molecules = Molecule.from_file(input_sdf.as_posix(), allow_undefined_stereo=True)
-    molecule_by_name = {molecule.name.lower(): molecule for molecule in molecules}
+    molecule_by_name = {molecule.name: molecule for molecule in molecules}
     print(molecule_by_name)
     ref_dataset = {}
     for _, row in ref_dg_data.iterrows():
-        ligand_name = row["Node"]
+        ligand_name = row["Node"].upper()
         if ligand_name not in molecule_by_name:
             # this ligand was not included in the benchmark dataset so skip it
             continue

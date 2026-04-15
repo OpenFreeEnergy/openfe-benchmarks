@@ -1,5 +1,5 @@
 {
-    "3mxf": {
+    "3MXF": {
         "dg": {
             "magnitude": -9.6,
             "unit": "kilocalories_per_mole",
@@ -10,7 +10,7 @@
         "inchikey": "DNVXATUJJDPFDM-KRWDZBQONA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "3svg": {
+    "3SVG": {
         "dg": {
             "magnitude": -7.3,
             "unit": "kilocalories_per_mole",
@@ -21,7 +21,7 @@
         "inchikey": "AONNGYBECNOVTK-SNVBAGLBNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "3u5j": {
+    "3U5J": {
         "dg": {
             "magnitude": -7.4,
             "unit": "kilocalories_per_mole",
@@ -32,7 +32,7 @@
         "inchikey": "YNNUPOWDAASPHS-QGZVFWFLNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "3u5l": {
+    "3U5L": {
         "dg": {
             "magnitude": -8.2,
             "unit": "kilocalories_per_mole",
@@ -43,7 +43,7 @@
         "inchikey": "UYIVCPRWMLOCSB-UHFFFAOYNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4e96": {
+    "4E96": {
         "dg": {
             "magnitude": -9.11,
             "unit": "kilocalories_per_mole",
@@ -54,7 +54,7 @@
         "inchikey": "TXZPMHLMPKIUGK-HCKMINDGNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4hxl": {
+    "4HXL": {
         "dg": {
             "magnitude": -7.74,
             "unit": "kilocalories_per_mole",
@@ -65,7 +65,7 @@
         "inchikey": "WAUBHBSWJBQJEK-DVIAZDKANA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4hxm": {
+    "4HXM": {
         "dg": {
             "magnitude": -8.35,
             "unit": "kilocalories_per_mole",
@@ -76,7 +76,7 @@
         "inchikey": "KWWYOIOTRAVAHK-VEWCPZSHNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4j0r": {
+    "4J0R": {
         "dg": {
             "magnitude": -8.8,
             "unit": "kilocalories_per_mole",
@@ -87,7 +87,7 @@
         "inchikey": "FEQUIPXIENTMJN-GOSISDBHNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4mr3": {
+    "4MR3": {
         "dg": {
             "magnitude": -9.0,
             "unit": "kilocalories_per_mole",
@@ -98,7 +98,7 @@
         "inchikey": "JKOMAPNLTUJAPI-UYBDAZJANA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4nud": {
+    "4NUD": {
         "dg": {
             "magnitude": -7.41,
             "unit": "kilocalories_per_mole",
@@ -109,7 +109,7 @@
         "inchikey": "DZTGIRNXWSZBIM-BBAKWIKBNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4pce": {
+    "4PCE": {
         "dg": {
             "magnitude": -7.05,
             "unit": "kilocalories_per_mole",
@@ -120,7 +120,7 @@
         "inchikey": "WAZKIRPFJTZRDA-UHFFFAOYNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4pci": {
+    "4PCI": {
         "dg": {
             "magnitude": -7.01,
             "unit": "kilocalories_per_mole",
@@ -131,7 +131,7 @@
         "inchikey": "FHOSJKIPIAZPJP-AWEZNQCLNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "4yh3": {
+    "4YH3": {
         "dg": {
             "magnitude": -6.27,
             "unit": "kilocalories_per_mole",
@@ -142,7 +142,7 @@
         "inchikey": "WQITZMVRSQPEBE-KLKKOXEHNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "5igk": {
+    "5IGK": {
         "dg": {
             "magnitude": -10.1,
             "unit": "kilocalories_per_mole",
@@ -153,7 +153,7 @@
         "inchikey": "UYBRROMMFMPJAN-GPQMBLKYNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "5ti7": {
+    "5TI7": {
         "dg": {
             "magnitude": -6.78,
             "unit": "kilocalories_per_mole",
@@ -164,7 +164,7 @@
         "inchikey": "MFUNXQNFKJCKOM-UHFFFAOYNA-N",
         "reference": "https://doi.org/10.1021/acs.jcim.5c02204"
     },
-    "5wuu": {
+    "5WUU": {
         "dg": {
             "magnitude": -8.33,
             "unit": "kilocalories_per_mole",
