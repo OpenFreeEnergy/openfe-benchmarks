@@ -134,6 +134,8 @@ def compile_network_transformations(
 
         protocol_settings = SepTopProtocol.default_settings()
         protocol_settings.forcefield_settings.small_molecule_forcefield = FORCEFIELD
+        # Disable the alchemical dispersion correction for now since this
+        # simulations would otherwise be very slow
         protocol_settings.alchemical_settings.disable_alchemical_dispersion_correction = True
         protocol_settings.protocol_repeats = 1
         transformation_protocol = SepTopProtocol(settings=protocol_settings)
