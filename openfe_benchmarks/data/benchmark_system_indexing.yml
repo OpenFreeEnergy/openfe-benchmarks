@@ -58,6 +58,8 @@ miscellaneous_set:
   faah: ["protein", "bfe"]
   galectin: ["protein", "bfe"]
   hiv1_protease: ["protein", "bfe"]
+scaffold_hopping:
+  brd4_tsai: ["protein", "bfe"]
 water_set:
   brd4: ["protein", "bfe"]
   chk1: ["protein", "bfe"]
