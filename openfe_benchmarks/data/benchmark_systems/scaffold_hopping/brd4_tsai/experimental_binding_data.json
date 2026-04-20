@@ -1,7 +1,7 @@
 {
     "3MXF": {
         "dg": {
-            "magnitude": -9.6,
+            "magnitude": -9.5,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
@@ -12,7 +12,7 @@
     },
     "3SVG": {
         "dg": {
-            "magnitude": -7.3,
+            "magnitude": -7.7,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
@@ -23,7 +23,7 @@
     },
     "3U5J": {
         "dg": {
-            "magnitude": -7.4,
+            "magnitude": -7.8,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
@@ -34,7 +34,7 @@
     },
     "3U5L": {
         "dg": {
-            "magnitude": -8.2,
+            "magnitude": -9.9,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
@@ -78,7 +78,7 @@
     },
     "4J0R": {
         "dg": {
-            "magnitude": -8.8,
+            "magnitude": -8.6,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
@@ -89,7 +89,7 @@
     },
     "4MR3": {
         "dg": {
-            "magnitude": -9.0,
+            "magnitude": -9.2,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
@@ -177,7 +177,7 @@
     },
     "4HBW": {
         "dg": {
-            "magnitude": -7.8,
+            "magnitude": -7.83,
             "unit": "kilocalories_per_mole",
             ":is_custom:": true,
             "pint_unit_registry": "openff_units"
