@@ -14,7 +14,7 @@ Charging failures:
 
 ## Subsets
 
-Regenerate all subsets: run `run.sh` in `data_generation/`.
+Regenerate all subsets: run `python define_freesolv_mnsol_openff_subsets.py` in `data_generation/`.
 
 ### subset_openff_filtered.json
 588 neutral solutes retained from the full FreeSolv v0.52 database, all measured in water. Excluded 54 entries: 47 with elements outside the OpenFF chemical space, 5 with disqualifying SMIRKS patterns, and 2 with undefined stereochemistry. Each entry is a unique solute with a single experimental aqueous hydration free energy measurement.

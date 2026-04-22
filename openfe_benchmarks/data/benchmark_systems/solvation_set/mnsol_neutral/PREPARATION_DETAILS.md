@@ -30,7 +30,7 @@ Some ligands could not be charged with all methods, the following lists the liga
 
 ## Subsets
 
-Regenerate all subsets: run `run.sh` in `data_generation/`.
+Regenerate all subsets: run `python define_freesolv_mnsol_openff_subsets.py` in `data_generation/`.
 
 ### subset_openff_filtered.json
 1570 systems retained from ~3037 MNSol database entries, covering 236 unique solutes across multiple solvent environments. Excluded: 402 entries on the water skip list; 71 self-solvation entries (solute = solvent); 47 with solutes containing out-of-scope elements; 40 with solvents containing out-of-scope elements; 3 entries with solutes bearing disqualifying SMIRKS; 286 with solvents bearing disqualifying SMIRKS; and 1 with undefined solvent stereochemistry. Entries may satisfy multiple exclusion criteria; totals are not additive.

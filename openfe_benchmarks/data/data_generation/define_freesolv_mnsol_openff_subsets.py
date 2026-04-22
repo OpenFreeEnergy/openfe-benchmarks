@@ -1382,6 +1382,14 @@ def main(
         / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/subset_openff_small.json"
     )
 
+    if not pathlib.Path(mnsol_json).exists():
+        raise FileNotFoundError(
+            f"MNSol data file not found: {mnsol_json}\n"
+            "This file is not included in the repository because MNSol is a "
+            "licensed database. Licensed MNSol users can regenerate it with:\n"
+            "  openfe_benchmarks/data/data_generation/generate_mnsol_data.py"
+        )
+
     mnsol_data, mnsol_skips = build_filtered_records_from_experimental_json(
         mnsol_json, skip_inchikey=["XLYOFNOQVPJJNP-UHFFFAOYNA-N"]
     )
