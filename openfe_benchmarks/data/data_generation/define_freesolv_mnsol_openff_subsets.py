@@ -45,7 +45,6 @@ rebalancing; its FreeSolv subset is primarily an MNSol overlap-membership filter
 without an independent chemical-space fill stage.
 """
 
-import csv
 import json
 import pathlib
 import warnings
@@ -54,7 +53,6 @@ from pathlib import Path
 from typing import Any
 
 import click
-import requests
 from gufe.tokenization import JSON_HANDLER
 from openff.toolkit import Molecule
 from rdkit import Chem
@@ -63,7 +61,6 @@ from rdkit import RDLogger
 from rdkit.Chem import AllChem
 import numpy as np
 import umap
-from tqdm import tqdm
 from yammbs import checkmol
 from yammbs.checkmol import ChemicalEnvironment
 
@@ -76,9 +73,14 @@ _warning_log: list[warnings.WarningMessage] = []
 PACKAGE_ROOT = Path(openfe_benchmarks.__file__).parent.parent
 MNSOL_SOLVENTS_PER_SOLUTE = 3
 
-_MN_SOL_JSON_PATH = pathlib.Path(__file__).parent / "mnsol-name-to-smiles.json"
-with _MN_SOL_JSON_PATH.open("r", encoding="utf-8") as _f:
-    NAMES_TO_SMILES = json.load(_f)
+DEFAULT_MNSOL_JSON_PATH = (
+    PACKAGE_ROOT
+    / "openfe_benchmarks/data/benchmark_systems/solvation_set/mnsol_neutral/experimental_solvation_free_energy_data.json"
+)
+DEFAULT_FREESOLV_JSON_PATH = (
+    PACKAGE_ROOT
+    / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/experimental_solvation_free_energy_data.json"
+)
 
 SMIRKS_FILTERS = [
     # Long chain alkane / ether
@@ -521,152 +523,96 @@ def fill_environment_coverage(
     return selected_data, sorted(coverage_additions), missing_environments
 
 
-def build_filtered_mnsol_records(
-    mnsol_alldata: pathlib.Path,
+def build_filtered_records_from_experimental_json(
+    reference_json: pathlib.Path,
+    skip_inchikey: set[str] | None = None,
 ) -> tuple[dict[str, dict], dict[str, list[str]]]:
-    """Load and filter MNSol rows with the same gates as the existing script."""
+    """Load validated experimental solvation reference data from a JSON file."""
     data: dict[str, dict] = {}
     skipped_systems = defaultdict(list)
-    skip_molecules = ["water"]
+    skip_inchikey = skip_inchikey or set()
 
-    with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
-        total_lines = sum(1 for _ in fh)
-        fh.seek(0)
-        reader = csv.DictReader(fh, delimiter="\t")
-        for row in tqdm(reader, total=total_lines):
-            if not row or not row.get("FileHandle"):
-                continue
+    with reference_json.open("r", encoding="utf-8") as fh:
+        raw = json.load(fh)
 
-            index_raw = row.get("No.")
-            if index_raw is None:
-                continue
-            index = f"{int(index_raw):04d}"
-            key = f"mnsol-{index}"
-            solute_name = row.get("SoluteName", "").strip().strip('"')
-            solvent_name = row.get("Solvent", "").strip().strip('"')
-            group = row.get("Level1", "").strip().strip('"')
-            charge = row.get("Charge", "").strip().strip('"')
+    if not isinstance(raw, dict):
+        raise ValueError(
+            f"Experimental reference JSON {reference_json} must contain a top-level object"
+        )
 
-            checks = [
-                (solute_name in skip_molecules, "solute in skip_molecules"),
-                (solvent_name in skip_molecules, "solvent in skip_molecules"),
-                (solute_name not in NAMES_TO_SMILES, "no solute smiles"),
-                (solvent_name not in NAMES_TO_SMILES, "no solvent smiles"),
-                ("radical" in solute_name, "solute is a radical"),
-                (group == "14", "explicit solvent"),
-                (charge != "0", "charged system"),
-                (solute_name == solvent_name, "solute and solvent are the same"),
-            ]
-            skip_reason = next(
-                (reason for condition, reason in checks if condition), None
-            )
-            if skip_reason:
-                skipped_systems[skip_reason].append(index)
-                continue
-
-            solute_smiles = NAMES_TO_SMILES[solute_name]
-            solvent_smiles = NAMES_TO_SMILES[solvent_name]
-            checks = [
-                (
-                    contains_any_filter_smirks(solute_smiles),
-                    "solute has disqualifying smirks",
-                ),
-                (
-                    contains_any_filter_smirks(solvent_smiles),
-                    "solvent has disqualifying smirks",
-                ),
-                (
-                    has_undefined_stereochemistry(solvent_smiles),
-                    "solvent has undefined stereochemistry",
-                ),
-                (
-                    has_undefined_stereochemistry(solute_smiles),
-                    "solute has undefined stereochemistry",
-                ),
-                (
-                    not has_only_allowed_elements(solvent_smiles),
-                    "solvent elements outside chemical space",
-                ),
-                (
-                    not has_only_allowed_elements(solute_smiles),
-                    "solute elements outside chemical space",
-                ),
-            ]
-            skip_reason = next(
-                (reason for condition, reason in checks if condition), None
-            )
-            if skip_reason:
-                skipped_systems[skip_reason].append(index)
-                continue
-
-            solute_cmiles = to_cmiles(solute_smiles)
-            solvent_cmiles = to_cmiles(solvent_smiles)
-            if solute_cmiles is None or solvent_cmiles is None:
-                skipped_systems["failed cmiles conversion"].append(index)
-                continue
-
-            data[key] = {
-                "mnsol No.": key.split("-")[1],
-                "solute_name": solute_name,
-                "solvent_name": solvent_name,
-                "solute_smiles": solute_cmiles,
-                "solvent_smiles": solvent_cmiles,
-                "solute_charge": charge,
-            }
-
-    return data, skipped_systems
-
-
-def build_filtered_freesolv_records() -> tuple[dict[str, dict], dict[str, list[str]]]:
-    """Load and filter FreeSolv rows with the same gates as the existing script."""
-    url = "https://raw.githubusercontent.com/MobleyLab/FreeSolv/refs/tags/v0.52/database.json"
-    response = requests.get(url)
-    response.raise_for_status()
-    freesolv = response.json()
-
-    data: dict[str, dict] = {}
-    skipped_systems = defaultdict(list)
-    for name, entry in freesolv.items():
-        offmol_solute = make_openff_molecule(entry["smiles"])
-        if offmol_solute is None:
-            skipped_systems["invalid openff solute"].append(name)
+    for key, record in raw.items():
+        if not isinstance(record, dict):
+            skipped_systems["invalid record"].append(str(key))
             continue
 
-        charge = sum(a.GetFormalCharge() for a in offmol_solute.to_rdkit().GetAtoms())
-        checks = [
-            (charge != 0, "charged system"),
+        if skip_inchikey:
+            solute_inchikey = record.get("solute_inchikey")
+            solvent_inchikey = record.get("solvent_inchikey")
+            if solute_inchikey in skip_inchikey or solvent_inchikey in skip_inchikey:
+                skipped_systems["skip inchikey"].append(str(key))
+                continue
+
+        missing_fields = [
+            field
+            for field in (
+                "solute_name",
+                "solvent_name",
+                "solute_smiles",
+                "solvent_smiles",
+            )
+            if not isinstance(record.get(field), str)
+        ]
+        if missing_fields:
+            skipped_systems["missing fields"].append(str(key))
+            continue
+
+        solute_smiles = record["solute_smiles"]
+        solvent_smiles = record["solvent_smiles"]
+
+        if record["solute_inchikey"] == record["solvent_inchikey"]:
+            skipped_systems["solute and solvent are the same"].append(str(key))
+            continue
+
+        smiles_checks = [
             (
-                contains_any_filter_smirks(entry["smiles"]),
+                contains_any_filter_smirks(solute_smiles),
                 "solute has disqualifying smirks",
             ),
             (
-                has_undefined_stereochemistry(entry["smiles"]),
+                contains_any_filter_smirks(solvent_smiles),
+                "solvent has disqualifying smirks",
+            ),
+            (
+                has_undefined_stereochemistry(solute_smiles),
                 "solute has undefined stereochemistry",
             ),
             (
-                not has_only_allowed_elements(entry["smiles"]),
+                has_undefined_stereochemistry(solvent_smiles),
+                "solvent has undefined stereochemistry",
+            ),
+            (
+                not has_only_allowed_elements(solute_smiles),
                 "solute elements outside chemical space",
             ),
+            (
+                not has_only_allowed_elements(solvent_smiles),
+                "solvent elements outside chemical space",
+            ),
         ]
-        skip_reason = next((reason for condition, reason in checks if condition), None)
+        skip_reason = next(
+            (reason for condition, reason in smiles_checks if condition), None
+        )
         if skip_reason:
-            skipped_systems[skip_reason].append(name)
+            skipped_systems[skip_reason].append(str(key))
             continue
 
-        solute_cmiles = to_cmiles(entry["smiles"])
-        solvent_cmiles = to_cmiles("O")
-        if solute_cmiles is None or solvent_cmiles is None:
-            skipped_systems["failed cmiles conversion"].append(name)
-            continue
-
-        key = f"{name},water"
-        data[key] = {
-            "freesolv_id": name,
-            "solute_name": name,
-            "solvent_name": "water",
-            "solute_smiles": solute_cmiles,
-            "solvent_smiles": solvent_cmiles,
-            "solute_charge": charge,
+        data[str(key)] = {
+            **record,
+            "solute_name": record["solute_name"],
+            "solvent_name": record["solvent_name"],
+            "solute_smiles": solute_smiles,
+            "solvent_smiles": solvent_smiles,
+            "solute_charge": record.get("solute_charge", 0),
         }
 
     return data, skipped_systems
@@ -1329,10 +1275,18 @@ def build_mnsol_subset(
 
 @click.command()
 @click.option(
-    "--mnsol-alldata",
-    type=click.Path(exists=True, dir_okay=True, path_type=pathlib.Path),
-    required=True,
-    help="Path to MNSol_alldata.txt",
+    "--mnsol-json",
+    type=click.Path(exists=True, dir_okay=False, path_type=pathlib.Path),
+    default=DEFAULT_MNSOL_JSON_PATH,
+    show_default=True,
+    help="Path to MNSol experimental_solvation_free_energy_data.json",
+)
+@click.option(
+    "--freesolv-json",
+    type=click.Path(exists=True, dir_okay=False, path_type=pathlib.Path),
+    default=DEFAULT_FREESOLV_JSON_PATH,
+    show_default=True,
+    help="Path to FreeSolv experimental_solvation_free_energy_data.json",
 )
 @click.option(
     "--n-per-environment",
@@ -1384,7 +1338,8 @@ def build_mnsol_subset(
     ),
 )
 def main(
-    mnsol_alldata: pathlib.Path,
+    mnsol_json: pathlib.Path,
+    freesolv_json: pathlib.Path,
     n_per_environment: int,
     max_subset_size: int,
     max_rows_per_solute: int,
@@ -1427,8 +1382,12 @@ def main(
         / "openfe_benchmarks/data/benchmark_systems/solvation_set/freesolv/subset_openff_small.json"
     )
 
-    mnsol_data, mnsol_skips = build_filtered_mnsol_records(mnsol_alldata)
-    freesolv_data, freesolv_skips = build_filtered_freesolv_records()
+    mnsol_data, mnsol_skips = build_filtered_records_from_experimental_json(
+        mnsol_json, skip_inchikey=["XLYOFNOQVPJJNP-UHFFFAOYNA-N"]
+    )
+    freesolv_data, freesolv_skips = build_filtered_records_from_experimental_json(
+        freesolv_json,
+    )
 
     overlapping_mnsol_solutes, overlapping_freesolv_solutes = find_overlapping_solutes(
         mnsol_data, freesolv_data

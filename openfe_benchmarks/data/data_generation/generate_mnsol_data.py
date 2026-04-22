@@ -275,6 +275,25 @@ def main(mnsol_alldata: pathlib.Path):
                 skipped_systems.append(index)
                 continue
 
+            # Filter on source SMILES (before 3-D assignment bakes in arbitrary stereo).
+            # A racemic solvent measured experimentally as a racemate must not be
+            # modelled as a specific enantiopure solvent in simulation.
+            solvent_source_smiles = NAMES_TO_SMILES[solvent_name]
+            solvent_rdmol = Chem.MolFromSmiles(solvent_source_smiles, sanitize=True)
+            if solvent_rdmol is not None:
+                Chem.AssignStereochemistry(solvent_rdmol, cleanIt=True, force=True)
+                _chiral = Chem.FindMolChiralCenters(
+                    solvent_rdmol, includeUnassigned=True, useLegacyImplementation=False
+                )
+                _stereo = Chem.FindPotentialStereo(solvent_rdmol)
+                _undefined = any(tag == "?" for _, tag in _chiral) or any(
+                    s.specified == Chem.rdchem.StereoSpecified.Unspecified
+                    for s in _stereo
+                )
+                if _undefined:
+                    skipped_systems.append(index)
+                    continue
+
             if (
                 solute_name in OCTANE_CANONICAL_NAMES
                 and solvent_name in WATER_CANONICAL_NAMES
