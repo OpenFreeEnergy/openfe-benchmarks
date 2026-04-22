@@ -14,7 +14,7 @@ The reference data was generated using the [generate_mnsol_data.py](../../../dat
 
 Conformer generation failed for: 6,7,8,9,10,10-hexachloro-1,5,5a,6,9,9a-hexahydro-6,9-methano-2,4,3-benzodioxathiepine-3-oxide(endosulfanalpha)
 
-After filtering, **2468 systems** are retained.
+After filtering, **2467 systems** are retained.
 
 ## Partial Charges
 
