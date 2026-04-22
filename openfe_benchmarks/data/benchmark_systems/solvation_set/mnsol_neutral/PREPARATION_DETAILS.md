@@ -2,6 +2,9 @@ Done by Jennifer Clark on 2026-02-25 (subset regenerated 2026-04-02)
 
 Systems extracted from the MNSol database (https://doi.org/10.13020/3eks-j059).
 
+- Licensing prevented including MNSol experimental values. After properly obtaining the dataset, a user can locally generate the needed experimental data file with the [generate_mnsol_data.py](../../../data_generation/generate_mnsol_data.py) script.
+- Experimental uncertainties are set to 0.2 kcal/mol for all neutral entries, following the recommendation in the MNSol documentation.
+
 ## Filtering
 
 The reference data was generated using the [generate_mnsol_data.py](../../../data_generation/generate_mnsol_data.py) script. Entries were excluded if:
@@ -18,9 +21,6 @@ Conformer generation failed for: 6,7,8,9,10,10-hexachloro-1,5,5a,6,9,9a-hexahydr
 After filtering, **2467 systems** are retained.
 
 ## Partial Charges
-
-- Licensing prevented including MNSol experimental values. After properly obtaining the dataset, a user can locally generate the needed experimental data file with the [generate_mnsol_data.py](../../../data_generation/generate_mnsol_data.py) script.
-- Experimental uncertainties are set to 0.2 kcal/mol for all neutral entries, following the recommendation in the MNSol documentation.
 
 Charges were generated using the [charge_mnsol.py](../../../data_generation/charge_mnsol.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
 Some ligands could not be charged with all methods, the following lists the ligands that could not be charged with each method:
