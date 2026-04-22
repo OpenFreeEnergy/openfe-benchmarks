@@ -127,7 +127,7 @@ def get_chemical_systems(
             solute = WATER
         elif solute_inchikey not in mol_dict:
             logger.warning(
-                f"Solute '{solute_inchikey}' not found in SDF; skipping network '{transformation_name}'"
+                f"Solute '{solute_inchikey}' not found in SDF; skipping transformation '{transformation_name}'"
             )
             continue
         else:
@@ -137,7 +137,7 @@ def get_chemical_systems(
             solvent = ExtendedSolventComponent()
         elif solvent_inchikey not in mol_dict:
             logger.warning(
-                f"Solvent '{solvent_inchikey}' not found in SDF; skipping network '{transformation_name}'"
+                f"Solvent '{solvent_inchikey}' not found in SDF; skipping transformation '{transformation_name}'"
             )
             continue
         else:
