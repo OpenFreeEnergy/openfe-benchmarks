@@ -12,7 +12,6 @@ for more details.
 
 import os
 import logging
-import json
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
@@ -264,17 +263,13 @@ def validate_rbfe_network(network_file):
             required = ["protein", "solvent", "ligand"]
             for comp in required:
                 if comp not in components:
-                    errors.append(
-                        f"Transformation '{name}' missing {comp} component"
-                    )
+                    errors.append(f"Transformation '{name}' missing {comp} component")
 
             # Check for cofactors if benchmark system has them
             if benchmark_sys.cofactors is not None:
                 has_cofactor = any("cofactor" in k for k in components.keys())
                 if not has_cofactor:
-                    errors.append(
-                        f"Transformation '{name}' missing cofactor component"
-                    )
+                    errors.append(f"Transformation '{name}' missing cofactor component")
                 else:
                     logger.info("Transformation '%s' includes cofactors", name)
 
@@ -290,9 +285,7 @@ def validate_rbfe_network(network_file):
             required = ["solvent", "ligand"]
             for comp in required:
                 if comp not in components:
-                    errors.append(
-                        f"Transformation '{name}' missing {comp} component"
-                    )
+                    errors.append(f"Transformation '{name}' missing {comp} component")
             else:
                 logger.info(
                     "Transformation '%s' solvent leg has required components", name
@@ -335,11 +328,15 @@ def validate_rbfe_network(network_file):
         for ligand in ligands:
             found_ligands.add(ligand.name)
             off_mol = ligand.to_openff()
-            if off_mol.partial_charges is not None and len(off_mol.partial_charges) == off_mol.n_atoms:
+            if (
+                off_mol.partial_charges is not None
+                and len(off_mol.partial_charges) == off_mol.n_atoms
+            ):
                 continue
             else:
-                errors.append(f"Ligand '{ligand.name}' in chemical system '{chem_system.key}' is missing partial charges")
-
+                errors.append(
+                    f"Ligand '{ligand.name}' in chemical system '{chem_system.key}' is missing partial charges"
+                )
 
     expected_keys = set(expected_ligands.keys()) | set(expected_cofactors.keys())
     missing_expected = expected_keys - found_ligands

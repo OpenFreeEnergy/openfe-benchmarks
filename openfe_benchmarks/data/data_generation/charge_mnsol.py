@@ -123,6 +123,10 @@ def main(dir_path: pathlib.Path, charge_method: str, nagl_model: None | str):
     charged_ligands = []
     failed_molecules = []
     for mol in tqdm.tqdm(mols, desc="Generating charges", ncols=80):
+        # water partial charges should come from a specific water model
+        if mol.to_openff().to_inchikey(fixed_hydrogens=True) == "XLYOFNOQVPJJNP-UHFFFAOYNA-N": # water
+            continue
+
         try:
             charged_molecule = assign_offmol_partial_charges(
                 offmol=mol.to_openff(),
