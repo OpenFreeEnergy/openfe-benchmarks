@@ -1,4 +1,4 @@
-"""Build aligned MNSol and FreeSolv benchmark subsets with UMAP-guided selection.
+"""Build aligned MNSol and FreeSolv benchmark subsets with Tanimoto-guided selection.
 
 This script produces two output files per dataset:
   - ``subset_openff_filtered.json``  — the full filtered pool (all valid records)
@@ -9,22 +9,23 @@ MNSol subset selection
 Phase 1 — FreeSolv-overlap seeding
     Solutes confirmed to overlap with FreeSolv (via OpenFF SMILES isomorphism)
     are guaranteed inclusion. Up to ``max_rows_per_solute`` rows per solute are
-    chosen by UMAP MaxMin to maximise solvent diversity.
+    chosen by greedy Tanimoto MaxMin on concatenated 4096-bit pair fingerprints
+    to maximise solvent diversity.
 
 Phase 2 — checkmol environment coverage
     For each checkmol ``ChemicalEnvironment`` still below ``n_per_environment``
     representatives, additional rows are added from the full filtered pool via
-    greedy UMAP MaxMin.
+    greedy Tanimoto MaxMin.
 
-Phase 3 — uniform UMAP fill
+Phase 3 — uniform Tanimoto fill
     Remaining budget (``max_subset_size`` minus current size) is filled by
-    greedy MaxMin over the 2D UMAP(Jaccard) embedding of OR-combined
-    solute+solvent Morgan fingerprints, maximizing pair-space coverage.
+    greedy MaxMin over concatenated 4096-bit (solute ‖ solvent) Morgan
+    fingerprints, maximizing pair-space coverage.
 
 Phase 4 — gap rebalancing
-    Up to ``max_swaps`` swap iterations move points from dense UMAP clusters
+    Up to ``max_swaps`` swap iterations move points from dense Tanimoto clusters
     into sparse regions. Each swap removes the selected point closest to any
-    other selected neighbor and replaces it with the unselected point that
+    other selected neighbour and replaces it with the unselected point that
     covers the largest remaining gap, subject to:
       - per-environment hard floor of ``n_per_environment - 1``
       - per-solute cap of ``max_rows_per_solute``
@@ -40,7 +41,7 @@ environment.
 
 Differences from openff-sage subsets
 -------------------------------------
-The openff-sage MNSol subset does not use UMAP-guided selection or gap
+The openff-sage MNSol subset does not use Tanimoto-guided selection or gap
 rebalancing; its FreeSolv subset is primarily an MNSol overlap-membership filter
 without an independent chemical-space fill stage.
 """
@@ -60,7 +61,6 @@ from rdkit import DataStructs
 from rdkit import RDLogger
 from rdkit.Chem import AllChem
 import numpy as np
-import umap
 from yammbs import checkmol
 from yammbs.checkmol import ChemicalEnvironment
 
@@ -95,6 +95,12 @@ SMIRKS_FILTERS = [
 SMIRKS_FILTER_MOLS = [Chem.MolFromSmarts(s) for s in SMIRKS_FILTERS]
 ALLOWED_ELEMENTS = {"C", "O", "N", "Cl", "Br", "H", "S", "P"}
 
+# ChemicalEnvironment values outside OpenFF chemical space
+# (require elements absent from ALLOWED_ELEMENTS) and therefore excluded:
+#   Fluorine (F):    AlkylFluoride, ArylFluoride, AcylFluoride
+#   Iodine (I):      AlkylIodide, ArylIodide, AcylIodide
+#   Boron (B):       BoronicAcidDeriv, BoronicAcid, BoronicAcidEster
+#   Organometallics: Organometallic, Organolithium, Organomagnesium
 CHEMICAL_ENVIRONMENTS = [
     ChemicalEnvironment.Alkane,
     ChemicalEnvironment.Alkene,
@@ -105,10 +111,12 @@ CHEMICAL_ENVIRONMENTS = [
     ChemicalEnvironment.Hemiaminal,
     ChemicalEnvironment.Aminal,
     ChemicalEnvironment.Thioacetal,
+    ChemicalEnvironment.CarboxylicAcid,
     ChemicalEnvironment.CarboxylicAcidEster,
     ChemicalEnvironment.Ether,
     ChemicalEnvironment.Aldehyde,
     ChemicalEnvironment.Ketone,
+    ChemicalEnvironment.Imine,
     ChemicalEnvironment.Aromatic,
     ChemicalEnvironment.CarboxylicAcidPrimaryAmide,
     ChemicalEnvironment.CarboxylicAcidSecondaryAmide,
@@ -116,11 +124,11 @@ CHEMICAL_ENVIRONMENTS = [
     ChemicalEnvironment.PrimaryAmine,
     ChemicalEnvironment.SecondaryAmine,
     ChemicalEnvironment.TertiaryAmine,
+    ChemicalEnvironment.Nitrile,
     ChemicalEnvironment.Cyanate,
     ChemicalEnvironment.Isocyanate,
+    ChemicalEnvironment.NitroCompound,
     ChemicalEnvironment.Heterocycle,
-    ChemicalEnvironment.AlkylFluoride,
-    ChemicalEnvironment.ArylFluoride,
     ChemicalEnvironment.AlkylChloride,
     ChemicalEnvironment.ArylChloride,
     ChemicalEnvironment.AlkylBromide,
@@ -136,6 +144,7 @@ CHEMICAL_ENVIRONMENTS = [
     ChemicalEnvironment.ThiocarboxylicAcid,
     ChemicalEnvironment.ThiocarboxylicAcidEster,
     ChemicalEnvironment.SulfonicAcidEster,
+    ChemicalEnvironment.Sulfoxide,
     ChemicalEnvironment.Sulfone,
     ChemicalEnvironment.PhosphonicAcid,
     ChemicalEnvironment.PhosphoricAcid,
@@ -310,18 +319,23 @@ def solute_fingerprint(smiles: str):
 
 
 def pair_fingerprint(solute_smiles: str, solvent_smiles: str):
-    """Return an OR-combined solute/solvent Morgan fingerprint for a system pair.
+    """Return a concatenated solute/solvent Morgan fingerprint for a system pair.
 
-    Combining both component fingerprints into a single bit vector captures
-    pair-level chemical diversity and matches the space used in UMAP analysis.
+    Solute bits occupy positions 0–2047 and solvent bits occupy positions
+    2048–4095 of a 4096-bit vector. Concatenation preserves solute/solvent
+    role information (unlike OR-combination, where (solute A + solvent B) and
+    (solute B + solvent A) are indistinguishable). This is the standard
+    approach for multi-component systems (reaction fingerprints, mixture QSAR).
     """
     fp_solute = solute_fingerprint(solute_smiles)
     fp_solvent = solute_fingerprint(solvent_smiles)
     if fp_solute is None or fp_solvent is None:
         return None
-    combined = DataStructs.ExplicitBitVect(2048)
-    combined |= fp_solute
-    combined |= fp_solvent
+    combined = DataStructs.ExplicitBitVect(4096)
+    for bit in fp_solute.GetOnBits():
+        combined.SetBit(bit)  # positions 0–2047
+    for bit in fp_solvent.GetOnBits():
+        combined.SetBit(2048 + bit)  # positions 2048–4095
     return combined
 
 
@@ -618,6 +632,29 @@ def build_filtered_records_from_experimental_json(
     return data, skipped_systems
 
 
+def tag_records_with_checkmol_environments(data: dict[str, dict]) -> None:
+    """Annotate each record in *data* with checkmol environment lists (in place).
+
+    Adds ``solute_env`` and ``solvent_env`` keys to each record: lists of
+    ``ChemicalEnvironment.name`` strings drawn from ``CHEMICAL_ENVIRONMENTS``.
+    Deduplicates checkmol calls across records sharing the same SMILES.
+    """
+    target_env_names = {env.name for env in CHEMICAL_ENVIRONMENTS}
+    smiles_to_envs: dict[str, list[str]] = {}
+
+    def _compute(smiles: str) -> list[str]:
+        if smiles not in smiles_to_envs:
+            envs = get_checkmol_environments(smiles)
+            smiles_to_envs[smiles] = [
+                e.name for e in envs if e.name in target_env_names
+            ]
+        return smiles_to_envs[smiles]
+
+    for record in data.values():
+        record["solute_env"] = _compute(record["solute_smiles"])
+        record["solvent_env"] = _compute(record["solvent_smiles"])
+
+
 def find_overlapping_solutes(
     mnsol_data: dict[str, dict], freesolv_data: dict[str, dict]
 ) -> tuple[set[str], set[str]]:
@@ -686,79 +723,33 @@ def find_multi_solvent_mnsol_solutes(mnsol_data: dict[str, dict]) -> set[str]:
     }
 
 
-def select_diverse_keys_umap(
-    candidate_keys: list[str],
-    already_selected_keys: set[str],
-    umap_coords: dict[str, np.ndarray],
-    order_map: dict[str, int],
-    n_to_select: int,
-) -> list[str]:
-    """Greedy MaxMin selection in UMAP 2D space.
-
-    At each step picks the candidate whose minimum Euclidean distance to any
-    already-selected point is largest, maximizing spread across the embedding.
-    When no references exist yet, the record with the smallest insertion index
-    is chosen for determinism.
-    """
-    available = [k for k in candidate_keys if k not in already_selected_keys]
-    if not available or n_to_select <= 0:
-        return []
-
-    chosen: list[str] = []
-    # Keep an incremental min-distance array to avoid re-scanning all refs each step.
-    # min_dist[i] = min Euclidean distance from available[i] to any reference so far.
-    avail_coords = np.stack([umap_coords[k] for k in available])  # (n_avail, 2)
-    ref_keys = list(already_selected_keys)
-    if ref_keys:
-        ref_coords = np.stack([umap_coords[k] for k in ref_keys])  # (n_ref, 2)
-        diffs = avail_coords[:, None, :] - ref_coords[None, :, :]  # (n_avail, n_ref, 2)
-        min_dist = np.sqrt((diffs**2).sum(axis=-1)).min(axis=1)  # (n_avail,)
-    else:
-        min_dist = np.full(len(available), np.inf)
-
-    while available and len(chosen) < n_to_select:
-        if np.isinf(min_dist).all():
-            # No references yet: pick lowest insertion-order key
-            best_idx = min(range(len(available)), key=lambda i: order_map[available[i]])
-        else:
-            best_idx = int(np.argmax(min_dist))
-
-        best_key = available[best_idx]
-        chosen.append(best_key)
-
-        # Update min_dist: replace with distance to the newly chosen point
-        new_ref = umap_coords[best_key]  # (2,)
-        new_dists = np.sqrt(((avail_coords - new_ref) ** 2).sum(axis=1))  # (n_avail,)
-        min_dist = np.minimum(min_dist, new_dists)
-
-        # Remove chosen point from tracking arrays
-        available.pop(best_idx)
-        avail_coords = np.delete(avail_coords, best_idx, axis=0)
-        min_dist = np.delete(min_dist, best_idx)
-
-    return chosen
-
-
-def rebalance_umap_coverage(
+def rebalance_tanimoto_coverage(
     selected: set[str],
     all_valid_keys: list[str],
-    umap_coords: dict[str, np.ndarray],
+    fp_by_key: dict[str, Any],
     key_to_envs: dict[str, set[str]],
     key_to_solute: dict[str, str],
     n_per_environment: int,
     max_rows_per_solute: int,
     max_swaps: int = 500,
 ) -> set[str]:
-    """Swap over-represented points for under-represented ones to fill UMAP gaps.
+    """Swap over-represented points for under-represented ones to fill Tanimoto gaps.
 
     After the initial selection phases there can be residual dense clusters
     (e.g. many similar alkane/solvent pairs grouped together) leaving sparse
     regions of pair chemical space uncovered.  This function addresses that
     by iterating up to *max_swaps* times:
 
-    1. Build the list of the 50 unselected candidates with the largest minimum
-       UMAP distance to any selected point (the biggest gap candidates).
-    2. For each gap candidate p_in (largest gap first), score every selected
+    1. Precompute the full pairwise Tanimoto distance matrix for all valid keys
+       (feasible at ~2000 records).  Gap distances and crowdedness scores are
+       derived from this matrix rather than from a 2D UMAP projection, giving
+       exact Tanimoto distances consistent with the selection metric in Phases
+       1–3.
+
+    2. Build the list of the 50 unselected candidates with the largest minimum
+       Tanimoto distance to any selected point (the biggest gap candidates).
+
+    3. For each gap candidate p_in (largest gap first), score every selected
        point as a potential swap-out using a weighted penalty:
 
          penalty(env) = 10^(n_per_env - n_actual + 1)
@@ -767,10 +758,10 @@ def rebalance_umap_coverage(
        This gives near-zero penalty when an environment is well above the target
        and grows steeply as n_actual approaches n_per_env.  An absolute hard
        floor prevents any environment from dropping below n_per_env - 1.
-       Ties are broken by nearest-neighbour UMAP distance (most crowded =
+       Ties are broken by nearest-neighbour Tanimoto distance (most crowded =
        smallest nn_dist preferred for removal).
 
-    3. Cap handling: the per-solute cap is treated as a penalty rather than a
+    4. Cap handling: the per-solute cap is treated as a penalty rather than a
        hard gate on the swap-out search.  For each (p_in, p_out) pair the
        combined score is (cap_penalty, env_scarcity, nn_dist):
 
@@ -782,29 +773,18 @@ def rebalance_umap_coverage(
          hard-blocked     if adding p_in would exceed cap by more than one
 
        This means same-solute swaps are always preferred, but cross-solute
-       swaps that bring a new (solute, solvent) pair to a sparse UMAP region
-       are permitted at the cost of temporarily putting one solute at cap+1.
+       swaps that bring a new (solute, solvent) pair to a sparse region are
+       permitted at the cost of temporarily putting one solute at cap+1.
 
-    4. If no valid swap-out exists for the current gap candidate, continue to
+    5. If no valid swap-out exists for the current gap candidate, continue to
        the next gap candidate rather than stopping the whole phase.
 
-    5. Stall detection: if _MAX_STALL consecutive outer iterations all fail to
+    6. Stall detection: if _MAX_STALL consecutive outer iterations all fail to
        find any swap, stop early (the remaining gaps cannot be filled under the
        current constraints).
 
-    Why max_swaps had no visible effect previously
-    -----------------------------------------------
-    The old implementation used a fixed neighbourhood radius to identify
-    "crowded" selected points and broke out of the inner loop as soon as it
-    found a selected point with zero neighbours in that radius.  Because most
-    selected points sat outside that radius (the radius was calibrated for
-    global density, not local clusters), the inner loop exited immediately on
-    every iteration without finding a valid swap-out.  This caused swaps_made
-    to stay at 0 regardless of max_swaps.  Additionally, on the first failed
-    gap candidate the outer loop broke instead of trying alternatives, so
-    increasing max_swaps had no effect at all.
-
-    The set size is unchanged; only its distribution in UMAP space improves.
+    The set size is unchanged; only its distribution in pair chemical space
+    improves.
     """
     selected = set(selected)  # work on a copy
     target_env_names = [env.name for env in CHEMICAL_ENVIRONMENTS]
@@ -818,6 +798,18 @@ def rebalance_umap_coverage(
         solute_counts[key_to_solute[k]] += 1
 
     unselected = [k for k in all_valid_keys if k not in selected]
+
+    # Precompute pairwise Tanimoto distance matrix for all valid keys.
+    # Gap and crowdedness scores are read from this matrix each swap iteration.
+    # At ~2000 records this is ~16 MB (float32) — feasible in memory.
+    all_fps = [fp_by_key[k] for k in all_valid_keys]
+    key_to_idx = {k: i for i, k in enumerate(all_valid_keys)}
+    n_all = len(all_valid_keys)
+    sim_matrix = np.zeros((n_all, n_all), dtype=np.float32)
+    for i, fp in enumerate(all_fps):
+        sim_matrix[i] = DataStructs.BulkTanimotoSimilarity(fp, all_fps)
+    dist_matrix = 1.0 - sim_matrix
+    np.fill_diagonal(dist_matrix, np.inf)  # self-distance excluded from nn/gap lookups
 
     def _swap_out_penalty(cand_key: str, p_in_envs: set[str]) -> float:
         """Scarcity-weighted penalty for removing cand_key from the selection.
@@ -850,16 +842,10 @@ def rebalance_umap_coverage(
         return max_pen
 
     # Report gap statistics before rebalancing.
-    sel_coords_init = np.stack([umap_coords[k] for k in selected])
-    unsel_coords_init = (
-        np.stack([umap_coords[k] for k in unselected]) if unselected else None
-    )
-    if unsel_coords_init is not None:
-        d_init = np.sqrt(
-            ((unsel_coords_init[:, None, :] - sel_coords_init[None, :, :]) ** 2).sum(
-                axis=-1
-            )
-        ).min(axis=1)
+    sel_init_idx = [key_to_idx[k] for k in selected]
+    unsel_init_idx = [key_to_idx[k] for k in unselected] if unselected else None
+    if unsel_init_idx is not None:
+        d_init = dist_matrix[np.ix_(unsel_init_idx, sel_init_idx)].min(axis=1)
         print(
             f"  Phase 4 start: max_gap={d_init.max():.3f}  "
             f"mean_gap={d_init.mean():.3f}  "
@@ -885,26 +871,22 @@ def rebalance_umap_coverage(
             break
 
         sel_list = list(selected)
-        sel_coords = np.stack([umap_coords[k] for k in sel_list])  # (n_sel, 2)
-        unsel_coords = np.stack([umap_coords[k] for k in unselected])  # (n_unsel, 2)
+        sel_idx = [key_to_idx[k] for k in sel_list]
+        unsel_idx = [key_to_idx[k] for k in unselected]
 
         # Expire tabu entries whose TTL has passed.
         tabu = {k: exp for k, exp in tabu.items() if exp > swap_iter}
         tabu_set = set(tabu)
 
-        # Mark tabu keys as having zero gap so they are never chosen as p_in.
-        # Gap: min UMAP distance from each unselected point to any selected point.
-        diff_gap = unsel_coords[:, None, :] - sel_coords[None, :, :]  # (n_u, n_s, 2)
-        gap_dists = np.sqrt((diff_gap**2).sum(axis=-1)).min(axis=1)  # (n_u,)
+        # Gap: min Tanimoto distance from each unselected point to any selected point.
+        gap_dists = dist_matrix[np.ix_(unsel_idx, sel_idx)].min(axis=1)
         for ti, tk in enumerate(unselected):
             if tk in tabu_set:
-                gap_dists[ti] = 0.0  # suppress from gap ranking
+                gap_dists[ti] = 0.0  # suppress tabu keys from gap ranking
 
-        # NN distance for selected points: smallest = most redundant = best to remove.
-        diff_sel = sel_coords[:, None, :] - sel_coords[None, :, :]  # (n_s, n_s, 2)
-        pair_dists = np.sqrt((diff_sel**2).sum(axis=-1))  # (n_s, n_s)
-        np.fill_diagonal(pair_dists, np.inf)
-        nn_dist = pair_dists.min(axis=1)  # (n_s,)
+        # NN distance for selected points: smallest = most crowded = best to remove.
+        sel_pair_dists = dist_matrix[np.ix_(sel_idx, sel_idx)]
+        nn_dist = sel_pair_dists.min(axis=1)
 
         swap_done = False
 
@@ -923,7 +905,7 @@ def rebalance_umap_coverage(
             # cap_penalty=1 → cross-solute swap that would put p_in's solute at cap+1.
             # cap_penalty=inf → would exceed cap+1 (hard block, never allowed).
             # env_penalty = scarcity of the env being removed (lower = easier to remove).
-            # nn_dist = crowdedness tie-breaker (smaller = more redundant in UMAP space).
+            # nn_dist = crowdedness tie-breaker (smaller = more redundant in Tanimoto pair space).
             scored: list[tuple[float, float, float, int]] = []
             n_inf = 0
             worst_env_blocking: str = ""
@@ -1006,13 +988,9 @@ def rebalance_umap_coverage(
 
     # Report gap statistics after rebalancing.
     if unselected:
-        sel_coords_final = np.stack([umap_coords[k] for k in selected])
-        unsel_coords_final = np.stack([umap_coords[k] for k in unselected])
-        d_final = np.sqrt(
-            ((unsel_coords_final[:, None, :] - sel_coords_final[None, :, :]) ** 2).sum(
-                axis=-1
-            )
-        ).min(axis=1)
+        sel_final_idx = [key_to_idx[k] for k in selected]
+        unsel_final_idx = [key_to_idx[k] for k in unselected]
+        d_final = dist_matrix[np.ix_(unsel_final_idx, sel_final_idx)].min(axis=1)
         print(
             f"  Phase 4 end:   max_gap={d_final.max():.3f}  "
             f"mean_gap={d_final.mean():.3f}  "
@@ -1066,30 +1044,27 @@ def build_mnsol_subset(
     n_per_environment: int,
     max_size: int,
     max_rows_per_solute: int,
-    umap_n_neighbors: int = 15,
-    umap_min_dist: float = 0.1,
-    random_state: int = 42,
     max_swaps: int = 500,
 ) -> tuple[dict[str, dict], list[str]]:
-    """Build MNSol subset with uniform UMAP pair-space coverage.
+    """Build MNSol subset with uniform Tanimoto pair-space coverage.
 
-    Selection proceeds in four phases, all using greedy MaxMin in the 2D
-    UMAP(Jaccard) embedding of pair (solute OR solvent) Morgan fingerprints.
+    Selection proceeds in four phases, all using greedy Tanimoto MaxMin on
+    concatenated 4096-bit (solute ‖ solvent) Morgan fingerprints.
     SAGE data is never consulted.
 
     Phase 1 — Seed (FreeSolv alignment)
         For each FreeSolv-overlapping solute, add up to *max_rows_per_solute*
-        rows choosing solvents by UMAP MaxMin so diverse solvents are included
-        first (needed for transfer free energy estimates).
+        rows choosing solvents by Tanimoto MaxMin so diverse solvents are
+        included first (needed for transfer free energy estimates).
 
     Phase 2 — Environment coverage
         For each checkmol target environment with fewer than *n_per_environment*
-        representatives, add the most UMAP-distant eligible candidate that
+        representatives, add the most Tanimoto-distant eligible candidate that
         respects the per-solute cap.
 
     Phase 3 — Uniform fill
-        Add records up to *max_size* using UMAP MaxMin, still respecting the
-        per-solute cap so multi-solvent solutes are not over-represented.
+        Add records up to *max_size* using Tanimoto MaxMin, still respecting
+        the per-solute cap so multi-solvent solutes are not over-represented.
 
     Phase 4 — Rebalance
         Swap over-represented points from dense clusters for unselected points
@@ -1104,40 +1079,21 @@ def build_mnsol_subset(
         Target environment names that still have fewer than *n_per_environment*
         representatives after selection.
     """
-    # --- Build pair fingerprints and UMAP embedding ---
+    # --- Build pair fingerprints ---
     ordered_keys = sorted(data, key=lambda k: int(k.split("-")[1]))
     order_map = {key: i for i, key in enumerate(ordered_keys)}
 
     valid_keys: list[str] = []
-    fp_rows: list[np.ndarray] = []
     pair_fps: dict[str, Any] = {}
     for key in ordered_keys:
         fp = pair_fingerprint(data[key]["solute_smiles"], data[key]["solvent_smiles"])
         if fp is None:
             continue
-        arr = np.zeros(2048, dtype=np.float32)
-        DataStructs.ConvertToNumpyArray(fp, arr)
         valid_keys.append(key)
-        fp_rows.append(arr)
         pair_fps[key] = fp
 
     if not valid_keys:
         return {}, [env.name for env in CHEMICAL_ENVIRONMENTS]
-
-    fp_matrix = np.vstack(fp_rows)  # (n_valid, 2048)
-
-    print(f"  Running UMAP(jaccard) on {len(valid_keys)} filtered MNSol records...")
-    reducer = umap.UMAP(
-        n_components=2,
-        metric="jaccard",
-        n_neighbors=umap_n_neighbors,
-        min_dist=umap_min_dist,
-        random_state=random_state,
-    )
-    coords_2d = reducer.fit_transform(fp_matrix)  # (n_valid, 2)
-    umap_coords: dict[str, np.ndarray] = {
-        key: coords_2d[i] for i, key in enumerate(valid_keys)
-    }
 
     key_to_solute = {key: data[key]["solute_name"] for key in valid_keys}
     # Phases 2–4 track both solute and solvent environments so that the
@@ -1173,9 +1129,7 @@ def build_mnsol_subset(
             break
         candidates = [k for k in keys_by_overlap_solute[solute_name] if can_add(k)]
         n = min(max_rows_per_solute, max_size - len(selected))
-        picked = select_diverse_keys_umap(
-            candidates, selected, umap_coords, order_map, n
-        )
+        picked = select_diverse_keys(candidates, selected, pair_fps, order_map, n)
         for k in picked:
             selected.add(k)
             solute_counts[key_to_solute[k]] += 1
@@ -1200,33 +1154,31 @@ def build_mnsol_subset(
             if env_name in key_to_envs.get(k, set()) and can_add(k)
         ]
         n = min(needed, max_size - len(selected))
-        picked = select_diverse_keys_umap(
-            candidates, selected, umap_coords, order_map, n
-        )
+        picked = select_diverse_keys(candidates, selected, pair_fps, order_map, n)
         for k in picked:
             selected.add(k)
             solute_counts[key_to_solute[k]] += 1
 
     coverage_additions = len(selected) - coverage_count_before
 
-    # --- Phase 3: Uniform UMAP fill up to max_size ---
+    # --- Phase 3: Tanimoto MaxMin fill up to max_size ---
     if len(selected) < max_size:
         candidates = [k for k in valid_keys if can_add(k)]
         remaining = max_size - len(selected)
-        print(f"  Phase 3: UMAP MaxMin fill ({remaining} slots remaining)...")
-        picked = select_diverse_keys_umap(
-            candidates, selected, umap_coords, order_map, remaining
+        print(f"  Phase 3: Tanimoto MaxMin fill ({remaining} slots remaining)...")
+        picked = select_diverse_keys(
+            candidates, selected, pair_fps, order_map, remaining
         )
         for k in picked:
             selected.add(k)
             solute_counts[key_to_solute[k]] += 1
 
-    # --- Phase 4: Rebalance gaps in UMAP space ---
-    print("  Phase 4: rebalancing UMAP coverage...")
-    selected = rebalance_umap_coverage(
+    # --- Phase 4: Rebalance gaps in Tanimoto pair space ---
+    print("  Phase 4: rebalancing Tanimoto pair-space coverage...")
+    selected = rebalance_tanimoto_coverage(
         selected,
         valid_keys,
-        umap_coords,
+        pair_fps,
         key_to_envs,
         key_to_solute,
         n_per_environment=n_per_environment,
@@ -1313,27 +1265,13 @@ def build_mnsol_subset(
     ),
 )
 @click.option(
-    "--umap-n-neighbors",
-    default=15,
-    show_default=True,
-    type=int,
-    help="UMAP n_neighbors used for the pair-space embedding.",
-)
-@click.option(
-    "--umap-min-dist",
-    default=0.1,
-    show_default=True,
-    type=float,
-    help="UMAP min_dist used for the pair-space embedding.",
-)
-@click.option(
     "--max-swaps",
     default=500,
     show_default=True,
     type=int,
     help=(
         "Maximum number of swap iterations in Phase 4. Each swap moves one point "
-        "from a dense cluster to the largest remaining gap in UMAP pair space, "
+        "from a dense cluster to the largest remaining gap in Tanimoto pair space, "
         "subject to environment-coverage and per-solute-cap constraints."
     ),
 )
@@ -1343,8 +1281,6 @@ def main(
     n_per_environment: int,
     max_subset_size: int,
     max_rows_per_solute: int,
-    umap_n_neighbors: int,
-    umap_min_dist: float,
     max_swaps: int,
 ):
     """Create aligned FreeSolv/MNSol subsets.
@@ -1356,10 +1292,10 @@ def main(
       subset_openff_small.json     (FreeSolv curated subset)
 
     MNSol selection — four phases, SAGE data never consulted:
-      Phase 1 — seed FreeSolv-overlapping solutes (UMAP MaxMin over solvents).
-      Phase 2 — fill checkmol environment coverage to n_per_environment (UMAP MaxMin).
-      Phase 3 — fill remaining budget with uniform UMAP MaxMin over pair space.
-      Phase 4 — swap dense-cluster points into UMAP gaps (up to max_swaps iterations).
+      Phase 1 — seed FreeSolv-overlapping solutes (Tanimoto MaxMin over solvents).
+      Phase 2 — fill checkmol environment coverage to n_per_environment (Tanimoto MaxMin).
+      Phase 3 — fill remaining budget with uniform Tanimoto MaxMin over pair space.
+      Phase 4 — swap dense-cluster points into Tanimoto gaps (up to max_swaps iterations).
 
     FreeSolv selection seeds from MNSol-overlapping solutes then fills
     environment coverage independently (solute environments only; solvent is always water).
@@ -1424,15 +1360,17 @@ def main(
     for reason, systems in sorted(freesolv_skips.items()):
         print(f"    {reason}: {len(systems)}")
 
-    print("\nBuilding MNSol subset (UMAP-guided, no SAGE data)...")
+    print("\nTagging records with checkmol environments...")
+    tag_records_with_checkmol_environments(mnsol_data)
+    tag_records_with_checkmol_environments(freesolv_data)
+
+    print("\nBuilding MNSol subset (Tanimoto-guided, no SAGE data)...")
     mnsol_subset, mnsol_missing = build_mnsol_subset(
         mnsol_data,
         overlapping_mnsol_solutes,
         n_per_environment=n_per_environment,
         max_size=max_subset_size,
         max_rows_per_solute=max_rows_per_solute,
-        umap_n_neighbors=umap_n_neighbors,
-        umap_min_dist=umap_min_dist,
         max_swaps=max_swaps,
     )
 
@@ -1581,15 +1519,23 @@ def main(
             f"  MNSol overlapping solutes: {', '.join(sorted(overlap_in_mnsol_subset))}"
         )
 
+    _env_keys = {"solute_env", "solvent_env"}
+
+    def _strip_env(data: dict[str, dict]) -> dict[str, dict]:
+        return {
+            k: {f: v for f, v in rec.items() if f not in _env_keys}
+            for k, rec in data.items()
+        }
+
     with open(str(mnsol_filtered_path), "w", encoding="utf-8") as f:
-        json.dump(mnsol_data, f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(_strip_env(mnsol_data), f, cls=JSON_HANDLER.encoder, indent=4)
     with open(str(mnsol_subset_path), "w", encoding="utf-8") as f:
-        json.dump(mnsol_subset, f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(_strip_env(mnsol_subset), f, cls=JSON_HANDLER.encoder, indent=4)
 
     with open(str(freesolv_filtered_path), "w", encoding="utf-8") as f:
-        json.dump(freesolv_data, f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(_strip_env(freesolv_data), f, cls=JSON_HANDLER.encoder, indent=4)
     with open(str(freesolv_subset_path), "w", encoding="utf-8") as f:
-        json.dump(freesolv_subset, f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(_strip_env(freesolv_subset), f, cls=JSON_HANDLER.encoder, indent=4)
 
 
 if __name__ == "__main__":

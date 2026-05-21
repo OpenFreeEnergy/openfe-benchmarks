@@ -1,4 +1,4 @@
-Done by Jennifer Clark on 2026-02-25 (subset regenerated 2026-04-02)
+Done by Jennifer Clark on 2026-02-25 (subset regenerated 2026-05-21 by Jennifer Clark)
 
 Systems extracted from the MNSol database (https://doi.org/10.13020/3eks-j059).
 
@@ -33,7 +33,8 @@ Some ligands could not be charged with all methods, the following lists the liga
 Regenerate all subsets: run `python define_freesolv_mnsol_openff_subsets.py` in `data_generation/`.
 
 ### subset_openff_filtered.json
+These subsets are independent of subsets used for Sage < 2.4.
+
 1570 systems retained from ~3037 MNSol database entries, covering 236 unique solutes across multiple solvent environments. Excluded: 402 entries involving water; 71 self-solvation entries (solute = solvent); 47 with solutes containing out-of-scope elements; 40 with solvents containing out-of-scope elements; 3 entries with solutes bearing disqualifying SMIRKS; 286 with solvents bearing disqualifying SMIRKS; and 1 with undefined solvent stereochemistry. Entries may satisfy multiple exclusion criteria; totals are not additive.
 
-### subset_openff_small.json
-400 systems, 182 unique solutes, with a per-solute cap of 3. Solute repetition: 60 appear once (56 pool-exhausted, 4 selection-limited), 26 appear twice (20 pool-exhausted, 6 selection-limited), and 96 appear three times (17 pool-exhausted, 79 at cap). Selection seeded the 188 MNSol–FreeSolv overlap solutes, then applied ChemicalEnvironment coverage fill and UMAP-guided diversification with 500 rebalancing swaps (490 same-solute, 10 cross-solute). No additional solutes were needed for coverage fill beyond the seeded overlap. 178 / 182 MNSol solutes (97.8%) overlap with the FreeSolv filtered pool. 44 ChemicalEnvironments are absent from the filtered pool and unrepresented.
+400 systems, 195 unique solutes, with a per-solute cap of 3. Solute repetition: 79 appear once (62 pool-exhausted, 17 selection-limited), 27 appear twice (19 pool-exhausted, 8 selection-limited), and 89 appear three times (17 pool-exhausted, 72 at cap). Selection seeded the 188 MNSol–FreeSolv overlap solutes (Phase 1, filling the full 400-system budget), then applied Tanimoto pair-space rebalancing with 500 swaps (486 same-solute, 14 cross-solute). ChemicalEnvironment coverage fill (Phase 2) was not reached as the budget was consumed by Phase 1. 187 / 195 MNSol solutes (95.9%) overlap with the FreeSolv filtered pool. 24 ChemicalEnvironments are not represented: 19 absent from the filtered pool, 1 pool-limited (Disulfide), and 4 budget-limited (CarboxylicAcidSecondaryAmide, Sulfone, Sulfoxide, TertiaryAmine).
