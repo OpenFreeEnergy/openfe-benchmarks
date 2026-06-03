@@ -22,4 +22,6 @@ These subsets are independent of subsets used for Sage < 2.4.
 588 neutral solutes retained from the full FreeSolv v0.52 database, all measured in water. Excluded 54 entries: 47 with elements outside the OpenFF chemical space, 5 with disqualifying SMIRKS patterns, and 2 with undefined stereochemistry. Each entry is a unique solute with a single experimental aqueous hydration free energy measurement.
 
 ### subset_openff_small.json
-206 unique solutes drawn from `subset_openff_filtered`. Selection seeded the 188 solutes present in both the FreeSolv and MNSol filtered pools (by OpenFF SMILES isomorphism), then added 18 further solutes via ChemicalEnvironment coverage fill (Tanimoto MaxMin, solute-only environments). 188 / 206 FreeSolv solutes (91.3%) overlap with the MNSol filtered pool. 23 ChemicalEnvironments are not represented: 15 absent from the filtered pool, 8 pool-limited (fewer than 3 representatives available).
+These subsets are independent of subsets used for Sage < 2.4.
+
+206 unique solutes drawn from `subset_openff_filtered`. Selection seeded the 188 solutes present in both the FreeSolv and MNSol filtered pools (by OpenFF SMILES isomorphism), then added 18 further solutes via ChemicalEnvironment coverage fill (Tanimoto MaxMin, solute-only environments). 188 / 206 FreeSolv solutes (91.3%) overlap with the MNSol filtered pool. 23 ChemicalEnvironments have fewer than 3 representatives: 15 absent from the filtered pool (0 representatives), 8 pool-limited (all 1-2 available representatives selected from pool).

@@ -527,14 +527,14 @@ def fill_environment_coverage(
                     key for key in component_pool_keys if key not in picked_set
                 ]
 
-    missing_environments = [
+    below_target_environments = [
         env_name
         for env_name in target_environment_names
         if count_for_environment(env_name) < n_per_environment
     ]
 
     selected_data = {key: data[key] for key in sorted(selected)}
-    return selected_data, sorted(coverage_additions), missing_environments
+    return selected_data, sorted(coverage_additions), below_target_environments
 
 
 def build_filtered_records_from_experimental_json(
@@ -1075,9 +1075,12 @@ def build_mnsol_subset(
     -------
     selected_data : dict
         Subset records keyed by MNSol key.
-    missing_environments : list[str]
-        Target environment names that still have fewer than *n_per_environment*
-        representatives after selection.
+    below_target_environments : list[str]
+        Target environment names that have fewer than *n_per_environment*
+        representatives after selection. This includes both environments with
+        zero representatives (absent) and environments where all available
+        representatives were selected but the pool had fewer than
+        *n_per_environment* (pool-limited).
     """
     # --- Build pair fingerprints ---
     ordered_keys = sorted(data, key=lambda k: int(k.split("-")[1]))
@@ -1186,7 +1189,7 @@ def build_mnsol_subset(
         max_swaps=max_swaps,
     )
 
-    missing_environments = [
+    below_target_environments = [
         env_name
         for env_name in target_env_names
         if sum(1 for k in selected if env_name in key_to_envs.get(k, set()))
@@ -1195,24 +1198,28 @@ def build_mnsol_subset(
 
     print(
         f"\nMNSol subset: total={len(selected)} "
-        f"coverage_additions={coverage_additions} missing_env={len(missing_environments)}"
+        f"coverage_additions={coverage_additions} below_target_env={len(below_target_environments)}"
     )
 
     _pool_env_counts = {
         env_name: sum(1 for k in valid_keys if env_name in key_to_envs.get(k, set()))
-        for env_name in missing_environments
+        for env_name in below_target_environments
     }
-    _mnsol_absent = sorted(e for e in missing_environments if _pool_env_counts[e] == 0)
+    _mnsol_absent = sorted(
+        e for e in below_target_environments if _pool_env_counts[e] == 0
+    )
     _mnsol_pool_limited = sorted(
-        e for e in missing_environments if 0 < _pool_env_counts[e] < n_per_environment
+        e
+        for e in below_target_environments
+        if 0 < _pool_env_counts[e] < n_per_environment
     )
     _mnsol_budget_limited = sorted(
-        e for e in missing_environments if _pool_env_counts[e] >= n_per_environment
+        e for e in below_target_environments if _pool_env_counts[e] >= n_per_environment
     )
     print(
-        f"  missing env breakdown — absent from pool: {len(_mnsol_absent)}  "
-        f"pool-limited (<{n_per_environment} in pool): {len(_mnsol_pool_limited)}  "
-        f"budget-limited (>={n_per_environment} in pool, not selected): {len(_mnsol_budget_limited)}"
+        f"  below-target env breakdown — absent from pool: {len(_mnsol_absent)}  "
+        f"pool-limited (all available selected, but <{n_per_environment} in pool): {len(_mnsol_pool_limited)}  "
+        f"budget-limited (>={n_per_environment} in pool, not all selected): {len(_mnsol_budget_limited)}"
     )
     if _mnsol_absent:
         print(f"    absent: {', '.join(_mnsol_absent)}")
@@ -1222,7 +1229,7 @@ def build_mnsol_subset(
         print(f"    budget-limited: {', '.join(_mnsol_budget_limited)}")
 
     selected_data = {key: data[key] for key in sorted(selected)}
-    return selected_data, missing_environments
+    return selected_data, below_target_environments
 
 
 @click.command()
@@ -1365,7 +1372,7 @@ def main(
     tag_records_with_checkmol_environments(freesolv_data)
 
     print("\nBuilding MNSol subset (Tanimoto-guided, no SAGE data)...")
-    mnsol_subset, mnsol_missing = build_mnsol_subset(
+    mnsol_subset, mnsol_below_target = build_mnsol_subset(
         mnsol_data,
         overlapping_mnsol_solutes,
         n_per_environment=n_per_environment,
@@ -1379,7 +1386,7 @@ def main(
         for key, record in freesolv_data.items()
         if record["solute_name"] in overlapping_freesolv_solutes
     }
-    freesolv_subset, freesolv_added_for_coverage, freesolv_missing = (
+    freesolv_subset, freesolv_added_for_coverage, freesolv_below_target = (
         fill_environment_coverage(
             freesolv_data,
             freesolv_seed_keys,
@@ -1391,35 +1398,41 @@ def main(
     print(
         f"FreeSolv subset: total={len(freesolv_subset)} "
         f"coverage_additions={len(freesolv_added_for_coverage)} "
-        f"missing_env={len(freesolv_missing)}\n"
+        f"below_target_env={len(freesolv_below_target)}\n"
     )
-    if mnsol_missing:
-        print(f"MNSol missing environments: {', '.join(mnsol_missing)}")
-    if freesolv_missing:
-        print(f"FreeSolv missing environments: {', '.join(freesolv_missing)}")
+    if mnsol_below_target:
+        print(
+            f"MNSol environments below target (<{n_per_environment} representatives): {', '.join(mnsol_below_target)}"
+        )
+    if freesolv_below_target:
+        print(
+            f"FreeSolv environments below target (<{n_per_environment} representatives): {', '.join(freesolv_below_target)}"
+        )
 
     _freesolv_key_to_envs = {
         key: set(freesolv_data[key].get("solute_env", [])) for key in freesolv_data
     }
     _freesolv_pool_env_counts = {
         env_name: sum(1 for k in freesolv_data if env_name in _freesolv_key_to_envs[k])
-        for env_name in freesolv_missing
+        for env_name in freesolv_below_target
     }
     _freesolv_absent = sorted(
-        e for e in freesolv_missing if _freesolv_pool_env_counts[e] == 0
+        e for e in freesolv_below_target if _freesolv_pool_env_counts[e] == 0
     )
     _freesolv_pool_limited = sorted(
         e
-        for e in freesolv_missing
+        for e in freesolv_below_target
         if 0 < _freesolv_pool_env_counts[e] < n_per_environment
     )
     _freesolv_budget_limited = sorted(
-        e for e in freesolv_missing if _freesolv_pool_env_counts[e] >= n_per_environment
+        e
+        for e in freesolv_below_target
+        if _freesolv_pool_env_counts[e] >= n_per_environment
     )
     print(
         f"FreeSolv env breakdown — absent from pool: {len(_freesolv_absent)}  "
-        f"pool-limited (<{n_per_environment} in pool): {len(_freesolv_pool_limited)}  "
-        f"budget-limited (>={n_per_environment} in pool, not selected): {len(_freesolv_budget_limited)}"
+        f"pool-limited (all available selected, but <{n_per_environment} in pool): {len(_freesolv_pool_limited)}  "
+        f"budget-limited (>={n_per_environment} in pool, not all selected): {len(_freesolv_budget_limited)}"
     )
     if _freesolv_absent:
         print(f"  absent: {', '.join(_freesolv_absent)}")

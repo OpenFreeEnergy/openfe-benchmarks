@@ -574,7 +574,7 @@ def validate_asfe_network(network_file: Path) -> list[str]:
         for comp_name in ("solute", "solvent"):
             if comp_name not in comps:
                 errors.append(
-                    f"Transformation '{t.tname}' missing {comp_name} component"
+                    f"Transformation '{t.name}' missing {comp_name} component"
                 )
 
     # Validate partial charges using get_components_of_type across all nodes
