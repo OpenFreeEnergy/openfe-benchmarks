@@ -10,6 +10,7 @@ import numpy as np
 import zstandard as zstd
 from openfecli.commands.gather import _get_names, _get_type
 
+
 def _get_simulation_key(result: dict) -> tuple[tuple[str, str], str]:
     lig_a_name, lig_b_name = _get_names(result)
     phase = _get_type(result)
@@ -18,22 +19,30 @@ def _get_simulation_key(result: dict) -> tuple[tuple[str, str], str]:
 
 @click.command()
 @click.option(
-    "--results_dir", 
-    help="The directory containing the transformation results", 
-    multiple=True, 
-    type=click.Path(exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path)
+    "--results_dir",
+    help="The directory containing the transformation results",
+    multiple=True,
+    type=click.Path(
+        exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path
+    ),
 )
 @click.option(
-    "--network", help="The path to the alchemical network JSON file",
-    type=click.Path(exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path)
+    "--network",
+    help="The path to the alchemical network JSON file",
+    type=click.Path(
+        exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path
+    ),
 )
 @click.option(
-    "--output_dir", help="The directory to write the archive to",
-    type=click.Path(exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path)
+    "--output_dir",
+    help="The directory to write the archive to",
+    type=click.Path(
+        exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path
+    ),
 )
 def main(results_dir, network, output_dir):
     """
-    Gather all the results for the transformations in the network and write the DDG/DG to a json file with units and metadata which can be used 
+    Gather all the results for the transformations in the network and write the DDG/DG to a json file with units and metadata which can be used
     for down stream analysis.
     """
     # load the network to make sure all transformations are present in the results
@@ -49,7 +58,6 @@ def main(results_dir, network, output_dir):
         else:
             phase = "solvent"
         transformations_to_run.add((ligand_a_name, ligand_b_name, phase))
-
 
     # make a key using the (lig_a.name, lig_b.name)
     raw_results = defaultdict(list)
@@ -79,13 +87,17 @@ def main(results_dir, network, output_dir):
         for phase, result in results:
             key = (lig_a_name, lig_b_name, phase)
             if key not in transformations_to_run:
-                raise ValueError(f"Found results for transformation {key} which is not in the alchemical network")
+                raise ValueError(
+                    f"Found results for transformation {key} which is not in the alchemical network"
+                )
             found_results.add((lig_a_name, lig_b_name, phase))
 
     # now check that we have results for all transformations
     missing_transformations = transformations_to_run - found_results
     if missing_transformations:
-        raise ValueError(f"Missing results for transformations: {missing_transformations}")
+        raise ValueError(
+            f"Missing results for transformations: {missing_transformations}"
+        )
 
     # also build a femap so we can get DGs if possible
     fe_map = FEMap()
@@ -96,44 +108,62 @@ def main(results_dir, network, output_dir):
             "ligand_b": lig_b_name,
             "system_group": system_group,
             "system_name": system_name,
-            # assuming this is the RBFE protocol we should have the same number of repeats for each phase
-            "repeats": len(results) // 2,
         }
         # group the results by phase
         complex_results = [result for phase, result in results if phase == "complex"]
         solvent_results = [result for phase, result in results if phase == "solvent"]
-        assert len(complex_results) == len(solvent_results), f"Found different number of complex and solvent results for {key}"
+        assert len(complex_results) == len(solvent_results), (
+            f"Found different number of complex and solvent results for {key}"
+        )
         # get the estimated values for each repeat
-        complex_data = [result["estimate"].m_as(unit.kilocalories_per_mole) for result in complex_results]
+        complex_data = [
+            result["estimate"].m_as(unit.kilocalories_per_mole)
+            for result in complex_results
+        ]
         complex_dg = np.mean(complex_data) * unit.kilocalories_per_mole
         complex_dg_uncertainty = np.std(complex_data) * unit.kilocalories_per_mole
         # get the solvent data
-        solvent_data = [result["estimate"].m_as(unit.kilocalories_per_mole) for result in solvent_results]
+        solvent_data = [
+            result["estimate"].m_as(unit.kilocalories_per_mole)
+            for result in solvent_results
+        ]
         solvent_dg = np.mean(solvent_data) * unit.kilocalories_per_mole
         solvent_dg_uncertainty = np.std(solvent_data) * unit.kilocalories_per_mole
 
         # get the combinded ddg and uncertainty
-        entry_data["DDG"] = complex_dg - solvent_dg
-        entry_data["DDG_uncertainty"] = np.sqrt(complex_dg_uncertainty**2 + solvent_dg_uncertainty**2)
+        entry_data["ddg"] = complex_dg - solvent_dg
+        entry_data["ddg_uncertainty"] = np.sqrt(
+            complex_dg_uncertainty**2 + solvent_dg_uncertainty**2
+        )
 
         # add the raw values for debugging?
-        entry_data["DGs_complex"] = complex_data
-        entry_data["DGs_solvent"] = solvent_data
+        entry_data["dgs_complex"] = complex_data
+        entry_data["dgs_solvent"] = solvent_data
 
         # calculate the smallest off diagonal element of the mabr overlap matrix and the replica mixing matrix for each result
-        for phase_results, label in zip([complex_results, solvent_results], ["Complex", "Solvent"]):
+        for phase_results, label in zip(
+            [complex_results, solvent_results], ["complex", "solvent"]
+        ):
             mbar_overlap_elements = []
             replica_mixing_elements = []
             for phase_result in phase_results:
                 # get the key for this protocol result
                 result_key = list(phase_result["protocol_result"]["data"].keys())[0]
                 # calculate the smallest overlap for the mbar overlap matrix
-                overlap_matrix = phase_result["protocol_result"]["data"][result_key][0]["outputs"]["unit_mbar_overlap"]["matrix"]
-                mbar_overlap_elements.append(np.diagonal(overlap_matrix, offset=1).min())
+                overlap_matrix = phase_result["protocol_result"]["data"][result_key][0][
+                    "outputs"
+                ]["unit_mbar_overlap"]["matrix"]
+                mbar_overlap_elements.append(
+                    np.diagonal(overlap_matrix, offset=1).min()
+                )
 
                 # calculate the smallest off diagonal element of the replica mixing matrix
-                mixing_matrix = phase_result["protocol_result"]["data"][result_key][0]["outputs"]["replica_exchange_statistics"]["matrix"]
-                replica_mixing_elements.append(np.diagonal(mixing_matrix, offset=1).min())
+                mixing_matrix = phase_result["protocol_result"]["data"][result_key][0][
+                    "outputs"
+                ]["replica_exchange_statistics"]["matrix"]
+                replica_mixing_elements.append(
+                    np.diagonal(mixing_matrix, offset=1).min()
+                )
 
             entry_data[f"{label}_smallest_mbar_overlaps"] = mbar_overlap_elements
             entry_data[f"{label}_smallest_replica_mixing"] = replica_mixing_elements
@@ -145,7 +175,7 @@ def main(results_dir, network, output_dir):
             labelA=lig_a_name,
             labelB=lig_b_name,
             value=entry_data["DDG"],
-            uncertainty=entry_data["DDG_uncertainty"]
+            uncertainty=entry_data["DDG_uncertainty"],
         )
 
     # check if the network is connected and we can calculate the DGs
@@ -156,22 +186,20 @@ def main(results_dir, network, output_dir):
         for _, row in abs_df.iterrows():
             entry_data = {
                 "ligand": row["label"],
-                "DG": row["DG (kcal/mol)"] * unit.kilocalories_per_mole,
-                "DG_uncertainty": row["uncertainty (kcal/mol)"] * unit.kilocalories_per_mole,
+                "dg": row["DG (kcal/mol)"] * unit.kilocalories_per_mole,
+                "dg_uncertainty": row["uncertainty (kcal/mol)"]
+                * unit.kilocalories_per_mole,
                 "system_group": system_group,
                 "system_name": system_name,
                 "source": row["source"],
             }
             gathered_results["DG"].append(entry_data)
-    
+
     # write out the data to a json file
-    output_file = output_dir / "computaional_results.json"
+    output_file = output_dir / "computational_results.json"
     with open(output_file, "w") as w:
         json.dump(gathered_results, w, cls=JSON_HANDLER.encoder, indent=4)
 
+
 if __name__ == "__main__":
     main()
-
-
-
-        
