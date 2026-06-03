@@ -2,45 +2,67 @@
 submission_id: 2026-03-18-openmm-840-qa-testing
 
 # REQUIRED: short descriptive title
-title: QA runs for OpenMM 8.4.0 using JACS (P38 & TYK2) and Charge changing edges.
+title: OpenFE RBFE - charge_annihilation_set, jacs_set (5 systems) - 2026-03-18-openmm-840-qa-testing
+
 # REQUIRED: short descriptive summary (1-2 sentences)
-summary: "RBFE runs for the TYK2 and P38 JACS sets and Charge changing edges from the egfr, irak_s2/s3 charge annihilation sets. Note this means the charge annihilation sets are not complete compared to what is in that system and should not be
-compared to other complete runs due to the missing edges."
-# REQUIRED: list of keywords (from the controlled vocabulary if possible)
-keywords: [charge_change, rbfe, benchmark, openfe, openmm-840]
+summary: |
+  This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
+  (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with openff-2.3.0
+  and nagl_openff-gnn-am1bcc-1.0.0.pt. The submission contains 160 transformations, 61 unique ligands,
+  and 5 unique proteins. The largest simulated chemical system contains 6744 atoms. Note this means the charge annihilation sets are not complete compared to what is in that system and should not be compared to other complete runs due to the missing edges.
+
+# REQUIRED: list of submission tags
+tags: [rbfe, openff-2.3.0, nagl_openff-gnn-am1bcc-1.0.0.pt, charge_change, benchmark, openfe, openmm-840]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
-  - name: Joshua Horton
+  - name: Josh Horton
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-03-18
+date: 2026-06-03
 
-# REQUIRED: OpenFE version used to produce the gathered reports
+# REQUIRED: OpenFE/OpenMM/toolkit versions used to produce gathered reports
 openfe_version: 1.8.0
-openmm_version: 8.4.0
-openff_toolkit_version:
+openmm_version: 
+openff_toolkit_version: 0.18.0
 
-# Recommended but useful: force field, partial charge and network descriptors
+# Recommended descriptors
 forcefield: openff-2.3.0
 partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
-network: industry_benchmarks_network
+
+# BenchmarkData provenance (from openfe-benchmarks planning script)
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  set: charge_annihilation_set, jacs_set
+  system: egfr, irak4_s2, irak4_s3, p38, tyk2
 
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
-  doi:
-  archive_provider:
+  doi: TODO add DOI
+  archive_provider: TODO add archive provider
 
-# REQUIRED: license for the submission (e.g. CC-BY-4.0)
+# REQUIRED: license for the submission
 license: CC-BY-4.0
 
-# RECOMMENDED / OPTIONAL metadata which detail the protocols used and associated settings allowing for mixed protocol networks
+# RECOMMENDED / OPTIONAL metadata for protocol settings
 protocol_settings:
-  - # list some default settings or anything interesting which has been changed such as the number of lambda windows or the schedule
   - protocol: RelativeHybridTopologyProtocol
-    simulation_time: 5 ns
-    equilibration_time: 1 ns
-    timestep: 4 fs
-    temperature: 298.15 K
-    pressure: 1 atm
-    repeats: 3
+    count: 3
+    systems: "charge_annihilation_set/egfr, charge_annihilation_set/irak4_s2, charge_annihilation_set/irak4_s3"
+    files: "charge_annihilation_set_egfr_alchemicalnetwork.json, charge_annihilation_set_irak4_s2_alchemicalnetwork.json, charge_annihilation_set_irak4_s3_alchemicalnetwork.json"
+    production_time: "20 nanosecond"
+    equilibration_time: "1.0 nanosecond"
+    timestep: "4.0 femtosecond"
+    temperature: "298.15 kelvin"
+    pressure: "1 bar"
+    lambda_windows: "22"
+  - protocol: RelativeHybridTopologyProtocol
+    count: 2
+    systems: "jacs_set/p38, jacs_set/tyk2"
+    files: "alchemicalnetwork.json"
+    production_time: "5.0 nanosecond"
+    equilibration_time: "1.0 nanosecond"
+    timestep: "4.0 femtosecond"
+    temperature: "298.15 kelvin"
+    pressure: "1 bar"
+    lambda_windows: "11"
