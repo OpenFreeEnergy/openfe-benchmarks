@@ -86,7 +86,13 @@ def process_components(benchmark_sys):
 
 
 def compile_network_transformations(
-    ligand_network, solvent, ligands_by_name, protein, cofactors
+    ligand_network,
+    solvent,
+    ligands_by_name,
+    protein,
+    cofactors,
+    system_group,
+    system_name,
 ):
     """
     Compile alchemical transformations for a given network.
@@ -103,6 +109,10 @@ def compile_network_transformations(
         The protein component for the transformations.
     cofactors : list or None
         List of cofactor components, if any.
+    system_group : str
+        The benchmark system group name (e.g., "jacs_set", "mcs_docking_set").
+    system_name : str
+        The benchmark system name (e.g., "p38", "hne").
 
     Returns
     -------
@@ -111,11 +121,20 @@ def compile_network_transformations(
     """
     transformations = []
     for edge in ligand_network.edges:
+        # Add system_group and system_name to the mapping annotations
+        mapping_annotations = dict(edge.annotations) if edge.annotations else {}
+        mapping_annotations.update(
+            {
+                "system_group": system_group,
+                "system_name": system_name,
+            }
+        )
+
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name],
             componentA_to_componentB=edge.componentA_to_componentB,
-            annotations=edge.annotations,
+            annotations=mapping_annotations,
         )
 
         # create the transformations for the bound and solvent legs
@@ -175,7 +194,13 @@ def main():
     lig_network, ligand_dict, protein, cofactors = process_components(benchmark_sys)
 
     transformations = compile_network_transformations(
-        lig_network, SOLVENT, ligand_dict, protein, cofactors
+        lig_network,
+        SOLVENT,
+        ligand_dict,
+        protein,
+        cofactors,
+        BENCHMARK_SET,
+        BENCHMARK_SYS,
     )
 
     # Can be used as input for Alchemiscale
@@ -296,6 +321,30 @@ def validate_rbfe_network(network_file):
             transformation.create()
         except Exception as e:
             errors.append(f"Failed to create protocol for transformation '{name}': {e}")
+
+        # Validate mapping annotations
+        if transformation.mapping is None:
+            errors.append(f"Transformation '{name}' has no mapping")
+        else:
+            mapping_annot = transformation.mapping.annotations
+            if not mapping_annot:
+                errors.append(f"Transformation '{name}' mapping has no annotations")
+            else:
+                for required_key in ["system_group", "system_name"]:
+                    if required_key not in mapping_annot:
+                        errors.append(
+                            f"Transformation '{name}' mapping missing '{required_key}' annotation"
+                        )
+                    elif mapping_annot[required_key] != (
+                        BENCHMARK_SET
+                        if required_key == "system_group"
+                        else BENCHMARK_SYS
+                    ):
+                        errors.append(
+                            f"Transformation '{name}' mapping has incorrect '{required_key}': "
+                            f"expected '{BENCHMARK_SET if required_key == 'system_group' else BENCHMARK_SYS}', "
+                            f"got '{mapping_annot[required_key]}'"
+                        )
 
     # Validate that we have both complex and solvent legs for each ligand pair
     expected_ligand_pairs = len(expected_lig_network.edges)
