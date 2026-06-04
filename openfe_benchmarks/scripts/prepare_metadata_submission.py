@@ -15,7 +15,7 @@ Example (Python API):
         input_files=[Path("archive1.json.bz2"), Path("archive2.json.bz2")],
         output_dir=Path("."),
         submission_id="2026-04-15-example",
-        keywords="openfe,alchemicalarchive",
+        tags="openfe,alchemicalarchive",
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
@@ -25,7 +25,7 @@ Example (Python API):
         input_files="networks/*/*.json",
         output_dir=Path("."),
         submission_id="2026-04-15-example",
-        keywords="openfe,alchemicalarchive",
+        tags="openfe,alchemicalarchive",
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
@@ -36,7 +36,7 @@ Example (CLI):
     python prepare_metadata_submission.py archive1.json.bz2 archive2.json.bz2 \\
         --output-dir ./output \\
         --submission-id "2026-04-15-example" \\
-        --keywords "openfe,alchemicalarchive" \\
+        --tags "openfe,alchemicalarchive" \\
         --author "Jane Doe" \\
         --license "CC-BY-4.0"
     
@@ -53,7 +53,6 @@ import bz2
 import glob as glob_module
 import json
 import re
-import statistics
 import sys
 import textwrap
 from collections import defaultdict
@@ -61,6 +60,8 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 from typing import Any
+
+from openfe_benchmarks.data import BenchmarkIndex
 
 
 @dataclass
@@ -96,7 +97,6 @@ class AutoMetadata:
     openff_toolkit_version: str = ""
     forcefield: str = ""
     partial_charges: str = ""
-    network_descriptor: str = ""
     benchmark_data_set: str = ""
     benchmark_system: str = ""
     protocol_settings_list: list[ProtocolSettingsInfo] = field(default_factory=list)
@@ -230,34 +230,31 @@ def _generate_title(
     - 2-3 sets, any systems: "OpenFE RBFE - set1, set2 (N systems) - submission_id"
     - 4+ sets: "OpenFE RBFE - Multi-set Benchmark (N sets, M systems) - submission_id"
     """
-    calc_type = "ASFE" if mode == "asfe" else "RBFE"
-
+    mode = mode.upper()
     n_sets = len(benchmark_sets)
     n_systems = len(systems)
 
     if n_sets == 0:
         # Fallback if no benchmark set detected
-        return f"OpenFE {calc_type} Benchmark - {submission_id}"
+        return f"OpenFE {mode} Benchmark - {submission_id}"
 
     if n_sets == 1:
         set_name = benchmark_sets[0]
         if n_systems <= 3:
             # List system names
             systems_str = ", ".join(systems)
-            return f"OpenFE {calc_type} - {set_name} - {systems_str} - {submission_id}"
+            return f"OpenFE {mode} - {set_name} - {systems_str} - {submission_id}"
         else:
             # Use count
-            return f"OpenFE {calc_type} - {set_name} ({n_systems} systems) - {submission_id}"
+            return f"OpenFE {mode} - {set_name} ({n_systems} systems) - {submission_id}"
 
     if n_sets <= 3:
         # List set names with system count
         sets_str = ", ".join(benchmark_sets)
-        return (
-            f"OpenFE {calc_type} - {sets_str} ({n_systems} systems) - {submission_id}"
-        )
+        return f"OpenFE {mode} - {sets_str} ({n_systems} systems) - {submission_id}"
 
     # Many sets - use multi-set notation
-    return f"OpenFE {calc_type} - Multi-set Benchmark ({n_sets} sets, {n_systems} systems) - {submission_id}"
+    return f"OpenFE {mode} - Multi-set Benchmark ({n_sets} sets, {n_systems} systems) - {submission_id}"
 
 
 def _iter_nested_items(obj: Any) -> list[tuple[str, Any]]:
@@ -311,39 +308,49 @@ def _extract_system_info_from_mapping(
     return (str(system_group), str(system_name))
 
 
-def _guess_network_descriptor(archive_stem: str, network_key: str) -> str:
-    if archive_stem.startswith(f"{network_key}-"):
-        return archive_stem[len(network_key) + 1 :]
-    if archive_stem.startswith("AlchemicalNetwork-"):
-        parts = archive_stem.split("-", maxsplit=2)
-        if len(parts) == 3:
-            return parts[2]
-    return archive_stem
-
-
 def _infer_benchmark_data_set_system(
     *, by_key: dict[str, dict[str, Any]], mode: str, archive_stem: str, network_key: str
 ) -> tuple[str, str]:
-    blob = json.dumps(list(by_key.values())).lower()
-    descriptor = _guess_network_descriptor(archive_stem, network_key).lower()
-    search_space = " ".join(
-        [blob, descriptor, archive_stem.lower(), network_key.lower()]
-    )
+    """Infer benchmark set and system from file contents using BenchmarkIndex.
 
-    system = ""
-    for candidate in ("freesolv", "tyk2", "mnsol"):
-        if candidate in search_space:
-            system = candidate
+    This searches for any known benchmark set or system name in the file's
+    metadata (filename, network key, and JSON contents).
+
+    Returns:
+        (benchmark_set, system_name) tuple, or ("", "") if not found
+    """
+    blob = json.dumps(list(by_key.values())).lower()
+    search_space = " ".join([blob, archive_stem.lower(), network_key.lower()])
+
+    # Get all known benchmark sets and systems from the index
+    index = BenchmarkIndex()
+    benchmark_sets = index.list_benchmark_sets()
+
+    # Check for benchmark set matches
+    benchmark_set = ""
+    for set_name in benchmark_sets:
+        if set_name.lower() in search_space:
+            benchmark_set = set_name
             break
 
-    benchmark_set = ""
-    if "jacs_set" in search_space or "jacs" in search_space:
-        benchmark_set = "jacs_set"
-    elif "solvation_set" in search_space or mode == "asfe":
-        benchmark_set = "solvation_set"
+    # Check for system name matches within the found set (or all sets if no set found)
+    system = ""
+    sets_to_check = [benchmark_set] if benchmark_set else benchmark_sets
 
-    if not system and mode == "asfe":
-        system = "freesolv"
+    for set_name in sets_to_check:
+        try:
+            systems = index.list_systems_by_benchmark_set(set_name)
+            for system_name in systems:
+                if system_name.lower() in search_space:
+                    system = system_name
+                    if not benchmark_set:
+                        benchmark_set = set_name
+                    break
+            if system:
+                break
+        except ValueError:
+            # Skip if benchmark set doesn't exist
+            continue
 
     return benchmark_set, system
 
@@ -361,16 +368,17 @@ def _extract_sim_times(settings_block: dict[str, Any]) -> tuple[str, str]:
 def _build_protocol_settings(
     protocol_obj: dict[str, Any] | None, mode: str
 ) -> dict[str, str]:
+    if not protocol_obj:
+        return {
+            "protocol": "unknown",
+            "notes": "Protocol settings unavailable in archive payload.",
+        }
+
+    # Detect protocol name from the object
     protocol_name = (
-        "AbsoluteSolvationProtocol"
-        if mode == "asfe"
-        else "RelativeHybridTopologyProtocol"
+        protocol_obj.get("__qualname__") or protocol_obj.get("qualname") or "unknown"
     )
     out: dict[str, str] = {"protocol": protocol_name}
-
-    if not protocol_obj:
-        out["notes"] = "Protocol settings unavailable in archive payload."
-        return out
 
     settings = protocol_obj.get("settings") or {}
 
@@ -413,7 +421,7 @@ def _build_protocol_settings(
                 out["equilibration_time"] = eq
             if prod:
                 out["production_time"] = prod
-    else:
+    elif mode == "asfe":
         for prefix, key in (
             ("vacuum", "vacuum_simulation_settings"),
             ("solvent", "solvent_simulation_settings"),
@@ -426,6 +434,10 @@ def _build_protocol_settings(
                 out[f"{prefix}_equilibration_time"] = eq
             if prod:
                 out[f"{prefix}_production_time"] = prod
+    else:
+        ValueError(
+            f"Calculation type {mode} is not yet supported. Add capability to `_build_protocol_settings`"
+        )
 
     if len(out) == 1:
         out["notes"] = "Protocol class found, but detailed settings were unavailable."
@@ -465,7 +477,7 @@ def _render_protocol_settings_yaml(
         "notes",
     ]
 
-    for idx, (settings_key, info_list) in enumerate(settings_groups.items()):
+    for _, (settings_key, info_list) in enumerate(settings_groups.items()):
         settings = info_list[0].settings
         protocol_name = settings.get("protocol", "")
         lines.append(f"  - protocol: {protocol_name}")
@@ -541,22 +553,6 @@ def _component_atoms(component: dict[str, Any]) -> int:
     if isinstance(atoms, list):
         return len(atoms)
     return 0
-
-
-def _repeat_stats_summary(repeat_counts: list[int]) -> str:
-    if not repeat_counts:
-        return "described below"
-
-    mean_repeats = statistics.fmean(repeat_counts)
-    median_repeats = statistics.median(repeat_counts)
-    dist: dict[int, int] = {}
-    for count in repeat_counts:
-        dist[count] = dist.get(count, 0) + 1
-    dist_text = ", ".join(f"{k}:{v}" for k, v in sorted(dist.items()))
-    return (
-        f"min={min(repeat_counts)}, median={median_repeats:g}, mean={mean_repeats:.2f}, "
-        f"max={max(repeat_counts)}, distribution={{ {dist_text} }}"
-    )
 
 
 def _build_content_summary(
@@ -672,7 +668,7 @@ def _build_content_summary(
                         system_info.solvents.add(comp_name)
                     elif "solute" in label_l or qualname == "SmallMoleculeComponent":
                         system_info.solutes.add(comp_name)
-                else:
+                elif mode == "rbfe":
                     if "protein" in label_l or qualname == "ProteinComponent":
                         system_info.proteins.add(comp_name)
                     elif "ligand" in label_l:
@@ -687,6 +683,10 @@ def _build_content_summary(
                         # Non-solvent small molecules that are not explicit ligands are treated as cofactors.
                         all_cofactors.add(comp_name)
                         local_cofactors.add(comp_name)
+                else:
+                    ValueError(
+                        f"Calculation type {mode} is not yet supported. Add capability to `_build_content_summary`"
+                    )
 
             system_info.max_atoms = max(system_info.max_atoms, system_atoms)
 
@@ -794,7 +794,6 @@ def _extract_auto_metadata(
     archive_stem: str,
 ) -> AutoMetadata:
     metadata = AutoMetadata()
-    metadata.network_descriptor = _guess_network_descriptor(archive_stem, network_key)
     metadata.benchmark_data_set, metadata.benchmark_system = (
         _infer_benchmark_data_set_system(
             by_key=by_key,
@@ -975,7 +974,6 @@ def _make_submission_yaml(
     openff_toolkit_version: str,
     forcefield: str,
     partial_charges: str,
-    network_descriptor: str,
     benchmark_data_set: str,
     benchmark_system: str,
     archive_doi: str,
@@ -983,6 +981,7 @@ def _make_submission_yaml(
     license_name: str,
     protocol_settings_list: list[ProtocolSettingsInfo],
     network_key_to_systems: dict[str, list[str]],
+    results_file: str,
 ) -> str:
     if not authors:
         authors = ["TODO add author name"]
@@ -1034,6 +1033,9 @@ benchmark_data:
   set: {benchmark_data_set}
   system: {benchmark_system}
 {network_keys_yaml}
+# REQUIRED: results file
+results: {results_file}
+
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
   doi: {archive_doi}
@@ -1050,9 +1052,7 @@ license: {license_name}
 def _make_zenodo_description(
     *,
     title: str,
-    summary: str,
     archive_filename: str,
-    network_key: str,
     mode: str,
     content_summary: str,
     openfe_version: str,
@@ -1060,12 +1060,8 @@ def _make_zenodo_description(
     openff_toolkit_version: str,
     forcefield: str,
     partial_charges: str,
-    network_descriptor: str,
-    tags: list[str],
     benchmark_data_set: str,
     benchmark_system: str,
-    n_transformations: int,
-    submission_yaml_file: str,
     license_name: str,
     protocol_settings_list: list[ProtocolSettingsInfo],
     has_archive_objects: bool,
@@ -1185,11 +1181,12 @@ def process_network(
     input_files: Path | list[Path] | str,
     output_dir: Path = Path("."),
     submission_id: str | None = None,
-    keywords: str = "openfe,alchemicalarchive",
+    tags: str = "openfe,alchemicalarchive",
     author: list[str] | None = None,
     license: str = "CC-BY-4.0",
     used_alchemiscale: bool = True,
     summary_suffix: str | None = None,
+    results_file: str = "computational_results.json",
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -1207,7 +1204,7 @@ def process_network(
     submission_id:
         Optional identifier to use in `submission.yaml`. If omitted, a default
         value is generated from the current date and network key.
-    keywords:
+    tags:
         Comma-separated list of additional tags to include in the submission
         metadata. The generated tag list also always includes the detected
         `mode` (either ``asfe`` or ``rbfe``), the resolved forcefield string,
@@ -1220,19 +1217,11 @@ def process_network(
     used_alchemiscale:
         Whether Alchemiscale was used to generate the results. If True, the
         description will mention Alchemiscale. Defaults to True.
-    submission_id:
-        Optional identifier to use in `submission.yaml`. If omitted, a default
-        value is generated from the current date and network key.
-    keywords:
-        Comma-separated list of additional tags to include in the submission
-        metadata. The generated tag list also always includes the detected
-        `mode` (either ``asfe`` or ``rbfe``), the resolved forcefield string,
-        and normalized partial charge information.
-    author:
-        Optional list of author entries for the submission YAML. Each entry is
-        treated as a raw string and written to the `authors` section.
-    license:
-        License string to write into the submission metadata.
+    summary_suffix:
+        Optional text to append to the auto-generated summary.
+    results_file:
+        Name of the results file to reference in submission.yaml and validate
+        exists in output_dir. Defaults to 'computational_results.json'.
 
     Notes
     -----
@@ -1268,6 +1257,13 @@ def process_network(
 
     out_dir = output_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    # Check for required results file
+    results_path = out_dir / results_file
+    if not results_path.exists():
+        raise FileNotFoundError(
+            f"Required file '{results_file}' not found in output directory: {out_dir}"
+        )
 
     # Process all input files and collect metadata
     all_metadata: list[AutoMetadata] = []
@@ -1338,8 +1334,6 @@ def process_network(
             merged_metadata.forcefield = metadata.forcefield
         if not merged_metadata.partial_charges and metadata.partial_charges:
             merged_metadata.partial_charges = metadata.partial_charges
-        if not merged_metadata.network_descriptor and metadata.network_descriptor:
-            merged_metadata.network_descriptor = metadata.network_descriptor
         if not merged_metadata.benchmark_data_set and metadata.benchmark_data_set:
             merged_metadata.benchmark_data_set = metadata.benchmark_data_set
         if not merged_metadata.benchmark_system and metadata.benchmark_system:
@@ -1353,7 +1347,6 @@ def process_network(
     partial_charges_raw = merged_metadata.partial_charges
     partial_charge_tag = _normalize_partial_charge_info(partial_charges_raw)
     partial_charges = partial_charge_tag or partial_charges_raw
-    network_descriptor = merged_metadata.network_descriptor
 
     # Build content summary from combined data
     # Get list of source file names
@@ -1484,26 +1477,25 @@ def process_network(
     zenodo_description_path = out_dir / zenodo_description_filename
 
     submission_id = submission_id or _default_submission_id(primary_network_key)
-    keywords_list = [k.strip() for k in keywords.split(",") if k.strip()]
-    tags = _make_tags(
+    tags_list = [k.strip() for k in tags.split(",") if k.strip()]
+    tags_final = _make_tags(
         mode=mode,
         forcefield=forcefield,
         partial_charge_tag=partial_charges,
-        user_keywords=keywords_list,
+        user_keywords=tags_list,
     )
 
     submission_yaml_text = _make_submission_yaml(
         submission_id=submission_id,
         title=title,
         summary=content_summary,
-        tags=tags,
+        tags=tags_final,
         authors=author or [],
         openfe_version=openfe_version,
         openmm_version=openmm_version,
         openff_toolkit_version=openff_toolkit_version,
         forcefield=forcefield,
         partial_charges=partial_charges,
-        network_descriptor=network_descriptor,
         benchmark_data_set=benchmark_data_set,
         benchmark_system=benchmark_system,
         archive_doi="TODO add DOI",
@@ -1511,6 +1503,7 @@ def process_network(
         license_name=license,
         protocol_settings_list=merged_metadata.protocol_settings_list,
         network_key_to_systems=network_key_to_systems,
+        results_file=results_file,
     )
     submission_yaml_path.write_text(submission_yaml_text)
 
@@ -1519,9 +1512,7 @@ def process_network(
 
     zenodo_description_text = _make_zenodo_description(
         title=title,
-        summary=content_summary,
         archive_filename=archive_filenames,
-        network_key=primary_network_key,
         mode=mode,
         content_summary=content_summary,
         openfe_version=openfe_version,
@@ -1529,12 +1520,8 @@ def process_network(
         openff_toolkit_version=openff_toolkit_version,
         forcefield=forcefield,
         partial_charges=partial_charges,
-        network_descriptor=network_descriptor,
-        tags=tags,
         benchmark_data_set=benchmark_data_set,
         benchmark_system=benchmark_system,
-        n_transformations=total_transformations,
-        submission_yaml_file=submission_yaml_filename,
         license_name=license,
         protocol_settings_list=merged_metadata.protocol_settings_list,
         has_archive_objects=has_archive_objects,
@@ -1575,7 +1562,7 @@ def main():
               %(prog)s "networks/*/*.json" \\
                   --output-dir ./output \\
                   --submission-id "2026-06-03-tyk2-rbfe" \\
-                  --keywords "openfe,rbfe,tyk2" \\
+                  --tags "openfe,rbfe,tyk2" \\
                   --author "Jane Doe" \\
                   --author "John Smith" \\
                   --license "CC-BY-4.0"
@@ -1608,11 +1595,11 @@ def main():
     )
 
     parser.add_argument(
-        "-k",
-        "--keywords",
+        "-t",
+        "--tags",
         type=str,
         default="openfe,alchemicalarchive",
-        help="Comma-separated keywords/tags (default: 'openfe,alchemicalarchive')",
+        help="Comma-separated tags (default: 'openfe,alchemicalarchive')",
     )
 
     parser.add_argument(
@@ -1645,6 +1632,14 @@ def main():
         help="Additional text to append to the auto-generated summary",
     )
 
+    parser.add_argument(
+        "-r",
+        "--results-file",
+        type=str,
+        default="computational_results.json",
+        help="Name of the results file in output directory (default: computational_results.json)",
+    )
+
     args = parser.parse_args()
 
     # Expand glob patterns and collect all matching files
@@ -1674,11 +1669,12 @@ def main():
             input_files=unique_files,
             output_dir=args.output_dir,
             submission_id=args.submission_id,
-            keywords=args.keywords,
+            tags=args.tags,
             author=args.authors,
             license=args.license,
             used_alchemiscale=not args.no_alchemiscale,
             summary_suffix=args.summary_suffix,
+            results_file=args.results_file,
         )
         print("\n✓ Successfully generated submission metadata")
         return 0

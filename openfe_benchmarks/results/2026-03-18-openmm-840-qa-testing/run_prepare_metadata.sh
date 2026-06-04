@@ -12,7 +12,7 @@ micromamba run -n openfe-benchmarks python \
     "/Users/jenniferclark/OMSF/OpenFE/BenchmarkRepo/ResultSubmission/networks/*/*/*alchemicalnetwork.json" \
     --output-dir . \
     --submission-id "2026-03-18-openmm-840-qa-testing" \
-    --keywords "charge_change, rbfe, benchmark, openfe, openmm-840" \
+    --tags "charge_change, rbfe, benchmark, openfe, openmm-840" \
     --author "Josh Horton" \
     --license "CC-BY-4.0" \
     --no-alchemiscale \

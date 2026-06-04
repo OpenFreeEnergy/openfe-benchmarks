@@ -19,7 +19,7 @@ authors:
   - name: Josh Horton
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-06-03
+date: 2026-06-04
 
 # REQUIRED: OpenFE/OpenMM/toolkit versions used to produce gathered reports
 openfe_version: 1.8.0
@@ -35,6 +35,9 @@ benchmark_data:
   source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
   set: charge_annihilation_set, jacs_set
   system: egfr, irak4_s2, irak4_s3, p38, tyk2
+
+# REQUIRED: results file
+results: computational_results.json
 
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
