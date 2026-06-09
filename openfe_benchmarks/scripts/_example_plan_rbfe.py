@@ -205,6 +205,11 @@ def main():
 
     # Can be used as input for Alchemiscale
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
+    # check each edge can validated before trying to run
+    logger.info(f"Validating transformations for system {BENCHMARK_SET} {BENCHMARK_SYS}")
+    for edge in alchem_network.edges:
+        edge.create()
+    # save to file
     alchem_network.to_json(file=os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
 
 
