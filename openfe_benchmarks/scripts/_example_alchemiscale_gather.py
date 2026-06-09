@@ -37,6 +37,8 @@ def main(network, org, campaign, project, allow_partial, output):
     ----------
     network : pathlib.Path optional
         The path to the submitted alchemicalnetwork JSON file which should have the network key set as the name
+ network_key : str optional
+     The alchemical network scope key
     org : str optional
         The organization name used to build the scope to check can not be used with --network.
     campaign : str optional
