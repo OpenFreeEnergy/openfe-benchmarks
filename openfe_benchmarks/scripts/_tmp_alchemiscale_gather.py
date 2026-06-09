@@ -20,31 +20,32 @@ def _configure_example_logging(level=logging.INFO):
     logging.getLogger("openfe_benchmarks").setLevel(level)
 
 @click.command()
-@click.option("--network", type=click.Path(dir_okay=False, file_okay=True, exists=True, path_type=pathlib.Path), help="Path to the submitted alchemical network with the scope key saved as the name for which an archive should be made.", default=None)
-@click.option("--org", type=str, help="Organization name used to build the scope to check can not be used with --inputs.", default=None)
-@click.option("--campaign", type=str, help="Campaign name used to build the scope to check can not be used with --inputs.", default=None)
-@click.option("--project", type=str, help="Project name used to build the scope to check can not be used with --inputs.", default=None)
+@click.option("--network", type=click.Path(dir_okay=False, file_okay=True, exists=True, path_type=pathlib.Path), help="Path to the submitted alchemical network with the scope key saved as into the name field for which an archive should be made.", default=None)
+@click.option("--network-key", type=str, help="The scope key of the network for which an archive should be made.", default=None)
+@click.option("--org", type=str, help="Organization name used to build the scope to check can not be used with --network/network-key.", default=None)
+@click.option("--campaign", type=str, help="Campaign name used to build the scope to check can not be used with --network/network-key.", default=None)
+@click.option("--project", type=str, help="Project name used to build the scope to check can not be used with --network/network-key.", default=None)
 @click.option("--allow-partial/--no-allow-partial", is_flag=True, default=False, help="Allow archive creation for an incomplete network.")
 @click.option("--output", type=click.Path(dir_okay=True, path_type=pathlib.Path), help="Path to the output directory where the archive(s) should be made.", required=True)
-def main(network, org, campaign, project, allow_partial, output):
+def main(network, network_key, org, campaign, project, allow_partial, output):
     """
     Create an AlchemicalArchive for a given alchemical network which has been submitted to Alchemiscale.
-    The network can be specified either by providing the path to the submitted network JSON file or by specifying the
+    The network can be specified either by providing the path to the submitted network JSON file, the scoped key or by specifying the
     scope (org, campaign, project). Archives for all networks
     found within that scope will be created.
 
     Parameters
     ----------
     network : pathlib.Path optional
-        The path to the submitted alchemicalnetwork JSON file which should have the network key set as the name
- network_key : str optional
-     The alchemical network scope key
+        The path to the submitted alchemicalnetwork JSON file which should have the network key set as the name field on the object
+    network_key : str optional
+        The alchemical network scope key
     org : str optional
-        The organization name used to build the scope to check can not be used with --network.
+        The organization name used to build the scope to check can not be used with --network/network-key.
     campaign : str optional
-        The campaign name used to build the scope to check can not be used with --network.
+        The campaign name used to build the scope to check can not be used with --network/network-key.
     project : str optional
-        The project name used to build the scope to check can not be used with --network.
+        The project name used to build the scope to check can not be used with --network/network-key.
     allow_partial : bool
         Whether to allow archive creation for an incomplete network, default is False which means only networks with all edges completed will be archived.
     output : pathlib.Path
@@ -58,17 +59,25 @@ def main(network, org, campaign, project, allow_partial, output):
     --------
     - Create an archive for a specific network specified by scope
     ```
-    python _example_alchemiscale_gather.py --org openfe --campaign my_first_run --project tyk2 --output local_archives
+    python _tmp_alchemiscale_gather.py --org openfe --campaign my_first_run --project tyk2 --output local_archives
     ```
     - Create an archive for each of the networks in a given campaign
     ```
-    python _example_alchemiscale_gather.py --org openfe --campaign my_first_run --output local_archives
+    python _tmp_alchemiscale_gather.py --org openfe --campaign my_first_run --output local_archives
+    ```
+    - Create an archive for a specific scoped key
+    ```
+    python _tmp_alchemiscale_gather.py --network-key my_network_key --output local_archives
     ```
     """
-    # we can not use scope with inputs
+    # we can not use scope with network/network-key
+    if network_key is not None and (network is not None or org is not None or campaign is not None or project is not None):
+        raise ValueError(
+            "Scope searching (org, campaign, project) and --network can not be used when --network-key is provided these are mutually exclusive.")
     if network is not None and (org is not None or campaign is not None or project is not None):
         raise ValueError(
             "Scope searching (org, campaign, project) can not be used when --network is provided these are mutually exclusive.")
+
     output.mkdir(exist_ok=True, parents=True)
     _configure_example_logging()
     client = AlchemiscaleClient(api_url="https://api.alchemiscale.org")
@@ -76,21 +85,27 @@ def main(network, org, campaign, project, allow_partial, output):
     networks_by_keys = {}
     # load the local network if provided
     if network is not None:
-        logger.info(f"Loading local network")
-        network = AlchemicalNetwork.from_json(network.as_posix())
-        network_key = ScopedKey.from_str(network.name)
-        networks_by_keys[network_key] = network
+        logger.info(f"Loading local network from {network}")
+        alchem_network = AlchemicalNetwork.from_json(network.as_posix())
+        alchem_network_key = ScopedKey.from_str(alchem_network.name)
+        networks_by_keys[alchem_network_key] = alchem_network
     else:
-        # use the scope to query for network keys
-        query_scope = Scope(org=org, campaign=campaign, project=project)
-        logger.info(f"Querying Alchemiscale for submissions with scope: {query_scope}")
-        network_keys = client.query_networks(scope=query_scope)
+        if network_key is not None:
+            logger.info(f"Loading network from key: {network_key}")
+            alchem_network_key = ScopedKey.from_str(network_key)
+            alchem_network = client.get_network(alchem_network_key)
+            networks_by_keys[alchem_network_key] = alchem_network
+        else:
+            # use the scope to query for network keys
+            query_scope = Scope(org=org, campaign=campaign, project=project)
+            logger.info(f"Querying Alchemiscale for submissions with scope: {query_scope}")
+            network_keys = client.query_networks(scope=query_scope)
 
-        logger.info(f"Number of networks found: {len(network_keys)}")
-        for network_key in network_keys:
-            logger.info(f"Loading network with key: {network_key}")
-            network = client.get_network(network_key, visualize=False)
-            networks_by_keys[network_key] = network
+            logger.info(f"Number of networks found: {len(network_keys)}")
+            for network_key in network_keys:
+                logger.info(f"Loading network with key: {network_key}")
+                network = client.get_network(network_key, visualize=False)
+                networks_by_keys[network_key] = network
 
     logger.info(f"Creating archives")
     for network_key, network in networks_by_keys.items():
