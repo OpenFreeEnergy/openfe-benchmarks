@@ -6,10 +6,11 @@ title: OpenFE RBFE - charge_annihilation_set, jacs_set (5 systems) - 2026-03-18-
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
-  This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
+  This submission describes QA testing using openmm-8.4 with the charge_annihilation_set and jacs_set RBFE benchmark
   (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with openff-2.3.0
   and nagl_openff-gnn-am1bcc-1.0.0.pt. The submission contains 160 transformations, 61 unique ligands,
   and 5 unique proteins. The largest simulated chemical system contains 6744 atoms. Note this means the charge annihilation sets are not complete compared to what is in that system and should not be compared to other complete runs due to the missing edges.
+  This submission was run locally on HPC3 and so no AlchemicalArchive is available but the raw outputs are included in the Zenodo archive.
 
 # REQUIRED: list of submission tags
 tags: [rbfe, openff-2.3.0, nagl_openff-gnn-am1bcc-1.0.0.pt, charge_change, benchmark, openfe, openmm-840]
@@ -22,8 +23,8 @@ authors:
 date: 2026-06-04
 
 # REQUIRED: OpenFE/OpenMM/toolkit versions used to produce gathered reports
-openfe_version: 1.8.0
-openmm_version: 
+openfe_version: 1.9.1
+openmm_version: 8.4.0
 openff_toolkit_version: 0.18.0
 
 # Recommended descriptors

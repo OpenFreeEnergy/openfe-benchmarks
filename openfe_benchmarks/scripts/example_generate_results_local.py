@@ -73,7 +73,7 @@ def main(results_dir, network, output_dir):
                     raw_results[key].append((phase, result))
 
     # now loop over the raw results and extract the ddg/dg and metadata
-    gathered_results = {"DG": [], "DDG": []}
+    gathered_results = {"dg": [], "ddg": []}
     # first workout the system group and system name which should be stored on all egdes
     transformation = list(network.edges)[0]
     mapping_annotations = transformation.mapping.annotations
@@ -130,7 +130,7 @@ def main(results_dir, network, output_dir):
         solvent_dg = np.mean(solvent_data) * unit.kilocalories_per_mole
         solvent_dg_uncertainty = np.std(solvent_data) * unit.kilocalories_per_mole
 
-        # get the combinded ddg and uncertainty
+        # get the combined ddg and uncertainty
         entry_data["ddg"] = complex_dg - solvent_dg
         entry_data["ddg_uncertainty"] = np.sqrt(
             complex_dg_uncertainty**2 + solvent_dg_uncertainty**2
@@ -168,14 +168,14 @@ def main(results_dir, network, output_dir):
             entry_data[f"{label}_smallest_mbar_overlaps"] = mbar_overlap_elements
             entry_data[f"{label}_smallest_replica_mixing"] = replica_mixing_elements
 
-        gathered_results["DDG"].append(entry_data)
+        gathered_results["ddg"].append(entry_data)
 
         # also add the DDG data to the FEMAP
         fe_map.add_relative_calculation(
             labelA=lig_a_name,
             labelB=lig_b_name,
-            value=entry_data["DDG"],
-            uncertainty=entry_data["DDG_uncertainty"],
+            value=entry_data["ddg"],
+            uncertainty=entry_data["ddg_uncertainty"],
         )
 
     # check if the network is connected and we can calculate the DGs
@@ -193,7 +193,7 @@ def main(results_dir, network, output_dir):
                 "system_name": system_name,
                 "source": row["source"],
             }
-            gathered_results["DG"].append(entry_data)
+            gathered_results["dg"].append(entry_data)
 
     # write out the data to a json file
     output_file = output_dir / "computational_results.json"
