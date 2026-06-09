@@ -18,8 +18,8 @@ def build_femap_from_relative_results(results: list[dict]) -> dict[tuple[str, st
          - ligand_b: str
          - system_group: str
          - system_name: str
-         - DDG: Quantity
-         - DDG_uncertainty: Quantity
+         - ddg: Quantity
+         - ddg_uncertainty: Quantity
 
     Returns
     -------
@@ -43,8 +43,8 @@ def build_femap_from_relative_results(results: list[dict]) -> dict[tuple[str, st
             ligand_b = result["ligand_b"]
             # record the ligands added to the femap
             unique_ligands.update([ligand_a, ligand_b])
-            ddg = result["DDG"]
-            ddg_uncertainty = result["DDG_uncertainty"]
+            ddg = result["ddg"]
+            ddg_uncertainty = result["ddg_uncertainty"]
             femap.add_relative_calculation(
                 labelA=ligand_a,
                 labelB=ligand_b,

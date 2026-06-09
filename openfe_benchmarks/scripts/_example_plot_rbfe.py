@@ -18,11 +18,11 @@ def main():
     # load the results file
     results = json.load(open(RESULTS_FILE), cls=JSON_HANDLER.decoder)
     # check we have DDG values
-    if "DDG" not in results:
-        raise ValueError(f"Results file {RESULTS_FILE} does not contain 'DDG' values, cannot plot")
+    if "ddg" not in results:
+        raise ValueError(f"Results file {RESULTS_FILE} does not contain 'ddg' values, cannot plot")
 
     # build FEMaps and load with experimental data
-    femaps_by_system = build_femap_from_relative_results(results=results["DDG"])
+    femaps_by_system = build_femap_from_relative_results(results=results["ddg"])
 
     output_dir = pathlib.Path(OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
