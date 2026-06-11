@@ -182,7 +182,7 @@ def main():
 # __________________________ Validation Function ________________________________
 
 
-def validate_rbfe_network(network_file):
+def validate_septop_network(network_file):
     """Validate RBFE network against BenchmarkData expectations.
 
     Checks:
