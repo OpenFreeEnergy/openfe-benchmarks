@@ -240,10 +240,8 @@ def validate_septop_network(network_file):
         name = transformation.name
         transformation_names.add(name)
 
-        # Get the ChemicalSystem components for stateA
-        components = transformation.stateA.components
-
-        # Check required components
+        # SepTop: both stateA and stateB are fully solvated protein-ligand systems,
+        # so required components must be present in both states independently.
         required = ["protein", "solvent", "ligand"]
         for comp in required:
             if comp not in components:
