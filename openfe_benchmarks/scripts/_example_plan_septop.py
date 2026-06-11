@@ -210,6 +210,9 @@ def validate_septop_network(network_file):
     )
 
     # Check exact number of edges
+    # SepTop produces 1 transformation per ligand pair (both protein legs are handled
+    # within a single transformation via separated topologies), unlike RBFE which
+    # produces 2 per pair (complex + solvent).
     expected_edge_count = len(expected_lig_network.edges)
     actual_edge_count = len(network.edges)
     if actual_edge_count != expected_edge_count:
