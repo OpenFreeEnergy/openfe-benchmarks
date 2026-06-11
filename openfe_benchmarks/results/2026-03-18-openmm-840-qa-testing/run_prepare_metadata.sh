@@ -7,7 +7,7 @@ set -e  # Exit on error
 echo "Generating submission metadata for all benchmark networks..."
 echo ""
 
-micromamba run -n openfe-benchmarks python \
+micromamba run -n openfe-benchmarks-test python \
     /Users/jenniferclark/bin/openfe-benchmarks/openfe_benchmarks/scripts/prepare_metadata_submission.py \
     "/Users/jenniferclark/OMSF/OpenFE/BenchmarkRepo/ResultSubmission/networks/*/*/*alchemicalnetwork.json" \
     --output-dir . \

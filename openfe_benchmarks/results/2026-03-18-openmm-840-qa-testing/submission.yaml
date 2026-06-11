@@ -2,40 +2,51 @@
 submission_id: 2026-03-18-openmm-840-qa-testing
 
 # REQUIRED: short descriptive title
-title: OpenFE RBFE - charge_annihilation_set, jacs_set (5 systems) - 2026-03-18-openmm-840-qa-testing
+title: OpenFE RBFE - Multi-set Benchmark (2 sets, 5 systems) - 2026-03-18-openmm-840-qa-testing
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
-  This submission describes QA testing using openmm-8.4 with the charge_annihilation_set and jacs_set RBFE benchmark
-  (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with openff-2.3.0
-  and nagl_openff-gnn-am1bcc-1.0.0.pt. The submission contains 160 transformations, 61 unique ligands,
-  and 5 unique proteins. The largest simulated chemical system contains 6744 atoms. Note this means the charge annihilation sets are not complete compared to what is in that system and should not be compared to other complete runs due to the missing edges.
-  This submission was run locally on HPC3 and so no AlchemicalArchive is available but the raw outputs are included in the Zenodo archive.
+  This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
+  (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with
+  tip3p_HFE_multivalent;amber/amber/tip3p_standard;amber/ff14SB/phosaa10;amber and am1bcc. The
+  submission contains 160 transformations, 45 unique ligands, and 1 unique proteins. Note this means
+  the charge annihilation sets are not complete compared to what is in that system and should not be
+  compared to other complete runs due to the missing edges.
 
 # REQUIRED: list of submission tags
-tags: [rbfe, openff-2.3.0, nagl_openff-gnn-am1bcc-1.0.0.pt, charge_change, benchmark, openfe, openmm-840]
+tags: [rbfe, tip3p_HFE_multivalent;amber, amber, tip3p_standard;amber, ff14SB, phosaa10;amber, am1bcc, charge_change, benchmark, openfe, openmm-840]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
   - name: Josh Horton
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-06-04
+date: 2026-06-11
 
-# REQUIRED: OpenFE/OpenMM/toolkit versions used to produce gathered reports
-openfe_version: 1.9.1
-openmm_version: 8.4.0
-openff_toolkit_version: 0.18.0
+openfe_version: []
+
+openmm_version: []
+
+openff_toolkit_version: []
+
 
 # Recommended descriptors
-forcefield: openff-2.3.0
-partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+forcefield: "amber/phosaa10;amber/tip3p_HFE_multivalent;amber/tip3p_standard;amber/ff14SB"
 
-# BenchmarkData provenance (from openfe-benchmarks planning script)
+partial_charges: "am1bcc"
+
+
+# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
 benchmark_data:
   source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
-  set: charge_annihilation_set, jacs_set
-  system: egfr, irak4_s2, irak4_s3, p38, tyk2
+  "charge_annihilation_set":
+    "egfr": AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6
+    "irak4_s2": AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9
+    "irak4_s3": AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a
+  "jacs_set":
+    "p38": AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191
+    "tyk2": AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252
+
 
 # REQUIRED: results file
 results: computational_results.json
@@ -50,23 +61,135 @@ license: CC-BY-4.0
 
 # RECOMMENDED / OPTIONAL metadata for protocol settings
 protocol_settings:
-  - protocol: RelativeHybridTopologyProtocol
-    count: 3
-    systems: "charge_annihilation_set/egfr, charge_annihilation_set/irak4_s2, charge_annihilation_set/irak4_s3"
-    files: "charge_annihilation_set_egfr_alchemicalnetwork.json, charge_annihilation_set_irak4_s2_alchemicalnetwork.json, charge_annihilation_set_irak4_s3_alchemicalnetwork.json"
-    production_time: "20 nanosecond"
-    equilibration_time: "1.0 nanosecond"
-    timestep: "4.0 femtosecond"
-    temperature: "298.15 kelvin"
-    pressure: "1 bar"
-    lambda_windows: "22"
-  - protocol: RelativeHybridTopologyProtocol
-    count: 2
-    systems: "jacs_set/p38, jacs_set/tyk2"
-    files: "alchemicalnetwork.json"
-    production_time: "5.0 nanosecond"
-    equilibration_time: "1.0 nanosecond"
-    timestep: "4.0 femtosecond"
-    temperature: "298.15 kelvin"
-    pressure: "1 bar"
+  - protocol: "RelativeHybridTopologyProtocol"
+    calculation_mode: "rbfe"
+    timestep: "{'val': 4.0, 'unit': 'femtosecond'}"
+    temperature: "{'val': 298.15, 'unit': 'kelvin'}"
+    pressure: "{'val': 1, 'unit': 'bar'}"
+    forcefields: "amber/phosaa10;amber/tip3p_HFE_multivalent;amber/tip3p_standard;amber/ff14SB"
+    small_molecule_forcefield: "openff-2.3.0"
+    partial_charges: "am1bcc"
+    equilibration_time: "{'val': 1.0, 'unit': 'nanosecond'}"
+    production_time: "{'val': 5.0, 'unit': 'nanosecond'}"
+    vacuum_equilibration_time: 
+    vacuum_production_time: 
+    solvent_equilibration_time: 
+    solvent_production_time: 
+    lambda_functions: "default"
     lambda_windows: "11"
+    lambda_schedule: ""
+    notes: |
+      Applies to systems:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ff, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2g, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2gg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2h, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2j, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2k, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2l, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2n, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2o, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2p, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2q, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2s, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2t, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2u, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2v, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2x, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2y, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2z, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3fln, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3flq, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3flw, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3fmh, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3fmk, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_31, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_42, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_43, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_44, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_47, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_49, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_50, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_55, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_23, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_27, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_28, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_30, ligand_final=none, solvent=none, cofactors=none, protein=none
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - alchemical_settings.explicit_charge_correction: False -> True
+      - lambda_settings.lambda_windows: 11 -> 22
+      - simulation_settings.n_replicas: 11 -> 22
+      - simulation_settings.production_length.val: 5.0 -> 20
+      Applies to transformations:
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein=none
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - alchemical_settings.explicit_charge_correction: False -> True
+      - lambda_settings.lambda_windows: 11 -> 22
+      - simulation_settings.n_replicas: 11 -> 22
+      - simulation_settings.production_length.val: 5.0 -> 20
+      - solvation_settings.solvent_padding.val: 1.5 -> 1
+      Applies to transformations:
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - solvation_settings.solvent_padding.val: 1.5 -> 1
+      Applies to transformations:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ff, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2g, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2gg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2h, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2j, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2k, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2l, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2n, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2o, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2p, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2q, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2s, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2t, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2u, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2v, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2x, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2y, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2z, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3fln, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3flq, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3flw, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3fmh, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=3fmk, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_31, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_42, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_43, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_44, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_47, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_49, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_50, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=ejm_55, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_23, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_27, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_28, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252 jacs_set-tyk2: ligand_start=jmc_30, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+
