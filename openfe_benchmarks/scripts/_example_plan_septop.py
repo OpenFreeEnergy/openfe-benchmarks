@@ -243,28 +243,31 @@ def validate_septop_network(network_file):
         # SepTop: both stateA and stateB are fully solvated protein-ligand systems,
         # so required components must be present in both states independently.
         required = ["protein", "solvent", "ligand"]
-        for comp in required:
-            if comp not in components:
-                errors.append(
-                    f"Transformation '{name}' missing {comp} component"
-                )
+        for state_label, state in (("stateA", transformation.stateA), ("stateB", transformation.stateB)):
+            components = state.components
 
-        # Check for cofactors if benchmark system has them
-        if benchmark_sys.cofactors is not None:
-            has_cofactor = any("cofactor" in k for k in components.keys())
-            if not has_cofactor:
-                errors.append(
-                    f"Transformation '{name}' missing cofactor component"
-                )
-            else:
-                logger.info("Transformation '%s' includes cofactors", name)
+            for comp in required:
+                if comp not in components:
+                    errors.append(
+                        f"Transformation '{name}' {state_label} missing {comp} component"
+                    )
 
-        # Log success if none of the required components were missing
-        missing = [c for c in required if c not in components]
-        if not missing:
-            logger.info(
-                "Transformation '%s' has required components", name
-            )
+            # Check for cofactors if benchmark system has them
+            if benchmark_sys.cofactors is not None:
+                has_cofactor = any("cofactor" in k for k in components.keys())
+                if not has_cofactor:
+                    errors.append(
+                        f"Transformation '{name}' {state_label} missing cofactor component"
+                    )
+                else:
+                    logger.info("Transformation '%s' %s includes cofactors", name, state_label)
+
+            # Log success if none of the required components were missing
+            missing = [c for c in required if c not in components]
+            if not missing:
+                logger.info(
+                    "Transformation '%s' %s has required components", name, state_label
+                )
 
 
         # check we can create the protocol DAG for this transformation this will run internal validation on the protocol settings and components
@@ -309,4 +312,6 @@ def validate_septop_network(network_file):
 if __name__ == "__main__":
     _configure_example_logging(level=logging.INFO)
     main()
-    validate_rbfe_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    errors = validate_septop_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    if errors:
+        raise RuntimeError("Network validation failed:\n" + "\n".join(errors))
