@@ -112,11 +112,16 @@ def compile_network_transformations(
     """
     transformations = []
     for edge in ligand_network.edges:
+        annotations = {
+            **edge.annotations,
+            "system_group": BENCHMARK_SET,
+            "system_name": BENCHMARK_SYS,
+        }
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name],
-            componentA_to_componentB={},
-            annotations=edge.annotations,
+            componentA_to_componentB=edge.componentA_to_componentB,
+            annotations=annotations,
         )
 
         system_a_dict = {"protein": protein, "ligand": new_edge.componentA, "solvent": solvent}
