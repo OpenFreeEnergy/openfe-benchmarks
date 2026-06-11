@@ -170,6 +170,8 @@ def main():
     # Can be used as input for Alchemiscale
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
     alchem_network.to_json(file=os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    for edge in alchem_network.edges:
+        edge.create()
 
 
 #    # Can be run HPC3
