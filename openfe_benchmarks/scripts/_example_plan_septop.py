@@ -12,7 +12,6 @@ for more details.
 
 import os
 import logging
-import json
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
@@ -112,11 +111,16 @@ def compile_network_transformations(
     """
     transformations = []
     for edge in ligand_network.edges:
+        annotations = {
+            **edge.annotations,
+            "system_group": BENCHMARK_SET,
+            "system_name": BENCHMARK_SYS,
+        }
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name],
-            componentA_to_componentB=edge.componentA_to_componentB,
-            annotations=edge.annotations,
+            componentA_to_componentB={},
+            annotations=annotations,
         )
 
         system_a_dict = {"protein": protein, "ligand": new_edge.componentA, "solvent": solvent}
@@ -144,7 +148,7 @@ def compile_network_transformations(
         transformation = openfe.Transformation(
             stateA=system_a,
             stateB=system_b,
-            mapping=None,
+            mapping=new_edge,
             protocol=transformation_protocol,
             name=name,
         )
@@ -171,6 +175,8 @@ def main():
     # Can be used as input for Alchemiscale
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
     alchem_network.to_json(file=os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    for edge in alchem_network.edges:
+        edge.create()
 
 
 #    # Can be run HPC3
@@ -181,7 +187,7 @@ def main():
 # __________________________ Validation Function ________________________________
 
 
-def validate_rbfe_network(network_file):
+def validate_septop_network(network_file):
     """Validate RBFE network against BenchmarkData expectations.
 
     Checks:
@@ -209,12 +215,15 @@ def validate_rbfe_network(network_file):
     )
 
     # Check exact number of edges
+    # SepTop produces 1 transformation per ligand pair (both protein legs are handled
+    # within a single transformation via separated topologies), unlike RBFE which
+    # produces 2 per pair (complex + solvent).
     expected_edge_count = len(expected_lig_network.edges)
     actual_edge_count = len(network.edges)
     if actual_edge_count != expected_edge_count:
         errors.append(
             f"Expected exactly {expected_edge_count} edges "
-            f"({len(expected_lig_network.edges)} ligand pairs), "
+            f"({len(expected_lig_network.edges)} ligand pairs  × 1 SepTop transformation each), "
             f"got {actual_edge_count}"
         )
     else:
@@ -236,33 +245,34 @@ def validate_rbfe_network(network_file):
         name = transformation.name
         transformation_names.add(name)
 
-        # Get the ChemicalSystem components for stateA
-        components = transformation.stateA.components
-
-        # Check required components
+        # SepTop: both stateA and stateB are fully solvated protein-ligand systems,
+        # so required components must be present in both states independently.
         required = ["protein", "solvent", "ligand"]
-        for comp in required:
-            if comp not in components:
-                errors.append(
-                    f"Transformation '{name}' missing {comp} component"
-                )
+        for state_label, state in (("stateA", transformation.stateA), ("stateB", transformation.stateB)):
+            components = state.components
 
-        # Check for cofactors if benchmark system has them
-        if benchmark_sys.cofactors is not None:
-            has_cofactor = any("cofactor" in k for k in components.keys())
-            if not has_cofactor:
-                errors.append(
-                    f"Transformation '{name}' missing cofactor component"
-                )
-            else:
-                logger.info("Transformation '%s' includes cofactors", name)
+            for comp in required:
+                if comp not in components:
+                    errors.append(
+                        f"Transformation '{name}' {state_label} missing {comp} component"
+                    )
 
-        # Log success if none of the required components were missing
-        missing = [c for c in required if c not in components]
-        if not missing:
-            logger.info(
-                "Transformation '%s' has required components", name
-            )
+            # Check for cofactors if benchmark system has them
+            if benchmark_sys.cofactors is not None:
+                has_cofactor = any("cofactor" in k for k in components.keys())
+                if not has_cofactor:
+                    errors.append(
+                        f"Transformation '{name}' {state_label} missing cofactor component"
+                    )
+                else:
+                    logger.info("Transformation '%s' %s includes cofactors", name, state_label)
+
+            # Log success if none of the required components were missing
+            missing = [c for c in required if c not in components]
+            if not missing:
+                logger.info(
+                    "Transformation '%s' %s has required components", name, state_label
+                )
 
 
         # check we can create the protocol DAG for this transformation this will run internal validation on the protocol settings and components
@@ -307,4 +317,6 @@ def validate_rbfe_network(network_file):
 if __name__ == "__main__":
     _configure_example_logging(level=logging.INFO)
     main()
-    validate_rbfe_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    errors = validate_septop_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    if errors:
+        raise RuntimeError("Network validation failed:\n" + "\n".join(errors))
