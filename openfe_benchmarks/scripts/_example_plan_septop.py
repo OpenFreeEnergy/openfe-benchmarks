@@ -12,7 +12,6 @@ for more details.
 
 import os
 import logging
-import json
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
