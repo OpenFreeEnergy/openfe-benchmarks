@@ -1,5 +1,5 @@
 """
-This module provides an example script for planning relative binding free energy (RBFE) calculations.
+This module provides an example script for planning relative binding free energy (RBFE) calculations using a Separated Topologies approach.
 It demonstrates how to process benchmark systems, compile alchemical transformations, and save the
 resulting network to a JSON file.
 
@@ -15,7 +15,7 @@ import logging
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
-from openfe.protocols.openmm_rfe.equil_rfe_methods import RelativeHybridTopologyProtocol
+from openfe.protocols.openmm_septop.equil_septop_method import SepTopProtocol
 
 from openfe_benchmarks.data import get_benchmark_data_system
 from openfe_benchmarks.scripts import utils as ofebu
@@ -36,13 +36,13 @@ def _configure_example_logging(level=logging.INFO):
 
 
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
-BENCHMARK_SET = "mcs_docking_set"
-BENCHMARK_SYS = "hne"
+BENCHMARK_SET = "fragments"
+BENCHMARK_SYS = "liga"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 LIG_NETWORK_FILE = "industry_benchmarks_network"
 FILENAME_ALCHEMICALNETWORK = (
-    f"alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
+    f"septop_alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
 )
 OUTPUT_DIR = "outputs"
 
@@ -111,55 +111,48 @@ def compile_network_transformations(
     """
     transformations = []
     for edge in ligand_network.edges:
+        annotations = {
+            **edge.annotations,
+            "system_group": BENCHMARK_SET,
+            "system_name": BENCHMARK_SYS,
+        }
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name],
-            componentA_to_componentB=edge.componentA_to_componentB,
-            annotations=edge.annotations,
+            componentA_to_componentB={},
+            annotations=annotations,
         )
 
-        # create the transformations for the bound and solvent legs
-        for leg in ["solvent", "complex"]:
-            system_a_dict = {"ligand": new_edge.componentA, "solvent": solvent}
-            system_b_dict = {"ligand": new_edge.componentB, "solvent": solvent}
-            if leg == "complex":
-                system_a_dict["protein"] = protein
-                system_b_dict["protein"] = protein
+        system_a_dict = {"protein": protein, "ligand": new_edge.componentA, "solvent": solvent}
+        system_b_dict = {"protein": protein, "ligand": new_edge.componentB, "solvent": solvent}
+        if cofactors is not None:
+            for i, cofactor in enumerate(cofactors):
+                cofactor_name = f"cofactor_{i}"
+                system_a_dict[cofactor_name] = cofactor
+                system_b_dict[cofactor_name] = cofactor
 
-                if cofactors is not None:
-                    for i, cofactor in enumerate(cofactors):
-                        cofactor_name = f"cofactor_{i}"
-                        system_a_dict[cofactor_name] = cofactor
-                        system_b_dict[cofactor_name] = cofactor
+        system_a = openfe.ChemicalSystem(system_a_dict)
+        system_b = openfe.ChemicalSystem(system_b_dict)
 
-            system_a = openfe.ChemicalSystem(system_a_dict)
-            system_b = openfe.ChemicalSystem(system_b_dict)
+        name = f"{new_edge.componentA.name}_{new_edge.componentB.name}"
 
-            name = f"{leg}_{new_edge.componentA.name}_{new_edge.componentB.name}"
+        protocol_settings = SepTopProtocol.default_settings()
+        protocol_settings.forcefield_settings.small_molecule_forcefield = FORCEFIELD
+        # Disable the alchemical dispersion correction for now since this
+        # simulations would otherwise be very slow
+        protocol_settings.alchemical_settings.disable_alchemical_dispersion_correction = True
+        protocol_settings.protocol_repeats = 1
+        transformation_protocol = SepTopProtocol(settings=protocol_settings)
 
-            # Create protocol with adaptive settings
-            # adaptive transformation settings are only supported for RelativeHybridTopologyProtocol currently
-            protocol_settings = RelativeHybridTopologyProtocol.default_settings()
-            protocol_settings.forcefield_settings.small_molecule_forcefield = FORCEFIELD
-            protocol_settings.protocol_repeats = 1
-            transformation_protocol = RelativeHybridTopologyProtocol(
-                settings=RelativeHybridTopologyProtocol._adaptive_settings(
-                    stateA=system_a,
-                    stateB=system_b,
-                    mapping=new_edge,
-                    initial_settings=protocol_settings,
-                ),
-            )
-
-            # Create transformation
-            transformation = openfe.Transformation(
-                stateA=system_a,
-                stateB=system_b,
-                mapping=new_edge,
-                protocol=transformation_protocol,
-                name=name,
-            )
-            transformations.append(transformation)
+        # Create transformation
+        transformation = openfe.Transformation(
+            stateA=system_a,
+            stateB=system_b,
+            mapping=new_edge,
+            protocol=transformation_protocol,
+            name=name,
+        )
+        transformations.append(transformation)
 
     return transformations
 
@@ -182,6 +175,8 @@ def main():
     # Can be used as input for Alchemiscale
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
     alchem_network.to_json(file=os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    for edge in alchem_network.edges:
+        edge.create()
 
 
 #    # Can be run HPC3
@@ -192,11 +187,11 @@ def main():
 # __________________________ Validation Function ________________________________
 
 
-def validate_rbfe_network(network_file):
+def validate_septop_network(network_file):
     """Validate RBFE network against BenchmarkData expectations.
 
     Checks:
-    - Exact number of edges (2 per ligand pair: complex + solvent)
+    - Exact number of edges
     - Transformations match expected ligand network
     - Each transformation has protein, solvent, and cofactors (if present)
     - Ligand charges match expected values from BenchmarkData
@@ -219,13 +214,16 @@ def validate_rbfe_network(network_file):
         file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE])
     )
 
-    # Check exact number of edges (2 per ligand edge: complex + solvent)
-    expected_edge_count = len(expected_lig_network.edges) * 2
+    # Check exact number of edges
+    # SepTop produces 1 transformation per ligand pair (both protein legs are handled
+    # within a single transformation via separated topologies), unlike RBFE which
+    # produces 2 per pair (complex + solvent).
+    expected_edge_count = len(expected_lig_network.edges)
     actual_edge_count = len(network.edges)
     if actual_edge_count != expected_edge_count:
         errors.append(
             f"Expected exactly {expected_edge_count} edges "
-            f"({len(expected_lig_network.edges)} ligand pairs × 2 legs), "
+            f"({len(expected_lig_network.edges)} ligand pairs  × 1 SepTop transformation each), "
             f"got {actual_edge_count}"
         )
     else:
@@ -242,72 +240,46 @@ def validate_rbfe_network(network_file):
 
     # Validate each transformation
     transformation_names = set()
-    complex_legs = []
-    solvent_legs = []
 
     for transformation in network.edges:
         name = transformation.name
         transformation_names.add(name)
 
-        # Check leg type (complex vs solvent)
-        if name.startswith("complex_"):
-            complex_legs.append(name)
-        elif name.startswith("solvent_"):
-            solvent_legs.append(name)
+        # SepTop: both stateA and stateB are fully solvated protein-ligand systems,
+        # so required components must be present in both states independently.
+        required = ["protein", "solvent", "ligand"]
+        for state_label, state in (("stateA", transformation.stateA), ("stateB", transformation.stateB)):
+            components = state.components
 
-        # Get the ChemicalSystem components for stateA
-        components = transformation.stateA.components
-
-        # Check required components based on leg type
-        if name.startswith("complex_"):
-            # Complex leg must have protein, solvent, ligand
-            required = ["protein", "solvent", "ligand"]
             for comp in required:
                 if comp not in components:
-                    errors.append(f"Transformation '{name}' missing {comp} component")
+                    errors.append(
+                        f"Transformation '{name}' {state_label} missing {comp} component"
+                    )
 
             # Check for cofactors if benchmark system has them
             if benchmark_sys.cofactors is not None:
                 has_cofactor = any("cofactor" in k for k in components.keys())
                 if not has_cofactor:
-                    errors.append(f"Transformation '{name}' missing cofactor component")
+                    errors.append(
+                        f"Transformation '{name}' {state_label} missing cofactor component"
+                    )
                 else:
-                    logger.info("Transformation '%s' includes cofactors", name)
+                    logger.info("Transformation '%s' %s includes cofactors", name, state_label)
 
             # Log success if none of the required components were missing
             missing = [c for c in required if c not in components]
             if not missing:
                 logger.info(
-                    "Transformation '%s' complex leg has required components", name
+                    "Transformation '%s' %s has required components", name, state_label
                 )
 
-        elif name.startswith("solvent_"):
-            # Solvent leg must have solvent and ligand
-            required = ["solvent", "ligand"]
-            for comp in required:
-                if comp not in components:
-                    errors.append(f"Transformation '{name}' missing {comp} component")
-            else:
-                logger.info(
-                    "Transformation '%s' solvent leg has required components", name
-                )
 
         # check we can create the protocol DAG for this transformation this will run internal validation on the protocol settings and components
         try:
             transformation.create()
         except Exception as e:
             errors.append(f"Failed to create protocol for transformation '{name}': {e}")
-
-    # Validate that we have both complex and solvent legs for each ligand pair
-    expected_ligand_pairs = len(expected_lig_network.edges)
-    if len(complex_legs) != expected_ligand_pairs:
-        errors.append(
-            f"Expected {expected_ligand_pairs} complex legs, got {len(complex_legs)}"
-        )
-    if len(solvent_legs) != expected_ligand_pairs:
-        errors.append(
-            f"Expected {expected_ligand_pairs} solvent legs, got {len(solvent_legs)}"
-        )
 
     # Validate that ligands have partial charges from BenchmarkData
     # Load expected ligands to get count
@@ -329,15 +301,11 @@ def validate_rbfe_network(network_file):
         for ligand in ligands:
             found_ligands.add(ligand.name)
             off_mol = ligand.to_openff()
-            if (
-                off_mol.partial_charges is not None
-                and len(off_mol.partial_charges) == off_mol.n_atoms
-            ):
+            if off_mol.partial_charges is not None and len(off_mol.partial_charges) == off_mol.n_atoms:
                 continue
             else:
-                errors.append(
-                    f"Ligand '{ligand.name}' in chemical system '{chem_system.key}' is missing partial charges"
-                )
+                errors.append(f"Ligand '{ligand.name}' in chemical system '{chem_system.key}' is missing partial charges")
+
 
     expected_keys = set(expected_ligands.keys()) | set(expected_cofactors.keys())
     missing_expected = expected_keys - found_ligands
@@ -349,6 +317,6 @@ def validate_rbfe_network(network_file):
 if __name__ == "__main__":
     _configure_example_logging(level=logging.INFO)
     main()
-    errors = validate_rbfe_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    errors = validate_septop_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
     if errors:
         raise RuntimeError("Network validation failed:\n" + "\n".join(errors))
