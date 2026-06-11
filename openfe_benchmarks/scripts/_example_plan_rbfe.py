@@ -114,7 +114,7 @@ def compile_network_transformations(
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name],
-            componentA_to_componentB=edge.componentA_to_componentB,
+            componentA_to_componentB={},
             annotations=edge.annotations,
         )
 
