@@ -42,8 +42,8 @@ results: computational_results.json
 
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
-  doi: TODO add DOI
-  archive_provider: TODO add archive provider
+  doi: https://doi.org/10.5281/zenodo.20643703
+  archive_provider: zenodo
 
 # REQUIRED: license for the submission
 license: CC-BY-4.0
