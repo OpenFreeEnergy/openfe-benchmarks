@@ -43,4 +43,4 @@ When adding new benchmark systems:
 4. Generate ligand network mapping files, `*network*.json` (JSON format)
 5. (If necessary) Add new charge types to `PARTIAL_CHARGE_TYPES` in `data/__init__.py`
 6. Generate `ligands_<charge_type>.sdf` files with ``openfe_benchmarks/data/data_generation/charge_molecules.py``
-6. (If present) Generate `cofactors_<charge_type>.sdf` files with ``openfe_benchmarks/data/data_generation/charge_molecules.py``
+7. (If present) Generate `cofactors_<charge_type>.sdf` files with ``openfe_benchmarks/data/data_generation/charge_molecules.py``
