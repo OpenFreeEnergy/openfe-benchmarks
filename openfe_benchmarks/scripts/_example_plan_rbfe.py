@@ -349,4 +349,6 @@ def validate_rbfe_network(network_file):
 if __name__ == "__main__":
     _configure_example_logging(level=logging.INFO)
     main()
-    validate_rbfe_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    errors = validate_rbfe_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    if errors:
+        raise RuntimeError("Network validation failed:\n" + "\n".join(errors))
