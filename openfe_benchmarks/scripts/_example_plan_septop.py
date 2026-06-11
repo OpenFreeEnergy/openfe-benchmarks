@@ -218,7 +218,7 @@ def validate_septop_network(network_file):
     if actual_edge_count != expected_edge_count:
         errors.append(
             f"Expected exactly {expected_edge_count} edges "
-            f"({len(expected_lig_network.edges)} ligand pairs), "
+            f"({len(expected_lig_network.edges)} ligand pairs  × 1 SepTop transformation each), "
             f"got {actual_edge_count}"
         )
     else:
