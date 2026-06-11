@@ -9,6 +9,7 @@ from openff.toolkit import Molecule
 @click.command()
 @click.option("--out-dir", type=click.Path(exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path), required=True, help="The output dir name")
 @click.option("--input-sdf", type=click.Path(exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path), required=False, help="The input sdf file containing the ligands from this network, used to extract identifiers.")
+@click.option("--ref-data", type=click.Path(exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path),required=True, help="Path to the CSV file containing the experimental reference data for this network.")
 def main(out_dir: pathlib.Path, input_sdf: pathlib.Path):
     """
     Extract the reference data
@@ -19,11 +20,14 @@ def main(out_dir: pathlib.Path, input_sdf: pathlib.Path):
         The output dir name where the extracted reference data will be saved.
     input_sdf
         The input sdf file containing the ligands from this network, used to extract identifiers which will be stored in the reference data.
+    ref_data : pathlib.Path
+        Path to the CSV file containing the experimental reference data.
+        Experimental values can be found here: https://zenodo.org/records/8066404
     """
     # tag each entry with the source, currently we link to the aggregated reference data but this should be changed if we refine it in future.
     baumann_et_al_doi = "https://doi.org/10.1021/acs.jctc.3c00282"
-    # load the ref data from the industry benchmark results stored on github
-    ref_dg_data = pd.read_csv("/Users/hannahbaumann/test_septop/bace/exp.csv")
+    # load the experimental reference data for this network
+    ref_dg_data = pd.read_csv(ref_data)
     # load the ligands with openff toolkit to extract the identifiers
     molecules = Molecule.from_file(input_sdf.as_posix(), allow_undefined_stereo=True)
     molecule_by_name = {molecule.name: molecule for molecule in molecules}
