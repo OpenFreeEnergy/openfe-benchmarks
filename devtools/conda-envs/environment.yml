@@ -7,3 +7,4 @@ dependencies:
   - pytest
   - pre-commit
   - pontibus
+  - pint

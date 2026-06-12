@@ -64,11 +64,15 @@ from typing import Any
 import warnings
 import pprint
 
+from pint import UnitRegistry
+
 from gufe.archival import AlchemicalArchive
 from gufe import AlchemicalNetwork
 from gufe.transformations.transformation import Transformation
 
 from openfe_benchmarks.data import BenchmarkIndex
+
+ureg = UnitRegistry()
 
 
 def _add_value_with_keys(
@@ -399,9 +403,12 @@ def _iter_nested_items(obj: Any) -> list[tuple[str, Any]]:
 
 
 def _quantity_to_text(value: Any) -> str:
-    if hasattr(value, "magnitude"):
-        return f"{value:#~}"
-    return str(value)
+    # For pint quantities that have been processed by pydantic model_dump()
+    if isinstance(value, dict) and "unit" in value:
+        q = value["val"] * ureg.parse_expression(value["unit"])
+        return f"{q:#~}"
+    else:
+        return str(value)
 
 
 def _infer_benchmark_data_set_system(
