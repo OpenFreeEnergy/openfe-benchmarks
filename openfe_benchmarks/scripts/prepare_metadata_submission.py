@@ -64,15 +64,13 @@ from typing import Any
 import warnings
 import pprint
 
-from pint import UnitRegistry
+from pint import Quantity
 
 from gufe.archival import AlchemicalArchive
 from gufe import AlchemicalNetwork
 from gufe.transformations.transformation import Transformation
 
 from openfe_benchmarks.data import BenchmarkIndex
-
-ureg = UnitRegistry()
 
 
 def _add_value_with_keys(
@@ -405,7 +403,7 @@ def _iter_nested_items(obj: Any) -> list[tuple[str, Any]]:
 def _quantity_to_text(value: Any) -> str:
     # For pint quantities that have been processed by pydantic model_dump()
     if isinstance(value, dict) and "unit" in value:
-        q = value["val"] * ureg.parse_expression(value["unit"])
+        q = Quantity(value["val"], value["unit"])
         return f"{q:#~}"
     else:
         return str(value)
@@ -781,11 +779,11 @@ def _make_tags(
     tags: list[str] = []
     tags.append(mode)
     if forcefield:
-        tags.extend(list(set(ff for ff_set, _ in forcefield for ff in ff_set)))
+        tags.extend(sorted(list(set(ff for ff_set, _ in forcefield for ff in ff_set))))
     if benchmark_data:
-        tags.extend(list(set(y for x in benchmark_data for y in x)))
+        tags.extend(sorted(list(set(y for x in benchmark_data for y in x))))
     if partial_charge_tag:
-        tags.extend(list(set(x[0] for x in partial_charge_tag)))
+        tags.extend(sorted(list(set(x[0] for x in partial_charge_tag))))
     tags.extend(user_keywords)
 
     # Deduplicate while preserving order.
@@ -962,7 +960,7 @@ def _render_protocol_settings_yaml(
 
     ordered_settings = sorted(
         enumerate(protocol_settings_list),
-        key=lambda item: (len(item[1]), item[0]),
+        key=lambda item: (len(item[1][1]), str(item[1][0].protocol), item[0]),
     )
 
     primary_index = max(
@@ -1150,7 +1148,7 @@ def _render_keyed_values_yaml(
 
     ordered_settings = sorted(
         enumerate(value_keys),
-        key=lambda item: (len(item[1]), item[0]),
+        key=lambda item: (len(item[1][1]), str(item[1][0]), item[0]),
     )
 
     lines = [f"{section_name}:"]
@@ -1341,6 +1339,9 @@ def _make_zenodo_description(
         "partial_charges",
         "edges",
     )
+    mapper_yaml = _render_keyed_values_yaml(
+        "mapper", metadata.mapper, "mapper", "edges"
+    )
 
     # Build network keys to systems mapping section
     network_keys_section = ""
@@ -1382,6 +1383,7 @@ def _make_zenodo_description(
 
 {forcefield_yaml}
 {partial_charges_yaml}
+{mapper_yaml}
 
 {benchmark_system_yaml}
 

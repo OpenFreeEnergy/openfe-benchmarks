@@ -8,13 +8,13 @@ title: OpenFE RBFE - Multi-set Benchmark (2 sets, 5 systems) - 2026-03-18-openmm
 summary: |
   This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
   (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with
-  tip3p_HFE_multivalent/ff14SB/tip3p_standard/phosaa10 and am1bcc_at. The submission contains 160
+  tip3p_HFE_multivalent/ff14SB/phosaa10/tip3p_standard and am1bcc_at. The submission contains 160
   edges, 45 unique ligands, and 1 unique proteins. Note this means the charge annihilation sets are
   not complete compared to what is in that system and should not be compared to other complete runs
   due to the missing edges.
 
 # REQUIRED: list of submission tags
-tags: [rbfe, tip3p_HFE_multivalent, ff14SB, tip3p_standard, phosaa10, charge_annihilation_set, jacs_set, tyk2, egfr, p38, irak4_s2, irak4_s3, am1bcc_at, charge_change, benchmark, openfe, openmm-840]
+tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, charge_annihilation_set, egfr, irak4_s2, irak4_s3, jacs_set, p38, tyk2, am1bcc_at, charge_change, benchmark, openfe, openmm-840]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
@@ -72,11 +72,11 @@ protocol_settings:
     lambda_schedule: ""
     notes: |
       Applies to 40 edges:
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein=none
       - etc.
   - protocol: "RelativeHybridTopologyProtocol"
     notes: |
@@ -85,6 +85,7 @@ protocol_settings:
       - lambda_settings.lambda_windows: 11 -> 22
       - simulation_settings.n_replicas: 11 -> 22
       - simulation_settings.production_length.val: 5.0 -> 20
+      - solvation_settings.solvent_padding.val: 1.5 -> 1
       Applies to 5 edges:
       - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
       - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
@@ -98,7 +99,6 @@ protocol_settings:
       - lambda_settings.lambda_windows: 11 -> 22
       - simulation_settings.n_replicas: 11 -> 22
       - simulation_settings.production_length.val: 5.0 -> 20
-      - solvation_settings.solvent_padding.val: 1 -> 1.5
       Applies to 5 edges:
       - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein=none
       - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein=none
@@ -108,12 +108,12 @@ protocol_settings:
   - protocol: "RelativeHybridTopologyProtocol"
     notes: |
       Detailed protocol settings differ:
-      - solvation_settings.solvent_padding.val: 1 -> 1.5
+      - solvation_settings.solvent_padding.val: 1.5 -> 1
       Applies to 40 edges:
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
       - etc.
 
