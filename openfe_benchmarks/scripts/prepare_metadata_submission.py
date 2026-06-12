@@ -97,7 +97,7 @@ class ProtocolSettingsInfo:
     pressure: str
     lambda_functions: str
     small_molecule_forcefield: str
-    forcefields: str
+    forcefields: set[str]
     partial_charges: str
     lambda_windows: str = ""
     lambda_schedule: str = ""
@@ -139,7 +139,7 @@ class ProtocolSettingsInfo:
 
 @dataclass
 class SystemInfo:
-    """Per-system information extracted from transformations."""
+    """Per-system information extracted from edges."""
 
     benchmark_set: str
     benchmark_system: str
@@ -154,6 +154,7 @@ class SystemInfo:
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
         default_factory=list
     )
@@ -195,7 +196,7 @@ class SystemInfo:
     def add_protocol_settings(self, protocol_settings: ProtocolSettingsInfo, key):
         """Add or update protocol settings with associated transformation key.
 
-        Stores unique ProtocolSettingsInfo objects with a list of transformation keys
+        Stores unique ProtocolSettingsInfo objects with a list of edge keys
         that use that protocol configuration.
         """
         _add_value_with_keys(self.protocol_settings_list, protocol_settings, [key])
@@ -211,6 +212,7 @@ class AutoMetadata:
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocols: list[tuple[str, list[str]]] = field(default_factory=list)
     forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
     small_molecule_force_field: list[tuple[str, list[str]]] = field(
@@ -228,6 +230,7 @@ class AutoMetadata:
         self.openfe_version = []
         self.openmm_version = []
         self.openff_toolkit_version = []
+        self.mapper = []
         self.protocols = []
         self.forcefield = []
         self.small_molecule_force_field = []
@@ -241,6 +244,8 @@ class AutoMetadata:
                 _add_value_with_keys(self.openmm_version, version, keys)
             for version, keys in system_info.openff_toolkit_version:
                 _add_value_with_keys(self.openff_toolkit_version, version, keys)
+            for mapper_info, keys in system_info.mapper:
+                _add_value_with_keys(self.mapper, mapper_info, keys)
 
             for protocol_settings, keys in system_info.protocol_settings_list:
                 if protocol_settings.protocol:
@@ -394,8 +399,8 @@ def _iter_nested_items(obj: Any) -> list[tuple[str, Any]]:
 
 
 def _quantity_to_text(value: Any) -> str:
-    if isinstance(value, dict) and "magnitude" in value and "unit" in value:
-        return f"{value['magnitude']} {value['unit']}"
+    if hasattr(value, "magnitude"):
+        return f"{value:#~}"
     return str(value)
 
 
@@ -438,7 +443,7 @@ def _extract_sim_times(settings_block: dict[str, Any]) -> tuple[str, str]:
     ) if production is not None else ""
 
 
-def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str]:
+def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str)]:
     if not protocol_obj:
         return {
             "protocol": "unknown",
@@ -495,22 +500,15 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str]:
         out["small_molecule_forcefield"] = str(
             forcefield_settings.get("small_molecule_forcefield") or ""
         )
-        out["forcefields"] = ""
         ffs = forcefield_settings.get("forcefields")
         if isinstance(ffs, list) and ffs:
-            out["forcefields"] = ";".join(set([os.path.splitext(ff)[0] for ff in ffs]))
+            out["forcefields"] = set(
+                sorted([os.path.splitext(ff.split("/")[1])[0] for ff in ffs])
+            )
 
     partial_charge_settings = settings.get("partial_charge_settings") or {}
     if partial_charge_settings:
-        method = partial_charge_settings.get("partial_charge_method")
-        nagl_model = partial_charge_settings.get("nagl_model")
-        if not method:
-            raise ValueError("Protocol does not have a parital charge method defined.")
-
-        if method and nagl_model:
-            out["partial_charges"] = f"{method} ({nagl_model})"
-        elif method:
-            out["partial_charges"] = str(method)
+        out["partial_charges"] = _normalize_partial_charge_info(partial_charge_settings)
 
     # Protocol-specific handling: RBFE typically has a single simulation block;
     # ASFE commonly has separate vacuum and solvent simulation settings.
@@ -675,18 +673,33 @@ def _extract_auto_metadata(
         )
 
         annotations = trans.mapping.annotations
-        for key, value in annotations.items():
-            if "openmm" in key:
+
+        # Extract mapper info if available (Option 1: concatenated string)
+        if "mapper_settings" in annotations and "mapper_version" in annotations:
+            mapper_settings = annotations.get("mapper_settings")
+            mapper_version = annotations.get("mapper_version", "unknown")
+            if isinstance(mapper_settings, dict):
+                mapper_name = mapper_settings.get("__qualname__", "unknown").split(".")[
+                    -1
+                ]
+                mapping_algorithm = mapper_settings.get("_mapping_algorithm", "unknown")
+                mapper_str = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
-                    "openmm_version", value, key
+                    "mapper", mapper_str, key
                 )
-            if "openfe" in key:
+
+        for annotation_key, value in annotations.items():
+            if "openmm" in annotation_key:
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
-                    "openfe_version", value, key
+                    "openmm_version", value, annotation_key
                 )
-            if "openff" in key and "toolkit" in key:
+            if "openfe" in annotation_key:
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
-                    "openff_toolkit_version", value, key
+                    "openfe_version", value, annotation_key
+                )
+            if "openff" in annotation_key and "toolkit" in annotation_key:
+                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                    "openff_toolkit_version", value, annotation_key
                 )
 
     metadata.update_from_system_info()
@@ -694,26 +707,60 @@ def _extract_auto_metadata(
     return metadata
 
 
-def _normalize_partial_charge_info(partial_charges: str) -> str:
-    value = partial_charges.strip()
-    if not value:
+def _normalize_partial_charge_info(partial_charge_settings: dict) -> str:
+    """Normalize partial charge settings to standardized method tags.
+
+    Maps protocol charge method names to the standard method names used in
+    openfe_benchmarks.data.data_generation.charge_molecules:
+    - am1bcc_at (AM1BCC with AmberTools)
+    - am1bcc_oe (AM1BCC with OpenEye)
+    - am1bccelf10_oe (AM1BCC ELF10 with OpenEye)
+    - nagl_off (NAGL with OpenFF Toolkit)
+
+    For nagl_off, appends the model name if available.
+
+    Parameters
+    ----------
+    partial_charge_settings : dict
+        Protocol partial charge settings dict containing 'partial_charge_method',
+        optionally 'off_toolkit_backend', and optionally 'nagl_model'.
+
+    Returns
+    -------
+    str
+        Normalized method tag, e.g., "nagl_off_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe".
+    """
+    if not partial_charge_settings or not isinstance(partial_charge_settings, dict):
         return ""
 
-    lower = value.lower()
+    method = partial_charge_settings.get("partial_charge_method", "").lower().strip()
+    if not method:
+        return ""
 
-    # Canonical openfe-benchmarks style: nagl_<model>.pt
-    model_match = re.search(
-        r"(openff-gnn-am1bcc-[0-9.]+\.0\.pt|openff-gnn-am1bcc-[0-9.]+\.pt)", lower
-    )
-    if "nagl" in lower and model_match:
-        model = model_match.group(1)
-        return f"nagl_{model}"
-
-    if lower in {"am1bcc", "am1-bcc"}:
-        return "am1bcc"
-
-    normalized = re.sub(r"[^a-z0-9._-]+", "_", lower).strip("_")
-    return normalized
+    # Map method names to standardized tags matching charge_molecules.py
+    if "nagl" in method:
+        # nagl_off with optional model
+        nagl_model = partial_charge_settings.get("nagl_model", "").strip()
+        if nagl_model:
+            # Extract just the filename if it's a path
+            nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
+            return f"nagl_off_{nagl_model}"
+        return "nagl_off"
+    elif "am1bccelf10" in method or "elf10" in method:
+        return "am1bccelf10_oe"
+    elif "am1bcc" in method:
+        # Check toolkit backend to determine if AmberTools or OpenEye
+        backend = partial_charge_settings.get("off_toolkit_backend", "").lower().strip()
+        if backend == "ambertools":
+            return "am1bcc_at"
+        elif backend == "openeye":
+            return "am1bcc_oe"
+        else:
+            raise ValueError("Unknown charge backend")
+    else:
+        # Fallback: normalize any other method name
+        normalized = re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
+        return normalized
 
 
 def _make_tags(
@@ -721,14 +768,15 @@ def _make_tags(
     mode: str,
     forcefield: list[tuple],
     partial_charge_tag: list[tuple],
+    benchmark_data: list[tuple],
     user_keywords: list[str],
 ) -> list[str]:
     tags: list[str] = []
     tags.append(mode)
     if forcefield:
-        tags.extend(
-            list(set(ff for ff_set, _ in forcefield for ff in ff_set.split("/")))
-        )
+        tags.extend(list(set(ff for ff_set, _ in forcefield for ff in ff_set)))
+    if benchmark_data:
+        tags.extend(list(set(y for x in benchmark_data for y in x)))
     if partial_charge_tag:
         tags.extend(list(set(x[0] for x in partial_charge_tag)))
     tags.extend(user_keywords)
@@ -767,14 +815,12 @@ def _build_content_summary(
         (summary_text, list of SystemInfo objects)
     """
 
-    field_info = "/".join(
-        set(ff for ff_set, _ in metadata.forcefield for ff in ff_set.split("/"))
-    )
+    field_info = "/".join(set(ff for ff_set, _ in metadata.forcefield for ff in ff_set))
     if not field_info:
         field_info = "an unspecified force field"
 
-    charge_info = "/".join(x[0] for x in metadata.partial_charges)
-    if not field_info:
+    charge_info = "/".join(set(x[0] for x in metadata.partial_charges))
+    if not charge_info:
         charge_info = "an unspecified partial charges"
 
     # Group systems by benchmark set for explicit listing
@@ -806,9 +852,9 @@ def _build_content_summary(
     elif len(unique_sets) == 1:
         systems_desc = ", ".join(sets_to_systems[unique_sets[0]])
     else:
-        systems_desc = f"{len(metadata.benchmark_sets_systems)} systems"
+        systems_desc = f"{len(metadata.benchmark_sets_systems)} edges"
 
-    # Count totals across all systems
+    # Count totals across all edges
     all_structures = {
         "ligands": set(),
         "proteins": set(),
@@ -832,12 +878,12 @@ def _build_content_summary(
         if len(unique_sets) > 1:
             summary_parts = [
                 f"This submission describes the {subject} RBFE benchmark ({systems_desc}) prepared with {field_info} and {charge_info}.",
-                f"The submission contains {metadata.n_transformations} transformations, {len(all_structures['ligands'])} unique ligands, and {len(all_structures['proteins'])} unique proteins.",
+                f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique ligands, and {len(all_structures['proteins'])} unique proteins.",
             ]
         else:
             summary_parts = [
                 f"This submission describes the {subject} RBFE benchmark prepared with {field_info} and {charge_info}.",
-                f"The network contains {metadata.n_transformations} transformations across {len(all_structures['ligands'])} unique ligands and {len(all_structures['proteins'])} unique proteins.",
+                f"The network contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique ligands and {len(all_structures['proteins'])} unique proteins.",
             ]
         if systems_with_cofactors:
             summary_parts.append(
@@ -847,12 +893,12 @@ def _build_content_summary(
         if len(unique_sets) > 1:
             summary_parts = [
                 f"This submission describes the {subject} ASFE benchmark ({systems_desc}) prepared with {field_info} and {charge_info}.",
-                f"The submission contains {metadata.n_transformations} transformations, {len(all_structures['ligands'])} unique solutes, and {len(all_structures['solvents'])} unique solvents.",
+                f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique solutes, and {len(all_structures['solvents'])} unique solvents.",
             ]
         else:
             summary_parts = [
                 f"This submission describes the {subject} ASFE benchmark prepared with {field_info} and {charge_info}.",
-                f"The archive contains {metadata.n_transformations} transformations across {len(all_structures['ligands'])} unique solutes and {len(all_structures['solvents'])} unique solvents.",
+                f"The archive contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique solutes and {len(all_structures['solvents'])} unique solvents.",
             ]
 
     if used_alchemiscale:
@@ -871,8 +917,8 @@ def _render_protocol_settings_yaml(
     All keys in the ProtocolSettingsInfo class are listed except for ``full_protocol_settings``.
 
     If only one protocol is used, it is labeled as the submission protocol and the notes specify "Applies to all
-    systems". If more than one protocol is present, the protocol that represents the largest number of systems is
-    listed last and notes specify as "All remaining systems". The other protocols are listed with notes containing
+    edges". If more than one protocol is present, the protocol that represents the largest number of systems is
+    listed last and notes specify as "All remaining edges". The other protocols are listed with notes containing
     the list of identifying strings.
 
     Parameters
@@ -889,6 +935,7 @@ def _render_protocol_settings_yaml(
         return "protocol_settings: []\n"
 
     def _format_value(value: Any) -> str:
+        """Format a value for YAML. Quantity fields (with units) are rendered unquoted."""
         if value is None:
             return ""
         if isinstance(value, bool):
@@ -972,7 +1019,6 @@ def _render_protocol_settings_yaml(
     output_lines = ["protocol_settings:"]
     multiple_protocols = len(protocol_settings_list) > 1
     field_names = [
-        "calculation_mode",
         "protocol",
         "timestep",
         "temperature",
@@ -1002,22 +1048,26 @@ def _render_protocol_settings_yaml(
 
         if is_primary:
             if multiple_protocols:
-                notes_lines = ["Applies to systems:"] + [
-                    f"- {item}" for item in sorted_ids
+                notes_lines = [f"Applies to {len(sorted_ids)} edges:"] + [
+                    f"- {item}" for item in sorted_ids[:5]
                 ]
+                if len(notes_lines) - 1 != len(sorted_ids):
+                    notes_lines.append("- etc.")
                 notes = "\n".join(notes_lines)
                 notes_is_multiline = True
             else:
-                notes = "Applies to all systems"
+                notes = "Applies to all edges"
                 notes_is_multiline = False
         else:
             notes_lines = _full_protocol_setting_notes(
                 primary_settings, protocol_settings
             )
-            notes_lines += ["Applies to transformations:"] + [
-                f"- {item}" for item in sorted_ids
+            trans_lines = [f"Applies to {len(sorted_ids)} edges:"] + [
+                f"- {item}" for item in sorted_ids[:5]
             ]
-            notes = "\n".join(notes_lines)
+            if len(trans_lines) - 1 != len(sorted_ids):
+                trans_lines.append("- etc.")
+            notes = "\n".join(notes_lines + trans_lines)
             notes_is_multiline = True
 
         output_lines.append(
@@ -1033,6 +1083,14 @@ def _render_protocol_settings_yaml(
                         output_lines.append("      " + line)
                 else:
                     output_lines.append("    notes: " + _format_value(notes))
+                continue
+            # Special handling for forcefields: render as JSON array
+            if field_name == "forcefields":
+                ff_value = getattr(protocol_settings, field_name)
+                if isinstance(ff_value, (list, tuple, set)) and ff_value:
+                    items = [json.dumps(str(x)) for x in sorted(ff_value)]
+                    if is_primary:
+                        output_lines.append(f"    {field_name}: [{', '.join(items)}]")
                 continue
             if is_primary:
                 output_lines.append(
@@ -1052,7 +1110,7 @@ def _render_keyed_values_yaml(
     section_name: str,
     value_keys: list[tuple[Any, list[str]]],
     value_label: str = "value",
-    keys_label: str = "systems",
+    keys_label: str = "edges",
 ) -> str:
     """Render simple value-with-systems metadata into YAML.
 
@@ -1073,9 +1131,15 @@ def _render_keyed_values_yaml(
         Output yaml section.
     """
     if not value_keys:
-        return f"{section_name}: []\n"
+        return f"{section_name}: TODO"
     if len(value_keys) == 1:
-        return f"{section_name}: {json.dumps(str(value_keys[0][0]))}\n"
+        if isinstance(value_keys[0][0], str):
+            return f"{section_name}: {json.dumps(str(value_keys[0][0]))}"
+        elif isinstance(value_keys[0][0], (list, tuple, set)):
+            items = [json.dumps(str(x)) for x in sorted(value_keys[0][0])]
+            return f"{section_name}: [{', '.join(items)}]"
+        else:
+            raise ValueError(f"Unknown value type to print: {value_keys[0][0]}")
 
     ordered_settings = sorted(
         enumerate(value_keys),
@@ -1083,18 +1147,24 @@ def _render_keyed_values_yaml(
     )
 
     lines = [f"{section_name}:"]
-    for i, (value, keys) in ordered_settings:
-        lines.append(f"  - {value_label}: {json.dumps(str(value))}")
-        if i != len(ordered_settings) - 1:
-            if keys:
-                lines.append(f"    {keys_label}:")
-                for key in sorted(keys):
-                    lines.append(f"      - {json.dumps(str(key))}")
+    for _, (value, keys) in ordered_settings:
+        if isinstance(value, str):
+            lines.append(f"  - {value_label}: {json.dumps(str(value))}")
+        elif isinstance(value, (list, tuple, set)):
+            items = [json.dumps(str(x)) for x in sorted(value)]
+            lines.append(f"  - {value_label}: [{', '.join(items)}]")
         else:
+            raise ValueError(f"Unknown value type to print: {value_label}")
+        if keys:
             lines.append(f"    {keys_label}:")
-            lines.append("      - All remaining")
+            for i, key in enumerate(sorted(keys)):
+                if i < 5:
+                    lines.append(f"      - {json.dumps(str(key))}")
+                else:
+                    lines.append("      - etc.")
+                    break
 
-    return "\n".join(lines) + "\n"
+    return "\n".join(lines)
 
 
 def _render_benchmark_system_yaml(system_info_dict: dict[tuple, SystemInfo]) -> str:
@@ -1153,19 +1223,22 @@ def _make_submission_yaml(
     )
     benchmark_system_yaml = _render_benchmark_system_yaml(metadata.system_info_dict)
     openfe_version_yaml = _render_keyed_values_yaml(
-        "openfe_version", metadata.openfe_version, "version", "systems"
+        "openfe_version", metadata.openfe_version, "version", "edges"
     )
     openmm_version_yaml = _render_keyed_values_yaml(
-        "openmm_version", metadata.openmm_version, "version", "systems"
+        "openmm_version", metadata.openmm_version, "version", "edges"
     )
     openff_toolkit_version_yaml = _render_keyed_values_yaml(
-        "openff_toolkit_version", metadata.openff_toolkit_version, "version", "systems"
+        "openff_toolkit_version", metadata.openff_toolkit_version, "version", "edges"
+    )
+    mapper_yaml = _render_keyed_values_yaml(
+        "mapper", metadata.mapper, "mapper", "edges"
     )
     forcefield_yaml = _render_keyed_values_yaml(
-        "forcefield", metadata.forcefield, "forcefield", "systems"
+        "forcefield", metadata.forcefield, "forcefield", "edges"
     )
     partial_charges_yaml = _render_keyed_values_yaml(
-        "partial_charges", metadata.partial_charges, "partial_charges", "systems"
+        "partial_charges", metadata.partial_charges, "partial_charges", "edges"
     )
 
     return f"""# REQUIRED: unique, kebab-case identifier for this submission
@@ -1187,12 +1260,10 @@ authors:
 
 # REQUIRED: publication/submission date (ISO 8601)
 date: {date.today().isoformat()}
-
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
-
-# Recommended descriptors
+{mapper_yaml}
 {forcefield_yaml}
 {partial_charges_yaml}
 {benchmark_system_yaml}
@@ -1243,25 +1314,25 @@ def _make_zenodo_description(
     )
     benchmark_system_yaml = _render_benchmark_system_yaml(metadata.system_info_dict)
     openfe_version_yaml = _render_keyed_values_yaml(
-        "openfe_version", metadata.openfe_version, "version", "systems"
+        "openfe_version", metadata.openfe_version, "version", "edges"
     )
     openmm_version_yaml = _render_keyed_values_yaml(
-        "openmm_version", metadata.openmm_version, "version", "systems"
+        "openmm_version", metadata.openmm_version, "version", "edges"
     )
     openff_toolkit_version_yaml = _render_keyed_values_yaml(
         "openff_toolkit_version",
         metadata.openff_toolkit_version,
         "version",
-        "systems",
+        "edges",
     )
     forcefield_yaml = _render_keyed_values_yaml(
-        "forcefield", metadata.forcefield, "forcefield", "systems"
+        "forcefield", metadata.forcefield, "forcefield", "edges"
     )
     partial_charges_yaml = _render_keyed_values_yaml(
         "partial_charges",
         metadata.partial_charges,
         "partial_charges",
-        "systems",
+        "edges",
     )
 
     # Build network keys to systems mapping section
@@ -1448,6 +1519,7 @@ def process_network(
             "small_molecule_force_field",
             "protocols",
             "protocol_settings_list",
+            "mapper",
         ]:
             for value, keys in getattr(metadata, key):
                 _add_value_with_keys(getattr(merged_metadata, key), value, keys)
@@ -1497,6 +1569,7 @@ def process_network(
         mode=mode,
         forcefield=merged_metadata.forcefield,
         partial_charge_tag=merged_metadata.partial_charges,
+        benchmark_data=merged_metadata.benchmark_sets_systems,
         user_keywords=tags_list,
     )
 
