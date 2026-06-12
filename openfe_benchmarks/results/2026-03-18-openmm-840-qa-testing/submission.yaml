@@ -8,13 +8,13 @@ title: OpenFE RBFE - Multi-set Benchmark (2 sets, 5 systems) - 2026-03-18-openmm
 summary: |
   This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
   (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with
-  ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard and am1bcc_at. The submission contains 160
+  tip3p_HFE_multivalent/ff14SB/tip3p_standard/phosaa10 and am1bcc_at. The submission contains 160
   edges, 45 unique ligands, and 1 unique proteins. Note this means the charge annihilation sets are
   not complete compared to what is in that system and should not be compared to other complete runs
   due to the missing edges.
 
 # REQUIRED: list of submission tags
-tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, irak4_s3, tyk2, irak4_s2, jacs_set, charge_annihilation_set, egfr, p38, am1bcc_at, charge_change, benchmark, openfe, openmm-840]
+tags: [rbfe, tip3p_HFE_multivalent, ff14SB, tip3p_standard, phosaa10, charge_annihilation_set, jacs_set, tyk2, egfr, p38, irak4_s2, irak4_s3, am1bcc_at, charge_change, benchmark, openfe, openmm-840]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:

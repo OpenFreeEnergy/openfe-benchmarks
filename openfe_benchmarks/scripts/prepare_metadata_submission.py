@@ -510,7 +510,7 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
         ffs = forcefield_settings.get("forcefields")
         if isinstance(ffs, list) and ffs:
             out["forcefields"] = set(
-                sorted([os.path.splitext(ff.split("/")[1])[0] for ff in ffs])
+                sorted(os.path.splitext(ff.split("/")[1])[0] for ff in ffs)
             )
 
     partial_charge_settings = settings.get("partial_charge_settings") or {}
