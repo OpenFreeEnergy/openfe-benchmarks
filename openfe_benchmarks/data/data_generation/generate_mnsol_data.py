@@ -109,7 +109,7 @@ def _best_conformer_rdmol(offmol: "Molecule"):
     Generate conformers for an OpenFF ``Molecule`` and return an
     RDKit molecule containing only the lowest-energy conformer.
 
-    Up to 10 conformers are generated via RDKit's ETKDGv3 algorithm with a 0.25 Å
+    Up to 100 conformers are generated via RDKit's ETKDGv3 algorithm with a 0.25 Å
     RMS pruning cutoff. Each conformer is optimized using RDKit's UFF force field.
     The conformer with the lowest post-optimization potential energy is kept; all
     others are discarded.
@@ -130,7 +130,8 @@ def _best_conformer_rdmol(offmol: "Molecule"):
     rdmol = offmol.to_rdkit()
     params = AllChem.ETKDGv3()
     params.pruneRmsThresh = 0.25
-    AllChem.EmbedMultipleConfs(rdmol, numConfs=10, params=params)
+    params.randomSeed = 42
+    AllChem.EmbedMultipleConfs(rdmol, numConfs=100, params=params)
     for conf_id in range(rdmol.GetNumConformers()):
         try:
             AllChem.UFFOptimizeMolecule(rdmol, confId=conf_id)

@@ -60,7 +60,7 @@
   "phosphoricacid[(E)-2-chloro-1-(2,4-dichlorophenyl)vinyl]diethylester(chlorfenvinphos)": "CCOP(=O)(OCC)O/C(=C\\Cl)/C1=C(C=C(C=C1)Cl)Cl",
   "6,7,8,9,10,10-hexachloro-1,5,5a,6,9,9a-hexahydro-6,9-methano-2,4,3-benzodioxathiepine-3-oxide(endosulfanalpha)": "C1[C@@H]2[C@H](COS(=O)O1)[C@@]3(C(=C([C@@]2(C3(Cl)Cl)Cl)Cl)Cl)Cl",
   "N2,N4-diisopropyl-6-methylthio-1,3,5-triazine-2,4-diamine(prometryn)": "CC(C)NC1=NC(=NC(=N1)SC)NC(C)C",
-  "3-(4-methoxy-6-methyl-1,3,5-triazin-2-ylcarbamoylsulfamoyl)thiophene-2-carboxylicacid(thifensulfuron)": "CC1=NC(=NC(=N1)OC)NC(=O)NS(=O)(=O)C2=C(SC=C2)C(=O)OC",
+  "3-(4-methoxy-6-methyl-1,3,5-triazin-2-ylcarbamoylsulfamoyl)thiophene-2-carboxylicacid(thifensulfuron)": "CC1=NC(=NC(=N1)OC)NC(=O)NS(=O)(=O)C2=C(SC=C2)C(=O)O",
   "3a,4,7,7a-tetrahydro-2-[(trichloromethyl)thio]-1H-isoindole-1,3(2H)-dione(captan)": "C1C=CCC2C1C(=O)N(C2=O)SC(Cl)(Cl)Cl",
   "N-butyl-N-ethyl-2,6-dinitro-4-(trifluoromethyl)aniline(benefin)": "CCCCN(CC)C1=C(C=C(C=C1[N+](=O)[O-])C(F)(F)F)[N+](=O)[O-]",
   "2-chloro-N-(2,6-diethylphenyl)-N-(methoxymethyl)acetamide(alachlor)": "CCC1=C(C(=CC=C1)CC)N(COC)C(=O)CCl",

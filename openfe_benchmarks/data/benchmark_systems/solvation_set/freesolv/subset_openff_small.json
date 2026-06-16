@@ -439,6 +439,17 @@
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
     },
+    "mobley_2078467,water": {
+        "solute_name": "mobley_2078467",
+        "solvent_name": "water",
+        "solute_iupac": "ibuprofen",
+        "solute_smiles": "C[C@@H](c1ccc(cc1)CC(C)C)C(=O)O",
+        "solute_inchikey": "HEFNNWSXXWATRW-RILOQBQWNA-N",
+        "solute_inchi": "InChI=1/C13H18O2/c1-9(2)8-11-4-6-12(7-5-11)10(3)13(14)15/h4-7,9-10H,8H2,1-3H3,(H,14,15)/t10-/m0/s1/f/h14H",
+        "solvent_smiles": "O",
+        "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
+        "solvent_inchi": "InChI=1/H2O/h1H2"
+    },
     "mobley_2146331,water": {
         "solute_name": "mobley_2146331",
         "solvent_name": "water",
