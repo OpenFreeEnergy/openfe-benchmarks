@@ -1,8 +1,23 @@
 """Build aligned MNSol and FreeSolv benchmark subsets with Tanimoto-guided selection.
 
-This script produces two output files per dataset:
+Output format
+-------------
+This script produces two output files per dataset, each containing structural identifiers:
   - ``subset_openff_filtered.json``  — the full filtered pool (all valid records)
   - ``subset_openff_small.json``     — the curated subset chosen by the algorithm below
+
+Each record is keyed by system identifier (e.g. "mobley_1017962,water") and contains only
+solute_* and solvent_* structural identifiers:
+  - ``solute_smiles``, ``solute_inchi``, ``solute_inchikey``, ``solute_name``, ``solute_iupac``
+  - ``solvent_smiles``, ``solvent_inchi``, ``solvent_inchikey``, ``solvent_name``
+
+Excluded (looked up from original experimental JSON instead):
+  - Experimental data: dG, reference, uncertainty, notes
+  - Metadata: solute_charge
+  - Runtime metadata: solute_env, solvent_env
+
+No experimental data is replicated in subset files. Original experimental records can be
+looked up from the source JSON files if needed.
 
 MNSol subset selection
 ----------------------
@@ -41,7 +56,7 @@ environment.
 
 Differences from openff-sage subsets
 -------------------------------------
-The openff-sage MNSol subset does not use Tanimoto-guided selection or gap
+The openff-sage <= 2.30 MNSol subset does not use Tanimoto-guided selection or gap
 rebalancing; its FreeSolv subset is primarily an MNSol overlap-membership filter
 without an independent chemical-space fill stage.
 """
@@ -1532,23 +1547,42 @@ def main(
             f"  MNSol overlapping solutes: {', '.join(sorted(overlap_in_mnsol_subset))}"
         )
 
-    _env_keys = {"solute_env", "solvent_env"}
+    def _extract_system_keys(data: dict[str, dict]) -> dict[str, dict]:
+        """Extract only system-identifying fields (solute_* and solvent_* keys, excluding runtime metadata).
 
-    def _strip_env(data: dict[str, dict]) -> dict[str, dict]:
+        This keeps the subset files focused on structural identifiers (SMILES, InChI, InChIKey, names, IUPAC)
+        while avoiding duplication of experimental data (dG, reference, uncertainty, etc.)
+        and runtime metadata (solute_env, solvent_env, solute_charge) that can be looked up
+        from the original experimental JSON files.
+        """
+        excluded = {"solute_env", "solvent_env", "solute_charge"}
         return {
-            k: {f: v for f, v in rec.items() if f not in _env_keys}
+            k: {
+                f: v
+                for f, v in rec.items()
+                if (f.startswith("solute_") or f.startswith("solvent_"))
+                and f not in excluded
+            }
             for k, rec in data.items()
         }
 
     with open(str(mnsol_filtered_path), "w", encoding="utf-8") as f:
-        json.dump(_strip_env(mnsol_data), f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(
+            _extract_system_keys(mnsol_data), f, cls=JSON_HANDLER.encoder, indent=4
+        )
     with open(str(mnsol_subset_path), "w", encoding="utf-8") as f:
-        json.dump(_strip_env(mnsol_subset), f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(
+            _extract_system_keys(mnsol_subset), f, cls=JSON_HANDLER.encoder, indent=4
+        )
 
     with open(str(freesolv_filtered_path), "w", encoding="utf-8") as f:
-        json.dump(_strip_env(freesolv_data), f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(
+            _extract_system_keys(freesolv_data), f, cls=JSON_HANDLER.encoder, indent=4
+        )
     with open(str(freesolv_subset_path), "w", encoding="utf-8") as f:
-        json.dump(_strip_env(freesolv_subset), f, cls=JSON_HANDLER.encoder, indent=4)
+        json.dump(
+            _extract_system_keys(freesolv_subset), f, cls=JSON_HANDLER.encoder, indent=4
+        )
 
 
 if __name__ == "__main__":
