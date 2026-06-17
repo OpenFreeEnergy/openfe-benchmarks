@@ -6,4 +6,4 @@ dependencies:
   - openfe<1.9
   - pytest
   - pre-commit
-  - pontibus
+  - pontibus==0.4.0
