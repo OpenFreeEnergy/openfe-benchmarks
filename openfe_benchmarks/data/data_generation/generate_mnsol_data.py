@@ -27,9 +27,81 @@ from rdkit.Chem import AllChem
 
 from openfe_benchmarks.scripts import utils as ofebu
 
-NAMES_TO_SMILES = json.load(open("mnsol-name-to-smiles.json", "r"))
+PACKAGE_ROOT = pathlib.Path(__file__).resolve().parent
+NAMES_TO_SMILES = json.loads(
+    (PACKAGE_ROOT / "mnsol-name-to-smiles.json").read_text(encoding="utf-8")
+)
 
 RDLogger.DisableLog("rdApp.*")
+
+
+def _specificity_key(name: str) -> tuple[int, int, int, str]:
+    return (int(name[0].isdigit()), name.count("-"), len(name), name)
+
+
+def _canonical_smiles(smiles: str) -> str | None:
+    mol = Chem.MolFromSmiles(smiles)
+    if mol is None:
+        return None
+    mol = Chem.AddHs(mol)
+    return Chem.MolToSmiles(mol, canonical=True)
+
+
+def _canonicalize_names(
+    names_to_smiles: dict[str, str],
+) -> tuple[dict[str, str], dict[str, str], set[str], set[str]]:
+    name_to_molecule: dict[str, Molecule] = {}
+    for name, smiles in names_to_smiles.items():
+        try:
+            name_to_molecule[name] = Molecule.from_smiles(
+                smiles, allow_undefined_stereo=True, name=name
+            )
+        except Exception:
+            continue
+
+    clusters: list[list[str]] = []
+    for name, mol in name_to_molecule.items():
+        for cluster in clusters:
+            representative = name_to_molecule[cluster[0]]
+            if Molecule.are_isomorphic(mol, representative, return_atom_map=False)[0]:
+                cluster.append(name)
+                break
+        else:
+            clusters.append([name])
+
+    name_to_canonical: dict[str, str] = {}
+    for cluster in clusters:
+        canonical_name = max(cluster, key=_specificity_key)
+        for name in cluster:
+            name_to_canonical[name] = canonical_name
+
+    canonical_name_to_smiles = {
+        canonical_name: names_to_smiles[canonical_name]
+        for canonical_name in set(name_to_canonical.values())
+    }
+
+    octane_signature = _canonical_smiles("CCCCCCCC")
+    water_signature = _canonical_smiles("O")
+    octane_names = {
+        name_to_canonical[name]
+        for name, smiles in names_to_smiles.items()
+        if _canonical_smiles(smiles) == octane_signature
+    }
+    water_names = {
+        name_to_canonical[name]
+        for name, smiles in names_to_smiles.items()
+        if _canonical_smiles(smiles) == water_signature
+    }
+
+    return name_to_canonical, canonical_name_to_smiles, octane_names, water_names
+
+
+(
+    NAME_CANONICAL_NAME,
+    CANONICAL_NAME_TO_SMILES,
+    OCTANE_CANONICAL_NAMES,
+    WATER_CANONICAL_NAMES,
+) = _canonicalize_names(NAMES_TO_SMILES)
 
 
 def _best_conformer_rdmol(offmol: "Molecule"):
@@ -37,7 +109,7 @@ def _best_conformer_rdmol(offmol: "Molecule"):
     Generate conformers for an OpenFF ``Molecule`` and return an
     RDKit molecule containing only the lowest-energy conformer.
 
-    Up to 10 conformers are generated via RDKit's ETKDGv3 algorithm with a 0.25 Å
+    Up to 100 conformers are generated via RDKit's ETKDGv3 algorithm with a 0.25 Å
     RMS pruning cutoff. Each conformer is optimized using RDKit's UFF force field.
     The conformer with the lowest post-optimization potential energy is kept; all
     others are discarded.
@@ -58,7 +130,8 @@ def _best_conformer_rdmol(offmol: "Molecule"):
     rdmol = offmol.to_rdkit()
     params = AllChem.ETKDGv3()
     params.pruneRmsThresh = 0.25
-    AllChem.EmbedMultipleConfs(rdmol, numConfs=10, params=params)
+    params.randomSeed = 42
+    AllChem.EmbedMultipleConfs(rdmol, numConfs=100, params=params)
     for conf_id in range(rdmol.GetNumConformers()):
         try:
             AllChem.UFFOptimizeMolecule(rdmol, confId=conf_id)
@@ -132,17 +205,31 @@ def main(mnsol_alldata: pathlib.Path):
     sdf_filename = "../benchmark_systems/solvation_set/mnsol_neutral/ligands.sdf"
     flag_no_sdf = not os.path.isfile(sdf_filename)
 
-    molecules: dict[str, Chem.rdchem.Mol] = (
-        {}
-        if flag_no_sdf
-        else {
+    if flag_no_sdf:
+        molecules: dict[str, Chem.rdchem.Mol] = {}
+    else:
+        molecules_by_smiles = {
             k: m._rdkit
-            for k, m in ofebu.process_sdf(sdf_filename, return_dict=True).items()
+            for k, m in ofebu.process_sdf(
+                sdf_filename, return_dict=True, key_type="smiles"
+            ).items()
         }
-    )
+        molecules = {}
+        for canonical_name, smiles in CANONICAL_NAME_TO_SMILES.items():
+            try:
+                offmol = Molecule.from_smiles(
+                    smiles,
+                    allow_undefined_stereo=True,
+                    name=canonical_name,
+                )
+            except Exception:
+                continue
+            explicit_smiles = offmol.to_smiles(explicit_hydrogens=True)
+            if explicit_smiles in molecules_by_smiles:
+                molecules[canonical_name] = molecules_by_smiles[explicit_smiles]
 
     exp_data = {}
-    skip_molecules = []
+    skip_molecules: list[str] = []
     skipped_systems = []
     with mnsol_alldata.open("r", encoding="utf-8", errors="replace") as fh:
         reader = csv.DictReader(fh, delimiter="\t")
@@ -155,8 +242,8 @@ def main(mnsol_alldata: pathlib.Path):
 
             index = f"{int(row.get('No.')):04d}"
             key = f"mnsol-{index}"
-            solute_name = row.get("SoluteName").strip().strip('"')
-            solvent_name = row.get("Solvent").strip().strip('"')
+            raw_solute_name = row.get("SoluteName").strip().strip('"')
+            raw_solvent_name = row.get("Solvent").strip().strip('"')
             group = row.get("Level1").strip().strip('"')
             charge = row.get("Charge").strip().strip('"')
             dg = float(row.get("DeltaGsolv").strip().strip('"'))
@@ -164,22 +251,57 @@ def main(mnsol_alldata: pathlib.Path):
             # following the recommendation in the MNSol documentation.
             uncertainty = 0.2 if charge == "0" else 3
 
-            if solute_name in skip_molecules or solvent_name in skip_molecules:
+            if raw_solute_name not in NAMES_TO_SMILES:
                 skipped_systems.append(index)
                 continue
-            if solute_name not in NAMES_TO_SMILES:
+            if raw_solvent_name not in NAMES_TO_SMILES:
                 skipped_systems.append(index)
                 continue
-            if solvent_name not in NAMES_TO_SMILES:
-                skipped_systems.append(index)
-                continue
-            if "radical" in solute_name:
+            if "radical" in raw_solute_name:
                 skipped_systems.append(index)
                 continue
             if group == "14":
                 skipped_systems.append(index)
                 continue
             if charge != "0":
+                skipped_systems.append(index)
+                continue
+
+            solute_name = NAME_CANONICAL_NAME.get(raw_solute_name)
+            solvent_name = NAME_CANONICAL_NAME.get(raw_solvent_name)
+            if solute_name is None or solvent_name is None:
+                skipped_systems.append(index)
+                continue
+            if solute_name in skip_molecules or solvent_name in skip_molecules:
+                skipped_systems.append(index)
+                continue
+
+            # Filter on source SMILES (before 3-D assignment bakes in arbitrary stereo).
+            # A racemic solvent measured experimentally as a racemate must not be
+            # modelled as a specific enantiopure solvent in simulation.
+            solvent_source_smiles = NAMES_TO_SMILES[solvent_name]
+            solvent_rdmol = Chem.MolFromSmiles(solvent_source_smiles, sanitize=True)
+            if solvent_rdmol is not None:
+                Chem.AssignStereochemistry(solvent_rdmol, cleanIt=True, force=True)
+                _chiral = Chem.FindMolChiralCenters(
+                    solvent_rdmol, includeUnassigned=True, useLegacyImplementation=False
+                )
+                _stereo = Chem.FindPotentialStereo(solvent_rdmol)
+                _undefined = any(tag == "?" for _, tag in _chiral) or any(
+                    s.specified == Chem.rdchem.StereoSpecified.Unspecified
+                    for s in _stereo
+                )
+                if _undefined:
+                    skipped_systems.append(index)
+                    continue
+
+            if (
+                solute_name in OCTANE_CANONICAL_NAMES
+                and solvent_name in WATER_CANONICAL_NAMES
+            ) or (
+                solute_name in WATER_CANONICAL_NAMES
+                and solvent_name in OCTANE_CANONICAL_NAMES
+            ):
                 skipped_systems.append(index)
                 continue
 
