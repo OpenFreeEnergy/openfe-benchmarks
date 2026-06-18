@@ -28,6 +28,7 @@ TAG_CHECKS = [
     ("bfe", ["experimental_binding_data.json"], []),
     ("sfe", ["experimental_solvation_free_energy_data.json"], ["mnsol_neutral"]),
     ("ross", [], []),
+    ("industry_benchmark", [], []),
 ]
 
 
