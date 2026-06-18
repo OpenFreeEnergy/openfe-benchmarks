@@ -236,8 +236,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCCC[N+](=O)[O-]",
-        "solute_inchikey": "NALZTFARIYUCBY-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C4H9NO2/c1-2-3-4-5(6)7/h2-4H2,1H3",
+        "solute_inchikey": "RRDWENFTYTUPER-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C4H9NO2/c1-2-3-4-5(6)7/h2-4H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -290,8 +290,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCCCCCO[N+](=O)[O-]",
-        "solute_inchikey": "AGDYNDJUZRMYRG-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H13NO3/c1-2-3-4-5-6-10-7(8)9/h2-6H2,1H3",
+        "solute_inchikey": "DCMLOLBEBGLMJJ-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H13NO3/c1-2-3-4-5-6-10-7(8)9/h2-6H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -669,8 +669,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CC(C)[N+](=O)[O-]",
-        "solute_inchikey": "FGLBSLMDCBOPQK-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C3H7NO2/c1-3(2)4(5)6/h3H,1-2H3",
+        "solute_inchikey": "XUBPCSOBIGXOIO-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C3H7NO2/c1-3(2)4(5)6/h3H,1-2H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -723,8 +723,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CC(=O)CO[N+](=O)[O-]",
-        "solute_inchikey": "ISWXYJQANHQYSR-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C3H5NO4/c1-3(5)2-8-4(6)7/h2H2,1H3",
+        "solute_inchikey": "SFFWGWSZLKBUMY-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C3H5NO4/c1-3(5)2-8-4(6)7/h2H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -1022,8 +1022,8 @@
             "Changed IUPAC name from nitroglycol to 1,2-dinitroxyethane for better handling/standardization."
         ],
         "solute_smiles": "C(CO[N+](=O)[O-])O[N+](=O)[O-]",
-        "solute_inchikey": "UQXKXGWGFRWILX-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C2H4N2O6/c5-3(6)9-1-2-10-4(7)8/h1-2H2",
+        "solute_inchikey": "BMFUAJNWUXZRFC-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C2H4N2O6/c5-3(6)9-1-2-10-4(7)8/h1-2H2/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -1511,8 +1511,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCCCO[N+](=O)[O-]",
-        "solute_inchikey": "QQHZPQUHCAKSOL-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C4H9NO3/c1-2-3-4-8-5(6)7/h2-4H2,1H3",
+        "solute_inchikey": "FKOHWPLNJAWJAE-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C4H9NO3/c1-2-3-4-8-5(6)7/h2-4H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -2268,8 +2268,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "C[C@@H](CCO[N+](=O)[O-])O[N+](=O)[O-]",
-        "solute_inchikey": "DGFBULNMARLFTH-BYPYZUCNNA-N",
-        "solute_inchi": "InChI=1/C4H8N2O6/c1-4(12-6(9)10)2-3-11-5(7)8/h4H,2-3H2,1H3/t4-/m0/s1",
+        "solute_inchikey": "LLMFQUPYSPRGII-BYPYZUCNNA-N",
+        "solute_inchi": "InChI=1/C4H8N2O6/c1-4(12-6(9)10)2-3-11-5(7)8/h4H,2-3H2,1H3/q-4/t4-/m0/s1",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -2620,8 +2620,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCC[N@@](CC1CC1)c2c(cc(cc2[N+](=O)[O-])C(F)(F)F)[N+](=O)[O-]",
-        "solute_inchikey": "ITVQAKZNYJEWKS-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C14H16F3N3O4/c1-2-5-18(8-9-3-4-9)13-11(19(21)22)6-10(14(15,16)17)7-12(13)20(23)24/h6-7,9H,2-5,8H2,1H3",
+        "solute_inchikey": "PBQOQHFLUMQWDX-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C14H16F3N3O4/c1-2-5-18(8-9-3-4-9)13-11(19(21)22)6-10(14(15,16)17)7-12(13)20(23)24/h6-7,9H,2-5,8H2,1H3/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -2811,8 +2811,8 @@
             "Changed IUPAC name from trifluralin to 2,6-Dinitro-N,N-dipropyl-4-(trifluoromethyl)aniline for better handling/standardization."
         ],
         "solute_smiles": "CCCN(CCC)c1c(cc(cc1[N+](=O)[O-])C(F)(F)F)[N+](=O)[O-]",
-        "solute_inchikey": "ZSDSQXJSNMTJDA-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C13H16F3N3O4/c1-3-5-17(6-4-2)12-10(18(20)21)7-9(13(14,15)16)8-11(12)19(22)23/h7-8H,3-6H2,1-2H3",
+        "solute_inchikey": "BTLGTGQNVPSCOI-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C13H16F3N3O4/c1-3-5-17(6-4-2)12-10(18(20)21)7-9(13(14,15)16)8-11(12)19(22)23/h7-8H,3-6H2,1-2H3/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -3081,8 +3081,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1ccc(cc1)[N+](=O)[O-]",
-        "solute_inchikey": "LQNUZADURLCDLV-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H5NO2/c8-7(9)6-4-2-1-3-5-6/h1-5H",
+        "solute_inchikey": "JFJMKSPMVYLASD-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H5NO2/c8-7(9)6-4-2-1-3-5-6/h1-5H/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -4354,8 +4354,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1cc(cc(c1)O)[N+](=O)[O-]",
-        "solute_inchikey": "RTZZCYNQPHTPPL-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H5NO3/c8-6-3-1-2-5(4-6)7(9)10/h1-4,8H",
+        "solute_inchikey": "QPYIXQMPDBLECI-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H5NO3/c8-6-3-1-2-5(4-6)7(9)10/h1-4,8H/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -4543,8 +4543,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "C1[C@@H]2[C@H](COS(=O)O1)[C@@]3(C(=C([C@]2(C3(Cl)Cl)Cl)Cl)Cl)Cl",
-        "solute_inchikey": "RDYMFSUJUZBWLH-AZVNHNRSNA-N",
-        "solute_inchi": "InChI=1/C9H6Cl6O3S/c10-5-6(11)8(13)4-2-18-19(16)17-1-3(4)7(5,12)9(8,14)15/h3-4H,1-2H2/t3-,4+,7-,8+,19?",
+        "solute_inchikey": "RDYMFSUJUZBWLH-LLXUDWAZNA-N",
+        "solute_inchi": "InChI=1/C9H6Cl6O3S/c10-5-6(11)8(13)4-2-18-19(16)17-1-3(4)7(5,12)9(8,14)15/h3-4H,1-2H2/t3-,4+,7-,8+,19-",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -4597,8 +4597,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CC(C)CO[N+](=O)[O-]",
-        "solute_inchikey": "LNNXFUZKZLXPOF-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C4H9NO3/c1-4(2)3-8-5(6)7/h4H,3H2,1-2H3",
+        "solute_inchikey": "MZIFKHGCKONRDC-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C4H9NO3/c1-4(2)3-8-5(6)7/h4H,3H2,1-2H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -5301,8 +5301,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1(c(c(c(c(c1Cl)Cl)Cl)Cl)Cl)N(=O)=O",
-        "solute_inchikey": "LKPLKUMXSAEKID-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6Cl5NO2/c7-1-2(8)4(10)6(12(13)14)5(11)3(1)9",
+        "solute_inchikey": "TXICITCWAHEZRJ-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6Cl5NO2/c7-1-2(8)4(10)6(12(13)14)5(11)3(1)9/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -5355,8 +5355,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "Cc1ccccc1[N+](=O)[O-]",
-        "solute_inchikey": "PLAZTCDQAHEYBI-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C7H7NO2/c1-6-4-2-3-5-7(6)8(9)10/h2-5H,1H3",
+        "solute_inchikey": "MUOOSZUIZKBNEZ-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C7H7NO2/c1-6-4-2-3-5-7(6)8(9)10/h2-5H,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -5574,8 +5574,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CC1CCC(CC1)C",
-        "solute_inchikey": "QRMPKOFEUHIBNM-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C8H16/c1-7-3-5-8(2)6-4-7/h7-8H,3-6H2,1-2H3",
+        "solute_inchikey": "QRMPKOFEUHIBNM-ZKCHVHJHNA-N",
+        "solute_inchi": "InChI=1/C8H16/c1-7-3-5-8(2)6-4-7/h7-8H,3-6H2,1-2H3/t7-,8-",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -6222,8 +6222,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1ccc(c(c1)[N+](=O)[O-])O",
-        "solute_inchikey": "IQUPABOKLQSFBK-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H5NO3/c8-6-4-2-1-3-5(6)7(9)10/h1-4,8H",
+        "solute_inchikey": "ULEMWMSWYQCDJT-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H5NO3/c8-6-4-2-1-3-5(6)7(9)10/h1-4,8H/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -6655,8 +6655,8 @@
             "IUPAC name and SMILES standardized in v0.2 to match PubChem.\n"
         ],
         "solute_smiles": "C(CO[N+](=O)[O-])CO[N+](=O)[O-]",
-        "solute_inchikey": "KOSAMXZBGUIISK-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C3H6N2O6/c6-4(7)10-2-1-3-11-5(8)9/h1-3H2",
+        "solute_inchikey": "JSHWBDMWGSOLKK-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C3H6N2O6/c6-4(7)10-2-1-3-11-5(8)9/h1-3H2/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -7307,8 +7307,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCCCC[N+](=O)[O-]",
-        "solute_inchikey": "BVALZCVRLDMXOQ-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C5H11NO2/c1-2-3-4-5-6(7)8/h2-5H2,1H3",
+        "solute_inchikey": "ISQDTNPOLQOWSO-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C5H11NO2/c1-2-3-4-5-6(7)8/h2-5H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -7631,8 +7631,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CC[N+](=O)[O-]",
-        "solute_inchikey": "MCSAJNNLRCFZED-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C2H5NO2/c1-2-3(4)5/h2H2,1H3",
+        "solute_inchikey": "OWGQWYZRWXPUJP-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C2H5NO2/c1-2-3(4)5/h2H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -8201,8 +8201,8 @@
             "Changed IUPAC name from dinitramine to 1-N,1-N-diethyl-2,6-dinitro-4-(trifluoromethyl)benzene-1,3-diamine for better handling/standardization."
         ],
         "solute_smiles": "CCN(CC)c1c(cc(c(c1[N+](=O)[O-])N)C(F)(F)F)[N+](=O)[O-]",
-        "solute_inchikey": "OFDYMSKSGFSLLM-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C11H13F3N4O4/c1-3-16(4-2)9-7(17(19)20)5-6(11(12,13)14)8(15)10(9)18(21)22/h5H,3-4,15H2,1-2H3",
+        "solute_inchikey": "QGFCVFBMRWKZDX-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C11H13F3N4O4/c1-3-16(4-2)9-7(17(19)20)5-6(11(12,13)14)8(15)10(9)18(21)22/h5H,3-4,15H2,1-2H3/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -9501,8 +9501,8 @@
             "Changed IUPAC name from ethyleneglycol mononitrate to 2-(nitrooxy)ethan-1-ol for better handling/standardization."
         ],
         "solute_smiles": "C(CO[N+](=O)[O-])O",
-        "solute_inchikey": "HTKIMWYSDZQQBP-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C2H5NO4/c4-1-2-7-3(5)6/h4H,1-2H2",
+        "solute_inchikey": "UPZLXWXFIBSLBH-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C2H5NO4/c4-1-2-7-3(5)6/h4H,1-2H2/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -9555,8 +9555,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1cc(cc(c1)[N+](=O)[O-])N",
-        "solute_inchikey": "XJCVRTZCHMZPBD-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H6N2O2/c7-5-2-1-3-6(4-5)8(9)10/h1-4H,7H2",
+        "solute_inchikey": "DXQWJYPTBLKTEK-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H6N2O2/c7-5-2-1-3-6(4-5)8(9)10/h1-4H,7H2/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -10911,8 +10911,8 @@
             "Changed IUPAC name from 2-butyl nitrate to [(2S)-butan-2-yl] nitrate for better handling/standardization."
         ],
         "solute_smiles": "CC[C@H](C)O[N+](=O)[O-]",
-        "solute_inchikey": "DYONNFFVDNILGI-BYPYZUCNNA-N",
-        "solute_inchi": "InChI=1/C4H9NO3/c1-3-4(2)8-5(6)7/h4H,3H2,1-2H3/t4-/m0/s1",
+        "solute_inchikey": "USAGARWUFSTMBC-BYPYZUCNNA-N",
+        "solute_inchi": "InChI=1/C4H9NO3/c1-3-4(2)8-5(6)7/h4H,3H2,1-2H3/q-2/t4-/m0/s1",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -11751,8 +11751,8 @@
             "Changed IUPAC name from dinoseb to 2-[(1R)-1-methylpropyl]-4,6-dinitro-phenolate for better handling/standardization."
         ],
         "solute_smiles": "CC[C@@H](C)c1cc(cc(c1O)[N+](=O)[O-])[N+](=O)[O-]",
-        "solute_inchikey": "OWZPCEFYPSAJFR-ZCFIWIBFNA-N",
-        "solute_inchi": "InChI=1/C10H12N2O5/c1-3-6(2)8-4-7(11(14)15)5-9(10(8)13)12(16)17/h4-6,13H,3H2,1-2H3/t6-/m1/s1",
+        "solute_inchikey": "FGMPWRMEZAIKDN-ZCFIWIBFNA-N",
+        "solute_inchi": "InChI=1/C10H12N2O5/c1-3-6(2)8-4-7(11(14)15)5-9(10(8)13)12(16)17/h4-6,13H,3H2,1-2H3/q-4/t6-/m1/s1",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -12509,8 +12509,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "Cc1cccc(c1)[N+](=O)[O-]",
-        "solute_inchikey": "QZYHIOPPLUPUJF-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C7H7NO2/c1-6-3-2-4-7(5-6)8(9)10/h2-5H,1H3",
+        "solute_inchikey": "FOKMBBBUGBYCBN-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C7H7NO2/c1-6-3-2-4-7(5-6)8(9)10/h2-5H,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -12888,8 +12888,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1cc(ccc1N)N(=O)=O",
-        "solute_inchikey": "TYMLOMAKGOJONV-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H6N2O2/c7-5-1-3-6(4-2-5)8(9)10/h1-4H,7H2",
+        "solute_inchikey": "CPPPKWPNNMAVNR-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H6N2O2/c7-5-1-3-6(4-2-5)8(9)10/h1-4H,7H2/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -13051,8 +13051,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCCN(CCC)c1c(cc(cc1[N+](=O)[O-])S(=O)(=O)C)[N+](=O)[O-]",
-        "solute_inchikey": "UMKANAFDOQQUKE-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C13H19N3O6S/c1-4-6-14(7-5-2)13-11(15(17)18)8-10(23(3,21)22)9-12(13)16(19)20/h8-9H,4-7H2,1-3H3",
+        "solute_inchikey": "MXPLIPGGNWZZPK-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C13H19N3O6S/c1-4-6-14(7-5-2)13-11(15(17)18)8-10(23(3,21)22)9-12(13)16(19)20/h8-9H,4-7H2,1-3H3/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -13240,8 +13240,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CCC[N+](=O)[O-]",
-        "solute_inchikey": "JSZOAYXJRCEYSX-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C3H7NO2/c1-2-3-4(5)6/h2-3H2,1H3",
+        "solute_inchikey": "ZHJZJKVMASSLGW-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C3H7NO2/c1-2-3-4(5)6/h2-3H2,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -13457,8 +13457,8 @@
             "Changed IUPAC name from methyparathion to methylparathion for better handling/standardization."
         ],
         "solute_smiles": "COP(=S)(OC)Oc1ccc(cc1)[N+](=O)[O-]",
-        "solute_inchikey": "RLBIQVVOMOPOHC-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C8H10NO5PS/c1-12-15(16,13-2)14-8-5-3-7(4-6-8)9(10)11/h3-6H,1-2H3",
+        "solute_inchikey": "GFHKUGXBDKSVPC-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C8H10NO5PS/c1-12-15(16,13-2)14-8-5-3-7(4-6-8)9(10)11/h3-6H,1-2H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -13674,8 +13674,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "C[C@@H](CO[N+](=O)[O-])O[N+](=O)[O-]",
-        "solute_inchikey": "PSXCGTLGGVDWFU-VKHMYHEANA-N",
-        "solute_inchi": "InChI=1/C3H6N2O6/c1-3(11-5(8)9)2-10-4(6)7/h3H,2H2,1H3/t3-/m0/s1",
+        "solute_inchikey": "BZUDRIZCGGLTRG-VKHMYHEANA-N",
+        "solute_inchi": "InChI=1/C3H6N2O6/c1-3(11-5(8)9)2-10-4(6)7/h3H,2H2,1H3/q-4/t3-/m0/s1",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -13785,8 +13785,8 @@
             "Changed IUPAC name from parathion to diethoxy-(4-nitrophenoxy)-thioxo-$l^{5}-phosphane for better handling/standardization."
         ],
         "solute_smiles": "CCOP(=S)(OCC)Oc1ccc(cc1)[N+](=O)[O-]",
-        "solute_inchikey": "LCCNCVORNKJIRZ-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C10H14NO5PS/c1-3-14-17(18,15-4-2)16-10-7-5-9(6-8-10)11(12)13/h5-8H,3-4H2,1-2H3",
+        "solute_inchikey": "DSULGBURGMPPDL-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C10H14NO5PS/c1-3-14-17(18,15-4-2)16-10-7-5-9(6-8-10)11(12)13/h5-8H,3-4H2,1-2H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -14487,8 +14487,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "CN(C)C(=O)c1ccc(cc1)[N+](=O)[O-]",
-        "solute_inchikey": "WYOXDERVKORKJN-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C9H10N2O3/c1-10(2)9(12)7-3-5-8(6-4-7)11(13)14/h3-6H,1-2H3",
+        "solute_inchikey": "CDOSWQOLPAEFNY-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C9H10N2O3/c1-10(2)9(12)7-3-5-8(6-4-7)11(13)14/h3-6H,1-2H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -14839,8 +14839,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1ccc(c(c1)N)[N+](=O)[O-]",
-        "solute_inchikey": "DPJCXCZTLWNFOH-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H6N2O2/c7-5-3-1-2-4-6(5)8(9)10/h1-4H,7H2",
+        "solute_inchikey": "UGHYKEIJRKBZQI-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H6N2O2/c7-5-3-1-2-4-6(5)8(9)10/h1-4H,7H2/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -14977,8 +14977,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "C[N+](=O)[O-]",
-        "solute_inchikey": "LYGJENNIWJXYER-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/CH3NO2/c1-2(3)4/h1H3",
+        "solute_inchikey": "VSKDLOOUQGBSIA-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/CH3NO2/c1-2(3)4/h1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -16196,8 +16196,8 @@
             "Changed IUPAC name from benefin to N-butyl-N-ethyl-2,6-dinitro-4-(trifluoromethyl)aniline for better handling/standardization."
         ],
         "solute_smiles": "CCCC[N@](CC)c1c(cc(cc1[N+](=O)[O-])C(F)(F)F)[N+](=O)[O-]",
-        "solute_inchikey": "SMDHCQAYESWHAE-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C13H16F3N3O4/c1-3-5-6-17(4-2)12-10(18(20)21)7-9(13(14,15)16)8-11(12)19(22)23/h7-8H,3-6H2,1-2H3",
+        "solute_inchikey": "WSQWZRBQUDOWDK-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C13H16F3N3O4/c1-3-5-6-17(4-2)12-10(18(20)21)7-9(13(14,15)16)8-11(12)19(22)23/h7-8H,3-6H2,1-2H3/q-4",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -16467,8 +16467,8 @@
             "Changed IUPAC name from chloropicrin to trichloro(nitro)methane for better handling/standardization."
         ],
         "solute_smiles": "C([N+](=O)[O-])(Cl)(Cl)Cl",
-        "solute_inchikey": "LFHISGNCFUNFFM-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/CCl3NO2/c2-1(3,4)5(6)7",
+        "solute_inchikey": "VIZPDJDTJBBOPO-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/CCl3NO2/c2-1(3,4)5(6)7/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -16873,8 +16873,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "c1cc(ccc1[N+](=O)[O-])O",
-        "solute_inchikey": "BTJIUGUIPKRLHP-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C6H5NO3/c8-6-3-1-5(2-4-6)7(9)10/h1-4,8H",
+        "solute_inchikey": "UKOVXTDLMIXKAQ-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C6H5NO3/c8-6-3-1-5(2-4-6)7(9)10/h1-4,8H/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"
@@ -17008,8 +17008,8 @@
             "Experimental uncertainty not presently available, so assigned a default value."
         ],
         "solute_smiles": "COC(=O)c1ccc(cc1)[N+](=O)[O-]",
-        "solute_inchikey": "YOJAHJGBFDPSDI-UHFFFAOYNA-N",
-        "solute_inchi": "InChI=1/C8H7NO4/c1-13-8(10)6-2-4-7(5-3-6)9(11)12/h2-5H,1H3",
+        "solute_inchikey": "FXHICPQNVHBEFU-UHFFFAOYNA-N",
+        "solute_inchi": "InChI=1/C8H7NO4/c1-13-8(10)6-2-4-7(5-3-6)9(11)12/h2-5H,1H3/q-2",
         "solvent_smiles": "O",
         "solvent_inchikey": "XLYOFNOQVPJJNP-UHFFFAOYNA-N",
         "solvent_inchi": "InChI=1/H2O/h1H2"

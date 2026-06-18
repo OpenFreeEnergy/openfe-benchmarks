@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
+.agents/
+
 # Ignore file for licensing reasons
 **/mnsol_neutral/experimental_solvation_free_energy_data.json
 
