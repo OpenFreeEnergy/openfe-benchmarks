@@ -98,8 +98,10 @@ class ProtocolSettingsInfo:
     temperature: str
     pressure: str
     lambda_functions: str
-    small_molecule_forcefield: str
-    forcefields: set[str]
+    small_molecule_forcefield: (
+        str  # mirrors definition in OpenMMSystemGeneratorFFSettings
+    )
+    forcefields: set[str]  # mirrors definition in OpenMMSystemGeneratorFFSettings
     partial_charges: str
     lambda_windows: str = ""
     lambda_schedule: str = ""
@@ -217,9 +219,7 @@ class AutoMetadata:
     mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocols: list[tuple[str, list[str]]] = field(default_factory=list)
     forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
-    small_molecule_force_field: list[tuple[str, list[str]]] = field(
-        default_factory=list
-    )
+    small_molecule_forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
     partial_charges: list[tuple[str, list[str]]] = field(default_factory=list)
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
         default_factory=list
@@ -235,7 +235,7 @@ class AutoMetadata:
         self.mapper = []
         self.protocols = []
         self.forcefield = []
-        self.small_molecule_force_field = []
+        self.small_molecule_forcefield = []
         self.partial_charges = []
         self.protocol_settings_list = []
 
@@ -260,7 +260,7 @@ class AutoMetadata:
                     )
                 if protocol_settings.small_molecule_forcefield:
                     _add_value_with_keys(
-                        self.small_molecule_force_field,
+                        self.small_molecule_forcefield,
                         protocol_settings.small_molecule_forcefield,
                         keys,
                     )
@@ -824,6 +824,10 @@ def _build_content_summary(
     if not field_info:
         field_info = "an unspecified force field"
 
+    small_mol_ff_info = "/".join(set(x[0] for x in metadata.small_molecule_forcefield))
+    if not small_mol_ff_info:
+        small_mol_ff_info = "an unspecified small molecule force field"
+
     charge_info = "/".join(set(x[0] for x in metadata.partial_charges))
     if not charge_info:
         charge_info = "an unspecified partial charges"
@@ -882,13 +886,13 @@ def _build_content_summary(
         )
         if len(unique_sets) > 1:
             summary_parts = [
-                f"This submission describes the {subject} RBFE benchmark ({systems_desc}) prepared with {field_info} and {charge_info}.",
-                f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique ligands, and {len(all_structures['proteins'])} unique proteins.",
+                f"This submission describes the {subject} RBFE benchmark ({systems_desc}) prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
+                f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique ligands.",
             ]
         else:
             summary_parts = [
-                f"This submission describes the {subject} RBFE benchmark prepared with {field_info} and {charge_info}.",
-                f"The network contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique ligands and {len(all_structures['proteins'])} unique proteins.",
+                f"This submission describes the {subject} RBFE benchmark prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
+                f"The network contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique ligands.",
             ]
         if systems_with_cofactors:
             summary_parts.append(
@@ -897,12 +901,12 @@ def _build_content_summary(
     else:
         if len(unique_sets) > 1:
             summary_parts = [
-                f"This submission describes the {subject} ASFE benchmark ({systems_desc}) prepared with {field_info} and {charge_info}.",
+                f"This submission describes the {subject} ASFE benchmark ({systems_desc}) prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
                 f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique solutes, and {len(all_structures['solvents'])} unique solvents.",
             ]
         else:
             summary_parts = [
-                f"This submission describes the {subject} ASFE benchmark prepared with {field_info} and {charge_info}.",
+                f"This submission describes the {subject} ASFE benchmark prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
                 f"The archive contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique solutes and {len(all_structures['solvents'])} unique solvents.",
             ]
 
@@ -976,7 +980,11 @@ def _render_protocol_settings_yaml(
             return None
 
     def _format_path(path: list[str]) -> str:
-        return ".".join(path)
+        formatted = ".".join(path)
+        # Strip .val suffix for pint Quantities
+        if formatted.endswith(".val"):
+            formatted = formatted[:-4]
+        return formatted
 
     def _compare_full_protocol_settings(
         base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
@@ -1096,17 +1104,26 @@ def _render_protocol_settings_yaml(
                     items = [json.dumps(str(x)) for x in sorted(ff_value)]
                     if is_primary:
                         output_lines.append(f"    {field_name}: [{', '.join(items)}]")
+                    else:
+                        # For non-primary, output if different from primary
+                        primary_ff_value = getattr(primary_settings, field_name, None)
+                        if primary_ff_value != ff_value:
+                            output_lines.append(
+                                f"    {field_name}: [{', '.join(items)}]"
+                            )
                 continue
             if is_primary:
                 output_lines.append(
                     f"    {field_name}: {_format_value(getattr(protocol_settings, field_name))}"
                 )
-            elif field_name == "protocol":
-                output_lines.append(
-                    f"    {field_name}: {_format_value(getattr(protocol_settings, field_name))}"
-                )
-
-        # For non-primary protocols, only protocol and notes are listed.
+            else:
+                # For non-primary protocols, output field if it differs from primary
+                current_value = getattr(protocol_settings, field_name)
+                primary_value = getattr(primary_settings, field_name, None)
+                if current_value != primary_value:
+                    output_lines.append(
+                        f"    {field_name}: {_format_value(current_value)}"
+                    )
 
     return "\n".join(output_lines) + "\n"
 
@@ -1242,6 +1259,12 @@ def _make_submission_yaml(
     forcefield_yaml = _render_keyed_values_yaml(
         "forcefield", metadata.forcefield, "forcefield", "edges"
     )
+    small_molecule_forcefield_yaml = _render_keyed_values_yaml(
+        "small_molecule_forcefield",
+        metadata.small_molecule_forcefield,
+        "small_molecule_forcefield",
+        "edges",
+    )
     partial_charges_yaml = _render_keyed_values_yaml(
         "partial_charges", metadata.partial_charges, "partial_charges", "edges"
     )
@@ -1270,6 +1293,7 @@ date: {date.today().isoformat()}
 {openff_toolkit_version_yaml}
 {mapper_yaml}
 {forcefield_yaml}
+{small_molecule_forcefield_yaml}
 {partial_charges_yaml}
 {benchmark_system_yaml}
 
@@ -1525,7 +1549,7 @@ def process_network(
             "openff_toolkit_version",
             "forcefield",
             "partial_charges",
-            "small_molecule_force_field",
+            "small_molecule_forcefield",
             "protocols",
             "protocol_settings_list",
             "mapper",
