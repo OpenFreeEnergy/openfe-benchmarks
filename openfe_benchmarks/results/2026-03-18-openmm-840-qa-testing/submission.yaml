@@ -9,12 +9,12 @@ summary: |
   This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
   (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with
   ff14SB/tip3p_standard/phosaa10/tip3p_HFE_multivalent for proteins and solvents, and openff-2.3.0
-  with am1bcc_at for ligands, solutes, and cofactors. The submission contains 160 edges, 45 unique
+  with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The submission contains 160 edges, 45 unique
   ligands. Note this means the charge annihilation sets are not complete compared to what is in that
   system and should not be compared to other complete runs due to the missing edges.
 
 # REQUIRED: list of submission tags
-tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, charge_annihilation_set, egfr, irak4_s2, irak4_s3, jacs_set, p38, tyk2, am1bcc_at, charge_change, benchmark, openfe, openmm-840]
+tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, charge_annihilation_set, egfr, irak4_s2, irak4_s3, jacs_set, p38, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, charge_change, benchmark, openfe, openmm-840]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
@@ -22,13 +22,13 @@ authors:
 
 # REQUIRED: publication/submission date (ISO 8601)
 date: 2026-06-19
-openfe_version: TODO
-openmm_version: TODO
-openff_toolkit_version: TODO
+openfe_version: 1.9.1
+openmm_version: 8.4.0
+openff_toolkit_version: 0.18.0
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
 forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
 small_molecule_forcefield: "openff-2.3.0"
-partial_charges: "am1bcc_at"
+partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
 
 # BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
 benchmark_data:
@@ -47,8 +47,8 @@ results: computational_results.json
 
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
-  doi: TODO add DOI
-  archive_provider: TODO add archive provider
+  doi: https://doi.org/10.5281/zenodo.20643703
+  archive_provider: zenodo
 
 # REQUIRED: license for the submission
 license: CC-BY-4.0
@@ -61,7 +61,7 @@ protocol_settings:
     pressure: "1 bar"
     forcefields: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
     small_molecule_forcefield: "openff-2.3.0"
-    partial_charges: "am1bcc_at"
+    partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
     equilibration_time: "1.0 ns"
     production_time: "5.0 ns"
     vacuum_equilibration_time: 

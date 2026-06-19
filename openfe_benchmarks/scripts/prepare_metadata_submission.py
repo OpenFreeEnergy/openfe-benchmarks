@@ -352,7 +352,7 @@ def _default_submission_id(network_key: str) -> str:
 
 def _generate_title(
     mode: str,
-    benchmark_set_systems: list[tuple(str, str)],
+    benchmark_set_systems: list[tuple[str, str]],
     submission_id: str,
 ) -> str:
     """
@@ -1265,9 +1265,8 @@ def _make_submission_yaml(
         "small_molecule_forcefield",
         "edges",
     )
-    partial_charges_yaml = _render_keyed_values_yaml(
-        "partial_charges", metadata.partial_charges, "partial_charges", "edges"
-    )
+    # make the user add the charges manually as ligand charges might take priority over those in the protocol settings
+    partial_charges_yaml = "partial_charges: TODO"
 
     return f"""# REQUIRED: unique, kebab-case identifier for this submission
 submission_id: {submission_id}
@@ -1357,12 +1356,9 @@ def _make_zenodo_description(
     forcefield_yaml = _render_keyed_values_yaml(
         "forcefield", metadata.forcefield, "forcefield", "edges"
     )
-    partial_charges_yaml = _render_keyed_values_yaml(
-        "partial_charges",
-        metadata.partial_charges,
-        "partial_charges",
-        "edges",
-    )
+
+    # make the user add the charges manually as ligand charges might take priority over those in the protocol settings
+    partial_charges_yaml = "partial_charges: TODO"
     mapper_yaml = _render_keyed_values_yaml(
         "mapper", metadata.mapper, "mapper", "edges"
     )
@@ -1608,7 +1604,7 @@ def process_network(
     tags_final = _make_tags(
         mode=mode,
         forcefield=merged_metadata.forcefield,
-        partial_charge_tag=merged_metadata.partial_charges,
+        partial_charge_tag=[],
         benchmark_data=merged_metadata.benchmark_sets_systems,
         user_keywords=tags_list,
     )
