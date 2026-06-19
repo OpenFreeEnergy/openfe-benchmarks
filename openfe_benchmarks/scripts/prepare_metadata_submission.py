@@ -1366,6 +1366,12 @@ def _make_zenodo_description(
     mapper_yaml = _render_keyed_values_yaml(
         "mapper", metadata.mapper, "mapper", "edges"
     )
+    small_molecule_forcefield_yaml = _render_keyed_values_yaml(
+        "small_molecule_forcefield",
+        metadata.small_molecule_forcefield,
+        "small_molecule_forcefield",
+        "edges",
+    )
 
     # Build network keys to systems mapping section
     network_keys_section = ""
@@ -1406,6 +1412,7 @@ def _make_zenodo_description(
 ## Recommended descriptors
 
 {forcefield_yaml}
+{small_molecule_forcefield_yaml}
 {partial_charges_yaml}
 {mapper_yaml}
 
