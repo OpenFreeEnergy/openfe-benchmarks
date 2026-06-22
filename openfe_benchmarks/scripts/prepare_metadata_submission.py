@@ -87,6 +87,103 @@ def _add_value_with_keys(
     list_obj.append((value, list(keys)))
 
 
+def _extract_charge_provenance(component_dict: dict) -> dict | None:
+    """Extract and parse charge_provenance from component molprops.
+
+    Parameters
+    ----------
+    component_dict : dict
+        Component dictionary (after .to_dict() conversion)
+
+    Returns
+    -------
+    dict | None
+        Parsed charge_provenance dict if present and valid, None otherwise
+    """
+    molprops = component_dict.get("molprops") or {}
+    if not isinstance(molprops, dict):
+        return None
+
+    charge_provenance_str = molprops.get("charge_provenance")
+    if not charge_provenance_str:
+        return None
+
+    try:
+        # charge_provenance is stored as a JSON string in molprops
+        provenance_dict = json.loads(charge_provenance_str)
+        return provenance_dict
+    except (json.JSONDecodeError, TypeError) as e:
+        warnings.warn(
+            f"Failed to parse charge_provenance for component {component_dict.get('name', 'unknown')}: {e}",
+            category=UserWarning,
+        )
+        return None
+
+
+def _extract_charges_from_transformation(trans, calc_mode: str) -> dict:
+    """Extract charge_provenance from ligand and cofactor components in both states.
+
+    Parameters
+    ----------
+    trans : Transformation
+        Transformation object
+    calc_mode : str
+        Calculation mode ("rbfe" or "asfe")
+
+    Returns
+    -------
+    dict
+        Structure: {
+            "stateA": {
+                "ligand": {...provenance dict...} or None,
+                "cofactor": {...provenance dict...} or None
+            },
+            "stateB": {
+                "ligand": {...provenance dict...} or None,
+                "cofactor": {...provenance dict...} or None
+            }
+        }
+    """
+    result = {
+        "stateA": {"ligand": None, "cofactor": None},
+        "stateB": {"ligand": None, "cofactor": None},
+    }
+
+    for state_key in ("stateA", "stateB"):
+        chemical_system = getattr(trans, state_key)
+        if not chemical_system:
+            continue
+
+        for label, component in chemical_system.components.items():
+            qualname = str(type(component)).rstrip("'>").split(".")[-1]
+            component_dict = component.to_dict()
+
+            # Determine component type based on label and qualname
+            if calc_mode == "asfe":
+                # In ASFE mode, we care about "solute" (ligand)
+                if "solute" in label or qualname == "SmallMoleculeComponent":
+                    provenance = _extract_charge_provenance(component_dict)
+                    if provenance:
+                        result[state_key]["ligand"] = provenance
+            elif calc_mode == "rbfe":
+                # In RBFE mode, we care about "ligand" and "cofactor"
+                if "ligand" in label:
+                    provenance = _extract_charge_provenance(component_dict)
+                    if provenance:
+                        result[state_key]["ligand"] = provenance
+                elif "cofactor" in label:
+                    provenance = _extract_charge_provenance(component_dict)
+                    if provenance:
+                        result[state_key]["cofactor"] = provenance
+                elif qualname == "SmallMoleculeComponent" and "solvent" not in label:
+                    # Non-solvent small molecules that are not explicit ligands are treated as cofactors
+                    provenance = _extract_charge_provenance(component_dict)
+                    if provenance:
+                        result[state_key]["cofactor"] = provenance
+
+    return result
+
+
 @dataclass
 class ProtocolSettingsInfo:
     """Container for protocol settings with source metadata."""
@@ -546,6 +643,121 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
     return out
 
 
+def _charge_method_from_provenance(provenance_dict: dict | None) -> str:
+    """Construct normalized charge method tag from charge_provenance dict.
+
+    Maps provenance charge_method to standardized tags matching _normalize_partial_charge_info():
+    - am1bcc_at (AM1BCC with AmberTools)
+    - am1bcc_oe (AM1BCC with OpenEye)
+    - am1bccelf10_oe (AM1BCC ELF10 with OpenEye)
+    - nagl_off (NAGL with OpenFF Toolkit)
+
+    For nagl_off, appends the model name if available in provenance.
+
+    Parameters
+    ----------
+    provenance_dict : dict | None
+        Provenance dict extracted from charge_provenance molprop
+
+    Returns
+    -------
+    str
+        Normalized method tag, e.g., "nagl_off_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe",
+        or empty string if provenance_dict is None
+    """
+    if not provenance_dict or not isinstance(provenance_dict, dict):
+        return ""
+
+    charge_method = provenance_dict.get("charge_method", "").lower().strip()
+    if not charge_method:
+        return ""
+
+    # Map method names to standardized tags
+    if "nagl" in charge_method:
+        nagl_model = provenance_dict.get("nagl_model", "").strip()
+        if nagl_model:
+            nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
+            return f"nagl_off_{nagl_model}"
+        return "nagl_off"
+    elif "am1bccelf10" in charge_method or "elf10" in charge_method:
+        return "am1bccelf10_oe"
+    elif "am1bcc" in charge_method:
+        # Determine toolkit backend from provenance
+        if "ambertools_version" in provenance_dict:
+            return "am1bcc_at"
+        elif "oeomega" in provenance_dict or "oequacpac" in provenance_dict:
+            return "am1bcc_oe"
+        else:
+            # Fallback: try to infer from charge_method name
+            if "ambertools" in charge_method.lower():
+                return "am1bcc_at"
+            else:
+                return "am1bcc_oe"
+    else:
+        # Fallback: normalize any other method name
+        normalized = re.sub(r"[^a-z0-9._-]+", "_", charge_method).strip("_")
+        return normalized
+
+
+def _reconcile_component_charges(
+    ligand_provenance: dict | None,
+    cofactor_provenance: dict | None,
+    trans_name: str,
+    state_label: str,
+) -> tuple[str, bool]:
+    """Compare ligand vs cofactor charges and return preferred method with warning flag.
+
+    Logic:
+    - If both present and differ: issue warning, return ligand method, has_warning=True
+    - If both present and same: return method, has_warning=False
+    - If only ligand present: return ligand method, has_warning=False
+    - If only cofactor present: return cofactor method, has_warning=False
+    - If neither: return empty string, has_warning=False
+
+    Parameters
+    ----------
+    ligand_provenance : dict | None
+        Provenance dict for ligand component
+    cofactor_provenance : dict | None
+        Provenance dict for cofactor component
+    trans_name : str
+        Transformation name for warning message
+    state_label : str
+        State label (e.g., "stateA", "stateB") for warning message
+
+    Returns
+    -------
+    tuple[str, bool]
+        (preferred_charge_method_tag, has_warning)
+    """
+    ligand_method = (
+        _charge_method_from_provenance(ligand_provenance) if ligand_provenance else ""
+    )
+    cofactor_method = (
+        _charge_method_from_provenance(cofactor_provenance)
+        if cofactor_provenance
+        else ""
+    )
+
+    if ligand_method and cofactor_method:
+        if ligand_method != cofactor_method:
+            warnings.warn(
+                f"Ligand and cofactor in {trans_name}[{state_label}] have different charges: "
+                f"ligand={ligand_method}, cofactor={cofactor_method}. Using ligand charges.",
+                category=UserWarning,
+            )
+            return ligand_method, True
+        else:
+            # Both present and same
+            return ligand_method, False
+    elif ligand_method:
+        return ligand_method, False
+    elif cofactor_method:
+        return cofactor_method, False
+    else:
+        return "", False
+
+
 def _component_name(component) -> str:
     molprops = component.get("molprops") or {}
     if isinstance(molprops, dict):
@@ -670,9 +882,51 @@ def _extract_auto_metadata(
             protein=system_info["proteins"],
         )
 
-        protocol_info = ProtocolSettingsInfo(
-            **_build_protocol_settings(trans.protocol, metadata.calculation_mode)
+        trans_charge_provenance = _extract_charges_from_transformation(
+            trans, metadata.calculation_mode
         )
+
+        # Detect ligand-cofactor charge mismatches
+        molprops_charge_methods = {}
+        for state_key in ("stateA", "stateB"):
+            charge_method, _ = _reconcile_component_charges(
+                trans_charge_provenance[state_key]["ligand"],
+                trans_charge_provenance[state_key]["cofactor"],
+                trans.name,
+                state_key,
+            )
+            molprops_charge_methods[state_key] = charge_method
+
+        # Use the first available charge method from molprops (prefer stateA, fallback to stateB)
+        molprops_charge_method = (
+            molprops_charge_methods["stateA"]
+            or molprops_charge_methods["stateB"]
+            or None
+        )
+
+        # Build protocol settings
+        protocol_settings_dict = _build_protocol_settings(
+            trans.protocol, metadata.calculation_mode
+        )
+        if molprops_charge_method:  # preferred source
+            protocol_settings_dict["partial_charges"] = molprops_charge_method
+        elif not protocol_settings_dict.get("partial_charges"):
+            protocol_settings_dict["partial_charges"] = "TODO"
+        else:
+            has_provenance = any(
+                trans_charge_provenance[state_key]["ligand"]
+                or trans_charge_provenance[state_key]["cofactor"]
+                for state_key in ("stateA", "stateB")
+            )
+            if not has_provenance:
+                warnings.warn(
+                    f"Transformation '{trans.name}' lacks charge_provenance in molprops. "
+                    f"Falling back to protocol settings: {protocol_settings_dict['partial_charges']}. "
+                    f"This may indicate molecules were not charged via charge_molecules.py.",
+                    category=UserWarning,
+                )
+
+        protocol_info = ProtocolSettingsInfo(**protocol_settings_dict)
         metadata.system_info_dict[benchmark_set_system].add_protocol_settings(
             protocol_info, key
         )
