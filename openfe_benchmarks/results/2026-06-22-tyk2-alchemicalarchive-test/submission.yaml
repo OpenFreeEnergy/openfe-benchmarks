@@ -1,0 +1,88 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-06-22-tyk2-alchemicalarchive-test
+
+# REQUIRED: short descriptive title
+title: OpenFE RBFE - jacs_set - tyk2 - 2026-06-22-tyk2-alchemicalarchive-test
+
+# REQUIRED: short descriptive summary (1-2 sentences)
+summary: |
+  This submission describes the jacs_set RBFE benchmark prepared with
+  ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and openff-2.3.0
+  with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The network contains 44
+  edges across 12 unique ligands. Results are derived from archived Alchemiscale workflow data. This
+  subset of the JACS set is meant to provide an example of an alchemical archive submission and
+  provide an indication of the variability in results.
+
+# REQUIRED: list of submission tags
+tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, jacs_set, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Jennifer A. Clark
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-06-22
+openfe_version: TODO
+openmm_version: TODO
+openff_toolkit_version: TODO
+mapper: "KartografAtomMapper 1.2.0 (LSA)"
+forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+small_molecule_forcefield: "openff-2.3.0"
+partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+
+# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  "jacs_set":
+    "tyk2": AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d
+
+
+# REQUIRED: results file
+results: computational_results.json
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi: TODO add DOI
+  archive_provider: TODO add archive provider
+
+# REQUIRED: license for the submission
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata for protocol settings
+protocol_settings:
+  - protocol: "RelativeHybridTopologyProtocol"
+    timestep: "4.0 fs"
+    temperature: "298.15 K"
+    pressure: "1 bar"
+    forcefields: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+    small_molecule_forcefield: "openff-2.3.0"
+    partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+    equilibration_time: "1.0 ns"
+    production_time: "5.0 ns"
+    vacuum_equilibration_time: 
+    vacuum_production_time: 
+    solvent_equilibration_time: 
+    solvent_production_time: 
+    lambda_functions: "default"
+    lambda_windows: "11"
+    lambda_schedule: ""
+    notes: |
+      Applies to 12 edges:
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_42, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_43, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_44, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_47, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - etc.
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - solvation_settings.solvent_padding: 1.5 -> 1
+      Applies to 12 edges:
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_42, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_43, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_44, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_47, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - etc.
+

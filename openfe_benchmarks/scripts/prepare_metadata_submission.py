@@ -51,10 +51,12 @@ from __future__ import annotations
 import os
 import argparse
 import ast
+import bz2
 import glob as glob_module
 import json
 import re
 import sys
+import tempfile
 import textwrap
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -380,21 +382,54 @@ class AutoMetadata:
 
 def _load_network(
     input_path: Path,
-) -> AlchemicalNetwork | AlchemicalArchive:
-    try:
-        archive = AlchemicalArchive.from_json(file=input_path)
-        alchemical_network = archive.network
-        mode = "alchemicalarchive"
-    except Exception:
-        try:
-            alchemical_network = AlchemicalNetwork.from_json(file=input_path)
-            mode = "alchemicalnetwork"
-        except Exception:
-            raise ImportError(
-                f"Could not import file neither an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
-            )
+) -> tuple[AlchemicalNetwork | AlchemicalArchive, str]:
+    """Load an AlchemicalNetwork or AlchemicalArchive from JSON or bz2-compressed JSON.
 
-    return alchemical_network, mode
+    Parameters
+    ----------
+    input_path : Path
+        Path to the JSON or JSON.bz2 file
+
+    Returns
+    -------
+    tuple[AlchemicalNetwork | AlchemicalArchive, str]
+        Tuple of (loaded network object, mode) where mode is either
+        "alchemicalarchive" or "alchemicalnetwork"
+        For "alchemicalarchive" mode, returns the AlchemicalArchive object.
+        For "alchemicalnetwork" mode, returns the AlchemicalNetwork object.
+    """
+    # Handle bz2-compressed files
+    if str(input_path).endswith(".bz2"):
+        with bz2.open(input_path, "rt") as f:
+            json_content = f.read()
+
+        # Write to temporary file for loading
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
+            tmp.write(json_content)
+            tmp_path = tmp.name
+    else:
+        tmp_path = None
+
+    try:
+        load_path = tmp_path if tmp_path else input_path
+
+        try:
+            archive = AlchemicalArchive.from_json(file=load_path)
+            mode = "alchemicalarchive"
+            return archive, mode
+        except Exception:
+            try:
+                alchemical_network = AlchemicalNetwork.from_json(file=load_path)
+                mode = "alchemicalnetwork"
+                return alchemical_network, mode
+            except Exception:
+                raise ImportError(
+                    f"Could not import file as either an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
+                )
+    finally:
+        # Clean up temporary file if one was created
+        if tmp_path:
+            Path(tmp_path).unlink(missing_ok=True)
 
 
 def _get_network_key(
@@ -415,8 +450,16 @@ def _transformation_refs(
     network_obj: AlchemicalArchive | AlchemicalNetwork,
     mode: str,
 ) -> list[Any]:
+    """Get transformation references from either an AlchemicalArchive or AlchemicalNetwork.
+
+    For AlchemicalArchive, transformation_results contains tuples of (transformation, results),
+    so we extract the transformation (first element) from each tuple.
+
+    For AlchemicalNetwork, edges are transformation objects directly.
+    """
     if mode == "alchemicalarchive":
-        return network_obj.transformation_results
+        # transformation_results is a list of (transformation, results) tuples
+        return [trans for trans, _ in network_obj.transformation_results]
     elif mode == "alchemicalnetwork":
         return network_obj.edges
     else:
@@ -508,29 +551,63 @@ def _quantity_to_text(value: Any) -> str:
 
 def _infer_benchmark_data_set_system(
     trans: Transformation,
+    override_system_group: str | None = None,
+    override_system_name: str | None = None,
 ) -> tuple[str, str]:
     """Infer benchmark set and system from Transformation contents using BenchmarkIndex.
 
     This searches for any known benchmark set or system name in the transformation mapping metadata.
+    If metadata is not available (e.g., from Alchemiscale archives), returns a generic placeholder.
+    Override values (if provided) take precedence over all other sources.
+
+    Parameters
+    ----------
+    trans : Transformation
+        The transformation to infer metadata from
+    override_system_group : str | None
+        Optional override for system_group. If provided, takes precedence.
+    override_system_name : str | None
+        Optional override for system_name. If provided, takes precedence.
 
     Returns:
-        (benchmark_set, system_name) tuple, or ("", "") if not found
+        (benchmark_set, system_name) tuple
     """
     benchmark_set = trans.mapping.annotations.get("system_group", None)
     system = trans.mapping.annotations.get("system_name", None)
 
     if benchmark_set is None and system is not None:
         # Get all known benchmark sets and systems from the index
-        index = BenchmarkIndex()
-        benchmark_sets_systems = index.list_systems_by_tag()
-        benchmark_set = [x[0] for x in benchmark_sets_systems if x[1] == system]
-        if benchmark_set:
-            benchmark_set = benchmark_set[0]  # just take the first one
+        try:
+            index = BenchmarkIndex()
+            benchmark_sets_systems = index.list_systems_by_tag()
+            benchmark_set = [x[0] for x in benchmark_sets_systems if x[1] == system]
+            if benchmark_set:
+                benchmark_set = benchmark_set[0]  # just take the first one
+        except Exception as e:
+            warnings.warn(
+                f"Could not query BenchmarkIndex for system '{system}': {e}. Using generic fallback.",
+                category=UserWarning,
+            )
+            benchmark_set = None
 
     if system is None or benchmark_set is None:
-        raise ValueError(
-            f"Benchmark set / system could not be found for the transformation, {trans.name}. The following was found: {benchmark_set} / {system}. See valid combinations with `index = ofebm.BenchmarkIndex(); index.list_systems_by_tag()`"
+        # Fallback for archives without explicit benchmark metadata (e.g., from Alchemiscale)
+        warnings.warn(
+            f"Transformation '{trans.name}' lacks explicit benchmark set/system metadata in annotations. "
+            f"Using generic fallback values. This may occur with archives generated from Alchemiscale submissions "
+            f"that were not created from openfe-benchmarks. If this is unexpected, verify the transformation "
+            f"has 'system_group' and 'system_name' in its mapping annotations.",
+            category=UserWarning,
         )
+        # Use the transformation name prefix as a simple heuristic for categorization
+        system = system or "unspecified_system"
+        benchmark_set = benchmark_set or "external_submission"
+
+    # Apply overrides (highest priority)
+    if override_system_group:
+        benchmark_set = override_system_group
+    if override_system_name:
+        system = override_system_name
 
     return benchmark_set, system
 
@@ -827,6 +904,8 @@ def _extract_auto_metadata(
     network_obj: AlchemicalArchive | AlchemicalNetwork,
     network_mode: str,
     source_file: str,
+    system_group: str | None = None,
+    system_name: str | None = None,
 ) -> AutoMetadata:
     metadata = AutoMetadata()
     metadata.network_key = _get_network_key(network_obj, network_mode)
@@ -835,7 +914,9 @@ def _extract_auto_metadata(
     transformations = _transformation_refs(network_obj, network_mode)
     metadata.n_transformations = len(transformations)
     for trans in transformations:
-        benchmark_set_system = _infer_benchmark_data_set_system(trans)
+        benchmark_set_system = _infer_benchmark_data_set_system(
+            trans, override_system_group=system_group, override_system_name=system_name
+        )
         if benchmark_set_system not in metadata.system_info_dict:
             metadata.system_info_dict[benchmark_set_system] = SystemInfo(
                 *benchmark_set_system,
@@ -1693,6 +1774,8 @@ def process_network(
     used_alchemiscale: bool = True,
     summary_suffix: str | None = None,
     results_file: str = "computational_results.json",
+    system_group: str | None = None,
+    system_name: str | None = None,
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -1728,6 +1811,12 @@ def process_network(
     results_file:
         Name of the results file to reference in submission.yaml and validate
         exists in output_dir. Defaults to 'computational_results.json'.
+    system_group:
+        Optional benchmark set name (e.g., 'jacs_set', 'solvation_set'). If provided,
+        overrides the system_group extracted from transformation annotations.
+    system_name:
+        Optional system name (e.g., 'tyk2', 'hsp90'). If provided, overrides the
+        system_name extracted from transformation annotations.
 
     Notes
     -----
@@ -1782,7 +1871,13 @@ def process_network(
         network_obj, network_mode = _load_network(resolved_path)
         all_network_objs.append(network_obj)
 
-        metadata = _extract_auto_metadata(network_obj, network_mode, str(resolved_path))
+        metadata = _extract_auto_metadata(
+            network_obj,
+            network_mode,
+            str(resolved_path),
+            system_group=system_group,
+            system_name=system_name,
+        )
         modes.add(metadata.calculation_mode)
         all_network_keys.append(metadata.network_key)
         all_metadata.append(metadata)
@@ -2007,6 +2102,20 @@ def main():
         help="Name of the results file in output directory (default: computational_results.json)",
     )
 
+    parser.add_argument(
+        "--system-group",
+        type=str,
+        default=None,
+        help="Benchmark set name (e.g., 'jacs_set', 'solvation_set'); overrides values from transformation annotations",
+    )
+
+    parser.add_argument(
+        "--system-name",
+        type=str,
+        default=None,
+        help="System name (e.g., 'tyk2', 'hsp90'); overrides values from transformation annotations",
+    )
+
     args = parser.parse_args()
 
     # Expand glob patterns and collect all matching files
@@ -2041,6 +2150,8 @@ def main():
         used_alchemiscale=not args.no_alchemiscale,
         summary_suffix=args.summary_suffix,
         results_file=args.results_file,
+        system_group=args.system_group,
+        system_name=args.system_name,
     )
     print("\n✓ Successfully generated submission metadata")
 
