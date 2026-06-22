@@ -662,7 +662,7 @@ def _charge_method_from_provenance(provenance_dict: dict | None) -> str:
     Returns
     -------
     str
-        Normalized method tag, e.g., "nagl_off_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe",
+        Normalized method tag, e.g., "nagl_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe",
         or empty string if provenance_dict is None
     """
     if not provenance_dict or not isinstance(provenance_dict, dict):
@@ -677,7 +677,7 @@ def _charge_method_from_provenance(provenance_dict: dict | None) -> str:
         nagl_model = provenance_dict.get("nagl_model", "").strip()
         if nagl_model:
             nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
-            return f"nagl_off_{nagl_model}"
+            return f"nagl_{nagl_model}"
         return "nagl_off"
     elif "am1bccelf10" in charge_method or "elf10" in charge_method:
         return "am1bccelf10_oe"
@@ -987,7 +987,7 @@ def _normalize_partial_charge_info(partial_charge_settings: dict) -> str:
     Returns
     -------
     str
-        Normalized method tag, e.g., "nagl_off_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe".
+        Normalized method tag, e.g., "nagl_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe".
     """
     if not partial_charge_settings or not isinstance(partial_charge_settings, dict):
         return ""
@@ -1003,7 +1003,7 @@ def _normalize_partial_charge_info(partial_charge_settings: dict) -> str:
         if nagl_model:
             # Extract just the filename if it's a path
             nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
-            return f"nagl_off_{nagl_model}"
+            return f"nagl_{nagl_model}"
         return "nagl_off"
     elif "am1bccelf10" in method or "elf10" in method:
         return "am1bccelf10_oe"
