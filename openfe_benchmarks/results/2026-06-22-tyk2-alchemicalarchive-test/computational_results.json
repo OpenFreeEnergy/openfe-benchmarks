@@ -1,0 +1,797 @@
+{
+    "dg": [],
+    "ddg": [
+        {
+            "ligand_a": "jmc_27",
+            "ligand_b": "ejm_46",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 0.3944645796057227,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -8.554108727828895
+            ],
+            "dgs_solvent": [
+                -8.948573307434618
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.11757242444326535
+            ],
+            "complex_smallest_replica_mixing": [
+                0.10963581183611533
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.10669544759419494
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.09346271705822268
+            ]
+        },
+        {
+            "ligand_a": "jmc_23",
+            "ligand_b": "jmc_27",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.016437569131319663,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                10.202480029695423
+            ],
+            "dgs_solvent": [
+                10.218917598826742
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.22247051463830023
+            ],
+            "complex_smallest_replica_mixing": [
+                0.19149577804583837
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.22123668944392555
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.1956521739130435
+            ]
+        },
+        {
+            "ligand_a": "ejm_49",
+            "ligand_b": "ejm_50",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.23623383292122924,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -42.11436825603507
+            ],
+            "dgs_solvent": [
+                -41.87813442311384
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.05121149629268388
+            ],
+            "complex_smallest_replica_mixing": [
+                0.003395585738539898
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.08247640604337936
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.024514811031664963
+            ]
+        },
+        {
+            "ligand_a": "ejm_31",
+            "ligand_b": "ejm_48",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 0.9985453902078412,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -11.020840614746957
+            ],
+            "dgs_solvent": [
+                -12.019386004954798
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.10813699238764123
+            ],
+            "complex_smallest_replica_mixing": [
+                0.028812572759022118
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.10799219089549518
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.05990899898887765
+            ]
+        },
+        {
+            "ligand_a": "jmc_23",
+            "ligand_b": "ejm_31",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 1.353546144969603,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                0.9407735370567446
+            ],
+            "dgs_solvent": [
+                -0.41277260791285825
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.1295750721480503
+            ],
+            "complex_smallest_replica_mixing": [
+                0.08442871587462084
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1268352558303523
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.08215369059656219
+            ]
+        },
+        {
+            "ligand_a": "ejm_50",
+            "ligand_b": "ejm_48",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 1.066846376894027,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                51.59455533392506
+            ],
+            "dgs_solvent": [
+                50.52770895703103
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.08812870814936948
+            ],
+            "complex_smallest_replica_mixing": [
+                0.026036400404448937
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1092758082397601
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.033539731682146544
+            ]
+        },
+        {
+            "ligand_a": "jmc_30",
+            "ligand_b": "ejm_46",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 0.7315247148840243,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                25.395659765298756
+            ],
+            "dgs_solvent": [
+                24.664135050414732
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.14008756101038597
+            ],
+            "complex_smallest_replica_mixing": [
+                0.1039453717754173
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.13446730510283933
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.1038928210313448
+            ]
+        },
+        {
+            "ligand_a": "ejm_31",
+            "ligand_b": "ejm_44",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 2.4103014805665026,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -35.80756670991719
+            ],
+            "dgs_solvent": [
+                -38.21786819048369
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.06517100451168358
+            ],
+            "complex_smallest_replica_mixing": [
+                0.011991657977059436
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.09129752854004677
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.035136501516683516
+            ]
+        },
+        {
+            "ligand_a": "ejm_44",
+            "ligand_b": "ejm_43",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -1.04272495801162,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                8.889896347432265
+            ],
+            "dgs_solvent": [
+                9.932621305443885
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.11196773310688458
+            ],
+            "complex_smallest_replica_mixing": [
+                0.06981032665964172
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.10351415695226121
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.10161779575328615
+            ]
+        },
+        {
+            "ligand_a": "ejm_50",
+            "ligand_b": "ejm_42",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.26258829656305593,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -18.942874031226214
+            ],
+            "dgs_solvent": [
+                -18.68028573466316
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.1282301619544747
+            ],
+            "complex_smallest_replica_mixing": [
+                0.0921859039836568
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1385137283750528
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.10616784630940344
+            ]
+        },
+        {
+            "ligand_a": "jmc_28",
+            "ligand_b": "jmc_30",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.8234030619597004,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -13.668853699707954
+            ],
+            "dgs_solvent": [
+                -12.845450637748254
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.12519788286717734
+            ],
+            "complex_smallest_replica_mixing": [
+                0.12200208550573514
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1238288929738377
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.12841253791708795
+            ]
+        },
+        {
+            "ligand_a": "ejm_31",
+            "ligand_b": "ejm_46",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.9639160198741621,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -29.259882978492115
+            ],
+            "dgs_solvent": [
+                -28.295966958617953
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.12426924732381463
+            ],
+            "complex_smallest_replica_mixing": [
+                0.09074823053589484
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.11888868776987947
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.09833164812942366
+            ]
+        },
+        {
+            "ligand_a": "ejm_47",
+            "ligand_b": "ejm_31",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.8633690014148669,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                16.172969391892433
+            ],
+            "dgs_solvent": [
+                17.0363383933073
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.10958782453760896
+            ],
+            "complex_smallest_replica_mixing": [
+                0.03058645096056623
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.10658289313914092
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.07785642062689585
+            ]
+        },
+        {
+            "ligand_a": "ejm_47",
+            "ligand_b": "ejm_50",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.3621743963691131,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -45.777142782806116
+            ],
+            "dgs_solvent": [
+                -45.414968386437
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.11099239106503338
+            ],
+            "complex_smallest_replica_mixing": [
+                0.03051643192488263
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.12182549336323226
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.05701754385964912
+            ]
+        },
+        {
+            "ligand_a": "ejm_50",
+            "ligand_b": "ejm_55",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.9962041225943352,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -44.345057012115596
+            ],
+            "dgs_solvent": [
+                -43.34885288952126
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.17890956682736645
+            ],
+            "complex_smallest_replica_mixing": [
+                0.12082912032355915
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.18508816445631723
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.12257405515832483
+            ]
+        },
+        {
+            "ligand_a": "ejm_31",
+            "ligand_b": "ejm_45",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 0.402250015528443,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                11.477247619756692
+            ],
+            "dgs_solvent": [
+                11.07499760422825
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.11175997015221116
+            ],
+            "complex_smallest_replica_mixing": [
+                0.052715654952076675
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1411166078366744
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.06243680485338726
+            ]
+        },
+        {
+            "ligand_a": "ejm_49",
+            "ligand_b": "ejm_31",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.9987053713540099,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                19.613661901722594
+            ],
+            "dgs_solvent": [
+                20.612367273076604
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.06700981243031064
+            ],
+            "complex_smallest_replica_mixing": [
+                0.015339074273412271
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.11461199594975612
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.04800817160367722
+            ]
+        },
+        {
+            "ligand_a": "ejm_42",
+            "ligand_b": "ejm_54",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -0.29788475880165777,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -8.29376022836312
+            ],
+            "dgs_solvent": [
+                -7.995875469561462
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.17359204961270405
+            ],
+            "complex_smallest_replica_mixing": [
+                0.11400541271989174
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.18323839568385503
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.13599595551061677
+            ]
+        },
+        {
+            "ligand_a": "ejm_55",
+            "ligand_b": "ejm_54",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 1.907524333702849,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                25.58332414174489
+            ],
+            "dgs_solvent": [
+                23.67579980804204
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.17284638276397962
+            ],
+            "complex_smallest_replica_mixing": [
+                0.11963434022257552
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.17130014049132214
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.1346749226006192
+            ]
+        },
+        {
+            "ligand_a": "jmc_23",
+            "ligand_b": "jmc_28",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 0.3942704063922555,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                22.641044497314393
+            ],
+            "dgs_solvent": [
+                22.246774090922138
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.14169345929783048
+            ],
+            "complex_smallest_replica_mixing": [
+                0.10920121334681497
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.14455300950824274
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.12108190091001012
+            ]
+        },
+        {
+            "ligand_a": "ejm_31",
+            "ligand_b": "ejm_42",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": 0.7539277683880332,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                -12.436790006948526
+            ],
+            "dgs_solvent": [
+                -13.190717775336559
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.1064972275160148
+            ],
+            "complex_smallest_replica_mixing": [
+                0.09605662285136501
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1028661907730266
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.10313447927199192
+            ]
+        },
+        {
+            "ligand_a": "ejm_43",
+            "ligand_b": "ejm_42",
+            "system_group": "jacs_set",
+            "system_name": "tyk2",
+            "ddg": {
+                "magnitude": -2.048383839378735,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "ddg_uncertainty": {
+                "magnitude": NaN,
+                "unit": "kilocalories_per_mole",
+                ":is_custom:": true,
+                "pint_unit_registry": "openff_units"
+            },
+            "dgs_complex": [
+                9.506050586372957
+            ],
+            "dgs_solvent": [
+                11.554434425751692
+            ],
+            "complex_smallest_mbar_overlaps": [
+                0.09876859133421917
+            ],
+            "complex_smallest_replica_mixing": [
+                0.07785642062689585
+            ],
+            "solvent_smallest_mbar_overlaps": [
+                0.1060145953025309
+            ],
+            "solvent_smallest_replica_mixing": [
+                0.11248736097067745
+            ]
+        }
+    ]
+}

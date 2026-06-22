@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+**/AlchemicalNetwork*
+**/zenodo_description.md
+
 # C extensions
 *.so
 
