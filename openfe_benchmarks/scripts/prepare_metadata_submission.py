@@ -198,7 +198,7 @@ class ProtocolSettingsInfo:
     small_molecule_forcefield: (
         str  # mirrors definition in OpenMMSystemGeneratorFFSettings
     )
-    forcefields: set[str]  # mirrors definition in OpenMMSystemGeneratorFFSettings
+    forcefields: tuple[str, ...]  # sorted tuple for deterministic ordering
     partial_charges: str
     lambda_windows: str = ""
     lambda_schedule: str = ""
@@ -604,7 +604,7 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
         )
         ffs = forcefield_settings.get("forcefields")
         if isinstance(ffs, list) and ffs:
-            out["forcefields"] = set(
+            out["forcefields"] = tuple(
                 sorted(os.path.splitext(ff.split("/")[1])[0] for ff in ffs)
             )
 
@@ -1074,7 +1074,9 @@ def _build_content_summary(
         (summary_text, list of SystemInfo objects)
     """
 
-    field_info = "/".join(set(ff for ff_set, _ in metadata.forcefield for ff in ff_set))
+    field_info = "/".join(
+        sorted(set(ff for ff_set, _ in metadata.forcefield for ff in ff_set))
+    )
     if not field_info:
         field_info = "an unspecified force field"
 
@@ -1213,7 +1215,7 @@ def _render_protocol_settings_yaml(
         if isinstance(identifier, str):
             return identifier
         if isinstance(identifier, (list, tuple, set)):
-            return ", ".join(str(item) for item in identifier)
+            return ", ".join(str(item) for item in sorted(identifier))
         return str(identifier)
 
     ordered_settings = sorted(

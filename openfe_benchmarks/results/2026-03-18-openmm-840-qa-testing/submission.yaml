@@ -88,13 +88,12 @@ protocol_settings:
       - lambda_settings.lambda_windows: 11 -> 22
       - simulation_settings.n_replicas: 11 -> 22
       - simulation_settings.production_length: 5.0 -> 20
-      - solvation_settings.solvent_padding: 1 -> 1.5
       Applies to 5 edges:
-      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
   - protocol: "RelativeHybridTopologyProtocol"
     production_time: "20 ns"
     lambda_windows: "22"
@@ -104,12 +103,13 @@ protocol_settings:
       - lambda_settings.lambda_windows: 11 -> 22
       - simulation_settings.n_replicas: 11 -> 22
       - simulation_settings.production_length: 5.0 -> 20
+      - solvation_settings.solvent_padding: 1 -> 1.5
       Applies to 5 edges:
-      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein=none
   - protocol: "RelativeHybridTopologyProtocol"
     notes: |
       Detailed protocol settings differ:
