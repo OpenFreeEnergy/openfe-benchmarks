@@ -1,0 +1,125 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-03-18-openmm-840-qa-testing
+
+# REQUIRED: short descriptive title
+title: OpenFE RBFE - Multi-set Benchmark (2 sets, 5 systems) - 2026-03-18-openmm-840-qa-testing
+
+# REQUIRED: short descriptive summary (1-2 sentences)
+summary: |
+  This submission describes the charge_annihilation_set, jacs_set RBFE benchmark
+  (charge_annihilation_set: egfr, irak4_s2, irak4_s3; jacs_set: p38, tyk2) prepared with
+  ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and openff-2.3.0
+  with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The submission contains
+  160 edges, 45 unique ligands. Note this means the charge annihilation sets are not complete compared
+  to what is in that system and should not be compared to other complete runs due to the missing
+  edges.
+
+# REQUIRED: list of submission tags
+tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, charge_annihilation_set, egfr, irak4_s2, irak4_s3, jacs_set, p38, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, charge_change, benchmark, openfe, openmm-840]
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Josh Horton
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-06-19
+openfe_version: 1.9.1
+openmm_version: 8.4.0
+openff_toolkit_version: 0.18.0
+mapper: "KartografAtomMapper 1.2.0 (LSA)"
+forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+small_molecule_forcefield: "openff-2.3.0"
+partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+
+# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  "charge_annihilation_set":
+    "egfr": AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6
+    "irak4_s2": AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9
+    "irak4_s3": AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a
+  "jacs_set":
+    "p38": AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191
+    "tyk2": AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252
+
+
+# REQUIRED: results file
+results: computational_results.json
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi: https://doi.org/10.5281/zenodo.20643703
+  archive_provider: zenodo
+
+# REQUIRED: license for the submission
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata for protocol settings
+protocol_settings:
+  - protocol: "RelativeHybridTopologyProtocol"
+    timestep: "4.0 fs"
+    temperature: "298.15 K"
+    pressure: "1 bar"
+    forcefields: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+    small_molecule_forcefield: "openff-2.3.0"
+    partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+    equilibration_time: "1.0 ns"
+    production_time: "5.0 ns"
+    vacuum_equilibration_time: 
+    vacuum_production_time: 
+    solvent_equilibration_time: 
+    solvent_production_time: 
+    lambda_functions: "default"
+    lambda_windows: "11"
+    lambda_schedule: ""
+    notes: |
+      Applies to 40 edges:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - etc.
+  - protocol: "RelativeHybridTopologyProtocol"
+    production_time: "20 ns"
+    lambda_windows: "22"
+    notes: |
+      Detailed protocol settings differ:
+      - alchemical_settings.explicit_charge_correction: False -> True
+      - lambda_settings.lambda_windows: 11 -> 22
+      - simulation_settings.n_replicas: 11 -> 22
+      - simulation_settings.production_length: 5.0 -> 20
+      Applies to 5 edges:
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+  - protocol: "RelativeHybridTopologyProtocol"
+    production_time: "20 ns"
+    lambda_windows: "22"
+    notes: |
+      Detailed protocol settings differ:
+      - alchemical_settings.explicit_charge_correction: False -> True
+      - lambda_settings.lambda_windows: 11 -> 22
+      - simulation_settings.n_replicas: 11 -> 22
+      - simulation_settings.production_length: 5.0 -> 20
+      - solvation_settings.solvent_padding: 1 -> 1.5
+      Applies to 5 edges:
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=19charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-6c2af871ad714bf6cda4368eb34fd06a charge_annihilation_set-irak4_s3: ligand_start=28charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-b15bcfadae8a358cee9a7dcb9f5445d6 charge_annihilation_set-egfr: ligand_start=21, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=17charg, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-e516aadebadf1c036b5930cf7838c6d9 charge_annihilation_set-irak4_s2: ligand_start=6, ligand_final=none, solvent=none, cofactors=none, protein=none
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - solvation_settings.solvent_padding: 1 -> 1.5
+      Applies to 40 edges:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein=none
+      - etc.
+

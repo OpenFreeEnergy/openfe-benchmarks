@@ -75,7 +75,7 @@ class BenchmarkIndex:
 
         logger.debug("Benchmark index successfully reloaded and validated.")
 
-    def list_systems_by_tag(self, tags: list[str]) -> list[tuple[str, str]]:
+    def list_systems_by_tag(self, tags: list[str] = []) -> list[tuple[str, str]]:
         """
         Get all systems that match **all** of the provided tags.
 
@@ -84,6 +84,7 @@ class BenchmarkIndex:
         tags : list[str]
             List of tags to filter by (e.g., ['protein', 'cofactors']).
             Only systems containing every tag in this list will be returned.
+            Defaults to ``[]``.
 
         Returns
         -------
