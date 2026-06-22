@@ -1521,8 +1521,12 @@ def _make_submission_yaml(
         "small_molecule_forcefield",
         "edges",
     )
-    # make the user add the charges manually as ligand charges might take priority over those in the protocol settings
-    partial_charges_yaml = "partial_charges: TODO"
+    partial_charges_yaml = _render_keyed_values_yaml(
+        "partial_charges",
+        metadata.partial_charges,
+        "partial_charges",
+        "edges",
+    )
 
     return f"""# REQUIRED: unique, kebab-case identifier for this submission
 submission_id: {submission_id}
@@ -1860,7 +1864,7 @@ def process_network(
     tags_final = _make_tags(
         mode=mode,
         forcefield=merged_metadata.forcefield,
-        partial_charge_tag=[],
+        partial_charge_tag=merged_metadata.partial_charges,
         benchmark_data=merged_metadata.benchmark_sets_systems,
         user_keywords=tags_list,
     )
