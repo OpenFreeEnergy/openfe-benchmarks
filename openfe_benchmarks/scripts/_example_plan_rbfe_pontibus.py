@@ -39,7 +39,7 @@ def _configure_example_logging(level=logging.INFO):
     logging.getLogger("openfe_benchmarks").setLevel(level)
 
 
-SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
+SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True, ion_concentration=0.15 * unit.molar)
 BENCHMARK_SET = "mcs_docking_set"
 BENCHMARK_SYS = "hne"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
