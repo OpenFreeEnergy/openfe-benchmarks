@@ -272,8 +272,8 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
             f"Missing results for transformations: {missing_transformations}"
         )
 
-    # Build FEMap and extract DDG/DG values
-    fe_map = FEMap()
+    # First pass: Build gathered_results with both ddg_uncertainty and mbar_std
+    # We'll decide globally which uncertainty type to use after processing all edges
     for key, results in raw_results.items():
         lig_a_name, lig_b_name = key
         entry_data = {
@@ -340,16 +340,25 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
             entry_data["dgs_complex"] = complex_data
             entry_data["dgs_solvent"] = solvent_data
 
-            # extract overlap and mixing matrices
-            for phase_results, label in zip(
-                [complex_results, solvent_results], ["complex", "solvent"]
+            # extract overlap and mixing matrices, and calculate mbar uncertainty
+            # mbar_errors will store the MBAR estimate errors for each repeat
+            complex_mbar_errors = []
+            solvent_mbar_errors = []
+
+            for phase_results, label, mbar_errors in zip(
+                [complex_results, solvent_results],
+                ["complex", "solvent"],
+                [complex_mbar_errors, solvent_mbar_errors],
             ):
                 mbar_overlap_elements = []
                 replica_mixing_elements = []
 
                 for phase_result in phase_results:
                     if results_source == "archive":
-                        # Archive results have mbar_overlap and replica_mixing already extracted
+                        # Archive results have estimate_error, mbar_overlap and replica_mixing already extracted
+                        if phase_result.get("estimate_error") is not None:
+                            mbar_errors.append(phase_result["estimate_error"])
+
                         if phase_result["mbar_overlap"] is not None:
                             mbar_overlap_elements.append(
                                 np.diagonal(
@@ -367,6 +376,16 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
                         result_key = list(
                             phase_result["protocol_result"]["data"].keys()
                         )[0]
+
+                        # Extract MBAR estimate error
+                        estimate_error = phase_result["protocol_result"]["data"][
+                            result_key
+                        ][0]["outputs"].get("unit_estimate_error")
+                        if estimate_error is not None:
+                            mbar_errors.append(
+                                estimate_error.m_as(unit.kilocalories_per_mole)
+                            )
+
                         overlap_matrix = phase_result["protocol_result"]["data"][
                             result_key
                         ][0]["outputs"]["unit_mbar_overlap"]["matrix"]
@@ -385,20 +404,88 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
                     entry_data[f"{label}_smallest_mbar_overlaps"] = (
                         mbar_overlap_elements
                     )
+
                 if replica_mixing_elements:
                     entry_data[f"{label}_smallest_replica_mixing"] = (
                         replica_mixing_elements
                     )
 
+                # Store individual MBAR errors for this phase with proper units
+                if mbar_errors:
+                    # Convert to list of Quantities with units
+                    mbar_errors_with_units = [
+                        err * unit.kilocalories_per_mole for err in mbar_errors
+                    ]
+                    entry_data[f"repeat_{label}_mbar_errors"] = mbar_errors_with_units
+
+            # Calculate mbar std from the root-mean-square of MBAR estimate errors
+            # This properly combines uncertainties in quadrature
+            complex_mbar_std = None
+            solvent_mbar_std = None
+
+            if complex_mbar_errors:
+                # Use RMS of MBAR errors as the uncertainty for this phase
+                complex_mbar_std = (
+                    np.sqrt(np.mean(np.array(complex_mbar_errors) ** 2))
+                    * unit.kilocalories_per_mole
+                )
+                entry_data["complex_mbar_std"] = complex_mbar_std
+
+            if solvent_mbar_errors:
+                solvent_mbar_std = (
+                    np.sqrt(np.mean(np.array(solvent_mbar_errors) ** 2))
+                    * unit.kilocalories_per_mole
+                )
+                entry_data["solvent_mbar_std"] = solvent_mbar_std
+
+            # Calculate combined mbar std
+            if complex_mbar_std is not None and solvent_mbar_std is not None:
+                entry_data["mbar_std"] = np.sqrt(
+                    complex_mbar_std**2 + solvent_mbar_std**2
+                )
+
             gathered_results["ddg"].append(entry_data)
 
-            # also add the DDG data to the FEMAP
-            fe_map.add_relative_calculation(
-                labelA=lig_a_name,
-                labelB=lig_b_name,
-                value=entry_data["ddg"],
-                uncertainty=entry_data["ddg_uncertainty"],
-            )
+    # Determine globally which uncertainty type to use for ALL edges
+    # Check if all edges have valid ddg_uncertainty (from repeats)
+    all_have_repeat_uncertainty = all(
+        not np.isnan(result["ddg_uncertainty"].magnitude)
+        for result in gathered_results["ddg"]
+    )
+
+    edges_without_repeat_uncertainty = [
+        (result["ligand_a"], result["ligand_b"])
+        for result in gathered_results["ddg"]
+        if np.isnan(result["ddg_uncertainty"].magnitude)
+    ]
+
+    # Decide which uncertainty to use for the entire network
+    if all_have_repeat_uncertainty:
+        use_mbar_std = False
+        logger.info(
+            "All edges have repeat-based uncertainties. Using ddg_uncertainty for all edges."
+        )
+    else:
+        use_mbar_std = True
+        logger.warning(
+            f"Some edges lack repeat-based uncertainties. Using mbar_std for ALL edges. "
+            f"Edges without repeat data: {edges_without_repeat_uncertainty}"
+        )
+
+    # Second pass: Build FEMap with consistent uncertainty type
+    fe_map = FEMap()
+    for result in gathered_results["ddg"]:
+        if use_mbar_std:
+            uncertainty = result["mbar_std"]
+        else:
+            uncertainty = result["ddg_uncertainty"]
+
+        fe_map.add_relative_calculation(
+            labelA=result["ligand_a"],
+            labelB=result["ligand_b"],
+            value=result["ddg"],
+            uncertainty=uncertainty,
+        )
 
     # check if the network is connected and we can calculate the DGs
     if fe_map.check_weakly_connected():
