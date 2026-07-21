@@ -13,6 +13,8 @@ import tempfile
 
 logger = logging.getLogger(__name__)
 
+MIN_ALLOWED_REPEATS = 3  # Less than this results in an error
+
 
 def _load_archive(archive_path: pathlib.Path):
     """
@@ -139,82 +141,123 @@ def _extract_results_from_files(results_dirs):
     return raw_results
 
 
-@click.command()
-@click.option(
-    "--archive",
-    help="Path to alchemical archive (.json.bz2 file)",
-    type=click.Path(
-        exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path
-    ),
-    default=None,
-)
-@click.option(
-    "--network",
-    help="Path to alchemical network JSON file (required if not using --archive)",
-    type=click.Path(
-        exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path
-    ),
-    default=None,
-)
-@click.option(
-    "--results_dir",
-    help="Directory containing transformation results (can be specified multiple times)",
-    multiple=True,
-    type=click.Path(
-        exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path
-    ),
-)
-@click.option(
-    "--output_dir",
-    help="Directory to write the results JSON to",
-    type=click.Path(
-        exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path
-    ),
-)
-@click.option(
-    "--system-group",
-    help="Benchmark set name (e.g., 'jacs_set', 'solvation_set'); overrides value from network annotations",
-    type=str,
-    default=None,
-)
-@click.option(
-    "--system-name",
-    help="System name (e.g., 'tyk2', 'hsp90'); overrides value from network annotations",
-    type=str,
-    default=None,
-)
-def main(archive, network, results_dir, output_dir, system_group, system_name):
-    """
-    Gather transformation results and compute DDG/DG values.
+def run_generate_results(
+    archive=None,
+    network=None,
+    network_key=None,
+    results_dir=None,
+    output_dir=None,
+    system_group=None,
+    system_name=None,
+):
+    """Generate computational results from alchemical archives or networks.
 
+    Parameters
+    ----------
+    archive : tuple of Path, optional
+        Paths to alchemical archive files (.json.bz2)
+    network : tuple of Path, optional
+        Paths to alchemical network JSON files
+    network_key : tuple of str, optional
+        Scope keys of networks from alchemiscale
+    results_dir : tuple of Path, optional
+        Directories containing transformation results
+    output_dir : Path, optional
+        Directory to write the results JSON to
+    system_group : str, optional
+        Benchmark set name (e.g., 'jacs_set', 'solvation_set')
+    system_name : str, optional
+        System name (e.g., 'tyk2', 'hsp90')
+
+    Notes
+    -----
     Can accept input from either:
-    - An alchemical archive (--archive) with embedded results
-    - A network file (--network) with separate results directories (--results_dir)
+    - One or more alchemical archives (archive) with embedded results
+    - One or more network files (network) with separate results directories (results_dir)
+    - One or more network keys (network_key) from alchemiscale with separate results directories (results_dir)
     """
-    # Validate input
-    if archive and network:
-        raise click.UsageError("Specify either --archive or --network, not both")
+    # Convert tuples to lists if needed, handle None values
+    archive = tuple(archive) if archive else ()
+    network = tuple(network) if network else ()
+    network_key = tuple(network_key) if network_key else ()
+    results_dir = tuple(results_dir) if results_dir else ()
+
+    # Convert string paths to Path objects if needed
+    if output_dir is not None and isinstance(output_dir, str):
+        output_dir = pathlib.Path(output_dir)
+
+    # Validate input combinations
+    input_sources = sum([bool(archive), bool(network), bool(network_key)])
+    if input_sources > 1:
+        raise ValueError(
+            "Specify only one of: archive, network, or network_key (not combinations)"
+        )
+    if input_sources == 0:
+        raise ValueError("Must specify one of: archive, network, or network_key")
 
     if archive:
-        # Load from archive
-        print(f"Loading archive: {archive.name}")
-        alchemical_archive = _load_archive(archive)
-        network_obj = alchemical_archive.network
+        # Load from archives
+        nl = "\n"
+        logger.info(
+            f"Loading {len(archive)} archive(s):\n{nl.join([x.name for x in archive])}"
+        )
+        alchemical_archives = [_load_archive(arch) for arch in archive]
+        network_obj = alchemical_archives[0].network
 
-        print("Extracting results from archive")
-        raw_results = _extract_results_from_archive(alchemical_archive)
+        # Verify all archives have the same network
+        for i, arch in enumerate(alchemical_archives[1:], start=1):
+            if arch.network != network_obj:
+                raise ValueError(
+                    f"Archive {i} has a different network than the first archive. "
+                    "All archives must have the same network."
+                )
+
+        logger.info("Extracting results from archives")
+        raw_results = defaultdict(list)
+        for arch in alchemical_archives:
+            arch_results = _extract_results_from_archive(arch)
+            # Merge results from this archive into the combined dictionary
+            for key, results_list in arch_results.items():
+                raw_results[key].extend(results_list)
+
         results_source = "archive"
-    else:
-        # Load from network + results files
-        if not network:
-            raise click.UsageError("Must specify either --archive or --network")
+    elif network or network_key:
+        # Load from network files or network keys + results files
         if not results_dir:
-            raise click.UsageError("Must specify --results_dir when using --network")
+            raise click.UsageError(
+                "Must specify --results_dir when using --network or --network-key"
+            )
 
-        print(f"Loading network: {network.name}")
-        network_obj = AlchemicalNetwork.from_json(network.as_posix())
+        networks_to_load = []
 
-        print(
+        if network:
+            logger.info(f"Loading {len(network)} network file(s)")
+            for net_file in network:
+                logger.info(f"  - {net_file.name}")
+                networks_to_load.append(
+                    AlchemicalNetwork.from_json(net_file.as_posix())
+                )
+
+        if network_key:
+            logger.info(f"Loading {len(network_key)} network(s) from alchemiscale")
+            from alchemiscale import AlchemiscaleClient, ScopedKey
+
+            client = AlchemiscaleClient(api_url="https://api.alchemiscale.org")
+            for key in network_key:
+                logger.info(f"  - {key}")
+                scoped_key = ScopedKey.from_str(key)
+                networks_to_load.append(client.get_network(scoped_key))
+
+        # Verify all networks are identical
+        network_obj = networks_to_load[0]
+        for i, net in enumerate(networks_to_load[1:], start=1):
+            if net != network_obj:
+                raise ValueError(
+                    f"Network {i} differs from the first network. "
+                    "All networks must be identical."
+                )
+
+        logger.info(
             f"Loading results from {len(results_dir)} director{'ies' if len(results_dir) != 1 else 'y'}"
         )
         raw_results = _extract_results_from_files(results_dir)
@@ -232,7 +275,7 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
             phase = "solvent"
         transformations_to_run.add((ligand_a_name, ligand_b_name, phase))
 
-    print(f"Found {len(transformations_to_run)} transformations in network")
+    logger.info(f"Found {len(transformations_to_run)} transformations in network")
 
     # Initialize output structure
     gathered_results = {"dg": [], "ddg": []}
@@ -251,7 +294,7 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
     final_system_group = system_group if system_group else extracted_system_group
     final_system_name = system_name if system_name else extracted_system_name
 
-    print(f"System: {final_system_group} / {final_system_name}")
+    logger.info(f"System: {final_system_group} / {final_system_name}")
 
     # Check that all simulations in the alchemical network have an associated result
     found_results = set()
@@ -272,7 +315,7 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
             f"Missing results for transformations: {missing_transformations}"
         )
 
-    # First pass: Build gathered_results with both ddg_uncertainty and mbar_std
+    # First pass: Build gathered_results with both ddg_uncertainty and mbar_err
     # We'll decide globally which uncertainty type to use after processing all edges
     for key, results in raw_results.items():
         lig_a_name, lig_b_name = key
@@ -314,21 +357,30 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
             ]
 
         if complex_data and solvent_data:
-            complex_dg = np.mean(complex_data) * unit.kilocalories_per_mole
-            if len(complex_data) == 1:
-                complex_dg_uncertainty = np.nan * unit.kilocalories_per_mole
-            else:
-                complex_dg_uncertainty = (
-                    np.std(complex_data) * unit.kilocalories_per_mole
+            n_repeats = (len(complex_data), len(solvent_data))
+            if n_repeats[0] < MIN_ALLOWED_REPEATS and n_repeats[0] > 1:
+                raise ValueError(
+                    f"Complex leg {key} is does not meet minimum number of repeats requirement. Must be 1 or at least {MIN_ALLOWED_REPEATS}."
+                )
+            if n_repeats[1] < MIN_ALLOWED_REPEATS and n_repeats[1] > 1:
+                raise ValueError(
+                    f"Solvent leg {key} is does not meet minimum number of repeats requirement. Must be 1 or at least {MIN_ALLOWED_REPEATS}."
                 )
 
-            solvent_dg = np.mean(solvent_data) * unit.kilocalories_per_mole
-            if len(solvent_data) == 1:
+            complex_data *= unit.kilocalories_per_mole
+            solvent_data *= unit.kilocalories_per_mole
+
+            complex_dg = np.mean(complex_data)
+            if n_repeats[0] == 1:
+                complex_dg_uncertainty = np.nan * unit.kilocalories_per_mole
+            else:
+                complex_dg_uncertainty = np.std(complex_data)
+
+            solvent_dg = np.mean(solvent_data)
+            if n_repeats[1] == 1:
                 solvent_dg_uncertainty = np.nan * unit.kilocalories_per_mole
             else:
-                solvent_dg_uncertainty = (
-                    np.std(solvent_data) * unit.kilocalories_per_mole
-                )
+                solvent_dg_uncertainty = np.std(solvent_data)
 
             # get the combined ddg and uncertainty
             entry_data["ddg"] = complex_dg - solvent_dg
@@ -337,8 +389,8 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
             )
 
             # add the raw values for debugging
-            entry_data["dgs_complex"] = complex_data
-            entry_data["dgs_solvent"] = solvent_data
+            entry_data["dgs_complex"] = list(complex_data)
+            entry_data["dgs_solvent"] = list(solvent_data)
 
             # extract overlap and mixing matrices, and calculate mbar uncertainty
             # mbar_errors will store the MBAR estimate errors for each repeat
@@ -410,39 +462,30 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
                         replica_mixing_elements
                     )
 
-                # Store individual MBAR errors for this phase with proper units
                 if mbar_errors:
-                    # Convert to list of Quantities with units
                     mbar_errors_with_units = [
                         err * unit.kilocalories_per_mole for err in mbar_errors
                     ]
-                    entry_data[f"repeat_{label}_mbar_errors"] = mbar_errors_with_units
+                    entry_data[f"{label}_mbar_errors"] = mbar_errors_with_units
 
-            # Calculate mbar std from the root-mean-square of MBAR estimate errors
-            # This properly combines uncertainties in quadrature
-            complex_mbar_std = None
-            solvent_mbar_std = None
-
-            if complex_mbar_errors:
-                # Use RMS of MBAR errors as the uncertainty for this phase
-                complex_mbar_std = (
-                    np.sqrt(np.mean(np.array(complex_mbar_errors) ** 2))
-                    * unit.kilocalories_per_mole
-                )
-                entry_data["complex_mbar_std"] = complex_mbar_std
-
-            if solvent_mbar_errors:
-                solvent_mbar_std = (
-                    np.sqrt(np.mean(np.array(solvent_mbar_errors) ** 2))
-                    * unit.kilocalories_per_mole
-                )
-                entry_data["solvent_mbar_std"] = solvent_mbar_std
-
-            # Calculate combined mbar std
-            if complex_mbar_std is not None and solvent_mbar_std is not None:
-                entry_data["mbar_std"] = np.sqrt(
-                    complex_mbar_std**2 + solvent_mbar_std**2
-                )
+            if np.isnan(entry_data["ddg_uncertainty"]):
+                if (
+                    "complex_mbar_errors" in entry_data
+                    and "solvent_mbar_errors" in entry_data
+                ):
+                    if all([x == 1 for x in n_repeats]):
+                        entry_data["mbar_error"] = np.sqrt(
+                            entry_data["complex_mbar_errors"][0] ** 2
+                            + entry_data["solvent_mbar_errors"][0] ** 2
+                        )
+                    else:
+                        raise ValueError(
+                            f"Uncertainty between complex/solvent {n_repeats} repeats is NaN "
+                        )
+                else:
+                    raise ValueError(
+                        f"No uncertainty can be derived from complex/solvent {n_repeats} repeats, and MBAR errors are unavailable."
+                    )
 
             gathered_results["ddg"].append(entry_data)
 
@@ -459,24 +502,35 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
         if np.isnan(result["ddg_uncertainty"].magnitude)
     ]
 
+    edges_without_min_repeats = [
+        (result["ligand_a"], result["ligand_b"])
+        for result in gathered_results["ddg"]
+        if len(result["dgs_complex"]) < MIN_ALLOWED_REPEATS
+    ]
+
     # Decide which uncertainty to use for the entire network
     if all_have_repeat_uncertainty:
-        use_mbar_std = False
-        logger.info(
-            "All edges have repeat-based uncertainties. Using ddg_uncertainty for all edges."
-        )
+        if edges_without_min_repeats:
+            raise ValueError(
+                f"Some edges have fewer than {MIN_ALLOWED_REPEATS}: {edges_without_min_repeats}"
+            )
+        else:
+            use_mbar_err = False
+            logger.info(
+                "All edges have repeat-based uncertainties. Using ddg_uncertainty for all edges."
+            )
     else:
-        use_mbar_std = True
+        use_mbar_err = True
         logger.warning(
-            f"Some edges lack repeat-based uncertainties. Using mbar_std for ALL edges. "
+            f"Some edges lack repeat-based uncertainties. Using mbar_err for ALL edges. "
             f"Edges without repeat data: {edges_without_repeat_uncertainty}"
         )
 
     # Second pass: Build FEMap with consistent uncertainty type
     fe_map = FEMap()
     for result in gathered_results["ddg"]:
-        if use_mbar_std:
-            uncertainty = result["mbar_std"]
+        if use_mbar_err:
+            uncertainty = result["mbar_error"]
         else:
             uncertainty = result["ddg_uncertainty"]
 
@@ -516,9 +570,82 @@ def main(archive, network, results_dir, output_dir, system_group, system_name):
     with open(output_file, "w") as w:
         json.dump(gathered_results, w, cls=JSON_HANDLER.encoder, indent=4)
 
-    print(f"Writing results to: {output_file}")
-    print(
+    logger.info(f"Writing results to: {output_file}")
+    logger.info(
         f"Done! Found {len(gathered_results['ddg'])} DDG entries and {len(gathered_results['dg'])} DG entries"
+    )
+
+
+@click.command()
+@click.option(
+    "--archive",
+    help="Path to alchemical archive (.json.bz2 file; can be specified multiple times)",
+    type=click.Path(
+        exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path
+    ),
+    multiple=True,
+)
+@click.option(
+    "--network",
+    help="Path to alchemical network JSON file (can be specified multiple times or used with --archive)",
+    type=click.Path(
+        exists=True, dir_okay=False, file_okay=True, path_type=pathlib.Path
+    ),
+    multiple=True,
+)
+@click.option(
+    "--network-key",
+    help="Scope key of network from alchemiscale (can be specified multiple times)",
+    type=str,
+    multiple=True,
+)
+@click.option(
+    "--results_dir",
+    help="Directory containing transformation results (can be specified multiple times)",
+    multiple=True,
+    type=click.Path(
+        exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path
+    ),
+)
+@click.option(
+    "--output_dir",
+    help="Directory to write the results JSON to",
+    type=click.Path(
+        exists=True, dir_okay=True, file_okay=False, path_type=pathlib.Path
+    ),
+)
+@click.option(
+    "--system-group",
+    help="Benchmark set name (e.g., 'jacs_set', 'solvation_set'); overrides value from network annotations",
+    type=str,
+    default=None,
+)
+@click.option(
+    "--system-name",
+    help="System name (e.g., 'tyk2', 'hsp90'); overrides value from network annotations",
+    type=str,
+    default=None,
+)
+def main(
+    archive, network, network_key, results_dir, output_dir, system_group, system_name
+):
+    """CLI wrapper for run_generate_results.
+
+    Gather transformation results and compute DDG/DG values.
+
+    Can accept input from either:
+    - One or more alchemical archives (--archive) with embedded results (can be specified multiple times)
+    - One or more network files (--network) with separate results directories (--results_dir)
+    - One or more network keys (--network-key) from alchemiscale with separate results directories (--results_dir)
+    """
+    run_generate_results(
+        archive=archive,
+        network=network,
+        network_key=network_key,
+        results_dir=results_dir,
+        output_dir=output_dir,
+        system_group=system_group,
+        system_name=system_name,
     )
 
 

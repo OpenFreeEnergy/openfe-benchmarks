@@ -5,6 +5,21 @@ This module generates `submission.yaml` and `zenodo_description.md` from one or 
 exported by OpenFE/Alchemiscale. Supports single files, lists of files, or glob patterns with 
 potentially different protocol settings.
 
+Example (CLI):
+
+    # Explicit files
+    python prepare_metadata_submission.py archive1.json.bz2 archive2.json.bz2 \\
+        --output-dir ./output \\
+        --submission-id "2026-04-15-example" \\
+        --tags "openfe,alchemicalarchive" \\
+        --author "Jane Doe" \\
+        --license "CC-BY-4.0"
+    
+    # Glob pattern
+    python prepare_metadata_submission.py "networks/*/*.json" \\
+        --output-dir ./output \\
+        --submission-id "2026-04-15-example"
+
 Example (Python API):
 
     from pathlib import Path
@@ -29,21 +44,6 @@ Example (Python API):
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
-
-Example (CLI):
-
-    # Explicit files
-    python prepare_metadata_submission.py archive1.json.bz2 archive2.json.bz2 \\
-        --output-dir ./output \\
-        --submission-id "2026-04-15-example" \\
-        --tags "openfe,alchemicalarchive" \\
-        --author "Jane Doe" \\
-        --license "CC-BY-4.0"
-    
-    # Glob pattern
-    python prepare_metadata_submission.py "networks/*/*.json" \\
-        --output-dir ./output \\
-        --submission-id "2026-04-15-example"
 """
 
 from __future__ import annotations
@@ -65,6 +65,7 @@ from pathlib import Path
 from typing import Any
 import warnings
 import pprint
+import logging
 
 from pint import Quantity
 
@@ -73,6 +74,8 @@ from gufe import AlchemicalNetwork
 from gufe.transformations.transformation import Transformation
 
 from openfe_benchmarks.data import BenchmarkIndex
+
+logger = logging.getLogger(__name__)
 
 
 def _add_value_with_keys(
@@ -558,22 +561,31 @@ def _infer_benchmark_data_set_system(
 
     This searches for any known benchmark set or system name in the transformation mapping metadata.
     If metadata is not available (e.g., from Alchemiscale archives), returns a generic placeholder.
-    Override values (if provided) take precedence over all other sources.
+    Override values (if provided) take precedence over all other sources, but must not conflict
+    with existing annotations.
 
     Parameters
     ----------
     trans : Transformation
         The transformation to infer metadata from
     override_system_group : str | None
-        Optional override for system_group. If provided, takes precedence.
+        Optional override for system_group. If provided, must match the annotation (if present).
     override_system_name : str | None
-        Optional override for system_name. If provided, takes precedence.
+        Optional override for system_name. If provided, must match the annotation (if present).
 
     Returns:
         (benchmark_set, system_name) tuple
+
+    Raises:
+        ValueError
+            If an override conflicts with an existing annotation value.
     """
-    benchmark_set = trans.mapping.annotations.get("system_group", None)
-    system = trans.mapping.annotations.get("system_name", None)
+    # Store original annotation values to detect conflicts
+    original_benchmark_set = trans.mapping.annotations.get("system_group", None)
+    original_system = trans.mapping.annotations.get("system_name", None)
+
+    benchmark_set = original_benchmark_set
+    system = original_system
 
     if benchmark_set is None and system is not None:
         # Get all known benchmark sets and systems from the index
@@ -603,7 +615,24 @@ def _infer_benchmark_data_set_system(
         system = system or "unspecified_system"
         benchmark_set = benchmark_set or "external_submission"
 
-    # Apply overrides (highest priority)
+    # Check for conflicts between overrides and annotations
+    if override_system_group is not None and original_benchmark_set is not None:
+        if override_system_group != original_benchmark_set:
+            raise ValueError(
+                f"Transformation '{trans.name}' has annotation system_group='{original_benchmark_set}' "
+                f"but --system-group override specifies '{override_system_group}'. "
+                f"These values must match. Either remove the override or correct the annotation."
+            )
+
+    if override_system_name is not None and original_system is not None:
+        if override_system_name != original_system:
+            raise ValueError(
+                f"Transformation '{trans.name}' has annotation system_name='{original_system}' "
+                f"but --system-name override specifies '{override_system_name}'. "
+                f"These values must match. Either remove the override or correct the annotation."
+            )
+
+    # Apply overrides (only when annotations were missing)
     if override_system_group:
         benchmark_set = override_system_group
     if override_system_name:
@@ -1993,10 +2022,10 @@ def process_network(
     )
     zenodo_description_path.write_text(zenodo_description_text)
 
-    print(f"Processed {len(input_paths)} input file(s)")
-    print(f"Detected mode: {mode}")
-    print(f"Submission YAML: {submission_yaml_path}")
-    print(f"Zenodo description: {zenodo_description_path}")
+    logger.info(f"Processed {len(input_paths)} input file(s)")
+    logger.info(f"Detected mode: {mode}")
+    logger.info(f"Submission YAML: {submission_yaml_path}")
+    logger.info(f"Zenodo description: {zenodo_description_path}")
 
     return submission_yaml_path, zenodo_description_path
 
@@ -2129,7 +2158,7 @@ def main():
             all_files.append(Path(pattern))
 
     if not all_files:
-        print("Error: No input files found", file=sys.stderr)
+        logger.error("No input files found", file=sys.stderr)
         return 1
 
     # Remove duplicates while preserving order
@@ -2153,7 +2182,7 @@ def main():
         system_group=args.system_group,
         system_name=args.system_name,
     )
-    print("\n✓ Successfully generated submission metadata")
+    logger.info("\n✓ Successfully generated submission metadata")
 
 
 if __name__ == "__main__":
