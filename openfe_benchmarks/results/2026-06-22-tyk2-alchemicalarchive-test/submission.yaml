@@ -11,7 +11,9 @@ summary: |
   with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The network contains 44
   edges across 12 unique ligands. Results are derived from archived Alchemiscale workflow data. This
   subset of the JACS set is meant to provide an example of an alchemical archive submission and
-  provide an indication of the variability in results.
+  provide an indication of the variability in results. For scripts to generate this network:
+  github.com/openforcefield/alchemical-benchmark-
+  resources/submissions/2026_03_17_openff-2.3.0_jacs_tyk2/alchemiscale_submission.ipynb
 
 # REQUIRED: list of submission tags
 tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, jacs_set, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
@@ -21,7 +23,7 @@ authors:
   - name: Jennifer A. Clark
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-07-20
+date: 2026-07-21
 openfe_version: TODO
 openmm_version: TODO
 openff_toolkit_version: TODO
