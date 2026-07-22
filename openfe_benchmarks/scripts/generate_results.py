@@ -1,15 +1,16 @@
 import json
 import click
-from gufe.tokenization import JSON_HANDLER
-from gufe import AlchemicalNetwork, ProteinComponent
-from openff.units import unit
 import pathlib
-from cinnabar import FEMap
 from collections import defaultdict
+import logging
+
 import numpy as np
 import bz2
-import logging
-import tempfile
+from gufe.tokenization import JSON_HANDLER
+from gufe import AlchemicalNetwork, ProteinComponent
+from gufe.archival import AlchemicalArchive
+from openff.units import unit
+from cinnabar import FEMap
 
 logger = logging.getLogger(__name__)
 
@@ -30,21 +31,17 @@ def _load_archive(archive_path: pathlib.Path):
     AlchemicalArchive
         The deserialized alchemical archive
     """
-    from gufe.archival import AlchemicalArchive
 
-    with bz2.open(archive_path, "rt") as f:
-        json_content = f.read()
+    archive_path = pathlib.Path(archive_path)
 
-    # Write to temporary file for AlchemicalArchive.from_json()
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
-        tmp.write(json_content)
-        tmp_path = tmp.name
+    if str(archive_path).endswith(".bz2"):
+        with bz2.open(archive_path, "rt") as f:
+            json_content = f.read()
+        archive = AlchemicalArchive.from_json(content=json_content)
+    else:
+        archive = AlchemicalArchive.from_json(str(archive_path))
 
-    try:
-        archive = AlchemicalArchive.from_json(tmp_path)
-        return archive
-    finally:
-        pathlib.Path(tmp_path).unlink()
+    return archive
 
 
 def _extract_results_from_archive(alchemical_archive):
@@ -67,46 +64,44 @@ def _extract_results_from_archive(alchemical_archive):
 
         key = (ligand_a_name, ligand_b_name)
 
-        # Extract estimate from the DAG result
+        # Extract estimate from all DAG results
         if dag_results_list:
-            dag_result = dag_results_list[0]
-            if dag_result.terminal_protocol_unit_results:
-                term_result = dag_result.terminal_protocol_unit_results[0]
-                outputs = term_result.outputs
+            for dag_result in dag_results_list:
+                if dag_result.terminal_protocol_unit_results:
+                    term_result = dag_result.terminal_protocol_unit_results[0]
+                    outputs = term_result.outputs
 
-                # Extract unit_estimate and error
-                estimate = None
-                estimate_error = None
-                mbar_overlap_matrix = None
-                replica_mixing_matrix = None
+                    # Extract unit_estimate and error
+                    estimate = None
+                    estimate_error = None
+                    mbar_overlap_matrix = None
+                    replica_mixing_matrix = None
 
-                if "unit_estimate" in outputs:
-                    estimate_qty = outputs["unit_estimate"]
-                    estimate = estimate_qty.magnitude
+                    if "unit_estimate" in outputs:
+                        estimate = outputs["unit_estimate"]
 
-                if "unit_estimate_error" in outputs:
-                    error_qty = outputs["unit_estimate_error"]
-                    estimate_error = error_qty.magnitude
+                    if "unit_estimate_error" in outputs:
+                        estimate_error = outputs["unit_estimate_error"]
 
-                if "unit_mbar_overlap" in outputs:
-                    mbar_dict = outputs["unit_mbar_overlap"]
-                    if isinstance(mbar_dict, dict) and "matrix" in mbar_dict:
-                        mbar_overlap_matrix = mbar_dict["matrix"]
+                    if "unit_mbar_overlap" in outputs:
+                        mbar_dict = outputs["unit_mbar_overlap"]
+                        if isinstance(mbar_dict, dict) and "matrix" in mbar_dict:
+                            mbar_overlap_matrix = mbar_dict["matrix"]
 
-                if "replica_exchange_statistics" in outputs:
-                    replica_dict = outputs["replica_exchange_statistics"]
-                    if isinstance(replica_dict, dict) and "matrix" in replica_dict:
-                        replica_mixing_matrix = replica_dict["matrix"]
+                    if "replica_exchange_statistics" in outputs:
+                        replica_dict = outputs["replica_exchange_statistics"]
+                        if isinstance(replica_dict, dict) and "matrix" in replica_dict:
+                            replica_mixing_matrix = replica_dict["matrix"]
 
-                result_dict = {
-                    "phase": phase,
-                    "estimate": estimate,
-                    "estimate_error": estimate_error,
-                    "mbar_overlap": mbar_overlap_matrix,
-                    "replica_mixing": replica_mixing_matrix,
-                    "transformation": transformation,
-                }
-                raw_results[key].append((phase, result_dict))
+                    result_dict = {
+                        "phase": phase,
+                        "estimate": estimate,
+                        "estimate_error": estimate_error,
+                        "mbar_overlap": mbar_overlap_matrix,
+                        "replica_mixing": replica_mixing_matrix,
+                        "transformation": transformation,
+                    }
+                    raw_results[key].append((phase, result_dict))
 
     return raw_results
 
@@ -336,25 +331,45 @@ def run_generate_results(
 
         # Extract estimates based on source type
         if results_source == "archive":
-            complex_data = [
-                result["estimate"]
-                for result in complex_results
-                if result["estimate"] is not None
-            ]
-            solvent_data = [
-                result["estimate"]
-                for result in solvent_results
-                if result["estimate"] is not None
-            ]
+            complex_data = (
+                np.array(
+                    [
+                        result["estimate"].m_as(unit.kilocalories_per_mole)
+                        for result in complex_results
+                        if result["estimate"] is not None
+                    ]
+                )
+                * unit.kilocalories_per_mole
+            )
+            solvent_data = (
+                np.array(
+                    [
+                        result["estimate"].m_as(unit.kilocalories_per_mole)
+                        for result in solvent_results
+                        if result["estimate"] is not None
+                    ]
+                )
+                * unit.kilocalories_per_mole
+            )
         else:  # files
-            complex_data = [
-                result["estimate"].m_as(unit.kilocalories_per_mole)
-                for result in complex_results
-            ]
-            solvent_data = [
-                result["estimate"].m_as(unit.kilocalories_per_mole)
-                for result in solvent_results
-            ]
+            complex_data = (
+                np.array(
+                    [
+                        result["estimate"].m_as(unit.kilocalories_per_mole)
+                        for result in complex_results
+                    ]
+                )
+                * unit.kilocalories_per_mole
+            )
+            solvent_data = (
+                np.array(
+                    [
+                        result["estimate"].m_as(unit.kilocalories_per_mole)
+                        for result in solvent_results
+                    ]
+                )
+                * unit.kilocalories_per_mole
+            )
 
         if complex_data and solvent_data:
             n_repeats = (len(complex_data), len(solvent_data))
@@ -367,20 +382,17 @@ def run_generate_results(
                     f"Solvent leg {key} is does not meet minimum number of repeats requirement. Must be 1 or at least {MIN_ALLOWED_REPEATS}."
                 )
 
-            complex_data *= unit.kilocalories_per_mole
-            solvent_data *= unit.kilocalories_per_mole
-
             complex_dg = np.mean(complex_data)
             if n_repeats[0] == 1:
                 complex_dg_uncertainty = np.nan * unit.kilocalories_per_mole
             else:
-                complex_dg_uncertainty = np.std(complex_data)
+                complex_dg_uncertainty = np.std(complex_data, ddof=1)
 
             solvent_dg = np.mean(solvent_data)
             if n_repeats[1] == 1:
                 solvent_dg_uncertainty = np.nan * unit.kilocalories_per_mole
             else:
-                solvent_dg_uncertainty = np.std(solvent_data)
+                solvent_dg_uncertainty = np.std(solvent_data, ddof=1)
 
             # get the combined ddg and uncertainty
             entry_data["ddg"] = complex_dg - solvent_dg
@@ -409,7 +421,11 @@ def run_generate_results(
                     if results_source == "archive":
                         # Archive results have estimate_error, mbar_overlap and replica_mixing already extracted
                         if phase_result.get("estimate_error") is not None:
-                            mbar_errors.append(phase_result["estimate_error"])
+                            mbar_errors.append(
+                                phase_result["estimate_error"].m_as(
+                                    unit.kilocalories_per_mole
+                                )
+                            )
 
                         if phase_result["mbar_overlap"] is not None:
                             mbar_overlap_elements.append(
@@ -492,14 +508,14 @@ def run_generate_results(
     # Determine globally which uncertainty type to use for ALL edges
     # Check if all edges have valid ddg_uncertainty (from repeats)
     all_have_repeat_uncertainty = all(
-        not np.isnan(result["ddg_uncertainty"].magnitude)
+        not np.isnan(result["ddg_uncertainty"].m_as(unit.kilocalories_per_mole))
         for result in gathered_results["ddg"]
     )
 
     edges_without_repeat_uncertainty = [
         (result["ligand_a"], result["ligand_b"])
         for result in gathered_results["ddg"]
-        if np.isnan(result["ddg_uncertainty"].magnitude)
+        if np.isnan(result["ddg_uncertainty"].m_as(unit.kilocalories_per_mole))
     ]
 
     edges_without_min_repeats = [
@@ -534,6 +550,7 @@ def run_generate_results(
         else:
             uncertainty = result["ddg_uncertainty"]
 
+        print(result["ddg"], "and", uncertainty)
         fe_map.add_relative_calculation(
             labelA=result["ligand_a"],
             labelB=result["ligand_b"],
