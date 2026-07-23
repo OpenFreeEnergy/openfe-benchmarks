@@ -56,7 +56,6 @@ import glob as glob_module
 import json
 import re
 import sys
-import tempfile
 import textwrap
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -401,38 +400,29 @@ def _load_network(
         For "alchemicalarchive" mode, returns the AlchemicalArchive object.
         For "alchemicalnetwork" mode, returns the AlchemicalNetwork object.
     """
-    # Handle bz2-compressed files
-    if str(input_path).endswith(".bz2"):
-        with bz2.open(input_path, "rt") as f:
-            json_content = f.read()
-
-        # Write to temporary file for loading
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
-            tmp.write(json_content)
-            tmp_path = tmp.name
-    else:
-        tmp_path = None
-
     try:
-        load_path = tmp_path if tmp_path else input_path
+        if str(input_path).endswith(".bz2"):
+            with bz2.open(input_path, "rt") as f:
+                json_content = f.read()
 
+            alchemical_archive = AlchemicalArchive.from_json(content=json_content)
+        else:
+            alchemical_archive = AlchemicalArchive.from_json(file=str(input_path))
+        return alchemical_archive, "alchemicalarchive"
+    except Exception:
         try:
-            archive = AlchemicalArchive.from_json(file=load_path)
-            mode = "alchemicalarchive"
-            return archive, mode
+            if str(input_path).endswith(".bz2"):
+                with bz2.open(input_path, "rt") as f:
+                    json_content = f.read()
+
+                alchemical_network = AlchemicalNetwork.from_json(content=json_content)
+            else:
+                alchemical_network = AlchemicalNetwork.from_json(file=str(input_path))
+            return alchemical_network, "alchemicalnetwork"
         except Exception:
-            try:
-                alchemical_network = AlchemicalNetwork.from_json(file=load_path)
-                mode = "alchemicalnetwork"
-                return alchemical_network, mode
-            except Exception:
-                raise ImportError(
-                    f"Could not import file as either an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
-                )
-    finally:
-        # Clean up temporary file if one was created
-        if tmp_path:
-            Path(tmp_path).unlink(missing_ok=True)
+            raise ImportError(
+                f"Could not import file as either an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
+            )
 
 
 def _get_network_key(
