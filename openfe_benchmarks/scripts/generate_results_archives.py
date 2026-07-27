@@ -8,6 +8,7 @@ import numpy as np
 import bz2
 
 from openfe.protocols.openmm_rfe import RelativeHybridTopologyProtocol
+from openfe.protocols.openmm_septop import SepTopProtocol
 from gufe.tokenization import JSON_HANDLER
 from gufe import ProteinComponent, SolventComponent
 from gufe.archival import AlchemicalArchive
@@ -63,6 +64,8 @@ def _extract_hybrid_topology_rfe_data(transformation, results):
     individual_estimates = protocol_result.get_individual_estimates()
     overlap_matrices = protocol_result.get_overlap_matrices()
     replica_transition_statistics = protocol_result.get_replica_transition_statistics()
+    equilibration_iterations = protocol_result.equilibration_iterations()
+    production_iterations = protocol_result.production_iterations()
 
     return {
         "ligand_a": ligand_a_name,
@@ -76,6 +79,8 @@ def _extract_hybrid_topology_rfe_data(transformation, results):
         "individual_mbar_errors": [e[1] for e in individual_estimates],
         "smallest_mbar_overlaps": [np.diagonal(om["matrix"], offset=1).min() for om in overlap_matrices],
         "smallest_replica_mixing": [np.diagonal(rts["matrix"], offset=1).min() for rts in replica_transition_statistics],
+        "equilibration_iterations": equilibration_iterations,
+        "production_iterations": production_iterations,
     }
 
 def _extract_asfe_data(transformation, results):
@@ -89,6 +94,8 @@ def _extract_asfe_data(transformation, results):
     vacuum_mbar_errors = [e[1] for e in individual_estimates["vacuum"]]
     overlap_matrices = protocol_result.get_overlap_matrices()
     replica_mixing_matrices = protocol_result.get_replica_transition_statistics()
+    equilibration_iterations = protocol_result.equilibration_iterations()
+    production_iterations = protocol_result.production_iterations()
 
     return {
         "solute": solute,
@@ -103,10 +110,52 @@ def _extract_asfe_data(transformation, results):
         "vacuum_smallest_mbar_overlaps": [np.diagonal(om["matrix"], offset=1).min() for om in overlap_matrices["vacuum"]],
         "solvent_smallest_replica_mixing": [np.diagonal(rts["matrix"], offset=1).min() for rts in replica_mixing_matrices["solvent"]],
         "vacuum_smallest_replica_mixing": [np.diagonal(rts["matrix"], offset=1).min() for rts in replica_mixing_matrices["vacuum"]],
+        "solvent_equilibration_iterations": equilibration_iterations["solvent"],
+        "vacuum_equilibration_iterations": equilibration_iterations["vacuum"],
+        "solvent_production_iterations": production_iterations["solvent"],
+        "vacuum_production_iterations": production_iterations["vacuum"],
     }
 
-def _extract_septop_rbfe_data():
-    pass
+
+def _extract_septop_rbfe_data(transformation, results):
+    """We assume that the inputs were prepared with the _example_plan_septop.py script and the system components are in the transformation name."""
+    protocol_result = transformation.protocol.gather(results)
+    individual_estimates = protocol_result.get_individual_estimates()
+    ligand_a_name = transformation.mapping.componentA.name
+    ligand_b_name = transformation.mapping.componentB.name
+    dgs_solvent = [e[0] for e in individual_estimates["solvent"]]
+    solvent_mbar_errors = [e[1] for e in individual_estimates["solvent"]]
+    dgs_complex = [e[0] for e in individual_estimates["complex"]]
+    complex_mbar_errors = [e[1] for e in individual_estimates["complex"]]
+    overlap_matrices = protocol_result.get_overlap_matrices()
+    replica_mixing_matrices = protocol_result.get_replica_transition_statistics()
+    equilibration_iterations = protocol_result.equilibration_iterations()
+    production_iterations = protocol_result.production_iterations()
+
+    return {
+        "ligand_a": ligand_a_name,
+        "ligand_b": ligand_b_name,
+        "system_group": transformation.mapping.annotations.get("system_group", "unknown"),
+        "system_name": transformation.mapping.annotations.get("system_name", "unknown"),
+        "ddg": protocol_result.get_estimate(),
+        "ddg_uncertainty": protocol_result.get_uncertainty(),
+        "dgs_solvent": dgs_solvent,
+        "solvent_mbar_errors": solvent_mbar_errors,
+        "dgs_complex": dgs_complex,
+        "complex_mbar_errors": complex_mbar_errors,
+        "solvent_smallest_mbar_overlaps": [np.diagonal(om["matrix"], offset=1).min() for om in overlap_matrices["solvent"]],
+        "complex_smallest_mbar_overlaps": [np.diagonal(om["matrix"], offset=1).min() for om in overlap_matrices["complex"]],
+        "solvent_smallest_replica_mixing": [np.diagonal(rts["matrix"], offset=1).min() for rts in replica_mixing_matrices["solvent"]],
+        "complex_smallest_replica_mixing": [np.diagonal(rts["matrix"], offset=1).min() for rts in replica_mixing_matrices["complex"]],
+        # for analytical corrections there is no uncertainty
+        "standard_state_correction_complex_A": [e[0] for e in individual_estimates["standard_state_correction_complex_A"]],
+        "standard_state_correction_complex_B": [e[0] for e in individual_estimates["standard_state_correction_complex_B"]],
+        "standard_state_correction_solvent": [e[0] for e in individual_estimates["standard_state_correction_solvent"]],
+        "complex_production_iterations": production_iterations["complex"],
+        "solvent_production_iterations": production_iterations["solvent"],
+        "complex_equlibration_iterations": equilibration_iterations["complex"],
+        "solvent_equlibration_iterations": equilibration_iterations["solvent"],
+    }
 
 
 def _combine_hybrid_topology_results(results: list[dict]) -> list[dict]:
@@ -145,6 +194,10 @@ def _combine_hybrid_topology_results(results: list[dict]) -> list[dict]:
             "solvent_smallest_mbar_overlaps": results_by_phase["solvent"]["smallest_mbar_overlaps"],
             "complex_smallest_replica_mixing": results_by_phase["complex"]["smallest_replica_mixing"],
             "solvent_smallest_replica_mixing": results_by_phase["solvent"]["smallest_replica_mixing"],
+            "complex_equilibration_iterations": results_by_phase["complex"]["equilibration_iterations"],
+            "solvent_equilibration_iterations": results_by_phase["solvent"]["equilibration_iterations"],
+            "complex_production_iterations": results_by_phase["complex"]["production_iterations"],
+            "solvent_production_iterations": results_by_phase["solvent"]["production_iterations"],
         }
         processed_results.append(combined_data)
     return processed_results
@@ -163,7 +216,9 @@ def _extract_results_from_archive(alchemical_archive):
         # default hybrid rbfe in pontibus using the split leg protocol
         HybridTopProtocol: _extract_hybrid_topology_rfe_data,
         # pontibus ASFE
-        ASFEProtocol: _extract_asfe_data
+        ASFEProtocol: _extract_asfe_data,
+        # SepTop RBFE
+        SepTopProtocol: _extract_septop_rbfe_data,
         # TODO add support for openfe ASFE
         # TODO add support for openfe ABFE
     }
@@ -322,6 +377,7 @@ def run_generate_results(
     type=click.Path(
         dir_okay=True, file_okay=False, path_type=pathlib.Path
     ),
+    required=True,
 )
 @click.option(
     "--system-group",
