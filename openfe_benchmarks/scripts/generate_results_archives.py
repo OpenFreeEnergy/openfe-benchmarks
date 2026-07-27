@@ -317,7 +317,7 @@ def run_generate_results(
     required=True,
 )
 @click.option(
-    "--output_dir",
+    "--output-dir",
     help="Directory to write the results JSON to",
     type=click.Path(
         dir_okay=True, file_okay=False, path_type=pathlib.Path
