@@ -171,7 +171,7 @@ def _extract_results_from_archive(alchemical_archive):
     raw_results = defaultdict(list)
 
     for transformation, dag_results_list in alchemical_archive.transformation_results:
-        if len(dag_results_list) != MIN_ALLOWED_REPEATS:
+        if len(dag_results_list) < MIN_ALLOWED_REPEATS:
             raise ValueError(
                 f"Transformation {transformation.key} is does not meet minimum number of repeats requirement. Must at least {MIN_ALLOWED_REPEATS}."
             )
