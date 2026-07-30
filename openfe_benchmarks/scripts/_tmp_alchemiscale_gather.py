@@ -113,9 +113,9 @@ def main(network, network_key, org, campaign, project, allow_partial, output):
         # first check the status
         status = client.get_network_status(network_key)
         status.pop("complete")
-        if any(v == 0 for v in status.values()):
+        if any(v != 0 for v in status.values()):
             if not allow_partial:
-                raise ValueError(f"Network {network_key} is incomplete to archive run with --allow_partial.")
+                raise ValueError(f"Network {network_key} is incomplete to archive run with --allow-partial.")
             else:
                 logger.warning(f"Network {network_key} has incomplete edges but will be archived anyway as --allow-partial is set.")
 
