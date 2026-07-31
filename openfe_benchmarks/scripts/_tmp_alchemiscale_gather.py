@@ -120,7 +120,7 @@ def run_gather(
         # first check the status
         status = client.get_network_status(network_key)
         status.pop("complete")
-        if any(v == 0 for v in status.values()):
+        if any(v != 0 for v in status.values()):
             if not allow_partial:
                 raise ValueError(
                     f"Network {network_key} is incomplete to archive run with --allow_partial."
