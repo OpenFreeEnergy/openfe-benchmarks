@@ -16,17 +16,17 @@ summary: |
   resources/submissions/2026_03_17_openff-2.3.0_jacs_tyk2/alchemiscale_submission.ipynb
 
 # REQUIRED: list of submission tags
-tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, jacs_set, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
+tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, openff-2.3.0, jacs_set, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
   - name: Jennifer A. Clark
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-07-22
-openfe_version: TODO
-openmm_version: TODO
-openff_toolkit_version: TODO
+date: 2026-07-31
+openfe_version: 1.11.1
+openmm_version: 8.2.0
+openff_toolkit_version: NA
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
 forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
 small_molecule_forcefield: "openff-2.3.0"

@@ -1126,6 +1126,7 @@ def _make_tags(
     *,
     mode: str,
     forcefield: list[tuple],
+    small_molecule_forcefield: list[tuple],
     partial_charge_tag: list[tuple],
     benchmark_data: list[tuple],
     user_keywords: list[str],
@@ -1134,6 +1135,8 @@ def _make_tags(
     tags.append(mode)
     if forcefield:
         tags.extend(sorted(list(set(ff for ff_set, _ in forcefield for ff in ff_set))))
+    if small_molecule_forcefield:
+        tags.extend(sorted(list(set(x[0] for x in small_molecule_forcefield))))
     if benchmark_data:
         tags.extend(sorted(list(set(y for x in benchmark_data for y in x))))
     if partial_charge_tag:
@@ -1816,7 +1819,8 @@ def process_network(
         Comma-separated list of additional tags to include in the submission
         metadata. The generated tag list also always includes the detected
         `mode` (either ``asfe`` or ``rbfe``), the resolved forcefield string,
-        and normalized partial charge information.
+        the detected small-molecule forcefield, and normalized partial charge
+        information.
     author:
         Optional list of author entries for the submission YAML. Each entry is
         treated as a raw string and written to the `authors` section.
@@ -1978,6 +1982,7 @@ def process_network(
     tags_final = _make_tags(
         mode=mode,
         forcefield=merged_metadata.forcefield,
+        small_molecule_forcefield=merged_metadata.small_molecule_forcefield,
         partial_charge_tag=merged_metadata.partial_charges,
         benchmark_data=merged_metadata.benchmark_sets_systems,
         user_keywords=tags_list,

@@ -26,8 +26,6 @@ def build_femap_from_relative_results(
          - system_name: str
          - ddg: Quantity
          - ddg_uncertainty: Quantity
-        Optionally may include:
-         - mbar_std: Quantity (used as fallback if ddg_uncertainty is NaN)
 
     Returns
     -------
@@ -46,15 +44,16 @@ def build_femap_from_relative_results(
         system_group, system_name = system_key
         benchmark_data = get_benchmark_data_system(system_group, system_name)
 
-        # First, determine globally which uncertainty type to use for this system
         # Check if all edges have valid ddg_uncertainty (not NaN)
-        all_have_repeat_uncertainty = all(
-            not np.isnan(result["ddg_uncertainty"].magnitude)
+        edges_no_uncertainty = [
+            (result["ligand_a"], result["ligand_b"])
             for result in system_results
-        )
-
-        # Decide which uncertainty to use for the entire network
-        use_mbar_std = not all_have_repeat_uncertainty
+            if not np.isnan(result["ddg_uncertainty"].magnitude)
+        ]
+        if edges_no_uncertainty:
+            raise ValueError(
+                f"Not all edges have ddg_uncertainty for {system_group} {system_name}: {edges_no_uncertainty}"
+            )
 
         femap = FEMap()
         for result in system_results:
@@ -62,19 +61,11 @@ def build_femap_from_relative_results(
             ligand_b = result["ligand_b"]
             # record the ligands added to the femap
             unique_ligands.update([ligand_a, ligand_b])
-            ddg = result["ddg"]
-
-            # Use consistent uncertainty type for all edges in this system
-            if use_mbar_std and "mbar_std" in result:
-                ddg_uncertainty = result["mbar_std"]
-            else:
-                ddg_uncertainty = result["ddg_uncertainty"]
-
             femap.add_relative_calculation(
                 labelA=ligand_a,
                 labelB=ligand_b,
-                value=ddg,
-                uncertainty=ddg_uncertainty,
+                value=result["ddg"],
+                uncertainty=result["ddg_uncertainty"],
             )
 
         # add experimental data for each of the ligands in the results
