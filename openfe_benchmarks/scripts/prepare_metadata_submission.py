@@ -1751,16 +1751,13 @@ def _make_zenodo_description(
         )
 
     return f"""# {title}
-
-## Description
-
 ## Overview
 
 {content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
 
 {content_summary}
 
-## Software versions
+## Software Versions
 
 {openfe_version_yaml}
 {openmm_version_yaml}
@@ -1768,7 +1765,7 @@ def _make_zenodo_description(
 
 {network_keys_section}
 
-## Recommended descriptors
+## Recommended Descriptors
 
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
@@ -1777,7 +1774,7 @@ def _make_zenodo_description(
 
 {benchmark_system_yaml}
 
-## Protocol settings
+## Protocol Settings
 
 {protocol_settings_yaml}
 

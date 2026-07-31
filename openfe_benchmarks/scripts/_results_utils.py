@@ -48,7 +48,7 @@ def build_femap_from_relative_results(
         edges_no_uncertainty = [
             (result["ligand_a"], result["ligand_b"])
             for result in system_results
-            if not np.isnan(result["ddg_uncertainty"].magnitude)
+            if np.isnan(result["ddg_uncertainty"].magnitude)
         ]
         if edges_no_uncertainty:
             raise ValueError(
