@@ -24,9 +24,9 @@ authors:
 
 # REQUIRED: publication/submission date (ISO 8601)
 date: 2026-07-31
-openfe_version: 1.11.1
+openfe_version: 1.8.0
 openmm_version: 8.2.0
-openff_toolkit_version: NA
+openff_toolkit_version: 0.18
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
 forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
 small_molecule_forcefield: "openff-2.3.0"
