@@ -72,22 +72,22 @@ protocol_settings:
     lambda_windows: "11"
     lambda_schedule: ""
     notes: |
-      Applies to 134 edges:
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein=none
+      Applies to 283 edges:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flq, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flw, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3fly, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=2v, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=3flz, solvent={'O'}, cofactors=none, protein=none
       - etc.
   - protocol: "RelativeHybridTopologyProtocol"
     notes: |
       Detailed protocol settings differ:
       - solvation_settings.solvent_padding: 1.5 -> 1
-      Applies to 134 edges:
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2ee, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2f, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      Applies to 283 edges:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flq, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flw, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3fly, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=2v, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=3flz, solvent={'O'}, cofactors=none, protein={'unknown'}
       - etc.
 

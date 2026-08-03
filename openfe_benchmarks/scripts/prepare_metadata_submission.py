@@ -5,6 +5,21 @@ This module generates `submission.yaml` and `zenodo_description.md` from one or 
 exported by OpenFE/Alchemiscale. Supports single files, lists of files, or glob patterns with 
 potentially different protocol settings.
 
+Example (CLI):
+
+    # Explicit files
+    python prepare_metadata_submission.py archive1.json.bz2 archive2.json.bz2 \\
+        --output-dir ./output \\
+        --submission-id "2026-04-15-example" \\
+        --tags "openfe,alchemicalarchive" \\
+        --author "Jane Doe" \\
+        --license "CC-BY-4.0"
+
+    # Glob pattern
+    python prepare_metadata_submission.py "networks/*/*.json" \\
+        --output-dir ./output \\
+        --submission-id "2026-04-15-example"
+
 Example (Python API):
 
     from pathlib import Path
@@ -19,7 +34,7 @@ Example (Python API):
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
-    
+
     # Using glob pattern
     process_network(
         input_files="networks/*/*.json",
@@ -29,21 +44,6 @@ Example (Python API):
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
-
-Example (CLI):
-
-    # Explicit files
-    python prepare_metadata_submission.py archive1.json.bz2 archive2.json.bz2 \\
-        --output-dir ./output \\
-        --submission-id "2026-04-15-example" \\
-        --tags "openfe,alchemicalarchive" \\
-        --author "Jane Doe" \\
-        --license "CC-BY-4.0"
-    
-    # Glob pattern
-    python prepare_metadata_submission.py "networks/*/*.json" \\
-        --output-dir ./output \\
-        --submission-id "2026-04-15-example"
 """
 
 from __future__ import annotations
@@ -51,6 +51,7 @@ from __future__ import annotations
 import os
 import argparse
 import ast
+import bz2
 import glob as glob_module
 import json
 import re
@@ -63,20 +64,23 @@ from pathlib import Path
 from typing import Any
 import warnings
 import pprint
+import logging
 
 from pint import Quantity
 
 from gufe.archival import AlchemicalArchive
-from gufe import AlchemicalNetwork
+from gufe import AlchemicalNetwork, SolventComponent, ProteinComponent, SmallMoleculeComponent
 from gufe.transformations.transformation import Transformation
 
 from openfe_benchmarks.data import BenchmarkIndex
 
+logger = logging.getLogger(__name__)
+
 
 def _add_value_with_keys(
-    list_obj: list[tuple[Any, list[str]]],
-    value: Any,
-    keys: list[str],
+        list_obj: list[tuple[Any, list[str]]],
+        value: Any,
+        keys: list[str],
 ) -> None:
     for existing_value, existing_keys in list_obj:
         if existing_value == value:
@@ -216,25 +220,25 @@ class ProtocolSettingsInfo:
         if not isinstance(other, ProtocolSettingsInfo):
             return NotImplemented
         return (
-            self.calculation_mode == other.calculation_mode
-            and self.protocol == other.protocol
-            and self.notes == other.notes
-            and self.full_protocol_settings == other.full_protocol_settings
-            and self.timestep == other.timestep
-            and self.temperature == other.temperature
-            and self.pressure == other.pressure
-            and self.lambda_functions == other.lambda_functions
-            and self.lambda_windows == other.lambda_windows
-            and self.lambda_schedule == other.lambda_schedule
-            and self.small_molecule_forcefield == other.small_molecule_forcefield
-            and self.forcefields == other.forcefields
-            and self.partial_charges == other.partial_charges
-            and self.equilibration_time == other.equilibration_time
-            and self.production_time == other.production_time
-            and self.vacuum_equilibration_time == other.vacuum_equilibration_time
-            and self.vacuum_production_time == other.vacuum_production_time
-            and self.solvent_equilibration_time == other.solvent_equilibration_time
-            and self.solvent_production_time == other.solvent_production_time
+                self.calculation_mode == other.calculation_mode
+                and self.protocol == other.protocol
+                and self.notes == other.notes
+                and self.full_protocol_settings == other.full_protocol_settings
+                and self.timestep == other.timestep
+                and self.temperature == other.temperature
+                and self.pressure == other.pressure
+                and self.lambda_functions == other.lambda_functions
+                and self.lambda_windows == other.lambda_windows
+                and self.lambda_schedule == other.lambda_schedule
+                and self.small_molecule_forcefield == other.small_molecule_forcefield
+                and self.forcefields == other.forcefields
+                and self.partial_charges == other.partial_charges
+                and self.equilibration_time == other.equilibration_time
+                and self.production_time == other.production_time
+                and self.vacuum_equilibration_time == other.vacuum_equilibration_time
+                and self.vacuum_production_time == other.vacuum_production_time
+                and self.solvent_equilibration_time == other.solvent_equilibration_time
+                and self.solvent_production_time == other.solvent_production_time
         )
 
 
@@ -261,13 +265,13 @@ class SystemInfo:
     )
 
     def make_key(
-        self,
-        network_key,
-        ligand_start,
-        cofactors,
-        solvent,
-        ligand_final=None,
-        protein=None,
+            self,
+            network_key,
+            ligand_start,
+            cofactors,
+            solvent,
+            ligand_final=None,
+            protein=None,
     ):
         if self.calculation_mode == "rbfe":
             return f"{network_key} {self.benchmark_set}-{self.benchmark_system}: ligand_start={ligand_start}, ligand_final={ligand_final}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}, protein={protein or 'none'}"
@@ -379,27 +383,51 @@ class AutoMetadata:
 
 
 def _load_network(
-    input_path: Path,
-) -> AlchemicalNetwork | AlchemicalArchive:
+        input_path: Path,
+) -> tuple[AlchemicalNetwork | AlchemicalArchive, str]:
+    """Load an AlchemicalNetwork or AlchemicalArchive from JSON or bz2-compressed JSON.
+
+    Parameters
+    ----------
+    input_path : Path
+        Path to the JSON or JSON.bz2 file
+
+    Returns
+    -------
+    tuple[AlchemicalNetwork | AlchemicalArchive, str]
+        Tuple of (loaded network object, mode) where mode is either
+        "alchemicalarchive" or "alchemicalnetwork"
+        For "alchemicalarchive" mode, returns the AlchemicalArchive object.
+        For "alchemicalnetwork" mode, returns the AlchemicalNetwork object.
+    """
     try:
-        archive = AlchemicalArchive.from_json(file=input_path)
-        alchemical_network = archive.network
-        mode = "alchemicalarchive"
+        if str(input_path).endswith(".bz2"):
+            with bz2.open(input_path, "rt") as f:
+                json_content = f.read()
+
+            alchemical_archive = AlchemicalArchive.from_json(content=json_content)
+        else:
+            alchemical_archive = AlchemicalArchive.from_json(file=str(input_path))
+        return alchemical_archive, "alchemicalarchive"
     except Exception:
         try:
-            alchemical_network = AlchemicalNetwork.from_json(file=input_path)
-            mode = "alchemicalnetwork"
+            if str(input_path).endswith(".bz2"):
+                with bz2.open(input_path, "rt") as f:
+                    json_content = f.read()
+
+                alchemical_network = AlchemicalNetwork.from_json(content=json_content)
+            else:
+                alchemical_network = AlchemicalNetwork.from_json(file=str(input_path))
+            return alchemical_network, "alchemicalnetwork"
         except Exception:
             raise ImportError(
-                f"Could not import file neither an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
+                f"Could not import file as either an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
             )
-
-    return alchemical_network, mode
 
 
 def _get_network_key(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    mode: str,
+        network_obj: AlchemicalArchive | AlchemicalNetwork,
+        mode: str,
 ) -> str:
     if mode == "alchemicalarchive":
         return network_obj.network.key
@@ -412,11 +440,19 @@ def _get_network_key(
 
 
 def _transformation_refs(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    mode: str,
+        network_obj: AlchemicalArchive | AlchemicalNetwork,
+        mode: str,
 ) -> list[Any]:
+    """Get transformation references from either an AlchemicalArchive or AlchemicalNetwork.
+
+    For AlchemicalArchive, transformation_results contains tuples of (transformation, results),
+    so we extract the transformation (first element) from each tuple.
+
+    For AlchemicalNetwork, edges are transformation objects directly.
+    """
     if mode == "alchemicalarchive":
-        return network_obj.transformation_results
+        # transformation_results is a list of (transformation, results) tuples
+        return [trans for trans, _ in network_obj.transformation_results]
     elif mode == "alchemicalnetwork":
         return network_obj.edges
     else:
@@ -426,8 +462,8 @@ def _transformation_refs(
 
 
 def _detect_calc_mode(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    mode: str,
+        network_obj: AlchemicalArchive | AlchemicalNetwork,
+        mode: str,
 ) -> str:
     names: list[str] = []
 
@@ -448,9 +484,9 @@ def _default_submission_id(network_key: str) -> str:
 
 
 def _generate_title(
-    mode: str,
-    benchmark_set_systems: list[tuple[str, str]],
-    submission_id: str,
+        mode: str,
+        benchmark_set_systems: list[tuple[str, str]],
+        submission_id: str,
 ) -> str:
     """
     Generate a descriptive title for the submission.
@@ -507,30 +543,90 @@ def _quantity_to_text(value: Any) -> str:
 
 
 def _infer_benchmark_data_set_system(
-    trans: Transformation,
+        trans: Transformation,
+        override_system_group: str | None = None,
+        override_system_name: str | None = None,
 ) -> tuple[str, str]:
     """Infer benchmark set and system from Transformation contents using BenchmarkIndex.
 
     This searches for any known benchmark set or system name in the transformation mapping metadata.
+    If metadata is not available (e.g., from Alchemiscale archives), returns a generic placeholder.
+    Override values (if provided) take precedence over all other sources, but must not conflict
+    with existing annotations.
+
+    Parameters
+    ----------
+    trans : Transformation
+        The transformation to infer metadata from
+    override_system_group : str | None
+        Optional override for system_group. If provided, must match the annotation (if present).
+    override_system_name : str | None
+        Optional override for system_name. If provided, must match the annotation (if present).
 
     Returns:
-        (benchmark_set, system_name) tuple, or ("", "") if not found
+        (benchmark_set, system_name) tuple
+
+    Raises:
+        ValueError
+            If an override conflicts with an existing annotation value.
     """
-    benchmark_set = trans.mapping.annotations.get("system_group", None)
-    system = trans.mapping.annotations.get("system_name", None)
+    # Store original annotation values to detect conflicts
+    original_benchmark_set = trans.mapping.annotations.get("system_group", None)
+    original_system = trans.mapping.annotations.get("system_name", None)
+
+    benchmark_set = original_benchmark_set
+    system = original_system
 
     if benchmark_set is None and system is not None:
         # Get all known benchmark sets and systems from the index
-        index = BenchmarkIndex()
-        benchmark_sets_systems = index.list_systems_by_tag()
-        benchmark_set = [x[0] for x in benchmark_sets_systems if x[1] == system]
-        if benchmark_set:
-            benchmark_set = benchmark_set[0]  # just take the first one
+        try:
+            index = BenchmarkIndex()
+            benchmark_sets_systems = index.list_systems_by_tag()
+            benchmark_set = [x[0] for x in benchmark_sets_systems if x[1] == system]
+            if benchmark_set:
+                benchmark_set = benchmark_set[0]  # just take the first one
+        except Exception as e:
+            warnings.warn(
+                f"Could not query BenchmarkIndex for system '{system}': {e}. Using generic fallback.",
+                category=UserWarning,
+            )
+            benchmark_set = None
 
     if system is None or benchmark_set is None:
-        raise ValueError(
-            f"Benchmark set / system could not be found for the transformation, {trans.name}. The following was found: {benchmark_set} / {system}. See valid combinations with `index = ofebm.BenchmarkIndex(); index.list_systems_by_tag()`"
+        # Fallback for archives without explicit benchmark metadata (e.g., from Alchemiscale)
+        warnings.warn(
+            f"Transformation '{trans.name}' lacks explicit benchmark set/system metadata in annotations. "
+            f"Using generic fallback values. This may occur with archives generated from Alchemiscale submissions "
+            f"that were not created from openfe-benchmarks. If this is unexpected, verify the transformation "
+            f"has 'system_group' and 'system_name' in its mapping annotations.",
+            category=UserWarning,
         )
+        # Use the transformation name prefix as a simple heuristic for categorization
+        system = system or "unspecified_system"
+        benchmark_set = benchmark_set or "external_submission"
+
+    # Check for conflicts between overrides and annotations
+    if override_system_group is not None and original_benchmark_set is not None:
+        if override_system_group != original_benchmark_set:
+            raise ValueError(
+                f"Transformation '{trans.name}' has annotation system_group='{original_benchmark_set}' "
+                f"but --system-group override specifies '{override_system_group}'. "
+                f"These values must match. Either remove the override or correct the annotation."
+            )
+
+    if override_system_name is not None and original_system is not None:
+        if override_system_name != original_system:
+            raise ValueError(
+                f"Transformation '{trans.name}' has annotation system_name='{original_system}' "
+                f"but --system-name override specifies '{override_system_name}'. "
+                f"These values must match. Either remove the override or correct the annotation."
+            )
+
+    # Apply overrides (only when annotations were missing)
+    if override_system_group:
+        benchmark_set = override_system_group
+    if override_system_name:
+        system = override_system_name
 
     return benchmark_set, system
 
@@ -593,10 +689,10 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
                 out["lambda_schedule"] = ", ".join(lambda_counts)
 
     forcefield_settings = (
-        settings.get("forcefield_settings")
-        or settings.get("solvent_forcefield_settings")
-        or settings.get("vacuum_forcefield_settings")
-        or {}
+            settings.get("forcefield_settings")
+            or settings.get("solvent_forcefield_settings")
+            or settings.get("vacuum_forcefield_settings")
+            or {}
     )
     if forcefield_settings:
         out["small_molecule_forcefield"] = str(
@@ -624,8 +720,8 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
                 out["production_time"] = prod
     elif calc_mode == "asfe":
         for prefix, key in (
-            ("vacuum", "vacuum_simulation_settings"),
-            ("solvent", "solvent_simulation_settings"),
+                ("vacuum", "vacuum_simulation_settings"),
+                ("solvent", "solvent_simulation_settings"),
         ):
             sim = settings.get(key) or {}
             if not isinstance(sim, dict):
@@ -700,10 +796,10 @@ def _charge_method_from_provenance(provenance_dict: dict | None) -> str:
 
 
 def _reconcile_component_charges(
-    ligand_provenance: dict | None,
-    cofactor_provenance: dict | None,
-    trans_name: str,
-    state_label: str,
+        ligand_provenance: dict | None,
+        cofactor_provenance: dict | None,
+        trans_name: str,
+        state_label: str,
 ) -> tuple[str, bool]:
     """Compare ligand vs cofactor charges and return preferred method with warning flag.
 
@@ -777,56 +873,61 @@ def _component_name(component) -> str:
     return "unknown"
 
 
-def _get_system_info(trans, calc_mode) -> dict[str, set | list]:
+def _get_system_info(trans: Transformation, calc_mode: str) -> dict[str, set | list]:
     # Per-system tracking
+    solvents = set()
+    proteins = set()
+    ligands = list()
+    cofactors = set()
     for state_key in ("stateA", "stateB"):
         chemical_system = getattr(trans, state_key)
         if not chemical_system:
             continue
 
-        solvents = set()
-        proteins = set()
-        ligands = list()
-        cofactors = set()
         for label, component in chemical_system.components.items():
-            qualname = str(type(component)).rstrip("'>").split(".")[-1]
 
-            component = component.to_dict()
-            comp_name = _component_name(component)
+            comp_name = _component_name(component.to_dict())
 
             if calc_mode == "asfe":
-                if "solvent" in label or "solventcomponent" in qualname.lower():
+                # ASFE should only have solvents and solutes, should we raise an error for other things?
+                if isinstance(component, SolventComponent):
                     solvents.add(comp_name)
-                elif "solute" in label or qualname == "SmallMoleculeComponent":
+                elif isinstance(component, SmallMoleculeComponent):
                     ligands.append(comp_name)
             elif calc_mode == "rbfe":
-                if "protein" in label or qualname == "ProteinComponent":
+                # get the alchemical ligands
+                alchemical_ligands = {trans.mapping.componentA, trans.mapping.componentB}
+                if isinstance(component, ProteinComponent):
                     proteins.add(comp_name)
-                elif "ligand" in label:
+                elif isinstance(component, SmallMoleculeComponent) and component in alchemical_ligands:
                     if comp_name not in ligands:
                         ligands.append(comp_name)
-                elif "cofactor" in label:
+                elif isinstance(component, SmallMoleculeComponent):
                     cofactors.add(comp_name)
-                elif qualname == "SmallMoleculeComponent" and "solvent" not in label:
+                elif isinstance(component, SmallMoleculeComponent) and "solvent" not in label:
                     # Non-solvent small molecules that are not explicit ligands are treated as cofactors.
                     cofactors.add(comp_name)
+                elif isinstance(component, SolventComponent):
+                    solvents.add(comp_name)
             else:
-                ValueError(
+                raise ValueError(
                     f"Calculation type {calc_mode} is not yet supported. Add capability to `_build_content_summary`"
                 )
 
-        return {
-            "solvents": solvents,
-            "proteins": proteins,
-            "ligands": ligands,
-            "cofactors": cofactors,
-        }
+    return {
+        "solvents": solvents,
+        "proteins": proteins,
+        "ligands": ligands,
+        "cofactors": cofactors,
+    }
 
 
 def _extract_auto_metadata(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    network_mode: str,
-    source_file: str,
+        network_obj: AlchemicalArchive | AlchemicalNetwork,
+        network_mode: str,
+        source_file: str,
+        system_group: str | None = None,
+        system_name: str | None = None,
 ) -> AutoMetadata:
     metadata = AutoMetadata()
     metadata.network_key = _get_network_key(network_obj, network_mode)
@@ -835,7 +936,9 @@ def _extract_auto_metadata(
     transformations = _transformation_refs(network_obj, network_mode)
     metadata.n_transformations = len(transformations)
     for trans in transformations:
-        benchmark_set_system = _infer_benchmark_data_set_system(trans)
+        benchmark_set_system = _infer_benchmark_data_set_system(
+            trans, override_system_group=system_group, override_system_name=system_name
+        )
         if benchmark_set_system not in metadata.system_info_dict:
             metadata.system_info_dict[benchmark_set_system] = SystemInfo(
                 *benchmark_set_system,
@@ -899,9 +1002,9 @@ def _extract_auto_metadata(
 
         # Use the first available charge method from molprops (prefer stateA, fallback to stateB)
         molprops_charge_method = (
-            molprops_charge_methods["stateA"]
-            or molprops_charge_methods["stateB"]
-            or None
+                molprops_charge_methods["stateA"]
+                or molprops_charge_methods["stateB"]
+                or None
         )
 
         # Build protocol settings
@@ -1023,17 +1126,20 @@ def _normalize_partial_charge_info(partial_charge_settings: dict) -> str:
 
 
 def _make_tags(
-    *,
-    mode: str,
-    forcefield: list[tuple],
-    partial_charge_tag: list[tuple],
-    benchmark_data: list[tuple],
-    user_keywords: list[str],
+        *,
+        mode: str,
+        forcefield: list[tuple],
+        small_molecule_forcefield: list[tuple],
+        partial_charge_tag: list[tuple],
+        benchmark_data: list[tuple],
+        user_keywords: list[str],
 ) -> list[str]:
     tags: list[str] = []
     tags.append(mode)
     if forcefield:
         tags.extend(sorted(list(set(ff for ff_set, _ in forcefield for ff in ff_set))))
+    if small_molecule_forcefield:
+        tags.extend(sorted(list(set(x[0] for x in small_molecule_forcefield))))
     if benchmark_data:
         tags.extend(sorted(list(set(y for x in benchmark_data for y in x))))
     if partial_charge_tag:
@@ -1059,8 +1165,8 @@ def _yaml_block(text: str, indent_spaces: int = 2) -> str:
 
 
 def _build_content_summary(
-    metadata: AutoMetadata,
-    used_alchemiscale: bool = True,
+        metadata: AutoMetadata,
+        used_alchemiscale: bool = True,
 ) -> str:
     """
     Build content summary and extract per-system information.
@@ -1175,7 +1281,7 @@ def _build_content_summary(
 
 
 def _render_protocol_settings_yaml(
-    protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]],
+        protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]],
 ) -> str:
     """Take a list of alchemical protocols pairs with strings identifying systems that use it
 
@@ -1243,7 +1349,7 @@ def _render_protocol_settings_yaml(
         return formatted
 
     def _compare_full_protocol_settings(
-        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
+            base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
     ) -> list[tuple[str, Any, Any]]:
         base_obj = _parse_full_protocol_settings(base.full_protocol_settings)
         other_obj = _parse_full_protocol_settings(other.full_protocol_settings)
@@ -1273,7 +1379,7 @@ def _render_protocol_settings_yaml(
         return diffs
 
     def _full_protocol_setting_notes(
-        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
+            base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
     ) -> list[str]:
         diffs = _compare_full_protocol_settings(base, other)
         if not diffs:
@@ -1385,10 +1491,10 @@ def _render_protocol_settings_yaml(
 
 
 def _render_keyed_values_yaml(
-    section_name: str,
-    value_keys: list[tuple[Any, list[str]]],
-    value_label: str = "value",
-    keys_label: str = "edges",
+        section_name: str,
+        value_keys: list[tuple[Any, list[str]]],
+        value_label: str = "value",
+        keys_label: str = "edges",
 ) -> str:
     """Render simple value-with-systems metadata into YAML.
 
@@ -1472,7 +1578,7 @@ benchmark_data:
     for benchmark_set in sorted(network_breakdown):
         benchmark_yaml += f"  {json.dumps(benchmark_set)}:\n"
         for benchmark_system, network_key in sorted(
-            network_breakdown[benchmark_set].items()
+                network_breakdown[benchmark_set].items()
         ):
             benchmark_yaml += f"    {json.dumps(benchmark_system)}: {network_key}\n"
 
@@ -1480,16 +1586,16 @@ benchmark_data:
 
 
 def _make_submission_yaml(
-    metadata: AutoMetadata,
-    submission_id: str,
-    title: str,
-    summary: str,
-    tags: list[str],
-    authors: list[str],
-    archive_doi: str,
-    archive_provider: str,
-    license_name: str,
-    results_file: str,
+        metadata: AutoMetadata,
+        submission_id: str,
+        title: str,
+        summary: str,
+        tags: list[str],
+        authors: list[str],
+        archive_doi: str,
+        archive_provider: str,
+        license_name: str,
+        results_file: str,
 ) -> str:
     if not authors:
         authors = ["TODO add author name"]
@@ -1573,14 +1679,14 @@ license: {license_name}
 
 
 def _make_zenodo_description(
-    metadata: AutoMetadata,
-    network_mode: str,
-    title: str,
-    archive_filename: str,
-    mode: str,
-    content_summary: str,
-    license_name: str,
-    used_alchemiscale: bool,
+        metadata: AutoMetadata,
+        network_mode: str,
+        title: str,
+        archive_filename: str,
+        mode: str,
+        content_summary: str,
+        license_name: str,
+        used_alchemiscale: bool,
 ) -> str:
     content_kind = "ASFE" if mode == "asfe" else "RBFE"
 
@@ -1648,16 +1754,13 @@ def _make_zenodo_description(
         )
 
     return f"""# {title}
-
-## Description
-
 ## Overview
 
 {content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
 
 {content_summary}
 
-## Software versions
+## Software Versions
 
 {openfe_version_yaml}
 {openmm_version_yaml}
@@ -1665,7 +1768,7 @@ def _make_zenodo_description(
 
 {network_keys_section}
 
-## Recommended descriptors
+## Recommended Descriptors
 
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
@@ -1674,7 +1777,7 @@ def _make_zenodo_description(
 
 {benchmark_system_yaml}
 
-## Protocol settings
+## Protocol Settings
 
 {protocol_settings_yaml}
 
@@ -1684,15 +1787,17 @@ def _make_zenodo_description(
 
 
 def process_network(
-    input_files: Path | list[Path] | str,
-    output_dir: Path = Path("."),
-    submission_id: str | None = None,
-    tags: str = "openfe,alchemicalarchive",
-    author: list[str] | None = None,
-    license: str = "CC-BY-4.0",
-    used_alchemiscale: bool = True,
-    summary_suffix: str | None = None,
-    results_file: str = "computational_results.json",
+        input_files: Path | list[Path] | str,
+        output_dir: Path = Path("."),
+        submission_id: str | None = None,
+        tags: str = "openfe,alchemicalarchive",
+        author: list[str] | None = None,
+        license: str = "CC-BY-4.0",
+        used_alchemiscale: bool = True,
+        summary_suffix: str | None = None,
+        results_file: str = "computational_results.json",
+        system_group: str | None = None,
+        system_name: str | None = None,
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -1714,7 +1819,8 @@ def process_network(
         Comma-separated list of additional tags to include in the submission
         metadata. The generated tag list also always includes the detected
         `mode` (either ``asfe`` or ``rbfe``), the resolved forcefield string,
-        and normalized partial charge information.
+        the detected small-molecule forcefield, and normalized partial charge
+        information.
     author:
         Optional list of author entries for the submission YAML. Each entry is
         treated as a raw string and written to the `authors` section.
@@ -1728,6 +1834,12 @@ def process_network(
     results_file:
         Name of the results file to reference in submission.yaml and validate
         exists in output_dir. Defaults to 'computational_results.json'.
+    system_group:
+        Optional benchmark set name (e.g., 'jacs_set', 'solvation_set'). If provided,
+        overrides the system_group extracted from transformation annotations.
+    system_name:
+        Optional system name (e.g., 'tyk2', 'hsp90'). If provided, overrides the
+        system_name extracted from transformation annotations.
 
     Notes
     -----
@@ -1782,7 +1894,13 @@ def process_network(
         network_obj, network_mode = _load_network(resolved_path)
         all_network_objs.append(network_obj)
 
-        metadata = _extract_auto_metadata(network_obj, network_mode, str(resolved_path))
+        metadata = _extract_auto_metadata(
+            network_obj,
+            network_mode,
+            str(resolved_path),
+            system_group=system_group,
+            system_name=system_name,
+        )
         modes.add(metadata.calculation_mode)
         all_network_keys.append(metadata.network_key)
         all_metadata.append(metadata)
@@ -1821,10 +1939,10 @@ def process_network(
                 _add_value_with_keys(getattr(merged_metadata, key), value, keys)
 
         if any(
-            [
-                x in merged_metadata.system_info_dict
-                for x in metadata.system_info_dict.keys()
-            ]
+                [
+                    x in merged_metadata.system_info_dict
+                    for x in metadata.system_info_dict.keys()
+                ]
         ):
             raise ValueError(
                 f"System is already documented: {[x for x in metadata.system_info_dict.keys() if x in merged_metadata.system_info_dict]}"
@@ -1864,6 +1982,7 @@ def process_network(
     tags_final = _make_tags(
         mode=mode,
         forcefield=merged_metadata.forcefield,
+        small_molecule_forcefield=merged_metadata.small_molecule_forcefield,
         partial_charge_tag=merged_metadata.partial_charges,
         benchmark_data=merged_metadata.benchmark_sets_systems,
         user_keywords=tags_list,
@@ -1898,10 +2017,10 @@ def process_network(
     )
     zenodo_description_path.write_text(zenodo_description_text)
 
-    print(f"Processed {len(input_paths)} input file(s)")
-    print(f"Detected mode: {mode}")
-    print(f"Submission YAML: {submission_yaml_path}")
-    print(f"Zenodo description: {zenodo_description_path}")
+    logger.info(f"Processed {len(input_paths)} input file(s)")
+    logger.info(f"Detected mode: {mode}")
+    logger.info(f"Submission YAML: {submission_yaml_path}")
+    logger.info(f"Zenodo description: {zenodo_description_path}")
 
     return submission_yaml_path, zenodo_description_path
 
@@ -1915,16 +2034,16 @@ def main():
             Examples:
               # Single archive file
               %(prog)s archive.json.bz2
-              
+
               # Multiple archive files
               %(prog)s archive1.json.bz2 archive2.json.bz2 --output-dir ./results
-              
+
               # Glob pattern
               %(prog)s "networks/*/*.json" --output-dir ./results
-              
+
               # Multiple glob patterns
               %(prog)s "charge_changes/*/*.json" "jacs_set/*/*.json"
-              
+
               # Full example with all options
               %(prog)s "networks/*/*.json" \\
                   --output-dir ./output \\
@@ -1942,7 +2061,7 @@ def main():
         nargs="+",
         metavar="INPUT",
         help="One or more file paths or glob patterns (e.g., 'networks/*/*.json'). "
-        "Glob patterns support * and ** wildcards.",
+             "Glob patterns support * and ** wildcards.",
     )
 
     parser.add_argument(
@@ -2007,6 +2126,20 @@ def main():
         help="Name of the results file in output directory (default: computational_results.json)",
     )
 
+    parser.add_argument(
+        "--system-group",
+        type=str,
+        default=None,
+        help="Benchmark set name (e.g., 'jacs_set', 'solvation_set'); overrides values from transformation annotations",
+    )
+
+    parser.add_argument(
+        "--system-name",
+        type=str,
+        default=None,
+        help="System name (e.g., 'tyk2', 'hsp90'); overrides values from transformation annotations",
+    )
+
     args = parser.parse_args()
 
     # Expand glob patterns and collect all matching files
@@ -2020,7 +2153,7 @@ def main():
             all_files.append(Path(pattern))
 
     if not all_files:
-        print("Error: No input files found", file=sys.stderr)
+        logger.error("No input files found", file=sys.stderr)
         return 1
 
     # Remove duplicates while preserving order
@@ -2041,8 +2174,10 @@ def main():
         used_alchemiscale=not args.no_alchemiscale,
         summary_suffix=args.summary_suffix,
         results_file=args.results_file,
+        system_group=args.system_group,
+        system_name=args.system_name,
     )
-    print("\n✓ Successfully generated submission metadata")
+    logger.info("\n✓ Successfully generated submission metadata")
 
 
 if __name__ == "__main__":
