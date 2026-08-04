@@ -42,7 +42,8 @@ def _get_simulation_key(result: dict) -> tuple[tuple[str, str], str]:
 )
 def main(results_dir, network, output_dir):
     """
-    Gather all the results for the transformations in the network and write the DDG/DG to a json file with units and metadata which can be used
+    Gather all the results for the transformations in the network and write the DDG/DG to
+    a json file with units and metadata which can be used
     for down stream analysis.
     """
     # load the network to make sure all transformations are present in the results

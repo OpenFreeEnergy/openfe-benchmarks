@@ -3,6 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+**/AlchemicalNetwork*
+**/zenodo_description.md
+# Test dir
+openfe_benchmarks/scripts/outputs/*
+
 # C extensions
 *.so
 

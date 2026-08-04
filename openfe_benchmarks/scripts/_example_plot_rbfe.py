@@ -1,11 +1,14 @@
-from openfe_benchmarks.data._results_utils import build_femap_from_relative_results
+import pathlib
 import json
+
 from gufe.tokenization import JSON_HANDLER
 from cinnabar import plotting
-import pathlib
+
+from openfe_benchmarks.scripts._results_utils import build_femap_from_relative_results
 
 RESULTS_FILE = "../results/2026-03-18-openmm-840-qa-testing/computational_results.json"
 OUTPUT_DIR = "outputs"
+
 
 def main():
     """
@@ -19,7 +22,9 @@ def main():
     results = json.load(open(RESULTS_FILE), cls=JSON_HANDLER.decoder)
     # check we have DDG values
     if "ddg" not in results:
-        raise ValueError(f"Results file {RESULTS_FILE} does not contain 'ddg' values, cannot plot")
+        raise ValueError(
+            f"Results file {RESULTS_FILE} does not contain 'ddg' values, cannot plot"
+        )
 
     # build FEMaps and load with experimental data
     femaps_by_system = build_femap_from_relative_results(results=results["ddg"])
@@ -34,8 +39,9 @@ def main():
             title=f"{system_group}-{system_name}",
             figsize=5,
             scatter_kwargs={"s": 20, "marker": "o"},
-            filename=(output_dir / f"{system_group}_{system_name}_DDG.png").as_posix()
+            filename=(output_dir / f"{system_group}_{system_name}_DDG.png").as_posix(),
         )
+
 
 if __name__ == "__main__":
     main()
