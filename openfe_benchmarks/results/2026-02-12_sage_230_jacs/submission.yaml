@@ -49,7 +49,6 @@ results: computational_results.json
 archive:
   doi: https://doi.org/10.5281/zenodo.21793193
   archive_provider: zenodo
-  archive_provider: TODO add archive provider
 
 # REQUIRED: license for the submission
 license: CC-BY-4.0
