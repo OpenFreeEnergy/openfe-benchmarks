@@ -2153,7 +2153,7 @@ def main():
             all_files.append(Path(pattern))
 
     if not all_files:
-        logger.error("No input files found", file=sys.stderr)
+        logger.error("No input files found")
         return 1
 
     # Remove duplicates while preserving order
