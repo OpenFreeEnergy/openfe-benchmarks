@@ -19,15 +19,14 @@ from openfe_benchmarks.scripts.prepare_metadata_submission import process_networ
 
 logger = logging.getLogger(__name__)
 
-NETWORK_KEY = (
-    "AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d-openff-test-openff_2_3_0_tyk2"
-)
+NETWORK_KEY = "your_network_key"
 SYSTEM_GROUP = "jacs_set"
 SYSTEM_SET = "tyk2"
-OUTPUT_DIR = "test"
+OUTPUT_DIR = "output"
 
 SUBMISSION_ID = "2026-06-22-tyk2-alchemicalarchive-test"
-AUTHOR = "Jennifer A. Clark"
+DATE = "2026-06-22"
+AUTHOR = "Jane Doe"
 SUMMARY_SUFFIX = (
     "This subset of the JACS set is meant to provide an example of an alchemical archive submission"
     " and provide an indication of the variability in results. For scripts to generate this network: "
@@ -55,7 +54,7 @@ if __name__ == "__main__":
     logger.info("Step: Generating computational_results.json")
     logger.info("=" * 70)
     run_generate_results(
-        archive=Path(f"{NETWORK_KEY}.json.bz2"),
+        archive=Path(f"{OUTPUT_DIR}/{NETWORK_KEY}.json.bz2"),
         system_group=SYSTEM_GROUP,
         system_name=SYSTEM_SET,
         output_dir=Path(OUTPUT_DIR),
@@ -67,7 +66,7 @@ if __name__ == "__main__":
     logger.info("Step: Generating submission metadata")
     logger.info("=" * 70)
     process_network(
-        input_files="AlchemicalNetwork*.json.bz2",
+        input_files=f"{OUTPUT_DIR}/AlchemicalNetwork*.json.bz2",
         output_dir=Path(OUTPUT_DIR),
         submission_id=SUBMISSION_ID,
         tags=TAGS,
@@ -75,6 +74,7 @@ if __name__ == "__main__":
         license="CC-BY-4.0",
         system_group=SYSTEM_GROUP,
         system_name=SYSTEM_SET,
+        submission_date=DATE,
         summary_suffix=SUMMARY_SUFFIX,
     )
     logger.info("✓ Generating submission metadata completed successfully\n")

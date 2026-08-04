@@ -6,12 +6,12 @@ title: OpenFE RBFE - jacs_set - tyk2 - 2026-06-22-tyk2-alchemicalarchive-test
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
-  This submission describes the jacs_set RBFE benchmark prepared with
-  ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and openff-2.3.0
-  with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The network contains 44
-  edges across 12 unique ligands. Results are derived from archived Alchemiscale workflow data. This
-  subset of the JACS set is meant to provide an example of an alchemical archive submission and
-  provide an indication of the variability in results. For scripts to generate this network:
+  This submission describes the RBFE benchmark covering the jacs_set benchmark set (tyk2) prepared
+  with ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and
+  openff-2.3.0 with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The network
+  contains 44 edges across 16 unique ligands. Results are derived from archived Alchemiscale workflow
+  data. This subset of the JACS set is meant to provide an example of an alchemical archive submission
+  and provide an indication of the variability in results. For scripts to generate this network:
   github.com/openforcefield/alchemical-benchmark-
   resources/submissions/2026_03_17_openff-2.3.0_jacs_tyk2/alchemiscale_submission.ipynb
 
@@ -23,7 +23,7 @@ authors:
   - name: Jennifer A. Clark
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-07-31
+date: 2026-06-22
 openfe_version: 1.8.0
 openmm_version: 8.2.0
 openff_toolkit_version: 0.18
@@ -69,22 +69,22 @@ protocol_settings:
     lambda_windows: "11"
     lambda_schedule: ""
     notes: |
-      Applies to 12 edges:
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_42, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_43, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_44, ligand_final=none, solvent=none, cofactors=none, protein=none
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_47, ligand_final=none, solvent=none, cofactors=none, protein=none
+      Applies to 22 edges:
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_42, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_44, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_45, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_46, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_48, solvent={'O'}, cofactors=none, protein=none
       - etc.
   - protocol: "RelativeHybridTopologyProtocol"
     notes: |
       Detailed protocol settings differ:
       - solvation_settings.solvent_padding: 1.5 -> 1
-      Applies to 12 edges:
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_42, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_43, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_44, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
-      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_47, ligand_final=none, solvent=none, cofactors=none, protein={'unknown'}
+      Applies to 22 edges:
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_42, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_44, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_45, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_46, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-2dd5d032b0228c7474eda50d8e064c2d jacs_set-tyk2: ligand_start=ejm_31, ligand_final=ejm_48, solvent={'O'}, cofactors=none, protein={'unknown'}
       - etc.
 

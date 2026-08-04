@@ -1208,8 +1208,12 @@ def _build_content_summary(
 
     # Group systems by benchmark set for explicit listing
     sets_to_systems: dict[str, list[str]] = defaultdict(list)
-    for system_group, system_name in metadata.benchmark_sets_systems:
-        sets_to_systems[system_group].append(system_name)
+    if metadata.benchmark_sets_systems:
+        for system_group, system_name in metadata.benchmark_sets_systems:
+            sets_to_systems[system_group].append(system_name)
+    else:
+        for system_group, system_name in metadata.system_info_dict.keys():
+            sets_to_systems[system_group].append(system_name)
 
     # Sort systems within each set
     for systems_list in sets_to_systems.values():
@@ -1217,25 +1221,19 @@ def _build_content_summary(
 
     unique_sets = sorted(sets_to_systems.keys())
 
-    # Build descriptive subject line
-    if len(unique_sets) == 0:
-        subject = "benchmark"
-    elif len(unique_sets) == 1:
-        subject = unique_sets[0]
-    else:
-        subject = ", ".join(unique_sets)
-
-    # Build explicit systems description: "set1: sys1, sys2; set2: sys3, sys4"
     if len(unique_sets) > 1:
         set_descriptions = [
             f"{set_name}: {', '.join(sets_to_systems[set_name])}"
             for set_name in unique_sets
         ]
-        systems_desc = "; ".join(set_descriptions)
+        systems_desc_phrase = f" covering {', '.join(set_descriptions)}"
     elif len(unique_sets) == 1:
         systems_desc = ", ".join(sets_to_systems[unique_sets[0]])
+        systems_desc_phrase = (
+            f" covering the {unique_sets[0]} benchmark set ({systems_desc})"
+        )
     else:
-        systems_desc = f"{len(metadata.benchmark_sets_systems)} edges"
+        systems_desc_phrase = ""
 
     # Count totals across all edges
     all_structures = {
@@ -1260,12 +1258,12 @@ def _build_content_summary(
         )
         if len(unique_sets) > 1:
             summary_parts = [
-                f"This submission describes the {subject} RBFE benchmark ({systems_desc}) prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
+                f"This submission describes the RBFE benchmark{systems_desc_phrase} prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
                 f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique ligands.",
             ]
         else:
             summary_parts = [
-                f"This submission describes the {subject} RBFE benchmark prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
+                f"This submission describes the RBFE benchmark{systems_desc_phrase} prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
                 f"The network contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique ligands.",
             ]
         if systems_with_cofactors:
@@ -1275,12 +1273,12 @@ def _build_content_summary(
     else:
         if len(unique_sets) > 1:
             summary_parts = [
-                f"This submission describes the {subject} ASFE benchmark ({systems_desc}) prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
+                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
                 f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique solutes, and {len(all_structures['solvents'])} unique solvents.",
             ]
         else:
             summary_parts = [
-                f"This submission describes the {subject} ASFE benchmark prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
+                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
                 f"The archive contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique solutes and {len(all_structures['solvents'])} unique solvents.",
             ]
 
@@ -1597,6 +1595,33 @@ benchmark_data:
     return benchmark_yaml
 
 
+def _normalize_submission_date(submission_date: date | str | None) -> str:
+    """Normalize the submission date to an ISO 8601 date string.
+
+    Parameters
+    ----------
+    submission_date:
+        A date object or ISO 8601 date string. If None, uses today's date.
+
+    Returns
+    -------
+    str
+        ISO 8601 formatted date string.
+    """
+    if submission_date is None:
+        return date.today().isoformat()
+    if isinstance(submission_date, date):
+        return submission_date.isoformat()
+    if isinstance(submission_date, str):
+        try:
+            return date.fromisoformat(submission_date).isoformat()
+        except ValueError as exc:
+            raise ValueError(
+                "submission_date must be an ISO 8601 date string like YYYY-MM-DD"
+            ) from exc
+    raise TypeError("submission_date must be a datetime.date or ISO 8601 date string")
+
+
 def _make_submission_yaml(
     metadata: AutoMetadata,
     submission_id: str,
@@ -1608,6 +1633,7 @@ def _make_submission_yaml(
     archive_provider: str,
     license_name: str,
     results_file: str,
+    submission_date: date | str | None = None,
 ) -> str:
     if not authors:
         authors = ["TODO add author name"]
@@ -1646,6 +1672,8 @@ def _make_submission_yaml(
         "edges",
     )
 
+    submission_date = _normalize_submission_date(submission_date)
+
     return f"""# REQUIRED: unique, kebab-case identifier for this submission
 submission_id: {submission_id}
 
@@ -1664,7 +1692,7 @@ authors:
 {authors_yaml}
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: {date.today().isoformat()}
+date: {submission_date}
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
@@ -1699,6 +1727,7 @@ def _make_zenodo_description(
     content_summary: str,
     license_name: str,
     used_alchemiscale: bool,
+    submission_id: str,
 ) -> str:
     content_kind = "ASFE" if mode == "asfe" else "RBFE"
 
@@ -1765,12 +1794,21 @@ def _make_zenodo_description(
             network_keys_lines
         )
 
+    repo_link = (
+        f"https://github.com/OpenFreeEnergy/openfe-benchmarks/tree/main/"
+        f"openfe_benchmarks/results/{submission_id}"
+    )
+
     return f"""# {title}
 ## Overview
 
 {content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
 
 {content_summary}
+
+## Repository Reference
+This submission is linked from the OpenFE Benchmarks repository:
+{repo_link}
 
 ## Software Versions
 
@@ -1808,6 +1846,7 @@ def process_network(
     used_alchemiscale: bool = True,
     summary_suffix: str | None = None,
     results_file: str = "computational_results.json",
+    submission_date: date | str | None = None,
     system_group: str | None = None,
     system_name: str | None = None,
 ) -> tuple[Path, Path]:
@@ -1846,6 +1885,10 @@ def process_network(
     results_file:
         Name of the results file to reference in submission.yaml and validate
         exists in output_dir. Defaults to 'computational_results.json'.
+    submission_date:
+        Optional publication or submission date for the YAML file, as a
+        datetime.date or ISO 8601 date string (YYYY-MM-DD). If omitted, the
+        current date is used.
     system_group:
         Optional benchmark set name (e.g., 'jacs_set', 'solvation_set'). If provided,
         overrides the system_group extracted from transformation annotations.
@@ -2011,6 +2054,7 @@ def process_network(
         archive_provider="TODO add archive provider",
         license_name=license,
         results_file=results_file,
+        submission_date=submission_date,
     )
     submission_yaml_path.write_text(submission_yaml_text)
 
@@ -2026,6 +2070,7 @@ def process_network(
         content_summary=content_summary,
         license_name=license,
         used_alchemiscale=used_alchemiscale,
+        submission_id=submission_id,
     )
     zenodo_description_path.write_text(zenodo_description_text)
 
@@ -2118,6 +2163,13 @@ def main():
     )
 
     parser.add_argument(
+        "--submission-date",
+        type=str,
+        required=True,
+        help="Submission date in ISO 8601 format (YYYY-MM-DD). This date is required for submission.yaml.",
+    )
+
+    parser.add_argument(
         "--no-alchemiscale",
         action="store_true",
         help="Indicate that Alchemiscale was NOT used to generate the results",
@@ -2186,6 +2238,7 @@ def main():
         used_alchemiscale=not args.no_alchemiscale,
         summary_suffix=args.summary_suffix,
         results_file=args.results_file,
+        submission_date=args.submission_date,
         system_group=args.system_group,
         system_name=args.system_name,
     )
