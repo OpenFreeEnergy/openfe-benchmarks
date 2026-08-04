@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare benchmark submission artifacts from AlchemicalArchive or AlchemicalNetwork JSON files.
 
-This module generates `submission.yaml` and `zenodo_description.md` from one or more JSON archives
+This module generates `submission.yaml` and `zenodo_description.txt` from one or more JSON archives
 exported by OpenFE/Alchemiscale. Supports single files, lists of files, or glob patterns with 
 potentially different protocol settings.
 
@@ -216,11 +216,11 @@ class ProtocolSettingsInfo:
     temperature: str
     pressure: str
     lambda_functions: str
+    partial_charges: str
     small_molecule_forcefield: (
         str  # mirrors definition in OpenMMSystemGeneratorFFSettings
-    )
-    forcefields: tuple[str, ...]  # sorted tuple for deterministic ordering
-    partial_charges: str
+    ) = "TODO"
+    forcefields: tuple[str, ...] = "TODO"  # sorted tuple for deterministic ordering
     lambda_windows: str = ""
     lambda_schedule: str = ""
     notes: str = ""
@@ -619,8 +619,8 @@ def _infer_benchmark_data_set_system(
             category=UserWarning,
         )
         # Use the transformation name prefix as a simple heuristic for categorization
-        system = system or "unspecified_system"
-        benchmark_set = benchmark_set or "external_submission"
+        system = system or "TODO"
+        benchmark_set = benchmark_set or "TODO"
 
     # Check for conflicts between overrides and annotations
     if override_system_group is not None and original_benchmark_set is not None:
@@ -661,7 +661,7 @@ def _extract_sim_times(settings_block: dict[str, Any]) -> tuple[str, str]:
 def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str)]:
     if not protocol_obj:
         return {
-            "protocol": "unknown",
+            "protocol": "TODO",
             "notes": "Protocol settings unavailable in archive.",
         }
 
@@ -1069,12 +1069,10 @@ def _extract_auto_metadata(
         # Extract mapper info if available (Option 1: concatenated string)
         if "mapper_settings" in annotations and "mapper_version" in annotations:
             mapper_settings = annotations.get("mapper_settings")
-            mapper_version = annotations.get("mapper_version", "unknown")
+            mapper_version = annotations.get("mapper_version", "TODO")
             if isinstance(mapper_settings, dict):
-                mapper_name = mapper_settings.get("__qualname__", "unknown").split(".")[
-                    -1
-                ]
-                mapping_algorithm = mapper_settings.get("_mapping_algorithm", "unknown")
+                mapper_name = mapper_settings.get("__qualname__", "TODO").split(".")[-1]
+                mapping_algorithm = mapper_settings.get("_mapping_algorithm", "TODO")
                 mapper_str = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
                     "mapper", mapper_str, key
@@ -1255,15 +1253,15 @@ def _build_content_summary(
         sorted(set(ff for ff_set, _ in metadata.forcefield for ff in ff_set))
     )
     if not field_info:
-        field_info = "an unspecified force field"
+        field_info = "an unspecified force field (TODO)"
 
     small_mol_ff_info = "/".join(set(x[0] for x in metadata.small_molecule_forcefield))
     if not small_mol_ff_info:
-        small_mol_ff_info = "an unspecified small molecule force field"
+        small_mol_ff_info = "an unspecified small molecule force field (TODO)"
 
     charge_info = "/".join(set(x[0] for x in metadata.partial_charges))
     if not charge_info:
-        charge_info = "an unspecified partial charges"
+        charge_info = "an unspecified partial charges (TODO)"
 
     # Group systems by benchmark set for explicit listing
     sets_to_systems: dict[str, list[str]] = defaultdict(list)
@@ -1559,6 +1557,155 @@ def _render_protocol_settings_yaml(
     return "\n".join(output_lines) + "\n"
 
 
+def _render_protocol_settings_text(
+    protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]],
+) -> str:
+    """Render protocol settings into plain text with consistent indenting."""
+    if not protocol_settings_list:
+        return "Protocol Settings: TODO\n"
+
+    def _format_value(value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, bool):
+            return "true" if value else "false"
+        if isinstance(value, (int, float)):
+            return str(value)
+        return str(value)
+
+    def _format_identifier(identifier: Any) -> str:
+        if identifier is None:
+            return "None"
+        if isinstance(identifier, str):
+            return identifier
+        if isinstance(identifier, (list, tuple, set)):
+            return ", ".join(str(item) for item in sorted(identifier))
+        return str(identifier)
+
+    ordered_settings = sorted(
+        enumerate(protocol_settings_list),
+        key=lambda item: (len(item[1][1]), str(item[1][0].protocol), item[0]),
+    )
+
+    primary_index = max(
+        range(len(protocol_settings_list)),
+        key=lambda i: (len(protocol_settings_list[i][1]), -i),
+    )
+    primary_settings, _ = protocol_settings_list[primary_index]
+
+    def _parse_full_protocol_settings(value: str) -> Any:
+        try:
+            return ast.literal_eval(value)
+        except Exception:
+            return None
+
+    def _format_path(path: list[str]) -> str:
+        formatted = ".".join(path)
+        if formatted.endswith(".val"):
+            formatted = formatted[:-4]
+        return formatted
+
+    def _compare_full_protocol_settings(
+        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
+    ) -> list[tuple[str, Any, Any]]:
+        base_obj = _parse_full_protocol_settings(base.full_protocol_settings)
+        other_obj = _parse_full_protocol_settings(other.full_protocol_settings)
+        diffs: list[tuple[str, Any, Any]] = []
+
+        def recurse(path: list[str], a: Any, b: Any) -> None:
+            if type(a) is not type(b):
+                diffs.append((_format_path(path), a, b))
+                return
+            if isinstance(a, dict):
+                for key in sorted(set(a) | set(b)):
+                    if key not in a:
+                        diffs.append((_format_path(path + [key]), None, b[key]))
+                    elif key not in b:
+                        diffs.append((_format_path(path + [key]), a[key], None))
+                    else:
+                        recurse(path + [key], a[key], b[key])
+            elif isinstance(a, list):
+                if a != b:
+                    diffs.append((_format_path(path), a, b))
+            else:
+                if a != b:
+                    diffs.append((_format_path(path), a, b))
+
+        if isinstance(base_obj, dict) and isinstance(other_obj, dict):
+            recurse([], base_obj, other_obj)
+        return diffs
+
+    def _full_protocol_setting_notes(
+        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
+    ) -> list[str]:
+        diffs = _compare_full_protocol_settings(base, other)
+        if not diffs:
+            return []
+        notes: list[str] = ["Detailed protocol settings differ:"]
+        for path, base_value, other_value in diffs:
+            notes.append(f"- {path}: {base_value!r} -> {other_value!r}")
+        return notes
+
+    output_lines = ["Protocol Settings:"]
+    multiple_protocols = len(protocol_settings_list) > 1
+    field_names = [
+        "protocol",
+        "timestep",
+        "temperature",
+        "pressure",
+        "forcefields",
+        "small_molecule_forcefield",
+        "partial_charges",
+        "equilibration_time",
+        "production_time",
+        "vacuum_equilibration_time",
+        "vacuum_production_time",
+        "solvent_equilibration_time",
+        "solvent_production_time",
+        "lambda_functions",
+        "lambda_windows",
+        "lambda_schedule",
+        "notes",
+    ]
+
+    primary_order = [primary_index] + [
+        idx for idx, _ in ordered_settings if idx != primary_index
+    ]
+    for index in primary_order:
+        protocol_settings, identifiers = protocol_settings_list[index]
+        output_lines.append(
+            f"  - protocol: {_format_value(protocol_settings.protocol)}"
+        )
+
+        for field_name in field_names:
+            if field_name == "protocol":
+                continue
+            if field_name == "notes":
+                if multiple_protocols or protocol_settings != primary_settings:
+                    notes_lines = _full_protocol_setting_notes(
+                        primary_settings, protocol_settings
+                    )
+                else:
+                    notes_lines = ["Applies to all edges"]
+                output_lines.append("    notes:")
+                for line in notes_lines:
+                    output_lines.append(f"      {line}")
+                continue
+            if field_name == "forcefields":
+                ff_value = getattr(protocol_settings, field_name)
+                if isinstance(ff_value, (list, tuple, set)) and ff_value:
+                    items = [str(x) for x in sorted(ff_value)]
+                    output_lines.append(f"    {field_name}: [{', '.join(items)}]")
+                else:
+                    output_lines.append(f"    {field_name}: ")
+                continue
+            output_lines.append(
+                f"    {field_name}: {_format_value(getattr(protocol_settings, field_name))}"
+            )
+
+    return "\n".join(output_lines) + "\n"
+
+
 def _render_keyed_values_yaml(
     section_name: str,
     value_keys: list[tuple[Any, list[str]]],
@@ -1803,7 +1950,7 @@ def _make_zenodo_description(
     if used_alchemiscale:
         workflow_text += " and Alchemiscale"
 
-    protocol_settings_yaml = _render_protocol_settings_yaml(
+    protocol_settings_yaml = _render_protocol_settings_text(
         metadata.protocol_settings_list
     )
     benchmark_system_yaml = _render_benchmark_system_yaml(metadata.system_info_dict)
@@ -1849,7 +1996,7 @@ def _make_zenodo_description(
             network_keys_lines.append(
                 f"  - {network_key_item}: {', '.join(sorted(set(systems)))}"
             )
-        network_keys_section = "## Alchemical Network Keys:\n" + "\n".join(
+        network_keys_section = "**Alchemical Network Keys:**\n" + "\n".join(
             network_keys_lines
         )
 
@@ -1858,24 +2005,25 @@ def _make_zenodo_description(
         f"openfe_benchmarks/results/{submission_id}"
     )
 
-    return f"""# {title}
-## Overview
+    return f"""**{title}**
+
+**Overview**
 {content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
 
 {content_summary}
 
-## Repository Reference
+**Repository Reference**
 This submission is linked from the OpenFE Benchmarks repository:
 {repo_link}
 
-## Software Versions
+**Software Versions**
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
 
 {network_keys_section}
 
-## Recommended Descriptors
+**Recommended Descriptors**
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
 {partial_charges_yaml}
@@ -1883,10 +2031,10 @@ This submission is linked from the OpenFE Benchmarks repository:
 
 {benchmark_system_yaml}
 
-## Protocol Settings
+**Protocol Settings**
 {protocol_settings_yaml}
 
-## Rights
+**Rights**
 - License: {license_name}
 """
 
@@ -1940,7 +2088,7 @@ def process_network(
         When multiple files are provided, protocol settings from each are collected
         and grouped in the output.
     output_dir:
-        Directory where `submission.yaml` and `zenodo_description.md` will be
+        Directory where `submission.yaml` and `zenodo_description.txt` will be
         written. Defaults to the current working directory.
     submission_id:
         Optional identifier to use in `submission.yaml`. If omitted, a default
@@ -1993,7 +2141,7 @@ def process_network(
     Returns
     -------
     tuple[Path, Path]
-        Paths to the generated `submission.yaml` and `zenodo_description.md`.
+        Paths to the generated `submission.yaml` and `zenodo_description.txt`.
     """
 
     out_dir = output_dir.resolve()
@@ -2115,6 +2263,17 @@ def process_network(
 
         merged_metadata.system_info_dict.update(metadata.system_info_dict)
 
+    if forcefields is not None:
+        if isinstance(forcefields, str):
+            forcefields = [forcefields]
+        merged_metadata.forcefield = [
+            (tuple(str(ff) for ff in forcefields), ["override"])
+        ]
+    if small_molecule_forcefield:
+        merged_metadata.small_molecule_forcefield = [
+            (small_molecule_forcefield, ["override"])
+        ]
+
     # Build content summary from combined data
     # Get list of source file names
     content_summary = _build_content_summary(
@@ -2132,25 +2291,13 @@ def process_network(
     for system_group, system_name in merged_metadata.benchmark_sets_systems:
         sets_to_systems[system_group].append(system_name)
 
-    # Apply explicit force field label overrides before summary generation.
-    if forcefields is not None:
-        if isinstance(forcefields, str):
-            forcefields = [forcefields]
-        merged_metadata.forcefield = [
-            (tuple(str(ff) for ff in forcefields), ["override"])
-        ]
-    if small_molecule_forcefield:
-        merged_metadata.small_molecule_forcefield = [
-            (small_molecule_forcefield, ["override"])
-        ]
-
     # Generate a descriptive title
     submission_id = submission_id or _default_submission_id("_".join(all_network_keys))
 
     title = _generate_title(mode, merged_metadata.benchmark_sets_systems, submission_id)
 
     submission_yaml_filename = "submission.yaml"
-    zenodo_description_filename = "zenodo_description.md"
+    zenodo_description_filename = "zenodo_description.txt"
 
     submission_yaml_path = out_dir / submission_yaml_filename
     zenodo_description_path = out_dir / zenodo_description_filename
@@ -2207,7 +2354,7 @@ def process_network(
 def main():
     """CLI entry point for prepare_metadata_submission."""
     parser = argparse.ArgumentParser(
-        description="Generate submission.yaml and zenodo_description.md from OpenFE JSON archives",
+        description="Generate submission.yaml and zenodo_description.txt from OpenFE JSON archives",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""
             Examples:
@@ -2248,7 +2395,7 @@ def main():
         "--output-dir",
         type=Path,
         default=Path("."),
-        help="Output directory for submission.yaml and zenodo_description.md (default: current directory)",
+        help="Output directory for submission.yaml and zenodo_description.txt (default: current directory)",
     )
 
     parser.add_argument(
