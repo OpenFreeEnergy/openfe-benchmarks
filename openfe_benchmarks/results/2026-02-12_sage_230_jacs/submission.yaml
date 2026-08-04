@@ -19,7 +19,7 @@ authors:
   - name: Josh Horton
 
 # REQUIRED: publication/submission date (ISO 8601)
-date: 2026-08-03
+date: 2026-02-12
 openfe_version: 1.8.0
 openmm_version: 8.2.0
 openff_toolkit_version: 0.18.0
