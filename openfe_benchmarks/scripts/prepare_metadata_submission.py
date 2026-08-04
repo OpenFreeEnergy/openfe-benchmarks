@@ -14,7 +14,6 @@ Example (CLI):
         --tags "openfe,alchemicalarchive" \\
         --author "Jane Doe" \\
         --license "CC-BY-4.0"
-    
     # Glob pattern
     python prepare_metadata_submission.py "networks/*/*.json" \\
         --output-dir ./output \\
@@ -34,7 +33,7 @@ Example (Python API):
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
-    
+
     # Using glob pattern
     process_network(
         input_files="networks/*/*.json",
@@ -69,7 +68,12 @@ import logging
 from pint import Quantity
 
 from gufe.archival import AlchemicalArchive
-from gufe import AlchemicalNetwork
+from gufe import (
+    AlchemicalNetwork,
+    SolventComponent,
+    ProteinComponent,
+    SmallMoleculeComponent,
+)
 from gufe.transformations.transformation import Transformation
 
 from openfe_benchmarks.data import BenchmarkIndex
@@ -421,7 +425,7 @@ def _load_network(
             return alchemical_network, "alchemicalnetwork"
         except Exception:
             raise ImportError(
-                f"Could not import file as either an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
+                f"Could not import file as either an AlchemicalArchive or AlchemicalNetwork: {input_path}"
             )
 
 
@@ -873,50 +877,61 @@ def _component_name(component) -> str:
     return "unknown"
 
 
-def _get_system_info(trans, calc_mode) -> dict[str, set | list]:
+def _get_system_info(trans: Transformation, calc_mode: str) -> dict[str, set | list]:
     # Per-system tracking
+    solvents = set()
+    proteins = set()
+    ligands = list()
+    cofactors = set()
     for state_key in ("stateA", "stateB"):
         chemical_system = getattr(trans, state_key)
         if not chemical_system:
             continue
 
-        solvents = set()
-        proteins = set()
-        ligands = list()
-        cofactors = set()
         for label, component in chemical_system.components.items():
-            qualname = str(type(component)).rstrip("'>").split(".")[-1]
-
-            component = component.to_dict()
-            comp_name = _component_name(component)
+            comp_name = _component_name(component.to_dict())
 
             if calc_mode == "asfe":
-                if "solvent" in label or "solventcomponent" in qualname.lower():
+                # ASFE should only have solvents and solutes, should we raise an error for other things?
+                if isinstance(component, SolventComponent):
                     solvents.add(comp_name)
-                elif "solute" in label or qualname == "SmallMoleculeComponent":
+                elif isinstance(component, SmallMoleculeComponent):
                     ligands.append(comp_name)
             elif calc_mode == "rbfe":
-                if "protein" in label or qualname == "ProteinComponent":
+                # get the alchemical ligands
+                alchemical_ligands = {
+                    trans.mapping.componentA,
+                    trans.mapping.componentB,
+                }
+                if isinstance(component, ProteinComponent):
                     proteins.add(comp_name)
-                elif "ligand" in label:
+                elif (
+                    isinstance(component, SmallMoleculeComponent)
+                    and component in alchemical_ligands
+                ):
                     if comp_name not in ligands:
                         ligands.append(comp_name)
-                elif "cofactor" in label:
+                elif isinstance(component, SmallMoleculeComponent):
                     cofactors.add(comp_name)
-                elif qualname == "SmallMoleculeComponent" and "solvent" not in label:
+                elif (
+                    isinstance(component, SmallMoleculeComponent)
+                    and "solvent" not in label
+                ):
                     # Non-solvent small molecules that are not explicit ligands are treated as cofactors.
                     cofactors.add(comp_name)
+                elif isinstance(component, SolventComponent):
+                    solvents.add(comp_name)
             else:
-                ValueError(
+                raise ValueError(
                     f"Calculation type {calc_mode} is not yet supported. Add capability to `_build_content_summary`"
                 )
 
-        return {
-            "solvents": solvents,
-            "proteins": proteins,
-            "ligands": ligands,
-            "cofactors": cofactors,
-        }
+    return {
+        "solvents": solvents,
+        "proteins": proteins,
+        "ligands": ligands,
+        "cofactors": cofactors,
+    }
 
 
 def _extract_auto_metadata(
@@ -2031,16 +2046,16 @@ def main():
             Examples:
               # Single archive file
               %(prog)s archive.json.bz2
-              
+
               # Multiple archive files
               %(prog)s archive1.json.bz2 archive2.json.bz2 --output-dir ./results
-              
+
               # Glob pattern
               %(prog)s "networks/*/*.json" --output-dir ./results
-              
+
               # Multiple glob patterns
               %(prog)s "charge_changes/*/*.json" "jacs_set/*/*.json"
-              
+
               # Full example with all options
               %(prog)s "networks/*/*.json" \\
                   --output-dir ./output \\
@@ -2150,7 +2165,7 @@ def main():
             all_files.append(Path(pattern))
 
     if not all_files:
-        logger.error("No input files found", file=sys.stderr)
+        logger.error("No input files found")
         return 1
 
     # Remove duplicates while preserving order

@@ -1,0 +1,93 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-02-12_sage_230_jacs_set
+
+# REQUIRED: short descriptive title
+title: OpenFE RBFE - jacs_set (8 systems) - 2026-02-12_sage_230_jacs_set
+
+# REQUIRED: short descriptive summary (1-2 sentences)
+summary: |
+  This submission describes the jacs_set RBFE benchmark prepared with
+  ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and openff-2.3.0
+  with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The network the entire JACS set. 
+  Results are derived from archived Alchemiscale workflow data.
+
+# REQUIRED: list of submission tags
+tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, openff-2.3.0, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, openfe, alchemicalarchive]
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Josh Horton
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-02-12
+openfe_version: 1.8.0
+openmm_version: 8.2.0
+openff_toolkit_version: 0.18.0
+mapper: "KartografAtomMapper 1.2.0 (LSA)"
+forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+small_molecule_forcefield: "openff-2.3.0"
+partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+
+# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  "jacs_set":
+    "bace": AlchemicalNetwork-dc1002e80f494ee62dd88b3a1c16775b
+    "cdk2": AlchemicalNetwork-139c105576710380f915128235c1f5fe
+    "jnk1": AlchemicalNetwork-459636b551faa8c08cb10104bc4dfdc4
+    "mcl1": AlchemicalNetwork-46de554347d878943aab14579ab1d29a
+    "p38": AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191
+    "ptp1b": AlchemicalNetwork-f22ccb1e62958618618125f80e8d43e7
+    "thrombin": AlchemicalNetwork-ff86d1ac92ee7d1e5ae8bc469370530b
+    "tyk2": AlchemicalNetwork-ed08b22af2e51875d23b0283d2080252
+
+
+# REQUIRED: results file
+results: computational_results.json
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi: https://doi.org/10.5281/zenodo.21793193
+  archive_provider: zenodo
+
+# REQUIRED: license for the submission
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata for protocol settings
+protocol_settings:
+  - protocol: "RelativeHybridTopologyProtocol"
+    timestep: "4.0 fs"
+    temperature: "298.15 K"
+    pressure: "1 bar"
+    forcefields: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+    small_molecule_forcefield: "openff-2.3.0"
+    partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+    equilibration_time: "1.0 ns"
+    production_time: "5.0 ns"
+    vacuum_equilibration_time: 
+    vacuum_production_time: 
+    solvent_equilibration_time: 
+    solvent_production_time: 
+    lambda_functions: "default"
+    lambda_windows: "11"
+    lambda_schedule: ""
+    notes: |
+      Applies to 283 edges:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flq, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flw, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3fly, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=2v, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=3flz, solvent={'O'}, cofactors=none, protein=none
+      - etc.
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - solvation_settings.solvent_padding: 1.5 -> 1
+      Applies to 283 edges:
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flq, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3flw, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2aa, ligand_final=3fly, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2bb, ligand_final=2v, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-034843fe04133cac65ec83f9b73fc191 jacs_set-p38: ligand_start=2c, ligand_final=3flz, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - etc.
+
