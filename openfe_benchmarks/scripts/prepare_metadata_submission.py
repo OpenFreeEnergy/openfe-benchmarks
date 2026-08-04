@@ -421,7 +421,7 @@ def _load_network(
             return alchemical_network, "alchemicalnetwork"
         except Exception:
             raise ImportError(
-                f"Could not import file as either an AlchemicalArchive nor AlchemicalNetwork: {input_path}"
+                f"Could not import file as either an AlchemicalArchive or AlchemicalNetwork: {input_path}"
             )
 
 
