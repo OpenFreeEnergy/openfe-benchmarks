@@ -74,6 +74,9 @@ SUMMARY_SUFFIX = (
 TAGS = "rbfe,benchmark,openfe"
 SMALL_MOL_FF = "openff-3.0.0-alpha1b"
 WATER_MODEL = "opc3.offxml"
+OPENFE_VER = "1.8.0"
+OPENMM_VER = "8.2.0"
+OFFTOOL_VER = "0.18"
 
 if __name__ == "__main__":
     setup_file_logger("log.txt", level=logging.INFO, print_console=True)
@@ -121,6 +124,9 @@ if __name__ == "__main__":
         summary_suffix=SUMMARY_SUFFIX,
         small_molecule_forcefield=SMALL_MOL_FF,
         forcefields=[SMALL_MOL_FF, WATER_MODEL],
+        openfe_version=OPENFE_VER,
+        openmm_version=OPENMM_VER,
+        openff_toolkit_version=OFFTOOL_VER,
     )
     logger.info("✓ Generating submission metadata completed successfully\n")
 

@@ -1574,156 +1574,6 @@ def _render_protocol_settings_yaml(
     return "\n".join(output_lines) + "\n"
 
 
-def _render_protocol_settings_text(
-    protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]],
-) -> str:
-    """Render protocol settings into plain text with consistent indenting."""
-    if not protocol_settings_list:
-        return "Protocol Settings: TODO\n"
-
-    def _format_value(value: Any) -> str:
-        if value is None:
-            return ""
-        if isinstance(value, bool):
-            return "true" if value else "false"
-        if isinstance(value, (int, float)):
-            return str(value)
-        return str(value)
-
-    def _format_identifier(identifier: Any) -> str:
-        if identifier is None:
-            return "None"
-        if isinstance(identifier, str):
-            return identifier
-        if isinstance(identifier, (list, tuple, set)):
-            return ", ".join(str(item) for item in sorted(identifier))
-        return str(identifier)
-
-    ordered_settings = sorted(
-        enumerate(protocol_settings_list),
-        key=lambda item: (len(item[1][1]), str(item[1][0].protocol), item[0]),
-    )
-
-    primary_index = max(
-        range(len(protocol_settings_list)),
-        key=lambda i: (len(protocol_settings_list[i][1]), -i),
-    )
-    primary_settings, _ = protocol_settings_list[primary_index]
-
-    def _parse_full_protocol_settings(value: str) -> Any:
-        try:
-            return ast.literal_eval(value)
-        except Exception:
-            return None
-
-    def _format_path(path: list[str]) -> str:
-        formatted = ".".join(path)
-        if formatted.endswith(".val"):
-            formatted = formatted[:-4]
-        return formatted
-
-    def _compare_full_protocol_settings(
-        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
-    ) -> list[tuple[str, Any, Any]]:
-        base_obj = _parse_full_protocol_settings(base.full_protocol_settings)
-        other_obj = _parse_full_protocol_settings(other.full_protocol_settings)
-        diffs: list[tuple[str, Any, Any]] = []
-
-        def recurse(path: list[str], a: Any, b: Any) -> None:
-            if type(a) is not type(b):
-                diffs.append((_format_path(path), a, b))
-                return
-            if isinstance(a, dict):
-                for key in sorted(set(a) | set(b)):
-                    if key not in a:
-                        diffs.append((_format_path(path + [key]), None, b[key]))
-                    elif key not in b:
-                        diffs.append((_format_path(path + [key]), a[key], None))
-                    else:
-                        recurse(path + [key], a[key], b[key])
-            elif isinstance(a, list):
-                if a != b:
-                    diffs.append((_format_path(path), a, b))
-            else:
-                if a != b:
-                    diffs.append((_format_path(path), a, b))
-
-        if isinstance(base_obj, dict) and isinstance(other_obj, dict):
-            recurse([], base_obj, other_obj)
-        return diffs
-
-    def _full_protocol_setting_notes(
-        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
-    ) -> list[str]:
-        diffs = _compare_full_protocol_settings(base, other)
-        if not diffs:
-            return []
-        notes: list[str] = ["Detailed protocol settings differ:"]
-        for path, base_value, other_value in diffs:
-            notes.append(f"- {path}: {base_value!r} -> {other_value!r}")
-        return notes
-
-    output_lines = ["Protocol Settings:"]
-    multiple_protocols = len(protocol_settings_list) > 1
-    field_names = [
-        "protocol",
-        "protocol_library",
-        "timestep",
-        "temperature",
-        "pressure",
-        "forcefields",
-        "small_molecule_forcefield",
-        "partial_charges",
-        "equilibration_time",
-        "production_time",
-        "vacuum_equilibration_time",
-        "vacuum_production_time",
-        "solvent_equilibration_time",
-        "solvent_production_time",
-        "lambda_functions",
-        "lambda_windows",
-        "lambda_schedule",
-        "notes",
-    ]
-
-    primary_order = [primary_index] + [
-        idx for idx, _ in ordered_settings if idx != primary_index
-    ]
-    for index in primary_order:
-        protocol_settings, identifiers = protocol_settings_list[index]
-        output_lines.append(
-            f"  - protocol: {_format_value(protocol_settings.protocol)}"
-        )
-
-        for field_name in field_names:
-            if field_name == "protocol":
-                continue
-            if field_name == "notes":
-                if multiple_protocols or protocol_settings != primary_settings:
-                    notes_lines = _full_protocol_setting_notes(
-                        primary_settings, protocol_settings
-                    )
-                else:
-                    notes_lines = ["Applies to all edges"]
-                output_lines.append("    notes:")
-                for line in notes_lines:
-                    output_lines.append(f"      {line}")
-                continue
-            if field_name == "forcefields":
-                ff_value = getattr(protocol_settings, field_name)
-                if isinstance(ff_value, (list, tuple, set)) and ff_value:
-                    items = [str(x) for x in sorted(ff_value)]
-                    output_lines.append(f"    {field_name}: [{', '.join(items)}]")
-                else:
-                    output_lines.append(f"    {field_name}: ")
-                continue
-            output_lines.append(
-                f"    {field_name}: {_format_value(getattr(protocol_settings, field_name))}"
-            )
-
-    return "\n".join(output_lines) + "\n"
-
-
 def _render_keyed_values_yaml(
     section_name: str,
     value_keys: list[tuple[Any, list[str]]],
@@ -1968,7 +1818,7 @@ def _make_zenodo_description(
     if used_alchemiscale:
         workflow_text += " and Alchemiscale"
 
-    protocol_settings_yaml = _render_protocol_settings_text(
+    protocol_settings_yaml = _render_protocol_settings_yaml(
         metadata.protocol_settings_list
     )
     benchmark_system_yaml = _render_benchmark_system_yaml(metadata.system_info_dict)
@@ -2094,6 +1944,9 @@ def process_network(
     system_name: str | None = None,
     forcefields: list[str] | str | None = None,
     small_molecule_forcefield: str | None = None,
+    openfe_version: str | None = None,
+    openmm_version: str | None = None,
+    openff_toolkit_version: str | None = None,
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -2149,6 +2002,15 @@ def process_network(
         Optional human-readable label for the small-molecule force field.
         This is required when the archive contains a custom force field encoded as
         serialized JSON or XML.
+    openfe_version:
+        Optional OpenFE version string to include in metadata instead of any
+        auto-detected versions from the archive.
+    openmm_version:
+        Optional OpenMM version string to include in metadata instead of any
+        auto-detected versions from the archive.
+    openff_toolkit_version:
+        Optional OpenFF Toolkit version string to include in metadata instead of any
+        auto-detected versions from the archive.
 
     Notes
     -----
@@ -2290,6 +2152,14 @@ def process_network(
     if small_molecule_forcefield:
         merged_metadata.small_molecule_forcefield = [
             (small_molecule_forcefield, ["override"])
+        ]
+    if openfe_version is not None:
+        merged_metadata.openfe_version = [(openfe_version, ["override"])]
+    if openmm_version is not None:
+        merged_metadata.openmm_version = [(openmm_version, ["override"])]
+    if openff_toolkit_version is not None:
+        merged_metadata.openff_toolkit_version = [
+            (openff_toolkit_version, ["override"])
         ]
 
     # Build content summary from combined data
@@ -2500,6 +2370,27 @@ def main():
     )
 
     parser.add_argument(
+        "--openfe-version",
+        type=str,
+        default=None,
+        help="Override the OpenFE version written into submission metadata.",
+    )
+
+    parser.add_argument(
+        "--openmm-version",
+        type=str,
+        default=None,
+        help="Override the OpenMM version written into submission metadata.",
+    )
+
+    parser.add_argument(
+        "--openff-toolkit-version",
+        type=str,
+        default=None,
+        help="Override the OpenFF Toolkit version written into submission metadata.",
+    )
+
+    parser.add_argument(
         "--small-molecule-forcefield",
         type=str,
         default=None,
@@ -2545,6 +2436,9 @@ def main():
         system_name=args.system_name,
         forcefields=args.forcefields,
         small_molecule_forcefield=args.small_molecule_forcefield,
+        openfe_version=args.openfe_version,
+        openmm_version=args.openmm_version,
+        openff_toolkit_version=args.openff_toolkit_version,
     )
     logger.info("\n✓ Successfully generated submission metadata")
 

@@ -33,6 +33,9 @@ SUMMARY_SUFFIX = (
     "github.com/openforcefield/alchemical-benchmark-resources/submissions/2026_03_17_openff-2.3.0_jacs_tyk2/alchemiscale_submission.ipynb"
 )
 TAGS = "rbfe,benchmark,openfe"
+OPENFE_VER = "1.8.0"
+OPENMM_VER = "8.2.0"
+OFFTOOL_VER = "0.18"
 
 if __name__ == "__main__":
     setup_file_logger("log.txt", level=logging.INFO, print_console=True)
@@ -76,6 +79,9 @@ if __name__ == "__main__":
         system_name=SYSTEM_SET,
         submission_date=DATE,
         summary_suffix=SUMMARY_SUFFIX,
+        openfe_version=OPENFE_VER,
+        openmm_version=OPENMM_VER,
+        openff_toolkit_version=OFFTOOL_VER,
     )
     logger.info("✓ Generating submission metadata completed successfully\n")
 
