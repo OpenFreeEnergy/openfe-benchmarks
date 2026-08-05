@@ -23,9 +23,9 @@ authors:
 
 # REQUIRED: publication/submission date (ISO 8601)
 date: 2026-08-04
-openfe_version: TODO
-openmm_version: TODO
-openff_toolkit_version: TODO
+openfe_version: 1.8.0
+openmm_version: 8.2.0
+openff_toolkit_version: 0.18
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
 forcefield: ["opc3.offxml", "openff-2.3.0-alpha1b"]
 small_molecule_forcefield: "openff-2.3.0-alpha1b"
@@ -50,8 +50,8 @@ results: computational_results.json
 
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
-  doi: TODO add DOI
-  archive_provider: TODO add archive provider
+  doi: 10.5281/zenodo.21797903
+  archive_provider: zenodo
 
 # REQUIRED: license for the submission
 license: CC-BY-4.0
