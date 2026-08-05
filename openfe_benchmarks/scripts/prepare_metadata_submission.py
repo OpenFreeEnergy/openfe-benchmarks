@@ -221,6 +221,7 @@ class ProtocolSettingsInfo:
         str  # mirrors definition in OpenMMSystemGeneratorFFSettings
     ) = "TODO"
     forcefields: tuple[str, ...] = "TODO"  # sorted tuple for deterministic ordering
+    protocol_library: str = "TODO"
     lambda_windows: str = ""
     lambda_schedule: str = ""
     notes: str = ""
@@ -249,6 +250,7 @@ class ProtocolSettingsInfo:
             and self.lambda_schedule == other.lambda_schedule
             and self.small_molecule_forcefield == other.small_molecule_forcefield
             and self.forcefields == other.forcefields
+            and self.protocol_library == other.protocol_library
             and self.partial_charges == other.partial_charges
             and self.equilibration_time == other.equilibration_time
             and self.production_time == other.production_time
@@ -339,6 +341,7 @@ class AutoMetadata:
     forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
     small_molecule_forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
     partial_charges: list[tuple[str, list[str]]] = field(default_factory=list)
+    protocol_libraries: list[tuple[str, list[str]]] = field(default_factory=list)
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
         default_factory=list
     )
@@ -380,6 +383,12 @@ class AutoMetadata:
                     _add_value_with_keys(
                         self.small_molecule_forcefield,
                         protocol_settings.small_molecule_forcefield,
+                        keys,
+                    )
+                if protocol_settings.protocol_library:
+                    _add_value_with_keys(
+                        self.protocol_libraries,
+                        protocol_settings.protocol_library,
                         keys,
                     )
                 if protocol_settings.partial_charges:
@@ -725,6 +734,13 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
                 normalized_ffs.append(os.path.splitext(ff_str.split("/")[-1])[0])
             if normalized_ffs:
                 out["forcefields"] = tuple(sorted(normalized_ffs))
+
+    module_name = type(protocol_obj).__module__ if protocol_obj is not None else ""
+    if module_name:
+        library_name = module_name.split(".")[0]
+    else:
+        library_name = "TODO"
+    out["protocol_library"] = library_name
 
     partial_charge_settings = settings.get("partial_charge_settings") or {}
     if partial_charge_settings:
@@ -1462,6 +1478,7 @@ def _render_protocol_settings_yaml(
     multiple_protocols = len(protocol_settings_list) > 1
     field_names = [
         "protocol",
+        "protocol_library",
         "timestep",
         "temperature",
         "pressure",
@@ -1650,6 +1667,7 @@ def _render_protocol_settings_text(
     multiple_protocols = len(protocol_settings_list) > 1
     field_names = [
         "protocol",
+        "protocol_library",
         "timestep",
         "temperature",
         "pressure",
