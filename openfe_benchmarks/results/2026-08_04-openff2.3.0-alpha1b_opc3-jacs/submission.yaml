@@ -1,21 +1,21 @@
 # REQUIRED: unique, kebab-case identifier for this submission
-submission_id: 2026-08-04-openff2.3.0-alpha1b_opc3-jacs
+submission_id: 2026-08-04-openff3.0.0-alpha1b_opc3-jacs
 
 # REQUIRED: short descriptive title
-title: OpenFE RBFE - jacs_set (8 systems) - 2026-08-04-openff2.3.0-alpha1b_opc3-jacs
+title: OpenFE RBFE - jacs_set (8 systems) - 2026-08-04-openff3.0.0-alpha1b_opc3-jacs
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
   This submission describes the RBFE benchmark covering the jacs_set benchmark set (bace, cdk2, jnk1,
-  mcl1, p38, ptp1b, thrombin, tyk2) prepared with opc3.offxml/openff-2.3.0-alpha1b for proteins and
-  solvents, and openff-2.3.0-alpha1b with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and
+  mcl1, p38, ptp1b, thrombin, tyk2) prepared with opc3.offxml/openff-3.0.0-alpha1b for proteins and
+  solvents, and openff-3.0.0-alpha1b with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and
   cofactors. The network contains 566 edges across 194 unique ligands. Results are derived from
   archived Alchemiscale workflow data. For scripts to generate this network:
   github.com/openforcefield/alchemical-benchmark-
   resources/submissions/2026_07_15_openff-3.0.0-alpha1b_opc3/alchemiscale_submission.ipynb
 
 # REQUIRED: list of submission tags
-tags: [rbfe, opc3.offxml, openff-2.3.0-alpha1b, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
+tags: [rbfe, opc3.offxml, openff-3.0.0-alpha1b, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
@@ -27,8 +27,8 @@ openfe_version: 1.8.0
 openmm_version: 8.2.0
 openff_toolkit_version: 0.18
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
-forcefield: ["opc3.offxml", "openff-2.3.0-alpha1b"]
-small_molecule_forcefield: "openff-2.3.0-alpha1b"
+forcefield: ["opc3.offxml", "openff-3.0.0-alpha1b"]
+small_molecule_forcefield: "openff-3.0.0-alpha1b"
 partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
 
 # BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
