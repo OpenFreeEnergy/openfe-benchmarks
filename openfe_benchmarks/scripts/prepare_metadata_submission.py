@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Prepare benchmark submission artifacts from AlchemicalArchive or AlchemicalNetwork JSON files.
 
-This module generates `submission.yaml` and `zenodo_description.txt` from one or more JSON archives
+This module generates `submission.yaml` and `zenodo_description.md` from one or more JSON archives
 exported by OpenFE/Alchemiscale. Supports single files, lists of files, or glob patterns with 
 potentially different protocol settings.
 
@@ -1864,7 +1864,7 @@ def _make_zenodo_description(
             network_keys_lines.append(
                 f"  - {network_key_item}: {', '.join(sorted(set(systems)))}"
             )
-        network_keys_section = "**Alchemical Network Keys:**\n" + "\n".join(
+        network_keys_section = "## Alchemical Network Keys:\n" + "\n".join(
             network_keys_lines
         )
 
@@ -1873,25 +1873,25 @@ def _make_zenodo_description(
         f"openfe_benchmarks/results/{submission_id}"
     )
 
-    return f"""**{title}**
+    return f"""# {title}
 
-**Overview**
+## Overview
 {content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
 
 {content_summary}
 
-**Repository Reference**
+## Repository Reference
 This submission is linked from the OpenFE Benchmarks repository:
 {repo_link}
 
-**Software Versions**
+## Software Versions
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
 
 {network_keys_section}
 
-**Recommended Descriptors**
+## Recommended Descriptors
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
 {partial_charges_yaml}
@@ -1899,10 +1899,10 @@ This submission is linked from the OpenFE Benchmarks repository:
 
 {benchmark_system_yaml}
 
-**Protocol Settings**
+## Protocol Settings
 {protocol_settings_yaml}
 
-**Rights**
+## Rights
 - License: {license_name}
 """
 
@@ -1922,7 +1922,9 @@ def _parse_systems_input(
             raise ValueError(
                 "Each systems entry must include a non-empty system_group and system_name"
             )
-        parsed.append((str(system_group).strip(), str(system_name).strip(), Path(archive_path)))
+        parsed.append(
+            (str(system_group).strip(), str(system_name).strip(), Path(archive_path))
+        )
     if not parsed:
         raise ValueError("At least one system must be provided in systems")
     return parsed
@@ -1959,7 +1961,7 @@ def process_network(
         When multiple files are provided, protocol settings from each are collected
         and grouped in the output.
     output_dir:
-        Directory where `submission.yaml` and `zenodo_description.txt` will be
+        Directory where `submission.yaml` and `zenodo_description.md` will be
         written. Defaults to the current working directory.
     submission_id:
         Optional identifier to use in `submission.yaml`. If omitted, a default
@@ -2021,7 +2023,7 @@ def process_network(
     Returns
     -------
     tuple[Path, Path]
-        Paths to the generated `submission.yaml` and `zenodo_description.txt`.
+        Paths to the generated `submission.yaml` and `zenodo_description.md`.
     """
 
     out_dir = output_dir.resolve()
@@ -2185,7 +2187,7 @@ def process_network(
     title = _generate_title(mode, merged_metadata.benchmark_sets_systems, submission_id)
 
     submission_yaml_filename = "submission.yaml"
-    zenodo_description_filename = "zenodo_description.txt"
+    zenodo_description_filename = "zenodo_description.md"
 
     submission_yaml_path = out_dir / submission_yaml_filename
     zenodo_description_path = out_dir / zenodo_description_filename
@@ -2242,7 +2244,7 @@ def process_network(
 def main():
     """CLI entry point for prepare_metadata_submission."""
     parser = argparse.ArgumentParser(
-        description="Generate submission.yaml and zenodo_description.txt from OpenFE JSON archives",
+        description="Generate submission.yaml and zenodo_description.md from OpenFE JSON archives",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""
             Examples:
@@ -2283,7 +2285,7 @@ def main():
         "--output-dir",
         type=Path,
         default=Path("."),
-        help="Output directory for submission.yaml and zenodo_description.txt (default: current directory)",
+        help="Output directory for submission.yaml and zenodo_description.md (default: current directory)",
     )
 
     parser.add_argument(
