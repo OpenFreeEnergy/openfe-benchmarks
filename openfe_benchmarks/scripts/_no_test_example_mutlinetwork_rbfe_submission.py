@@ -129,4 +129,4 @@ if __name__ == "__main__":
     logger.info("=" * 70)
     logger.info("Check files in this directory:")
     logger.info("  - submission.yaml")
-    logger.info("  - zenodo_description.md (do not include in submission)")
+    logger.info("  - zenodo_description.txt (do not include in submission)")
