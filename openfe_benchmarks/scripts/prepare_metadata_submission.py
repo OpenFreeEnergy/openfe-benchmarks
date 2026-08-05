@@ -217,9 +217,7 @@ class ProtocolSettingsInfo:
     pressure: str
     lambda_functions: str
     partial_charges: str
-    small_molecule_forcefield: (
-        str  # mirrors definition in OpenMMSystemGeneratorFFSettings
-    ) = "TODO"
+    small_molecule_forcefield: str = "TODO"
     forcefields: tuple[str, ...] = ("TODO",)  # sorted tuple for deterministic ordering
     protocol_library: str = "TODO"
     lambda_windows: str = ""
@@ -2148,13 +2146,16 @@ def process_network(
     if forcefields is not None:
         if isinstance(forcefields, str):
             forcefields = [forcefields]
-        merged_metadata.forcefield = [
-            (tuple(str(ff) for ff in forcefields), ["override"])
-        ]
+        forcefields_tuple = tuple(str(ff) for ff in forcefields)
+        merged_metadata.forcefield = [(forcefields_tuple, ["override"])]
+        for protocol_settings, _ in merged_metadata.protocol_settings_list:
+            protocol_settings.forcefields = forcefields_tuple
     if small_molecule_forcefield:
         merged_metadata.small_molecule_forcefield = [
             (small_molecule_forcefield, ["override"])
         ]
+        for protocol_settings, _ in merged_metadata.protocol_settings_list:
+            protocol_settings.small_molecule_forcefield = small_molecule_forcefield
     if openfe_version is not None:
         merged_metadata.openfe_version = [(openfe_version, ["override"])]
     if openmm_version is not None:
