@@ -220,7 +220,7 @@ class ProtocolSettingsInfo:
     small_molecule_forcefield: (
         str  # mirrors definition in OpenMMSystemGeneratorFFSettings
     ) = "TODO"
-    forcefields: tuple[str, ...] = "TODO"  # sorted tuple for deterministic ordering
+    forcefields: tuple[str, ...] = ("TODO",)  # sorted tuple for deterministic ordering
     protocol_library: str = "TODO"
     lambda_windows: str = ""
     lambda_schedule: str = ""
