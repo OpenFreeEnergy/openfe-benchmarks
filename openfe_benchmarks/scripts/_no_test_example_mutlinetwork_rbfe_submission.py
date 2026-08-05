@@ -64,7 +64,7 @@ SYSTEM_GROUP_SET_KEY = (
 )
 OUTPUT_DIR = "output"
 
-SUBMISSION_ID = "2026-08-04-openff2.3.0-alpha1b_opc3-jacs"
+SUBMISSION_ID = "2026-08-04-openff3.0.0-alpha1b_opc3-jacs"
 DATE = "2026-08-04"
 AUTHOR = "Jennifer A. Clark"
 SUMMARY_SUFFIX = (
@@ -72,7 +72,7 @@ SUMMARY_SUFFIX = (
     "github.com/openforcefield/alchemical-benchmark-resources/submissions/2026_07_15_openff-3.0.0-alpha1b_opc3/alchemiscale_submission.ipynb"
 )
 TAGS = "rbfe,benchmark,openfe"
-SMALL_MOL_FF = "openff-2.3.0-alpha1b"
+SMALL_MOL_FF = "openff-3.0.0-alpha1b"
 WATER_MODEL = "opc3.offxml"
 
 if __name__ == "__main__":
