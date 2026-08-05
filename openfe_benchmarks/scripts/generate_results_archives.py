@@ -346,7 +346,7 @@ def run_generate_results(
     archive : Path, optional
         Path to the alchemical archive file (.json.bz2)
     output_dir : Path, optional
-        Directory to write the results JSON to
+        Directory to write the compressed results JSON archive to
     system_group : str, optional
         Benchmark set name (e.g., 'jacs_set', 'solvation_set')
     system_name : str, optional
@@ -494,12 +494,12 @@ def run_generate_results(
                     e,
                 )
 
-    # write out the data to a json file
-    output_file = output_dir / "computational_results.json"
-    with open(output_file, "w") as w:
+    # write out the data to a bz2-compressed JSON file
+    output_file = output_dir / "computational_results.json.bz2"
+    with bz2.open(output_file, "wt") as w:
         json.dump(gathered_results, w, cls=JSON_HANDLER.encoder, indent=4)
 
-    logger.info(f"Writing results to: {output_file}")
+    logger.info(f"Writing compressed results to: {output_file}")
     logger.info(
         f"Done! Found {len(gathered_results['ddg'])} DDG entries and {len(gathered_results['dg'])} DG entries"
     )
