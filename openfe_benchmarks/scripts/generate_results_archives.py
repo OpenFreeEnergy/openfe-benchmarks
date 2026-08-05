@@ -56,7 +56,7 @@ def _extract_hybrid_topology_rfe_data(transformation, results):
     elif transformation.stateA.contains(SolventComponent):
         phase = "solvent"
     else:
-        phase = "unknown"
+        phase = "TODO"
 
     ligand_a_name = transformation.mapping.componentA.name
     ligand_b_name = transformation.mapping.componentB.name
@@ -70,10 +70,8 @@ def _extract_hybrid_topology_rfe_data(transformation, results):
     return {
         "ligand_a": ligand_a_name,
         "ligand_b": ligand_b_name,
-        "system_group": transformation.mapping.annotations.get(
-            "system_group", "unknown"
-        ),
-        "system_name": transformation.mapping.annotations.get("system_name", "unknown"),
+        "system_group": transformation.mapping.annotations.get("system_group", "TODO"),
+        "system_name": transformation.mapping.annotations.get("system_name", "TODO"),
         "estimate": protocol_result.get_estimate(),
         "estimate_error": protocol_result.get_uncertainty(),
         "phase": phase,
@@ -155,10 +153,8 @@ def _extract_septop_rbfe_data(transformation, results):
     return {
         "ligand_a": ligand_a_name,
         "ligand_b": ligand_b_name,
-        "system_group": transformation.mapping.annotations.get(
-            "system_group", "unknown"
-        ),
-        "system_name": transformation.mapping.annotations.get("system_name", "unknown"),
+        "system_group": transformation.mapping.annotations.get("system_group", "TODO"),
+        "system_name": transformation.mapping.annotations.get("system_name", "TODO"),
         "ddg": protocol_result.get_estimate(),
         "ddg_uncertainty": protocol_result.get_uncertainty(),
         "dgs_solvent": dgs_solvent,
@@ -412,8 +408,8 @@ def run_generate_results(
         # Get system group and system name from the first result we can find
         for p_rs in archive_results_by_protocol.values():
             data = p_rs[0]
-            extracted_system_group = data.get("system_group", "unknown")
-            extracted_system_name = data.get("system_name", "unknown")
+            extracted_system_group = data.get("system_group", "TODO")
+            extracted_system_name = data.get("system_name", "TODO")
             break
 
         # Use CLI options if provided, otherwise use extracted values
@@ -447,8 +443,8 @@ def run_generate_results(
         ddgs_by_system = defaultdict(list)
         for result in gathered_results["ddg"]:
             system_key = (
-                result.get("system_group", "unknown"),
-                result.get("system_name", "unknown"),
+                result.get("system_group", "TODO"),
+                result.get("system_name", "TODO"),
             )
             ddgs_by_system[system_key].append(result)
 
