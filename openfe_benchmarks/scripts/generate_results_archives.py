@@ -322,11 +322,11 @@ def _parse_systems_input(systems):
                 "(system_group, system_name, archive_path)"
             )
         system_group, system_name, archive_path = item
-        if system_group is None or system_name is None:
+        if not str(system_group).strip() or not str(system_name).strip():
             raise ValueError(
                 "Each systems entry must include a non-empty system_group and system_name"
             )
-        parsed.append((system_group, system_name, pathlib.Path(archive_path)))
+        parsed.append((str(system_group).strip(), str(system_name).strip(), pathlib.Path(archive_path)))
     if not parsed:
         raise ValueError("At least one system must be provided in systems")
     return parsed
