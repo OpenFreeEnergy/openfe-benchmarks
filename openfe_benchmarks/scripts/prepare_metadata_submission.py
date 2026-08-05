@@ -1940,7 +1940,7 @@ def process_network(
     license: str = "CC-BY-4.0",
     used_alchemiscale: bool = True,
     summary_suffix: str | None = None,
-    results_file: str = "computational_results.json",
+    results_file: str = "computational_results.json.bz2",
     submission_date: date | str | None = None,
     system_group: str | None = None,
     system_name: str | None = None,

@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     # Step 2: Generate computational results
     logger.info("=" * 70)
-    logger.info("Step: Generating computational_results.json")
+    logger.info("Step: Generating computational_results.json.bz2")
     logger.info("=" * 70)
     systems_local = [
         [group, sys_set, os.path.join(OUTPUT_DIR, f"{network_key}.json.bz2")]
@@ -107,7 +107,7 @@ if __name__ == "__main__":
         systems=systems_local,
         output_dir=Path(OUTPUT_DIR),
     )
-    logger.info("✓ Generating computational_results.json completed successfully\n")
+    logger.info("✓ Generating computational_results.json.bz2 completed successfully\n")
 
     # Step 3: Generate submission metadata
     logger.info("=" * 70)
