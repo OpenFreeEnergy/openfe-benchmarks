@@ -271,10 +271,15 @@ def _extract_results_from_archive(alchemical_archive):
     Returns a dictionary keyed by the protocol class with lists of result dictionaries
     for each transformation.
     """
+    # map the supported protocols to their extraction functions
     extraction_functions = {
+        # default openfe hybrid rbfe in openfe using a split leg protocol
         RelativeHybridTopologyProtocol: _extract_hybrid_topology_rfe_data,
+        # default hybrid rbfe in pontibus using the split leg protocol
         HybridTopProtocol: _extract_hybrid_topology_rfe_data,
+        # pontibus ASFE
         ASFEProtocol: _extract_asfe_data,
+        # SepTop RBFE
         SepTopProtocol: _extract_septop_rbfe_data,
         # TODO add support for openfe ASFE
         # TODO add support for openfe ABFE
