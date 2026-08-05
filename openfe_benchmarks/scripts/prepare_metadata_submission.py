@@ -1654,8 +1654,8 @@ def _render_benchmark_system_yaml(system_info_dict: dict[tuple, SystemInfo]) -> 
         network_breakdown[si.benchmark_set][si.benchmark_system] = si.network_key
 
     benchmark_yaml = """
-# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
-benchmark_data:
+## BenchmarkData Provenance
+  (from openfe-benchmarks planning script) with associated network key benchmark_data:
   source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
 """
 
@@ -1864,7 +1864,7 @@ def _make_zenodo_description(
             network_keys_lines.append(
                 f"  - {network_key_item}: {', '.join(sorted(set(systems)))}"
             )
-        network_keys_section = "## Alchemical Network Keys:\n" + "\n".join(
+        network_keys_section = "## Alchemical Network Keys\n" + "\n".join(
             network_keys_lines
         )
 
