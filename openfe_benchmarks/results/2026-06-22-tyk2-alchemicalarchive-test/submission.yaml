@@ -53,6 +53,7 @@ license: CC-BY-4.0
 # RECOMMENDED / OPTIONAL metadata for protocol settings
 protocol_settings:
   - protocol: "RelativeHybridTopologyProtocol"
+    protocol_library: "openfe"
     timestep: "4.0 fs"
     temperature: "298.15 K"
     pressure: "1 bar"
