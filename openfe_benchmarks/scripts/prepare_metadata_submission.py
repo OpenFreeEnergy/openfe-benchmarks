@@ -1652,8 +1652,8 @@ def _render_benchmark_system_yaml(system_info_dict: dict[tuple, SystemInfo]) -> 
         network_breakdown[si.benchmark_set][si.benchmark_system] = si.network_key
 
     benchmark_yaml = """
-## BenchmarkData Provenance
-  (from openfe-benchmarks planning script) with associated network key benchmark_data:
+## BenchmarkData Provenance (from openfe-benchmarks planning script) with associated network key 
+benchmark_data:
   source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
 """
 
