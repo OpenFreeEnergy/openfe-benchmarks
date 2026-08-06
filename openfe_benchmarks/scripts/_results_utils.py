@@ -79,7 +79,7 @@ def build_femap_from_relative_results(
                     label=ligand,
                     value=exp_data["dg"],
                     uncertainty=exp_data.get(
-                        "uncertainty", 0 * unit.kilocalorie_per_mole
+                        "uncertainty", 0 * unit.kilocalories_per_mole
                     ),
                 )
 
