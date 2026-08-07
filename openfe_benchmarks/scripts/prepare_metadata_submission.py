@@ -1738,8 +1738,8 @@ def _make_submission_yaml(
     for lib in sorted(protocol_libraries):
         enhanced_tags.append(lib)
 
-    # Remove duplicates while preserving order (convert to set then back to sorted list)
-    tags_yaml = ", ".join(sorted(set(enhanced_tags)))
+    # Remove duplicates while preserving order.
+    tags_yaml = ", ".join(dict.fromkeys(enhanced_tags))
     authors_yaml = "\n".join(f"  - name: {name}" for name in authors)
     protocol_settings_yaml = _render_protocol_settings_yaml(
         metadata.protocol_settings_list
