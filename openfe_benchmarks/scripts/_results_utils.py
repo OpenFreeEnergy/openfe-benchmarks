@@ -167,11 +167,7 @@ def build_femap_from_absolute_results(
                 )
                 n_experimental_points += 1
         if n_experimental_points == 0:
-            raise ValueError("No experimental data points where found")
-        else:
-            print(
-                f"Of the {len(system_results)}, {n_experimental_points} has corresponding exp. data."
-            )
+            raise ValueError("No experimental data points were found")
 
         femaps_by_system_key[system_key] = femap
 

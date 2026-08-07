@@ -1371,7 +1371,6 @@ def _build_content_summary(
 
 def _render_protocol_settings_yaml(
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]],
-    calc_mode: str = "rbfe",
 ) -> str:
     """Take a list of alchemical protocols pairs with strings identifying systems that use it
 
@@ -1386,8 +1385,6 @@ def _render_protocol_settings_yaml(
     ----------
     protocol_settings_list : list[tuple[ProtocolSettingsInfo, list[str]]]
         List of unique protocol settings paired with system identifiers that use that protocol.
-    calc_mode : str
-        Calculation mode ("rbfe" or "asfe"). Determines which fields are included in the output.
 
     Returns
     -------

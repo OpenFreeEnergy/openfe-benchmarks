@@ -1,9 +1,9 @@
-name: openfe-benchmarks-test2
+name: openfe-benchmarks-test
 channels:
   - conda-forge
 dependencies:
   - gufe
-  - openfe<1.9
+  - openfe<1.9 # From alchemiscale stack dependence?
   - pytest
   - pre-commit
   - pontibus==0.4.0
