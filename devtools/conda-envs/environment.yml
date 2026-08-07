@@ -1,4 +1,4 @@
-name: openfe-benchmarks-test
+name: openfe-benchmarks-test2
 channels:
   - conda-forge
 dependencies:
@@ -8,3 +8,4 @@ dependencies:
   - pre-commit
   - pontibus==0.4.0
   - pint
+#  - cinnabar >= 0.6.1

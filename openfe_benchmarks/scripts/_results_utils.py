@@ -85,3 +85,94 @@ def build_femap_from_relative_results(
 
         femaps_by_system_key[system_key] = femap
     return femaps_by_system_key
+
+
+def build_femap_from_absolute_results(
+    results: list[dict],
+) -> dict[tuple[str, str], FEMap]:
+    """
+    Build FEMaps for each of the unique combinations of system_group and system_name in the absolute solvation results
+    and add experimental solvation free energy data.
+
+    Parameters
+    ----------
+    results: list[dict]
+        A list of absolute solvation free energy estimates which should include at least the following entries:
+         - solute: str
+         - system_group: str
+         - system_name: str
+         - dg: Quantity
+         - dg_uncertainty: Quantity
+
+    Returns
+    -------
+    dict[tuple[str, str], FEMap]
+        A dictionary mapping each unique combination of system_group and system_name to an FEMap with calculated
+        and experimental solvation free energy data.
+    """
+    # get the unique combinations of system_group and system_name
+    results_by_system_key = defaultdict(list)
+    for result in results:
+        key = (result["system_group"], result["system_name"])
+        results_by_system_key[key].append(result)
+
+    femaps_by_system_key = {}
+    for system_key, system_results in results_by_system_key.items():
+        system_group, system_name = system_key
+        benchmark_data = get_benchmark_data_system(system_group, system_name)
+
+        # Check if all solutes have valid dg_uncertainty (not NaN)
+        solutes_no_uncertainty = [
+            result["solute"]
+            for result in system_results
+            if np.isnan(
+                result["dg_uncertainty"].magnitude
+                if "dg" in result
+                else result["estimate_error"].magnitude
+            )
+        ]
+        if solutes_no_uncertainty:
+            raise ValueError(
+                f"Not all solutes have dg_uncertainty for {system_group} {system_name}: {solutes_no_uncertainty}"
+            )
+
+        femap = FEMap()
+        for result in system_results:
+            value_key = "dg" if "dg" in result else "estimate"
+            err_key = "dg_uncertainty" if value_key == "dg" else "estimate_error"
+            label = f"{result['solute']},{result['solvent']}"
+            femap.add_absolute_calculation(
+                label=label,
+                value=result[value_key],
+                uncertainty=result[err_key],
+                source="Computational",
+            )
+
+        # add experimental solvation data for each of the solutes in the results
+        experimental_file = benchmark_data.reference_data[
+            "experimental_solvation_free_energy_data"
+        ]
+        experimental_data = json.load(open(experimental_file), cls=JSON_HANDLER.decoder)
+        n_experimental_points = 0
+        for result in system_results:
+            label = f"{result['solute']},{result['solvent']}"
+            exp_data = experimental_data.get(label, None)
+            if exp_data is not None:
+                femap.add_experimental_measurement(
+                    label=label,
+                    value=exp_data["dg"],
+                    uncertainty=exp_data.get(
+                        "uncertainty", 0 * unit.kilocalories_per_mole
+                    ),
+                )
+                n_experimental_points += 1
+        if n_experimental_points == 0:
+            raise ValueError("No experimental data points where found")
+        else:
+            print(
+                f"Of the {len(system_results)}, {n_experimental_points} has corresponding exp. data."
+            )
+
+        femaps_by_system_key[system_key] = femap
+
+    return femaps_by_system_key
