@@ -24,42 +24,12 @@ SYSTEM_GROUP_SET_KEY = (
     [
         "jacs_set",
         "bace",
-        "AlchemicalNetwork-58ef1baba714145eaddb8f81abf609ce-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_bace",
+        "AlchemicalNetwork-your-key",
     ],
     [
         "jacs_set",
         "cdk2",
-        "AlchemicalNetwork-8b3e6b25fe046924998a1f520c798b19-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_cdk2",
-    ],
-    [
-        "jacs_set",
-        "jnk1",
-        "AlchemicalNetwork-6cea205bc124349b8add8824e2060147-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_jnk1",
-    ],
-    [
-        "jacs_set",
-        "mcl1",
-        "AlchemicalNetwork-ee5422ba932ced782b51da9bb9eb24ff-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_mcl1",
-    ],
-    [
-        "jacs_set",
-        "p38",
-        "AlchemicalNetwork-c613a533bdaa47f92e9a1cf4d58fe6dd-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_p38",
-    ],
-    [
-        "jacs_set",
-        "ptp1b",
-        "AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_ptp1b",
-    ],
-    [
-        "jacs_set",
-        "thrombin",
-        "AlchemicalNetwork-7fcf1d4cb0a6af702747de83fc23af69-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_thrombin",
-    ],
-    [
-        "jacs_set",
-        "tyk2",
-        "AlchemicalNetwork-51caad3a5d3daea240406eb23fa6dad6-openff-openff_3_0_0_alpha1b_opc3-rbfe_pontibus_jacs_set_tyk2",
+        "AlchemicalNetwork-your-key",
     ],
 )
 OUTPUT_DIR = "output"
@@ -71,7 +41,7 @@ SUMMARY_SUFFIX = (
     "For scripts to generate this network: "
     "github.com/openforcefield/alchemical-benchmark-resources/submissions/2026_07_15_openff-3.0.0-alpha1b_opc3/alchemiscale_submission.ipynb"
 )
-TAGS = "rbfe,benchmark,openfe"
+TAGS = ""
 SMALL_MOL_FF = "openff-3.0.0-alpha1b"
 WATER_MODEL = "opc3.offxml"
 OPENFE_VER = "1.8.0"
