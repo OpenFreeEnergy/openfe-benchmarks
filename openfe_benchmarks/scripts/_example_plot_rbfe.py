@@ -1,5 +1,6 @@
 import pathlib
 import json
+import bz2
 
 from gufe.tokenization import JSON_HANDLER
 from cinnabar import plotting
@@ -10,6 +11,18 @@ RESULTS_FILE = "../results/2026-03-18-openmm-840-qa-testing/computational_result
 OUTPUT_DIR = "outputs"
 
 
+def _load_results(results_file: str) -> dict:
+    results_path = pathlib.Path(results_file)
+
+    if not results_path.exists():
+        raise FileNotFoundError(f"Could not find results file: {results_path}")
+
+    open_func = bz2.open if "bz2" in results_file else open
+
+    with open_func(results_path, "rt") as handle:
+        return json.load(handle, cls=JSON_HANDLER.decoder)
+
+
 def main():
     """
     An example script which can load the calculated DDG values from RBFE calculations and plot vs experimental data for each system.
@@ -18,9 +31,8 @@ def main():
         - Does not plot the DG values
     """
 
-    # load the results file
-    results = json.load(open(RESULTS_FILE), cls=JSON_HANDLER.decoder)
-    # check we have DDG values
+    # load the results file, whether compressed or not
+    results = _load_results(RESULTS_FILE)
     if "ddg" not in results:
         raise ValueError(
             f"Results file {RESULTS_FILE} does not contain 'ddg' values, cannot plot"

@@ -33,6 +33,9 @@ SUMMARY_SUFFIX = (
     "github.com/openforcefield/alchemical-benchmark-resources/submissions/2026_03_17_openff-2.3.0_jacs_tyk2/alchemiscale_submission.ipynb"
 )
 TAGS = "rbfe,benchmark,openfe"
+OPENFE_VER = "1.8.0"
+OPENMM_VER = "8.2.0"
+OFFTOOL_VER = "0.18"
 
 if __name__ == "__main__":
     setup_file_logger("log.txt", level=logging.INFO, print_console=True)
@@ -51,7 +54,7 @@ if __name__ == "__main__":
 
     # Step 2: Generate computational results
     logger.info("=" * 70)
-    logger.info("Step: Generating computational_results.json")
+    logger.info("Step: Generating computational_results.json.bz2")
     logger.info("=" * 70)
     run_generate_results(
         archive=Path(f"{OUTPUT_DIR}/{NETWORK_KEY}.json.bz2"),
@@ -59,7 +62,7 @@ if __name__ == "__main__":
         system_name=SYSTEM_SET,
         output_dir=Path(OUTPUT_DIR),
     )
-    logger.info("✓ Generating computational_results.json completed successfully\n")
+    logger.info("✓ Generating computational_results.json.bz2 completed successfully\n")
 
     # Step 3: Generate submission metadata
     logger.info("=" * 70)
@@ -76,6 +79,9 @@ if __name__ == "__main__":
         system_name=SYSTEM_SET,
         submission_date=DATE,
         summary_suffix=SUMMARY_SUFFIX,
+        openfe_version=OPENFE_VER,
+        openmm_version=OPENMM_VER,
+        openff_toolkit_version=OFFTOOL_VER,
     )
     logger.info("✓ Generating submission metadata completed successfully\n")
 

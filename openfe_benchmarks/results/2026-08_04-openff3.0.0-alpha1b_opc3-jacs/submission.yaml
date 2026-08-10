@@ -1,0 +1,96 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-08-04-openff3.0.0-alpha1b_opc3-jacs
+
+# REQUIRED: short descriptive title
+title: OpenFE RBFE - jacs_set (8 systems) - 2026-08-04-openff3.0.0-alpha1b_opc3-jacs
+
+# REQUIRED: short descriptive summary (1-2 sentences)
+summary: |
+  This submission describes the RBFE benchmark covering the jacs_set benchmark set (bace, cdk2, jnk1,
+  mcl1, p38, ptp1b, thrombin, tyk2) prepared with opc3.offxml/openff-3.0.0-alpha1b for proteins and
+  solvents, and openff-3.0.0-alpha1b with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and
+  cofactors. The network contains 566 edges across 194 unique ligands. Results are derived from
+  archived Alchemiscale workflow data. For scripts to generate this network:
+  github.com/openforcefield/alchemical-benchmark-
+  resources/submissions/2026_07_15_openff-3.0.0-alpha1b_opc3/alchemiscale_submission.ipynb
+
+# REQUIRED: list of submission tags
+tags: [rbfe, opc3.offxml, openff-3.0.0-alpha1b, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Jennifer A. Clark
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-08-04
+openfe_version: 1.8.0
+openmm_version: 8.2.0
+openff_toolkit_version: 0.18
+mapper: "KartografAtomMapper 1.2.0 (LSA)"
+forcefield: ["opc3.offxml", "openff-3.0.0-alpha1b"]
+small_molecule_forcefield: "openff-3.0.0-alpha1b"
+partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+
+# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  "jacs_set":
+    "bace": AlchemicalNetwork-58ef1baba714145eaddb8f81abf609ce
+    "cdk2": AlchemicalNetwork-8b3e6b25fe046924998a1f520c798b19
+    "jnk1": AlchemicalNetwork-6cea205bc124349b8add8824e2060147
+    "mcl1": AlchemicalNetwork-ee5422ba932ced782b51da9bb9eb24ff
+    "p38": AlchemicalNetwork-c613a533bdaa47f92e9a1cf4d58fe6dd
+    "ptp1b": AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2
+    "thrombin": AlchemicalNetwork-7fcf1d4cb0a6af702747de83fc23af69
+    "tyk2": AlchemicalNetwork-51caad3a5d3daea240406eb23fa6dad6
+
+
+# REQUIRED: results file
+results: computational_results.json
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi: 10.5281/zenodo.21797903
+  archive_provider: zenodo
+
+# REQUIRED: license for the submission
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata for protocol settings
+protocol_settings:
+  - protocol: "HybridTopProtocol"
+    protocol_library: "pontibus"
+    timestep: "4.0 fs"
+    temperature: "298.15 K"
+    pressure: "1 bar"
+    small_molecule_forcefield: ""
+    partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+    equilibration_time: "1.0 ns"
+    production_time: "5.0 ns"
+    vacuum_equilibration_time: 
+    vacuum_production_time: 
+    solvent_equilibration_time: 
+    solvent_production_time: 
+    lambda_functions: "default"
+    lambda_windows: "11"
+    lambda_schedule: ""
+    notes: |
+      Applies to 283 edges:
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20667, ligand_final=23482, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20667, ligand_final=23485, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20667, ligand_final=23486, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20669, ligand_final=23466, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=23466, ligand_final=20670, solvent={'O'}, cofactors=none, protein=none
+      - etc.
+  - protocol: "HybridTopProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - solvation_settings.solvent_padding: 1.2 -> 1
+      Applies to 283 edges:
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20667, ligand_final=23482, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20667, ligand_final=23485, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20667, ligand_final=23486, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=20669, ligand_final=23466, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-3885e858e4b36849e110edbebe348ae2 jacs_set-ptp1b: ligand_start=23466, ligand_final=20670, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - etc.
+

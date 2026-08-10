@@ -43,6 +43,19 @@ Example (Python API):
         author=["Jane Doe"],
         license="CC-BY-4.0",
     )
+
+    # When a custom force field is stored as serialized XML/JSON inside the archive,
+    # supply a readable label so metadata and tags remain clean.
+    process_network(
+        input_files="networks/*/*.json",
+        output_dir=Path("."),
+        submission_id="2026-04-15-example",
+        tags="openfe,alchemicalarchive",
+        author=["Jane Doe"],
+        license="CC-BY-4.0",
+        forcefields=["openff-3.0.0-alpha1b-opc3"],
+        small_molecule_forcefield="openff-3.0.0-alpha1b",
+    )
 """
 
 from __future__ import annotations
@@ -203,11 +216,10 @@ class ProtocolSettingsInfo:
     temperature: str
     pressure: str
     lambda_functions: str
-    small_molecule_forcefield: (
-        str  # mirrors definition in OpenMMSystemGeneratorFFSettings
-    )
-    forcefields: tuple[str, ...]  # sorted tuple for deterministic ordering
     partial_charges: str
+    small_molecule_forcefield: str = "TODO"
+    forcefields: tuple[str, ...] = ("TODO",)  # sorted tuple for deterministic ordering
+    protocol_library: str = "TODO"
     lambda_windows: str = ""
     lambda_schedule: str = ""
     notes: str = ""
@@ -236,6 +248,7 @@ class ProtocolSettingsInfo:
             and self.lambda_schedule == other.lambda_schedule
             and self.small_molecule_forcefield == other.small_molecule_forcefield
             and self.forcefields == other.forcefields
+            and self.protocol_library == other.protocol_library
             and self.partial_charges == other.partial_charges
             and self.equilibration_time == other.equilibration_time
             and self.production_time == other.production_time
@@ -326,6 +339,7 @@ class AutoMetadata:
     forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
     small_molecule_forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
     partial_charges: list[tuple[str, list[str]]] = field(default_factory=list)
+    protocol_libraries: list[tuple[str, list[str]]] = field(default_factory=list)
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
         default_factory=list
     )
@@ -367,6 +381,12 @@ class AutoMetadata:
                     _add_value_with_keys(
                         self.small_molecule_forcefield,
                         protocol_settings.small_molecule_forcefield,
+                        keys,
+                    )
+                if protocol_settings.protocol_library:
+                    _add_value_with_keys(
+                        self.protocol_libraries,
+                        protocol_settings.protocol_library,
                         keys,
                     )
                 if protocol_settings.partial_charges:
@@ -606,8 +626,8 @@ def _infer_benchmark_data_set_system(
             category=UserWarning,
         )
         # Use the transformation name prefix as a simple heuristic for categorization
-        system = system or "unspecified_system"
-        benchmark_set = benchmark_set or "external_submission"
+        system = system or "TODO"
+        benchmark_set = benchmark_set or "TODO"
 
     # Check for conflicts between overrides and annotations
     if override_system_group is not None and original_benchmark_set is not None:
@@ -648,7 +668,7 @@ def _extract_sim_times(settings_block: dict[str, Any]) -> tuple[str, str]:
 def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str)]:
     if not protocol_obj:
         return {
-            "protocol": "unknown",
+            "protocol": "TODO",
             "notes": "Protocol settings unavailable in archive.",
         }
 
@@ -699,14 +719,26 @@ def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str
         or {}
     )
     if forcefield_settings:
-        out["small_molecule_forcefield"] = str(
-            forcefield_settings.get("small_molecule_forcefield") or ""
+        out["small_molecule_forcefield"] = _normalize_forcefield_tag(
+            str(forcefield_settings.get("small_molecule_forcefield") or "")
         )
         ffs = forcefield_settings.get("forcefields")
         if isinstance(ffs, list) and ffs:
-            out["forcefields"] = tuple(
-                sorted(os.path.splitext(ff.split("/")[1])[0] for ff in ffs)
-            )
+            normalized_ffs: list[str] = []
+            for ff in ffs:
+                ff_str = str(ff)
+                if _looks_like_serialized_forcefield(ff_str):
+                    continue
+                normalized_ffs.append(os.path.splitext(ff_str.split("/")[-1])[0])
+            if normalized_ffs:
+                out["forcefields"] = tuple(sorted(normalized_ffs))
+
+    module_name = type(protocol_obj).__module__ if protocol_obj is not None else ""
+    if module_name:
+        library_name = module_name.split(".")[0]
+    else:
+        library_name = "TODO"
+    out["protocol_library"] = library_name
 
     partial_charge_settings = settings.get("partial_charge_settings") or {}
     if partial_charge_settings:
@@ -1051,12 +1083,10 @@ def _extract_auto_metadata(
         # Extract mapper info if available (Option 1: concatenated string)
         if "mapper_settings" in annotations and "mapper_version" in annotations:
             mapper_settings = annotations.get("mapper_settings")
-            mapper_version = annotations.get("mapper_version", "unknown")
+            mapper_version = annotations.get("mapper_version", "TODO")
             if isinstance(mapper_settings, dict):
-                mapper_name = mapper_settings.get("__qualname__", "unknown").split(".")[
-                    -1
-                ]
-                mapping_algorithm = mapper_settings.get("_mapping_algorithm", "unknown")
+                mapper_name = mapper_settings.get("__qualname__", "TODO").split(".")[-1]
+                mapping_algorithm = mapper_settings.get("_mapping_algorithm", "TODO")
                 mapper_str = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
                     "mapper", mapper_str, key
@@ -1137,6 +1167,26 @@ def _normalize_partial_charge_info(partial_charge_settings: dict) -> str:
         return normalized
 
 
+def _looks_like_serialized_forcefield(value: str) -> bool:
+    if not isinstance(value, str):
+        return False
+
+    trimmed = value.lstrip()
+    if trimmed.startswith("<?xml"):
+        return True
+    if "<SMIRNOFF" in value or "<ForceField" in value:
+        return True
+    return False
+
+
+def _normalize_forcefield_tag(value: str) -> str:
+    if not isinstance(value, str):
+        return str(value)
+    if _looks_like_serialized_forcefield(value):
+        return ""
+    return value.strip()
+
+
 def _make_tags(
     *,
     mode: str,
@@ -1149,9 +1199,30 @@ def _make_tags(
     tags: list[str] = []
     tags.append(mode)
     if forcefield:
-        tags.extend(sorted(list(set(ff for ff_set, _ in forcefield for ff in ff_set))))
+        tags.extend(
+            sorted(
+                list(
+                    set(
+                        ff
+                        for ff_set, _ in forcefield
+                        for ff in ff_set
+                        if ff and not _looks_like_serialized_forcefield(str(ff))
+                    )
+                )
+            )
+        )
     if small_molecule_forcefield:
-        tags.extend(sorted(list(set(x[0] for x in small_molecule_forcefield))))
+        tags.extend(
+            sorted(
+                list(
+                    set(
+                        x[0]
+                        for x in small_molecule_forcefield
+                        if x[0] and not _looks_like_serialized_forcefield(str(x[0]))
+                    )
+                )
+            )
+        )
     if benchmark_data:
         tags.extend(sorted(list(set(y for x in benchmark_data for y in x))))
     if partial_charge_tag:
@@ -1196,15 +1267,15 @@ def _build_content_summary(
         sorted(set(ff for ff_set, _ in metadata.forcefield for ff in ff_set))
     )
     if not field_info:
-        field_info = "an unspecified force field"
+        field_info = "an unspecified force field (TODO)"
 
     small_mol_ff_info = "/".join(set(x[0] for x in metadata.small_molecule_forcefield))
     if not small_mol_ff_info:
-        small_mol_ff_info = "an unspecified small molecule force field"
+        small_mol_ff_info = "an unspecified small molecule force field (TODO)"
 
     charge_info = "/".join(set(x[0] for x in metadata.partial_charges))
     if not charge_info:
-        charge_info = "an unspecified partial charges"
+        charge_info = "an unspecified partial charges (TODO)"
 
     # Group systems by benchmark set for explicit listing
     sets_to_systems: dict[str, list[str]] = defaultdict(list)
@@ -1405,6 +1476,7 @@ def _render_protocol_settings_yaml(
     multiple_protocols = len(protocol_settings_list) > 1
     field_names = [
         "protocol",
+        "protocol_library",
         "timestep",
         "temperature",
         "pressure",
@@ -1580,7 +1652,7 @@ def _render_benchmark_system_yaml(system_info_dict: dict[tuple, SystemInfo]) -> 
         network_breakdown[si.benchmark_set][si.benchmark_system] = si.network_key
 
     benchmark_yaml = """
-# BenchmarkData provenance (from openfe-benchmarks planning script) with associated network key
+## BenchmarkData Provenance (from openfe-benchmarks planning script) with associated network key 
 benchmark_data:
   source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
 """
@@ -1790,7 +1862,7 @@ def _make_zenodo_description(
             network_keys_lines.append(
                 f"  - {network_key_item}: {', '.join(sorted(set(systems)))}"
             )
-        network_keys_section = "## Alchemical Network Keys:\n" + "\n".join(
+        network_keys_section = "## Alchemical Network Keys\n" + "\n".join(
             network_keys_lines
         )
 
@@ -1800,8 +1872,8 @@ def _make_zenodo_description(
     )
 
     return f"""# {title}
-## Overview
 
+## Overview
 {content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
 
 {content_summary}
@@ -1811,7 +1883,6 @@ This submission is linked from the OpenFE Benchmarks repository:
 {repo_link}
 
 ## Software Versions
-
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
@@ -1819,7 +1890,6 @@ This submission is linked from the OpenFE Benchmarks repository:
 {network_keys_section}
 
 ## Recommended Descriptors
-
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
 {partial_charges_yaml}
@@ -1828,7 +1898,6 @@ This submission is linked from the OpenFE Benchmarks repository:
 {benchmark_system_yaml}
 
 ## Protocol Settings
-
 {protocol_settings_yaml}
 
 ## Rights
@@ -1836,8 +1905,32 @@ This submission is linked from the OpenFE Benchmarks repository:
 """
 
 
+def _parse_systems_input(
+    systems: Any,
+) -> list[tuple[str, str, Path]]:
+    parsed: list[tuple[str, str, Path]] = []
+    for item in systems:
+        if not isinstance(item, (list, tuple)) or len(item) != 3:
+            raise ValueError(
+                "Each item in systems must be a tuple/list of "
+                "(system_group, system_name, archive_path)"
+            )
+        system_group, system_name, archive_path = item
+        if not str(system_group).strip() or not str(system_name).strip():
+            raise ValueError(
+                "Each systems entry must include a non-empty system_group and system_name"
+            )
+        parsed.append(
+            (str(system_group).strip(), str(system_name).strip(), Path(archive_path))
+        )
+    if not parsed:
+        raise ValueError("At least one system must be provided in systems")
+    return parsed
+
+
 def process_network(
-    input_files: Path | list[Path] | str,
+    input_files: Path | list[Path] | str | None = None,
+    systems: Any = None,
     output_dir: Path = Path("."),
     submission_id: str | None = None,
     tags: str = "openfe,alchemicalarchive",
@@ -1845,10 +1938,15 @@ def process_network(
     license: str = "CC-BY-4.0",
     used_alchemiscale: bool = True,
     summary_suffix: str | None = None,
-    results_file: str = "computational_results.json",
+    results_file: str = "computational_results.json.bz2",
     submission_date: date | str | None = None,
     system_group: str | None = None,
     system_name: str | None = None,
+    forcefields: list[str] | str | None = None,
+    small_molecule_forcefield: str | None = None,
+    openfe_version: str | None = None,
+    openmm_version: str | None = None,
+    openff_toolkit_version: str | None = None,
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -1895,6 +1993,24 @@ def process_network(
     system_name:
         Optional system name (e.g., 'tyk2', 'hsp90'). If provided, overrides the
         system_name extracted from transformation annotations.
+    forcefields:
+        Optional human-readable labels for the protein/solvent force fields.
+        This is required when the archive contains a custom force field encoded as
+        serialized JSON or XML (for example, a SMIRNOFF XML string) because the
+        archive cannot always be auto-normalized into a clean tag.
+    small_molecule_forcefield:
+        Optional human-readable label for the small-molecule force field.
+        This is required when the archive contains a custom force field encoded as
+        serialized JSON or XML.
+    openfe_version:
+        Optional OpenFE version string to include in metadata instead of any
+        auto-detected versions from the archive.
+    openmm_version:
+        Optional OpenMM version string to include in metadata instead of any
+        auto-detected versions from the archive.
+    openff_toolkit_version:
+        Optional OpenFF Toolkit version string to include in metadata instead of any
+        auto-detected versions from the archive.
 
     Notes
     -----
@@ -1918,17 +2034,36 @@ def process_network(
             f"Required file '{results_file}' not found in output directory: {out_dir}"
         )
 
-    # Normalize input to list and expand glob patterns
-    if isinstance(input_files, str):
-        # Glob pattern
-        matched_files = glob_module.glob(input_files, recursive=True)
-        if not matched_files:
-            raise ValueError(f"No files matched glob pattern: {input_files}")
-        input_paths = [Path(f) for f in sorted(matched_files)]
-    elif isinstance(input_files, Path):
-        input_paths = [input_files]
+    if systems is not None:
+        if input_files is not None:
+            raise ValueError(
+                "Cannot specify both input_files and systems. Use one input style only."
+            )
+        if system_group is not None or system_name is not None:
+            raise ValueError(
+                "When providing systems, do not also pass system_group or system_name. "
+                "Use per-system overrides in systems instead."
+            )
+        system_entries = _parse_systems_input(systems)
+        input_paths = [entry[2] for entry in system_entries]
+        system_overrides = {
+            entry[2].resolve(): (entry[0], entry[1]) for entry in system_entries
+        }
     else:
-        input_paths = input_files
+        # Normalize input to list and expand glob patterns
+        if input_files is None:
+            raise ValueError("At least one input file must be provided")
+        if isinstance(input_files, str):
+            # Glob pattern
+            matched_files = glob_module.glob(input_files, recursive=True)
+            if not matched_files:
+                raise ValueError(f"No files matched glob pattern: {input_files}")
+            input_paths = [Path(f) for f in sorted(matched_files)]
+        elif isinstance(input_files, Path):
+            input_paths = [input_files]
+        else:
+            input_paths = input_files
+        system_overrides = {}
 
     if not input_paths:
         raise ValueError("At least one input file must be provided")
@@ -1949,12 +2084,15 @@ def process_network(
         network_obj, network_mode = _load_network(resolved_path)
         all_network_objs.append(network_obj)
 
+        override_group, override_name = system_overrides.get(
+            resolved_path, (system_group, system_name)
+        )
         metadata = _extract_auto_metadata(
             network_obj,
             network_mode,
             str(resolved_path),
-            system_group=system_group,
-            system_name=system_name,
+            system_group=override_group,
+            system_name=override_name,
         )
         modes.add(metadata.calculation_mode)
         all_network_keys.append(metadata.network_key)
@@ -2004,6 +2142,28 @@ def process_network(
             )
 
         merged_metadata.system_info_dict.update(metadata.system_info_dict)
+
+    if forcefields is not None:
+        if isinstance(forcefields, str):
+            forcefields = [forcefields]
+        forcefields_tuple = tuple(str(ff) for ff in forcefields)
+        merged_metadata.forcefield = [(forcefields_tuple, ["override"])]
+        for protocol_settings, _ in merged_metadata.protocol_settings_list:
+            protocol_settings.forcefields = forcefields_tuple
+    if small_molecule_forcefield:
+        merged_metadata.small_molecule_forcefield = [
+            (small_molecule_forcefield, ["override"])
+        ]
+        for protocol_settings, _ in merged_metadata.protocol_settings_list:
+            protocol_settings.small_molecule_forcefield = small_molecule_forcefield
+    if openfe_version is not None:
+        merged_metadata.openfe_version = [(openfe_version, ["override"])]
+    if openmm_version is not None:
+        merged_metadata.openmm_version = [(openmm_version, ["override"])]
+    if openff_toolkit_version is not None:
+        merged_metadata.openff_toolkit_version = [
+            (openff_toolkit_version, ["override"])
+        ]
 
     # Build content summary from combined data
     # Get list of source file names
@@ -2204,6 +2364,42 @@ def main():
         help="System name (e.g., 'tyk2', 'hsp90'); overrides values from transformation annotations",
     )
 
+    parser.add_argument(
+        "--forcefields",
+        type=str,
+        action="append",
+        default=None,
+        help="Custom protein/solvent force field labels when the archive uses serialized force field contents. Repeat to add multiple values.",
+    )
+
+    parser.add_argument(
+        "--openfe-version",
+        type=str,
+        default=None,
+        help="Override the OpenFE version written into submission metadata.",
+    )
+
+    parser.add_argument(
+        "--openmm-version",
+        type=str,
+        default=None,
+        help="Override the OpenMM version written into submission metadata.",
+    )
+
+    parser.add_argument(
+        "--openff-toolkit-version",
+        type=str,
+        default=None,
+        help="Override the OpenFF Toolkit version written into submission metadata.",
+    )
+
+    parser.add_argument(
+        "--small-molecule-forcefield",
+        type=str,
+        default=None,
+        help="Custom small molecule force field label when the archive uses serialized force field contents.",
+    )
+
     args = parser.parse_args()
 
     # Expand glob patterns and collect all matching files
@@ -2241,6 +2437,11 @@ def main():
         submission_date=args.submission_date,
         system_group=args.system_group,
         system_name=args.system_name,
+        forcefields=args.forcefields,
+        small_molecule_forcefield=args.small_molecule_forcefield,
+        openfe_version=args.openfe_version,
+        openmm_version=args.openmm_version,
+        openff_toolkit_version=args.openff_toolkit_version,
     )
     logger.info("\n✓ Successfully generated submission metadata")
 
