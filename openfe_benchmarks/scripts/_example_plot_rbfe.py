@@ -13,23 +13,13 @@ OUTPUT_DIR = "outputs"
 
 def _load_results(results_file: str) -> dict:
     results_path = pathlib.Path(results_file)
-    compressed_path = results_path.with_name(results_path.name + ".bz2")
 
-    if results_path.suffix == ".bz2":
-        open_func = bz2.open
-        path_to_open = results_path
-    elif compressed_path.exists():
-        open_func = bz2.open
-        path_to_open = compressed_path
-    elif results_path.exists():
-        open_func = open
-        path_to_open = results_path
-    else:
-        raise FileNotFoundError(
-            f"Could not find results file: {results_path} or {compressed_path}"
-        )
+    if not results_path.exists():
+        raise FileNotFoundError(f"Could not find results file: {results_path}")
 
-    with open_func(path_to_open, "rt") as handle:
+    open_func = bz2.open if "bz2" in results_file else open
+
+    with open_func(results_path, "rt") as handle:
         return json.load(handle, cls=JSON_HANDLER.decoder)
 
 
