@@ -17,6 +17,9 @@ summary: |
 # REQUIRED: list of submission tags
 tags: [rbfe, openff-3.0.0-alpha1b, tip3p.offxml, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
 
+# REQUIRED: calculation type (asfe, rbfe, etc.)
+calculation_type: rbfe
+
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
   - name: Jennifer A. Clark
