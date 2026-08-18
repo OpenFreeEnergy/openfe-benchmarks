@@ -1,58 +1,66 @@
-import pathlib
-import json
-import bz2
+"""Example script demonstrating BenchmarkResults API for RBFE plotting.
 
-from gufe.tokenization import JSON_HANDLER
+This script showcases the new BenchmarkResults features:
+- Loading results using get_benchmark_results()
+- Filtering results with filter_results()
+- Using lazy .ddg_femaps property for automatic FEMap generation
+- Generating plots using cinnabar
+
+Simply edit the SUBMISSION_ID variable to plot a different submission.
+"""
+
+import pathlib
+
 from cinnabar import plotting
 
-from openfe_benchmarks.scripts._results_utils import build_femap_from_relative_results
+from openfe_benchmarks.results import get_benchmark_results
 
-RESULTS_FILE = "../results/2026-03-18-openmm-840-qa-testing/computational_results.json"
+# Edit this to plot a different submission
+SUBMISSION_ID = "2026-03-18-openmm-840-qa-testing"
 OUTPUT_DIR = "outputs"
 
 
-def _load_results(results_file: str) -> dict:
-    results_path = pathlib.Path(results_file)
-
-    if not results_path.exists():
-        raise FileNotFoundError(f"Could not find results file: {results_path}")
-
-    open_func = bz2.open if "bz2" in results_file else open
-
-    with open_func(results_path, "rt") as handle:
-        return json.load(handle, cls=JSON_HANDLER.decoder)
-
-
 def main():
-    """
-    An example script which can load the calculated DDG values from RBFE calculations and plot vs experimental data for each system.
+    """Load RBFE results and plot vs experimental data for each system."""
 
-    Notes:
-        - Does not plot the DG values
-    """
+    # 1. Load results using the new get_benchmark_results() factory function
+    print(f"Loading submission: {SUBMISSION_ID}")
+    results = get_benchmark_results(SUBMISSION_ID)
+    print(f"Loaded: {results.title}")
+    print(f"Calculation type: {results.calculation_type}")
+    print(f"Tags: {', '.join(results.tags)}")
 
-    # load the results file, whether compressed or not
-    results = _load_results(RESULTS_FILE)
-    if "ddg" not in results:
+    # Verify this is an RBFE submission
+    if "ddg" not in results.raw_results:
         raise ValueError(
-            f"Results file {RESULTS_FILE} does not contain 'ddg' values, cannot plot"
+            f"Submission {SUBMISSION_ID} does not contain 'ddg' values. "
+            f"This script is for RBFE calculations only."
         )
 
-    # build FEMaps and load with experimental data
-    femaps_by_system = build_femap_from_relative_results(results=results["ddg"])
+    print("\nGenerating FEMaps...")
+    femaps_by_system = results.ddg_femaps
+    print(f"Generated {len(femaps_by_system)} FEMaps:")
+    for (system_group, system_name), femap in femaps_by_system.items():
+        n_edges = len(femap.edges)
+        print(f"  - {system_group}/{system_name}: {n_edges} edges")
 
     output_dir = pathlib.Path(OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
-    # for each system plot the RBFE results
+
+    print(f"\nGenerating plots in {output_dir}/...")
     for (system_group, system_name), femap in femaps_by_system.items():
         leg_graph = femap.to_legacy_graph()
+        output_file = output_dir / f"{system_group}_{system_name}_DDG.png"
         plotting.plot_DDGs(
             graph=leg_graph,
             title=f"{system_group}-{system_name}",
             figsize=5,
             scatter_kwargs={"s": 20, "marker": "o"},
-            filename=(output_dir / f"{system_group}_{system_name}_DDG.png").as_posix(),
+            filename=output_file.as_posix(),
         )
+        print(f"  Created: {output_file}")
+
+    print(f"\nComplete! Generated {len(femaps_by_system)} plots.")
 
 
 if __name__ == "__main__":
