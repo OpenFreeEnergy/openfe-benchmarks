@@ -14,6 +14,7 @@ import fnmatch
 import logging
 
 from gufe.tokenization import JSON_HANDLER
+from cinnabar import FEMap
 
 # Get logger for this module - will inherit configuration from parent
 logger = logging.getLogger(__name__)
@@ -179,6 +180,10 @@ class BenchmarkResults:
             except Exception as e:
                 raise ValueError(f"Error loading results file {self.results_file}: {e}")
 
+        # Initialize FEMap caches
+        self._dg_femaps_cache = None
+        self._ddg_femaps_cache = None
+
         logger.debug(
             f"Loaded BenchmarkResults: {self.submission_id} (load_results={load_results})"
         )
@@ -186,6 +191,114 @@ class BenchmarkResults:
     def __repr__(self):
         """Return string representation."""
         return f"BenchmarkResults(submission_id='{self.submission_id}', title='{self.title}')"
+
+    @property
+    def dg_femaps(self) -> dict[tuple[str, str], FEMap]:
+        """
+        Lazy-loaded FEMaps for absolute (dg) results grouped by system.
+
+        Returns FEMaps with calculated and experimental solvation free energy data.
+        Results are cached after first access to avoid repeated processing.
+
+        Returns
+        -------
+        dict[tuple[str, str], FEMap]
+            Dictionary mapping (system_group, system_name) to FEMap objects
+
+        Raises
+        ------
+        ValueError
+            If raw_results is None (load_results=False was used) or if 'dg' key not found
+
+        Examples
+        --------
+        >>> results = BenchmarkResults(submission_id='2026-08-06-openff-2.3.0-solvation_set_freesolv')
+        >>> femaps = results.dg_femaps
+        >>> for (group, name), femap in femaps.items():
+        ...     print(f"{group}/{name}: {len(femap.edges)} calculations")
+        """
+        if self.raw_results is None:
+            raise ValueError(
+                "Cannot access dg_femaps: raw_results is None. "
+                "Initialize with load_results=True to access computational data."
+            )
+
+        if "dg" not in self.raw_results:
+            raise ValueError(
+                f"'dg' key not found in raw_results for {self.submission_id}. "
+                f"Available keys: {list(self.raw_results.keys())}"
+            )
+
+        # Return cached value if available
+        if self._dg_femaps_cache is not None:
+            return self._dg_femaps_cache
+
+        # Import here to avoid circular dependency
+        from openfe_benchmarks.scripts._results_utils import (
+            build_femap_from_absolute_results,
+        )
+
+        # Build FEMaps and cache
+        logger.warning("Computing FEMaps for dg results - first access may be slow")
+        self._dg_femaps_cache = build_femap_from_absolute_results(
+            self.raw_results["dg"]
+        )
+
+        return self._dg_femaps_cache
+
+    @property
+    def ddg_femaps(self) -> dict[tuple[str, str], FEMap]:
+        """
+        Lazy-loaded FEMaps for relative (ddg) results grouped by system.
+
+        Returns FEMaps with calculated and experimental binding free energy data.
+        Results are cached after first access to avoid repeated processing.
+
+        Returns
+        -------
+        dict[tuple[str, str], FEMap]
+            Dictionary mapping (system_group, system_name) to FEMap objects
+
+        Raises
+        ------
+        ValueError
+            If raw_results is None (load_results=False was used) or if 'ddg' key not found
+
+        Examples
+        --------
+        >>> results = BenchmarkResults(submission_id='2026-03-18-openmm-840-qa-testing')
+        >>> femaps = results.ddg_femaps
+        >>> for (group, name), femap in femaps.items():
+        ...     print(f"{group}/{name}: {len(femap.edges)} edges")
+        """
+        if self.raw_results is None:
+            raise ValueError(
+                "Cannot access ddg_femaps: raw_results is None. "
+                "Initialize with load_results=True to access computational data."
+            )
+
+        if "ddg" not in self.raw_results:
+            raise ValueError(
+                f"'ddg' key not found in raw_results for {self.submission_id}. "
+                f"Available keys: {list(self.raw_results.keys())}"
+            )
+
+        # Return cached value if available
+        if self._ddg_femaps_cache is not None:
+            return self._ddg_femaps_cache
+
+        # Import here to avoid circular dependency
+        from openfe_benchmarks.scripts._results_utils import (
+            build_femap_from_relative_results,
+        )
+
+        # Build FEMaps and cache
+        logger.warning("Computing FEMaps for ddg results - first access may be slow")
+        self._ddg_femaps_cache = build_femap_from_relative_results(
+            self.raw_results["ddg"]
+        )
+
+        return self._ddg_femaps_cache
 
 
 # Standalone filtering functions
