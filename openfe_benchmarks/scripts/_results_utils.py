@@ -144,11 +144,7 @@ def build_femap_from_absolute_results(
         solutes_no_uncertainty = [
             result["ligand"]
             for result in system_results
-            if np.isnan(
-                result["dg_uncertainty"].magnitude
-                if "dg" in result
-                else result["estimate_error"].magnitude
-            )
+            if np.isnan(result["dg_uncertainty"].magnitude)
         ]
         if solutes_no_uncertainty:
             raise ValueError(
@@ -157,13 +153,11 @@ def build_femap_from_absolute_results(
 
         femap = FEMap()
         for result in system_results:
-            value_key = "dg" if "dg" in result else "estimate"
-            err_key = "dg_uncertainty" if value_key == "dg" else "estimate_error"
             label = _asfe_result_key(result)
             femap.add_absolute_calculation(
                 label=label,
-                value=result[value_key],
-                uncertainty=result[err_key],
+                value=result["dg"],
+                uncertainty=result["dg_uncertainty"],
                 source="Computational",
             )
 
