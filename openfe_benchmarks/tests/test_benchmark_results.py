@@ -12,6 +12,7 @@ Tests cover:
 import pytest
 import yaml
 import time
+import pint
 
 from cinnabar import FEMap
 
@@ -685,3 +686,84 @@ def test_filter_quantity_invalid_string_raises():
     """Test that invalid quantity strings raise ValueError (no silent fallback)."""
     with pytest.raises(ValueError, match="Invalid quantity filter value"):
         _ = filter_results(dg=">not_a_quantity")
+
+
+def test_compare_values_list_of_quantities_inequality(mock_submission_yaml):
+    """Protocol quantities extracted from BenchmarkResults should compare element-wise."""
+    ureg = pint.UnitRegistry()
+    yaml_data = mock_submission_yaml(
+        "test-tyk2-protocol-quantity-compare",
+        benchmark_data={"system_name": "tyk2"},
+        protocol_settings=[
+            {"system_name": "tyk2", "temperature": ureg.Quantity(298.0, "kelvin")},
+        ],
+    )
+    submission = BenchmarkResults(**yaml_data)
+    temperatures = br_module._get_nested_value(
+        submission, "protocol_settings__temperature"
+    )
+    system_names = br_module._get_nested_value(
+        submission, "protocol_settings__system_name"
+    )
+
+    assert isinstance(temperatures, list)
+    assert len(temperatures) == 1
+    assert system_names == ["tyk2"]
+
+    assert br_module._compare_values(
+        temperatures, "290 kelvin", ">", "protocol_settings__temperature"
+    )
+    assert br_module._compare_values(
+        temperatures, "298 kelvin", ">=", "protocol_settings__temperature"
+    )
+    assert not br_module._compare_values(
+        temperatures, "280 kelvin", "<=", "protocol_settings__temperature"
+    )
+    assert not br_module._compare_values(
+        temperatures, "350 kelvin", ">", "protocol_settings__temperature"
+    )
+
+
+def test_filter_protocol_settings_quantity_inequality(mock_submission_yaml):
+    """Nested protocol_settings Quantity filters return predictable pass/fail matches."""
+    ureg = pint.UnitRegistry()
+    yaml_data = mock_submission_yaml(
+        "test-tyk2-protocol-quantity",
+        benchmark_data={"system_name": "tyk2"},
+        protocol_settings=[
+            {"system_name": "tyk2", "temperature": ureg.Quantity(298.0, "kelvin")},
+        ],
+    )
+    submission = BenchmarkResults(**yaml_data)
+
+    assert br_module._match_submission_filter(
+        submission,
+        "benchmark_data__system_name",
+        "tyk2",
+        tags_mode="all",
+    )
+
+    assert br_module._match_submission_filter(
+        submission,
+        "protocol_settings__temperature",
+        ">290 kelvin",
+        tags_mode="all",
+    )
+    assert br_module._match_submission_filter(
+        submission,
+        "protocol_settings__temperature",
+        "<=298 kelvin",
+        tags_mode="all",
+    )
+    assert not br_module._match_submission_filter(
+        submission,
+        "protocol_settings__temperature",
+        "<298 kelvin",
+        tags_mode="all",
+    )
+    assert not br_module._match_submission_filter(
+        submission,
+        "protocol_settings__temperature",
+        ">350 kelvin",
+        tags_mode="all",
+    )

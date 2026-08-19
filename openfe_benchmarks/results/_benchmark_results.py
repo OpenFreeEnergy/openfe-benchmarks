@@ -16,6 +16,7 @@ import fnmatch
 import re
 import logging
 import warnings
+import operator as py_operator
 
 from packaging.version import Version, InvalidVersion
 import pint
@@ -951,84 +952,27 @@ def _compare_values(
     >>> _compare_values(q1, '25 celsius', '>=')  # Unit conversion handled automatically
     True
     """
-    # Check if field is appropriate for comparison operators
-    # Don't warn for date/version fields or pint Quantity objects (semantically meaningful)
-    COMPARISON_ALLOWED_FIELDS = {
-        "date",
-        "openfe_version",
-        "openmm_version",
-        "openff_toolkit_version",
-    }
-    if (
-        field_name
-        and field_name not in COMPARISON_ALLOWED_FIELDS
-        and not field_name.endswith("_version")
-        and not isinstance(result_value, pint.Quantity)
-    ):
-        warnings.warn(
-            f"Comparison operator '{operator}' used with field '{field_name}'. "
-            f"Comparison operators are designed for date and version fields. "
-            f"Results may not be semantically meaningful for other field types.",
-            UserWarning,
-            stacklevel=4,
+    # For list-valued nested fields, match if any element satisfies the comparison.
+    if isinstance(result_value, list):
+        return any(
+            _compare_values(item, filter_val, operator, field_name)
+            for item in result_value
         )
+
+    _warn_if_nonsemantic_comparison(result_value, operator, field_name)
 
     # Handle datetime.date objects (from YAML parsing)
     if isinstance(result_value, date_type):
-        # Convert filter value to date if it's a string
-        if isinstance(filter_val, str):
-            try:
-                # Parse ISO format date string YYYY-MM-DD
-                filter_val = date_type.fromisoformat(filter_val)
-            except (ValueError, AttributeError):
-                # If parsing fails, convert both to strings for comparison
-                result_value = result_value.isoformat()
-
-        # Now compare dates (both should be date objects or both strings)
-        if operator == "<":
-            return result_value < filter_val
-        elif operator == "<=":
-            return result_value <= filter_val
-        elif operator == ">":
-            return result_value > filter_val
-        elif operator == ">=":
-            return result_value >= filter_val
-        else:
-            raise ValueError(f"Unknown comparison operator: {operator}")
+        result_value, filter_val = _coerce_date_values(result_value, filter_val)
+        return _apply_comparison_operator(result_value, filter_val, operator)
 
     # Handle pint Quantity objects (from JSON_HANDLER deserialization)
     if isinstance(result_value, pint.Quantity):
-        # Convert filter value to Quantity if it's a string
-        # Use the same UnitRegistry as the result_value to ensure compatibility
-        if isinstance(filter_val, str):
-            try:
-                # Parse quantity string using the result_value's UnitRegistry
-                # This ensures we can compare quantities from the same registry
-                ureg = result_value._REGISTRY
-                filter_val = ureg.Quantity(filter_val)
-            except (ValueError, pint.errors.UndefinedUnitError, AttributeError):
-                raise ValueError(
-                    f"Invalid quantity filter value '{filter_val}' for field '{field_name}'. "
-                    "Provide a valid quantity string with units."
-                )
-        elif not isinstance(filter_val, pint.Quantity):
-            raise ValueError(
-                f"Invalid filter type '{type(filter_val).__name__}' for Quantity field '{field_name}'. "
-                "Provide a quantity string or pint.Quantity value."
-            )
+        filter_val = _coerce_quantity_filter_value(result_value, filter_val, field_name)
 
         # Compare Quantities (pint handles unit conversion automatically)
         try:
-            if operator == "<":
-                return result_value < filter_val
-            elif operator == "<=":
-                return result_value <= filter_val
-            elif operator == ">":
-                return result_value > filter_val
-            elif operator == ">=":
-                return result_value >= filter_val
-            else:
-                raise ValueError(f"Unknown comparison operator: {operator}")
+            return _apply_comparison_operator(result_value, filter_val, operator)
         except pint.errors.DimensionalityError as e:
             raise ValueError(
                 f"Incompatible units for Quantity comparison on field '{field_name}': {e}"
@@ -1038,30 +982,89 @@ def _compare_values(
     try:
         result_ver = Version(str(result_value))
         filter_ver = Version(str(filter_val))
-
-        if operator == "<":
-            return result_ver < filter_ver
-        elif operator == "<=":
-            return result_ver <= filter_ver
-        elif operator == ">":
-            return result_ver > filter_ver
-        elif operator == ">=":
-            return result_ver >= filter_ver
-        else:
-            raise ValueError(f"Unknown comparison operator: {operator}")
+        return _apply_comparison_operator(result_ver, filter_ver, operator)
 
     except (InvalidVersion, TypeError):
         # Fall back to string comparison
         result_str = str(result_value)
         filter_str = str(filter_val)
+        return _apply_comparison_operator(result_str, filter_str, operator)
 
-        if operator == "<":
-            return result_str < filter_str
-        elif operator == "<=":
-            return result_str <= filter_str
-        elif operator == ">":
-            return result_str > filter_str
-        elif operator == ">=":
-            return result_str >= filter_str
-        else:
-            raise ValueError(f"Unknown comparison operator: {operator}")
+
+def _warn_if_nonsemantic_comparison(
+    result_value: Any, operator: str, field_name: str
+) -> None:
+    """Warn when comparison operators are used on fields that may not compare semantically."""
+    comparison_allowed_fields = {
+        "date",
+        "openfe_version",
+        "openmm_version",
+        "openff_toolkit_version",
+    }
+    if (
+        field_name
+        and field_name not in comparison_allowed_fields
+        and not field_name.endswith("_version")
+        and not isinstance(result_value, pint.Quantity)
+    ):
+        warnings.warn(
+            f"Comparison operator '{operator}' used with field '{field_name}'. "
+            "Comparison operators are designed for date and version fields. "
+            "Results may not be semantically meaningful for other field types.",
+            UserWarning,
+            stacklevel=4,
+        )
+
+
+def _coerce_date_values(
+    result_value: date_type, filter_val: Any
+) -> tuple[date_type | str, Any]:
+    """Coerce date comparisons, preserving fallback-to-string behavior on parse failure."""
+    coerced_result_value: date_type | str = result_value
+    if isinstance(filter_val, str):
+        try:
+            # Parse ISO format date string YYYY-MM-DD
+            filter_val = date_type.fromisoformat(filter_val)
+        except (ValueError, AttributeError):
+            # If parsing fails, compare strings to preserve previous behavior
+            coerced_result_value = result_value.isoformat()
+
+    return coerced_result_value, filter_val
+
+
+def _coerce_quantity_filter_value(
+    result_value: pint.Quantity, filter_val: Any, field_name: str
+) -> Any:
+    """Convert quantity filter inputs into pint.Quantity using the result value registry."""
+    if isinstance(filter_val, str):
+        try:
+            ureg = result_value._REGISTRY
+            return ureg.Quantity(filter_val)
+        except (ValueError, pint.errors.UndefinedUnitError, AttributeError) as exc:
+            raise ValueError(
+                f"Invalid quantity filter value '{filter_val}' for field '{field_name}'. "
+                "Provide a valid quantity string with units."
+            ) from exc
+
+    if isinstance(filter_val, pint.Quantity):
+        return filter_val
+
+    raise ValueError(
+        f"Invalid filter type '{type(filter_val).__name__}' for Quantity field '{field_name}'. "
+        "Provide a quantity string or pint.Quantity value."
+    )
+
+
+def _apply_comparison_operator(left: Any, right: Any, operator: str) -> bool:
+    """Apply one of <, <=, >, >= operators to two comparable values."""
+    operator_map = {
+        "<": py_operator.lt,
+        "<=": py_operator.le,
+        ">": py_operator.gt,
+        ">=": py_operator.ge,
+    }
+    compare_func = operator_map.get(operator)
+    if compare_func is None:
+        raise ValueError(f"Unknown comparison operator: {operator}")
+
+    return compare_func(left, right)
