@@ -649,6 +649,12 @@ def _get_nested_value(result: dict, nested_key: str) -> Optional[Any]:
     for key in keys:
         if isinstance(value, dict):
             value = value.get(key, None)
+        elif isinstance(value, list):
+            # Support list-of-dicts nesting (e.g. protocol_settings is a list of dicts)
+            value = [item.get(key, None) for item in value if isinstance(item, dict)]
+            value = [v for v in value if v is not None]
+            if not value:
+                return None
         else:
             return None
     return value

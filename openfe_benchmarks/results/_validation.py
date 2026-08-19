@@ -166,10 +166,18 @@ def get_changed_submission_ids(base_branch: str = "origin/main") -> list[str]:
             # Match patterns like: results/SUBMISSION_ID/submission.yaml
             # or results/SUBMISSION_ID/computational_results.json
             parts = Path(file_path).parts
-            if len(parts) >= 2 and parts[0] == "results":
-                # Check if it's a submission.yaml or results file
-                if "submission.yaml" in parts or "computational_results" in parts[-1]:
-                    submission_ids.add(parts[1])
+
+            submission_id = None
+            if len(parts) >= 3 and parts[0] == "openfe_benchmarks" and parts[1] == "results":
+                submission_id = parts[2]
+            elif len(parts) >= 2 and parts[0] == "results":
+                submission_id = parts[1]
+
+            if submission_id is None:
+                continue
+
+            if parts[-1] == "submission.yaml" or "computational_results" in parts[-1]:
+                submission_ids.add(submission_id)
 
         return sorted(list(submission_ids))
 

@@ -163,9 +163,9 @@ def test_changed_files_detection():
     - Returns empty list gracefully when git unavailable
     """
     # Mock git diff output
-    mock_git_output = """results/2026-03-18-openmm-840-qa-testing/submission.yaml
-results/2026-03-18-openmm-840-qa-testing/computational_results.json.bz2
-results/2026-08-06-openff-2.3.0-solvation_set_freesolv/submission.yaml
+    mock_git_output = """openfe_benchmarks/results/2026-03-18-openmm-840-qa-testing/submission.yaml
+openfe_benchmarks/results/2026-03-18-openmm-840-qa-testing/computational_results.json.bz2
+openfe_benchmarks/results/2026-08-06-openff-2.3.0-solvation_set_freesolv/submission.yaml
 openfe_benchmarks/data/something_else.py
 """
 

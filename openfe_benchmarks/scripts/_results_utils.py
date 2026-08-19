@@ -194,9 +194,8 @@ def build_femap_from_absolute_results(
 
         if experimental_key in benchmark_data.reference_data:
             experimental_file = benchmark_data.reference_data[experimental_key]
-            experimental_data = json.load(
-                open(experimental_file), cls=JSON_HANDLER.decoder
-            )
+            with open(experimental_file, "r") as f:
+                experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
             n_experimental_points = 0
 
             for result in system_results:
