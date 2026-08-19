@@ -156,7 +156,7 @@ def build_femap_from_absolute_results(
         missing_required_fields = [
             _asfe_result_key(result)
             for result in system_results
-            if "dg" not in result or "dg_uncertainty" not in result
+            if np.isnan(result["dg_uncertainty"].magnitude)
         ]
         if missing_required_fields:
             raise ValueError(
