@@ -104,10 +104,10 @@ def _extract_asfe_data(transformation, results):
     production_iterations = protocol_result.production_iterations()
 
     return {
-        "solute": solute,
+        "ligand": solute,
         "solvent": solvent,
-        "estimate": protocol_result.get_estimate(),
-        "estimate_error": protocol_result.get_uncertainty(),
+        "dg": protocol_result.get_estimate(),
+        "dg_uncertainty": protocol_result.get_uncertainty(),
         "dgs_solvent": dgs_solvent,
         "solvent_mbar_errors": solvent_mbar_errors,
         "dgs_vacuum": dgs_vacuum,
@@ -326,7 +326,13 @@ def _parse_systems_input(systems):
             raise ValueError(
                 "Each systems entry must include a non-empty system_group and system_name"
             )
-        parsed.append((str(system_group).strip(), str(system_name).strip(), pathlib.Path(archive_path)))
+        parsed.append(
+            (
+                str(system_group).strip(),
+                str(system_name).strip(),
+                pathlib.Path(archive_path),
+            )
+        )
     if not parsed:
         raise ValueError("At least one system must be provided in systems")
     return parsed
