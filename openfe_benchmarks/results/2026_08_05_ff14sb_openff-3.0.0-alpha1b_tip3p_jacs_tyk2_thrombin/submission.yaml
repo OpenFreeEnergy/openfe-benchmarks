@@ -15,7 +15,7 @@ summary: |
   resources/submissions/2026_07_23_ff14sb_openff-3.0.0-alpha1b_tip3p/alchemiscale_submission.ipynb
 
 # REQUIRED: list of submission tags
-tags: [rbfe, ff14SB, lipid17_merged, phosaa10, tip3p_HFE_multivalent, tip3p_standard, openff-3.0.0-alpha1b, jacs_set, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
+tags: [rbfe, ff14SB, lipid17_merged, phosaa10, tip3p_HFE_multivalent, tip3p_standard, openff-3.0.0-alpha1b, jacs_set, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe, alchemicalarchive]
 
 # REQUIRED: calculation type (asfe, rbfe, etc.)
 calculation_type: rbfe
