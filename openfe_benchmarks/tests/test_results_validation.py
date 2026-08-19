@@ -9,6 +9,7 @@ Target: <6 min CI time for 100 submissions with 10% changed.
 
 import time
 from unittest.mock import patch
+import yaml
 
 from openfe_benchmarks.results._validation import (
     validate_submission_yaml_fast,
@@ -18,6 +19,61 @@ from openfe_benchmarks.results._validation import (
 )
 from openfe_benchmarks.results import get_benchmark_results
 from openfe_benchmarks.results._benchmark_results import _RESULTS_DIR
+
+
+def _trigger_available_femaps(benchmark_result):
+    """Load only FEMap types that exist in raw_results for this submission."""
+    loaded_any = False
+
+    if "ddg" in benchmark_result.raw_results:
+        _ = benchmark_result.ddg_femaps
+        loaded_any = True
+
+    if "dg" in benchmark_result.raw_results:
+        _ = benchmark_result.dg_femaps
+        loaded_any = True
+
+    assert loaded_any, (
+        f"Expected at least one of 'dg' or 'ddg' in raw_results for "
+        f"{benchmark_result.submission_id}, found keys: "
+        f"{list(benchmark_result.raw_results.keys())}"
+    )
+
+
+def test_fast_yaml_validation_rejects_noncanonical_path(tmp_path):
+    """Test that validate_submission_yaml_fast rejects non-canonical YAML paths."""
+    submission_id = "standalone-submission"
+    submission_dir = tmp_path / submission_id
+    submission_dir.mkdir(parents=True, exist_ok=True)
+    yaml_path = submission_dir / "submission.yaml"
+
+    yaml_data = {
+        "submission_id": submission_id,
+        "title": "Standalone Test Submission",
+        "summary": "Validate explicit path handling",
+        "calculation_type": "rbfe",
+        "tags": ["test"],
+        "authors": [{"name": "Test Author"}],
+        "date": "2026-01-01",
+        "results": "results.json",
+        "archive": {"doi": "10.1234/test", "archive_provider": "test"},
+        "license": "MIT",
+        "openfe_version": "1.0.0",
+        "openmm_version": "8.0.0",
+        "openff_toolkit_version": "0.10.0",
+        "partial_charges": "am1bcc",
+        "benchmark_data": {},
+        "protocol_settings": [],
+    }
+    with open(yaml_path, "w") as f:
+        yaml.dump(yaml_data, f)
+
+    result = validate_submission_yaml_fast(yaml_path)
+
+    assert result["valid"] is False
+    assert result["submission_id"] is None
+    assert result["calculation_type"] is None
+    assert any("Non-canonical submission path" in err for err in result["errors"])
 
 
 def test_fast_yaml_validation_all():
@@ -356,9 +412,8 @@ def test_deep_validation_changed_only():
         # Full load: YAML + JSON + FEMap generation
         result = get_benchmark_results(submission_id, load_results=True)
 
-        # Access FEMaps to trigger generation
-        _ = result.ddg_femaps
-        _ = result.dg_femaps
+        # Access available FEMaps to trigger generation.
+        _trigger_available_femaps(result)
 
         elapsed = time.time() - start
         timings.append(elapsed)
@@ -437,8 +492,7 @@ def test_ci_hybrid_workflow():
 
     for submission_id in changed_ids:
         result = get_benchmark_results(submission_id, load_results=True)
-        _ = result.ddg_femaps
-        _ = result.dg_femaps
+        _trigger_available_femaps(result)
 
     deep_elapsed = time.time() - deep_start
     print(f"  Completed in {deep_elapsed:.3f}s")
@@ -453,8 +507,7 @@ def test_ci_hybrid_workflow():
 
     for submission_id in sample_ids:
         result = get_benchmark_results(submission_id, load_results=True)
-        _ = result.ddg_femaps
-        _ = result.dg_femaps
+        _trigger_available_femaps(result)
 
     sample_elapsed = time.time() - sample_start
     print(f"  Completed in {sample_elapsed:.3f}s")

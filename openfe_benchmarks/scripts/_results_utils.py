@@ -39,10 +39,10 @@ def build_femap_from_relative_results(
         results_by_system_key[key].append(result)
 
     femaps_by_system_key = {}
-    unique_ligands = set()
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
         benchmark_data = get_benchmark_data_system(system_group, system_name)
+        unique_ligands = set()
 
         # Check if all edges have valid ddg_uncertainty (not NaN)
         edges_no_uncertainty = [
@@ -70,7 +70,8 @@ def build_femap_from_relative_results(
 
         # add experimental data for each of the ligands in the results
         experimental_file = benchmark_data.reference_data["experimental_binding_data"]
-        experimental_data = json.load(open(experimental_file), cls=JSON_HANDLER.decoder)
+        with open(experimental_file, "r") as f:
+            experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
 
         for ligand in unique_ligands:
             exp_data = experimental_data.get(ligand, None)
@@ -185,11 +186,11 @@ def build_femap_from_absolute_results(
 
         # Add experimental data if available
         # For ASFE: experimental solvation free energy data
-        # For RBFE: experimental binding free energy data (if available)
+        # For RBFE: experimental binding data
         experimental_key = (
             "experimental_solvation_free_energy_data"
             if calculation_type == "asfe"
-            else "experimental_binding_free_energy_data"
+            else "experimental_binding_data"
         )
 
         if experimental_key in benchmark_data.reference_data:

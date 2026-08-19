@@ -19,11 +19,10 @@ from openfe_benchmarks.results._benchmark_results import _RESULTS_DIR
 
 def validate_submission_yaml_fast(yaml_path: Path) -> dict:
     """
-    Fast YAML-only validation using get_benchmark_results(load_results=False).
+    Fast YAML-only validation for canonical submissions.
 
     Validates by attempting to construct BenchmarkResults object without
-    loading JSON data or generating FEMaps. Delegates validation to the
-    actual factory function that will be used.
+    loading JSON data or generating FEMaps, using get_benchmark_results().
 
     Parameters
     ----------
@@ -63,10 +62,19 @@ def validate_submission_yaml_fast(yaml_path: Path) -> dict:
         result["errors"].append(f"File not found: {yaml_path}")
         return result
 
-    # Extract submission_id from path
+    # Extract submission_id from path and enforce canonical location to avoid
+    # silently validating a different file with the same submission_id.
     submission_id = yaml_path.parent.name
+    canonical_yaml_path = (_RESULTS_DIR / submission_id / "submission.yaml").resolve()
+    if yaml_path.resolve() != canonical_yaml_path:
+        result["valid"] = False
+        result["errors"].append(
+            "Non-canonical submission path. Expected "
+            f"{canonical_yaml_path}, got {yaml_path.resolve()}"
+        )
+        return result
 
-    # Attempt to construct BenchmarkResults without loading data
+    # Attempt to construct BenchmarkResults without loading data.
     try:
         benchmark = get_benchmark_results(
             submission_id=submission_id, load_results=False
@@ -158,7 +166,7 @@ def get_changed_submission_ids(base_branch: str = "origin/main") -> list[str]:
             check=True,
         )
 
-        changed_files = result.stdout.strip().split("\n")
+        changed_files = [line for line in result.stdout.splitlines() if line.strip()]
 
         # Extract submission_ids from changed results paths
         submission_ids = set()
@@ -168,7 +176,11 @@ def get_changed_submission_ids(base_branch: str = "origin/main") -> list[str]:
             parts = Path(file_path).parts
 
             submission_id = None
-            if len(parts) >= 3 and parts[0] == "openfe_benchmarks" and parts[1] == "results":
+            if (
+                len(parts) >= 3
+                and parts[0] == "openfe_benchmarks"
+                and parts[1] == "results"
+            ):
                 submission_id = parts[2]
             elif len(parts) >= 2 and parts[0] == "results":
                 submission_id = parts[1]
@@ -176,7 +188,11 @@ def get_changed_submission_ids(base_branch: str = "origin/main") -> list[str]:
             if submission_id is None:
                 continue
 
-            if parts[-1] == "submission.yaml" or "computational_results" in parts[-1]:
+            if not parts:
+                continue
+
+            filename = parts[-1]
+            if filename == "submission.yaml" or "computational_results" in filename:
                 submission_ids.add(submission_id)
 
         return sorted(list(submission_ids))

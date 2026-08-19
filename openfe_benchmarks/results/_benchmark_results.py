@@ -874,6 +874,12 @@ def _compare_values(
     bool
         True if comparison succeeds, False otherwise
 
+    Raises
+    ------
+    ValueError
+        If a Quantity comparison is requested with an invalid quantity string,
+        unsupported filter type, or incompatible dimensions.
+
     Examples
     --------
     >>> _compare_values('2026-01-15', '2026-01-01', '>=', 'date')
@@ -947,13 +953,15 @@ def _compare_values(
                 ureg = result_value._REGISTRY
                 filter_val = ureg.Quantity(filter_val)
             except (ValueError, pint.errors.UndefinedUnitError, AttributeError):
-                # If parsing fails, convert both to strings for comparison
-                result_value = str(result_value)
-                filter_val = str(filter_val)
+                raise ValueError(
+                    f"Invalid quantity filter value '{filter_val}' for field '{field_name}'. "
+                    "Provide a valid quantity string with units."
+                )
         elif not isinstance(filter_val, pint.Quantity):
-            # If filter_val is not a string or Quantity, convert both to strings
-            result_value = str(result_value)
-            filter_val = str(filter_val)
+            raise ValueError(
+                f"Invalid filter type '{type(filter_val).__name__}' for Quantity field '{field_name}'. "
+                "Provide a quantity string or pint.Quantity value."
+            )
 
         # Compare Quantities (pint handles unit conversion automatically)
         try:
@@ -967,11 +975,10 @@ def _compare_values(
                 return result_value >= filter_val
             else:
                 raise ValueError(f"Unknown comparison operator: {operator}")
-        except (pint.errors.DimensionalityError, ValueError):
-            # Units are incompatible (e.g., comparing temperature to pressure)
-            # or different registries - fall back to string comparison
-            result_value = str(result_value)
-            filter_val = str(filter_val)
+        except pint.errors.DimensionalityError as e:
+            raise ValueError(
+                f"Incompatible units for Quantity comparison on field '{field_name}': {e}"
+            ) from e
 
     # Try semantic version comparison (for version fields)
     try:

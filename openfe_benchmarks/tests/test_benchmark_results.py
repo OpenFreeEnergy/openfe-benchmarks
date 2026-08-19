@@ -745,24 +745,19 @@ def test_filter_quantity_comparison_range():
         assert r["dg"].magnitude <= 2.0
 
 
-def test_filter_quantity_incompatible_units_fallback():
-    """Test that incompatible units fall back to string comparison."""
+def test_filter_quantity_incompatible_units_raises():
+    """Test that incompatible units raise ValueError (no silent fallback)."""
     result = get_benchmark_results(RBFE_SUBMISSION)
 
     # Try to compare energy (kcal/mol) with temperature (K) - dimensionally incompatible
-    # Should fall back to string comparison without error
-    filtered = filter_results(result, dg=">298 kelvin")
-
-    # Should not raise an error, but may return unexpected results (string comparison)
-    assert isinstance(filtered, list)
+    with pytest.raises(ValueError, match="Incompatible units"):
+        _ = filter_results(result, dg=">298 kelvin")
 
 
-def test_filter_quantity_invalid_string_fallback():
-    """Test that invalid quantity strings fall back to string comparison."""
+def test_filter_quantity_invalid_string_raises():
+    """Test that invalid quantity strings raise ValueError (no silent fallback)."""
     result = get_benchmark_results(RBFE_SUBMISSION)
 
     # Use a string that can't be parsed as a quantity
-    filtered = filter_results(result, dg=">not_a_quantity")
-
-    # Should fall back to string comparison without error
-    assert isinstance(filtered, list)
+    with pytest.raises(ValueError, match="Invalid quantity filter value"):
+        _ = filter_results(result, dg=">not_a_quantity")
