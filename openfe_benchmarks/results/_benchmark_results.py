@@ -118,9 +118,9 @@ class BenchmarkResults:
     >>> # Fast YAML-only load (for CI validation)
     >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing', load_results=False)
     >>>
-    >>> # Filter the results
-    >>> rbfe_results = filter_results(results, tags='rbfe')
-    >>> tyk2_results = filter_results(results, system_name='tyk2')
+    >>> # Filter submissions globally
+    >>> rbfe_submissions = filter_results(tags='rbfe')
+    >>> tyk2_submissions = filter_results(system_name='tyk2')
     """
 
     # Required fields (match submission.yaml structure exactly)
@@ -515,119 +515,162 @@ def get_benchmark_results(
 
 
 def filter_results(
-    benchmark_results: BenchmarkResults, tags_mode: str = "all", **filters
-) -> list[dict]:
+    tags_mode: str = "all", load_results: Optional[bool] = None, **filters
+) -> list[BenchmarkResults]:
     """
-    Filter raw computational results by any combination of fields.
+    Filter submissions by metadata and/or raw result-entry fields.
 
-    Supports:
-    - Top-level metadata: tags='rbfe', calculation_type='rbfe'
-    - Nested fields: protocol_settings__temperature='298.15 K' (use __ for nesting)
-    - Result fields: system_group='jacs_set', system_name='tyk2'
-    - Wildcards: system_name='*tyk2*' (uses fnmatch)
-    - Comparison operators inline notation: date='>=2026-01-01', openfe_version='<1.0.0'
-      (supports <, <=, >, >= for dates, versions, and pint Quantity objects)
-    - Pint Quantity comparison: automatically handles unit conversion (e.g., '25 celsius' == '298.15 K')
-    - OR logic within field: pass list for ANY match (e.g., system_name=['tyk2', 'thrombin'])
-    - NOT logic: use exclude_ prefix (e.g., exclude_tags=['deprecated'])
-    - AND logic between fields: all filter conditions must match
+    This function scans all submission directories under ``openfe_benchmarks/results``
+    and returns matching ``BenchmarkResults`` objects.
+
+    Filters targeting ``BenchmarkResults`` fields (e.g. ``tags``, ``date``) are applied
+    at submission level. Filters targeting raw result entries (e.g. ``system_name``,
+    ``dg``) are applied to ``dg`` and ``ddg`` entries; a submission matches when any
+    single result entry satisfies all result-entry filters.
 
     Parameters
     ----------
-    benchmark_results : BenchmarkResults
-        BenchmarkResults instance to filter
     tags_mode : {'all', 'any'}, default='all'
         When filtering by multiple tags:
-        - 'all': result must have ALL specified tags (AND logic, default)
-        - 'any': result must have ANY specified tag (OR logic)
-        Ignored if tags filter is not provided or is a single value.
+        - 'all': submission must have ALL specified tags (AND logic, default)
+        - 'any': submission must have ANY specified tag (OR logic)
+    load_results : bool, optional
+        Whether to load raw computational results while filtering.
+        If None (default), automatically enabled when result-entry filters are used.
     **filters : dict
         Field=value pairs to filter by. Values can be:
         - Single value: exact match (or wildcard if contains * or ?)
-        - List: matches if ANY value matches (OR logic) - EXCEPT tags which respects tags_mode
-        - Use exclude_ prefix for NOT logic (e.g., exclude_tags=['test'])
+        - List: matches if ANY value matches (OR logic), except ``tags`` honoring
+          ``tags_mode``
+        - Use ``exclude_`` prefix for NOT logic (e.g. ``exclude_tags=['test']``)
 
     Returns
     -------
-    list[dict]
-        Filtered result dictionaries
-
-    Raises
-    ------
-    ValueError
-        If raw_results is None (load_results=False was used)
-
-    Examples
-    --------
-    >>> results = BenchmarkResults(submission_id='2026-03-18-openmm-840-qa-testing')
-    >>>
-    >>> # Exact match
-    >>> rbfe_results = filter_results(results, tags='rbfe')
-    >>>
-    >>> # Tags AND logic (default): must have ALL tags
-    >>> validated = filter_results(results, tags=['rbfe', 'openfe', 'validation'])
-    >>>
-    >>> # Tags OR logic: must have ANY tag
-    >>> any_calc = filter_results(results, tags=['rbfe', 'asfe'], tags_mode='any')
-    >>>
-    >>> # OR within non-tag fields (list = ANY match)
-    >>> multi_system = filter_results(results, system_name=['tyk2', 'thrombin'])
-    >>>
-    >>> # NOT logic (exclude_ prefix)
-    >>> no_deprecated = filter_results(results, exclude_tags='deprecated')
-    >>> no_test = filter_results(results, exclude_tags=['deprecated', 'test'], tags_mode='any')
-    >>>
-    >>> # Comparison operators (inline notation)
-    >>> recent = filter_results(results, date='>=2026-01-01')
-    >>> old_versions = filter_results(results, openfe_version='<1.0.0')
-    >>> newer_versions = filter_results(results, openmm_version='>=8.0.0')
-    >>>
-    >>> # Complex: multiple tags (AND), system OR, exclude
-    >>> filtered = filter_results(
-    ...     results,
-    ...     tags=['rbfe', 'openfe'],           # has BOTH rbfe AND openfe
-    ...     system_name=['tyk2', 'thrombin'],  # AND (tyk2 OR thrombin)
-    ...     exclude_tags=['deprecated']        # AND NOT deprecated
-    ... )
-    >>>
-    >>> # Nested fields and wildcards
-    >>> lambda11 = filter_results(results, protocol_settings__lambda_windows='11')
-    >>> tyk2_wildcard = filter_results(results, system_name='*tyk2*')
+    list[BenchmarkResults]
+        Matching BenchmarkResults objects
     """
-    if benchmark_results.raw_results is None:
-        raise ValueError(
-            "Cannot filter results: raw_results is None. "
-            "Initialize with load_results=True to access computational data."
-        )
+    if tags_mode not in {"all", "any"}:
+        raise ValueError(f"Invalid tags_mode: {tags_mode}. Must be 'all' or 'any'")
 
-    # Collect all results (dg + ddg)
-    all_results = []
-    if "dg" in benchmark_results.raw_results:
-        all_results.extend(benchmark_results.raw_results["dg"])
-    if "ddg" in benchmark_results.raw_results:
-        all_results.extend(benchmark_results.raw_results["ddg"])
+    if not _RESULTS_DIR.exists():
+        raise FileNotFoundError(f"Results directory not found: {_RESULTS_DIR}")
 
-    # Apply filters
-    filtered = []
-    for result in all_results:
-        # Check all filters (AND logic between different filters)
-        if all(
-            _match_filter(result, benchmark_results, key, value, tags_mode)
-            for key, value in filters.items()
+    submission_filters = {
+        key: value for key, value in filters.items() if _is_submission_filter_key(key)
+    }
+    result_entry_filters = {
+        key: value
+        for key, value in filters.items()
+        if not _is_submission_filter_key(key)
+    }
+
+    if load_results is None:
+        load_results = bool(result_entry_filters)
+
+    matched_submissions: list[BenchmarkResults] = []
+    for submission_dir in sorted(_RESULTS_DIR.iterdir()):
+        if not submission_dir.is_dir():
+            continue
+
+        submission_file = submission_dir / "submission.yaml"
+        if not submission_file.exists():
+            continue
+
+        try:
+            benchmark_results = get_benchmark_results(
+                submission_id=submission_dir.name,
+                load_results=load_results,
+            )
+        except (FileNotFoundError, ValueError) as exc:
+            logger.warning(
+                "Skipping submission '%s' during filtering: %s",
+                submission_dir.name,
+                exc,
+            )
+            continue
+
+        if not all(
+            _match_submission_filter(benchmark_results, key, value, tags_mode)
+            for key, value in submission_filters.items()
         ):
-            filtered.append(result)
+            continue
 
-    return filtered
+        if not result_entry_filters:
+            matched_submissions.append(benchmark_results)
+            continue
+
+        if benchmark_results.raw_results is None:
+            continue
+
+        all_results = []
+        if "dg" in benchmark_results.raw_results:
+            all_results.extend(benchmark_results.raw_results["dg"])
+        if "ddg" in benchmark_results.raw_results:
+            all_results.extend(benchmark_results.raw_results["ddg"])
+
+        if any(
+            all(
+                _match_filter(result, benchmark_results, key, value, tags_mode)
+                for key, value in result_entry_filters.items()
+            )
+            for result in all_results
+        ):
+            matched_submissions.append(benchmark_results)
+
+    return matched_submissions
 
 
-def _get_nested_value(result: dict, nested_key: str) -> Optional[Any]:
+def _is_submission_filter_key(filter_key: str) -> bool:
+    """Return True if filter key targets a BenchmarkResults-level field."""
+    if filter_key.startswith("exclude_"):
+        filter_key = filter_key[len("exclude_") :]
+
+    root_key = filter_key.split("__", 1)[0]
+    return root_key in BenchmarkResults.__dataclass_fields__
+
+
+def _match_submission_filter(
+    benchmark_results: BenchmarkResults,
+    filter_key: str,
+    filter_val: Union[str, list, Any],
+    tags_mode: str,
+) -> bool:
+    """Check if a submission-level field matches a filter predicate."""
+    EXCLUDE_PREFIX = "exclude_"
+    negate = False
+    if filter_key.startswith(EXCLUDE_PREFIX):
+        negate = True
+        filter_key = filter_key[len(EXCLUDE_PREFIX) :]
+
+    comparison_op = None
+    if isinstance(filter_val, str):
+        comparison_op, filter_val = _parse_inline_operator(filter_val)
+
+    if "__" in filter_key:
+        value = _get_nested_value(benchmark_results, filter_key)
+    else:
+        value = getattr(benchmark_results, filter_key, None)
+
+    if value is None:
+        result_matched = False
+        return not result_matched if negate else result_matched
+
+    if comparison_op is not None:
+        result_matched = _compare_values(value, filter_val, comparison_op, filter_key)
+    else:
+        result_matched = _match_value(value, filter_val, filter_key, tags_mode)
+
+    return not result_matched if negate else result_matched
+
+
+def _get_nested_value(result: Any, nested_key: str) -> Optional[Any]:
     """
     Extract value from nested dictionary using double-underscore separated keys.
 
     Parameters
     ----------
-    result : dict
-        Result dictionary to extract from
+    result : Any
+        Result object or dictionary to extract from
     nested_key : str
         Nested key with __ separator (e.g., 'protocol_settings__temperature')
 
@@ -651,12 +694,23 @@ def _get_nested_value(result: dict, nested_key: str) -> Optional[Any]:
             value = value.get(key, None)
         elif isinstance(value, list):
             # Support list-of-dicts nesting (e.g. protocol_settings is a list of dicts)
-            value = [item.get(key, None) for item in value if isinstance(item, dict)]
-            value = [v for v in value if v is not None]
+            next_values = []
+            for item in value:
+                if isinstance(item, dict):
+                    nested = item.get(key, None)
+                else:
+                    nested = getattr(item, key, None)
+
+                if nested is not None:
+                    next_values.append(nested)
+
+            value = next_values
             if not value:
                 return None
         else:
-            return None
+            value = getattr(value, key, None)
+            if value is None:
+                return None
     return value
 
 

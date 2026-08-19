@@ -15,13 +15,35 @@ import time
 
 from cinnabar import FEMap
 
-from openfe_benchmarks.results import get_benchmark_results, filter_results
+from openfe_benchmarks.results import (
+    BenchmarkResults,
+    get_benchmark_results,
+    filter_results,
+)
 import openfe_benchmarks.results._benchmark_results as br_module
 
 
 # Test data submission IDs
 RBFE_SUBMISSION = "2026-03-18-openmm-840-qa-testing"
 ASFE_SUBMISSION = "2026-08-06-openff-2.3.0-solvation_set_freesolv"
+
+
+def _all_result_entries(submission: BenchmarkResults) -> list[dict]:
+    """Collect all dg/ddg entries for a submission."""
+    if submission.raw_results is None:
+        return []
+
+    entries = []
+    if "dg" in submission.raw_results:
+        entries.extend(submission.raw_results["dg"])
+    if "ddg" in submission.raw_results:
+        entries.extend(submission.raw_results["ddg"])
+    return entries
+
+
+def _has_matching_entry(submission: BenchmarkResults, predicate) -> bool:
+    """Return True if any raw result entry satisfies predicate."""
+    return any(predicate(entry) for entry in _all_result_entries(submission))
 
 
 # ========== Fixtures ==========
@@ -187,51 +209,47 @@ def test_raw_results_structure():
 
 def test_filter_by_tags():
     """Test filtering by exact tag match."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-    filtered = filter_results(result, tags="rbfe")
+    filtered = filter_results(tags="rbfe")
 
     assert len(filtered) > 0
-    # All results should have the tag (check metadata since tags is top-level)
-    assert "rbfe" in result.tags
+    assert all(isinstance(submission, BenchmarkResults) for submission in filtered)
+    assert all("rbfe" in submission.tags for submission in filtered)
 
 
 def test_filter_by_multiple_tags_and():
     """Test filtering by multiple tags with AND logic (default)."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(tags=["rbfe", "jacs_set"])
 
-    # Use tags that should exist in the submission
-    filtered = filter_results(result, tags=["rbfe", "jacs_set"])
-
-    # Verify it returns a list
     assert isinstance(filtered, list)
-
-    # Verify tags exist in submission metadata (tags are top-level, not per-result)
-    assert "rbfe" in result.tags
-    assert "jacs_set" in result.tags
+    assert all("rbfe" in submission.tags for submission in filtered)
+    assert all("jacs_set" in submission.tags for submission in filtered)
 
 
 def test_filter_by_multiple_tags_or():
     """Test filtering by multiple tags with OR logic."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(tags=["rbfe", "asfe"], tags_mode="any")
 
-    # Use tags_mode='any' for OR logic
-    filtered = filter_results(result, tags=["rbfe", "asfe"], tags_mode="any")
-
-    # Should return results since 'rbfe' tag exists
     assert len(filtered) > 0
     assert isinstance(filtered, list)
+    assert all(
+        ("rbfe" in submission.tags) or ("asfe" in submission.tags)
+        for submission in filtered
+    )
 
 
 def test_filter_by_system():
     """Test filtering by system_group and system_name."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-    filtered = filter_results(result, system_group="jacs_set", system_name="tyk2")
+    filtered = filter_results(system_group="jacs_set", system_name="tyk2")
 
     assert len(filtered) > 0
-    # Verify all results match
-    for r in filtered:
-        assert r["system_group"] == "jacs_set"
-        assert r["system_name"] == "tyk2"
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: entry.get("system_group") == "jacs_set"
+            and entry.get("system_name") == "tyk2",
+        )
+        for submission in filtered
+    )
 
 
 def test_filter_by_nested_field():
@@ -242,118 +260,91 @@ def test_filter_by_nested_field():
     so this test verifies that the nested field filtering mechanism works correctly
     when the field doesn't exist (should return empty list).
     """
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(hypothetical__nested__field="value")
 
-    # Test that nested field syntax doesn't crash when field doesn't exist
-    # Using a hypothetical nested field that doesn't exist in current test data
-    filtered = filter_results(result, hypothetical__nested__field="value")
-
-    # Should return empty list (field doesn't exist)
     assert isinstance(filtered, list)
-    assert len(filtered) == 0, (
-        "Filtering by non-existent nested field should return empty list"
-    )
+    assert len(filtered) == 0
 
-    # Verify regular filtering still works
-    filtered_normal = filter_results(result, system_group="jacs_set")
-    assert len(filtered_normal) > 0, "Regular filtering should still work"
+    filtered_normal = filter_results(system_group="jacs_set")
+    assert len(filtered_normal) > 0
 
 
 def test_filter_with_wildcard():
     """Test filtering with wildcard pattern matching."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-    filtered = filter_results(result, system_name="*tyk2*")
+    filtered = filter_results(system_name="*tyk2*")
 
     assert len(filtered) > 0
-    # Verify all results match wildcard (case-sensitive by fnmatch)
-    for r in filtered:
-        assert "tyk2" in r["system_name"]
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: "tyk2" in entry.get("system_name", ""),
+        )
+        for submission in filtered
+    )
 
 
 def test_filter_or_logic():
     """Test OR logic within a field using list values."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-    filtered = filter_results(result, system_name=["tyk2", "p38"])
+    filtered = filter_results(system_name=["tyk2", "p38"])
 
     assert len(filtered) > 0
-    # Verify all results match one of the values
-    for r in filtered:
-        assert r["system_name"] in ["tyk2", "p38"]
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: entry.get("system_name") in ["tyk2", "p38"],
+        )
+        for submission in filtered
+    )
 
 
 def test_filter_not_logic():
     """Test NOT logic using exclude_ prefix."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Test 1: Filter for jacs_set but exclude tyk2 system
-    filtered = filter_results(
-        result, system_group="jacs_set", exclude_system_name="tyk2"
-    )
+    filtered = filter_results(system_group="jacs_set", exclude_system_name="tyk2")
 
     assert len(filtered) > 0
-    # Verify no tyk2 results
-    for r in filtered:
-        assert r["system_group"] == "jacs_set"
-        assert r["system_name"] != "tyk2"
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: entry.get("system_group") == "jacs_set"
+            and entry.get("system_name") != "tyk2",
+        )
+        for submission in filtered
+    )
 
-    # Test 2: Exclude by tags (as specified in plan)
-    # Note: This tests the mechanism even if 'deprecated' tag doesn't exist
-    # The filter should return all results (no exclusion) if tag doesn't exist
-    filtered_tags = filter_results(result, exclude_tags="deprecated")
+    filtered_tags = filter_results(exclude_tags="deprecated")
     assert isinstance(filtered_tags, list)
 
 
 def test_filter_complex_logic():
     """Test complex filtering combining tags AND + system OR + exclude."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Complex filter: tags AND + system OR + exclude
     filtered = filter_results(
-        result,
         tags=["rbfe", "jacs_set"],
         system_name=["tyk2", "p38"],
         exclude_tags="deprecated",
     )
 
-    # Verify it returns a list
     assert isinstance(filtered, list)
-
-    # Verify tags exist in metadata (tags are top-level)
-    assert "rbfe" in result.tags
-    assert "jacs_set" in result.tags
-
-    # Verify filtering worked correctly
-    if len(filtered) > 0:
-        for r in filtered:
-            # Must match one of the system names (OR logic within field)
-            assert r["system_name"] in ["tyk2", "p38"], (
-                f"Expected system_name in ['tyk2', 'p38'], got {r['system_name']}"
-            )
-
-            # Must NOT have 'deprecated' tag (exclude logic)
-            # Tags are at result level if they exist in the result dict
-            if "tags" in r:
-                assert "deprecated" not in r["tags"], (
-                    f"Result should not have 'deprecated' tag but found it in {r.get('tags')}"
-                )
-    else:
-        # If no results, ensure the filter criteria could be met
-        # (i.e., the submission has the required tags)
-        assert "rbfe" in result.tags and "jacs_set" in result.tags
+    for submission in filtered:
+        assert "rbfe" in submission.tags
+        assert "jacs_set" in submission.tags
+        assert "deprecated" not in submission.tags
+        assert _has_matching_entry(
+            submission,
+            lambda entry: entry.get("system_name") in ["tyk2", "p38"],
+        )
 
 
 def test_filter_multi_and_logic():
     """Test multiple predicates with AND logic between fields."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-    filtered = filter_results(result, system_group="jacs_set", calculation_type="rbfe")
+    filtered = filter_results(system_group="jacs_set", calculation_type="rbfe")
 
-    # Should return results matching both predicates
     assert len(filtered) > 0
-    for r in filtered:
-        assert r["system_group"] == "jacs_set"
-
-    # Verify calculation_type in metadata (it's a top-level field)
-    assert result.calculation_type == "rbfe"
+    for submission in filtered:
+        assert submission.calculation_type == "rbfe"
+        assert _has_matching_entry(
+            submission,
+            lambda entry: entry.get("system_group") == "jacs_set",
+        )
 
 
 # ========== FEMap Tests ==========
@@ -484,18 +475,12 @@ def test_unknown_fields_in_yaml(create_test_submission):
     )
 
 
-def test_filter_on_fast_loaded_results():
-    """Test that filtering raises error when raw_results is None."""
-    result = get_benchmark_results(RBFE_SUBMISSION, load_results=False)
+def test_filter_metadata_with_load_results_false():
+    """Test metadata-only filtering without loading raw result JSON files."""
+    filtered = filter_results(tags="rbfe", load_results=False)
 
-    with pytest.raises(ValueError) as excinfo:
-        filter_results(result, tags="rbfe")
-
-    expected_msg = (
-        "Cannot filter results: raw_results is None. "
-        "Initialize with load_results=True to access computational data."
-    )
-    assert str(excinfo.value) == expected_msg
+    assert len(filtered) > 0
+    assert all(submission.raw_results is None for submission in filtered)
 
 
 def test_femaps_on_fast_loaded_results():
@@ -517,81 +502,48 @@ def test_femaps_on_fast_loaded_results():
 
 def test_filter_date_greater_than_or_equal():
     """Test date filtering with >= operator."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(date=">=2026-03-01")
 
-    # Filter for dates >= 2026-03-01
-    filtered = filter_results(result, date=">=2026-03-01")
-
-    # Should include results (submission date is after 2026-03-01)
     assert len(filtered) > 0
-    # Convert date to string for comparison
-    assert result.date.isoformat() >= "2026-03-01"
+    assert all(submission.date.isoformat() >= "2026-03-01" for submission in filtered)
 
 
 def test_filter_date_less_than():
     """Test date filtering with < operator."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(date="<2027-01-01")
 
-    # Filter for dates < 2027-01-01
-    filtered = filter_results(result, date="<2027-01-01")
-
-    # Should include results (submission date is before 2027)
     assert len(filtered) > 0
-    assert result.date.isoformat() < "2027-01-01"
+    assert all(submission.date.isoformat() < "2027-01-01" for submission in filtered)
 
 
 def test_filter_date_range():
     """Test date filtering with range (combining two filters)."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered_after = filter_results(date=">=2026-01-01")
+    filtered_before = filter_results(date="<2027-01-01")
 
-    # Filter for dates in 2026 (>= 2026-01-01 AND < 2027-01-01)
-    # Note: This requires applying both filters, but current API doesn't support
-    # multiple operators on same field, so we test separately
-    filtered_after = filter_results(result, date=">=2026-01-01")
-    filtered_before = filter_results(result, date="<2027-01-01")
-
-    # Both should return results
     assert len(filtered_after) > 0
     assert len(filtered_before) > 0
 
 
 def test_filter_version_less_than():
     """Test version filtering with < operator using semantic versioning."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    next_version = "99.0.0"
+    filtered = filter_results(openfe_version=f"<{next_version}")
 
-    # Get the actual version from the submission
-    actual_version = result.openfe_version
-
-    # Filter for versions < actual_version + 1 (should include all)
-    major, minor, *rest = actual_version.split(".")
-    next_version = f"{int(major) + 1}.0.0"
-    filtered = filter_results(result, openfe_version=f"<{next_version}")
-
-    # Should include results
     assert len(filtered) > 0
 
 
 def test_filter_version_greater_than_or_equal():
     """Test version filtering with >= operator using semantic versioning."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(openfe_version=">=1.0.0")
 
-    # Filter for versions >= 1.0.0 (should include most versions)
-    filtered = filter_results(result, openfe_version=">=1.0.0")
-
-    # Should include results (openfe_version is likely >= 1.0.0)
     assert isinstance(filtered, list)
 
 
 def test_filter_version_semantic_comparison():
     """Test that version comparison uses semantic versioning, not string comparison."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Semantic: 1.10.0 > 1.9.0
-    # String: "1.10.0" < "1.9.0" (would be wrong)
-
-    # Just verify filtering works without error
-    filtered_gte = filter_results(result, openfe_version=">=1.0.0")
-    filtered_lt = filter_results(result, openfe_version="<99.0.0")
+    filtered_gte = filter_results(openfe_version=">=1.0.0")
+    filtered_lt = filter_results(openfe_version="<99.0.0")
 
     assert isinstance(filtered_gte, list)
     assert isinstance(filtered_lt, list)
@@ -599,50 +551,37 @@ def test_filter_version_semantic_comparison():
 
 def test_filter_comparison_with_other_filters():
     """Test comparison operators combined with other filter types."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(date=">=2026-01-01", system_group="jacs_set")
 
-    # Combine date comparison with system filter
-    filtered = filter_results(result, date=">=2026-01-01", system_group="jacs_set")
-
-    # Should return results matching both conditions
     assert isinstance(filtered, list)
     if len(filtered) > 0:
-        for r in filtered:
-            assert r["system_group"] == "jacs_set"
-        # Date is metadata-level, checked via isoformat
-        assert result.date.isoformat() >= "2026-01-01"
+        for submission in filtered:
+            assert submission.date.isoformat() >= "2026-01-01"
+            assert _has_matching_entry(
+                submission,
+                lambda entry: entry.get("system_group") == "jacs_set",
+            )
 
 
 def test_filter_comparison_no_operator():
     """Test that values without operators still work as exact match."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    exact_date = "2026-03-18"
+    filtered = filter_results(date=exact_date)
 
-    # Date without operator should be exact match
-    exact_date = result.date
-    filtered = filter_results(result, date=exact_date)
-
-    # Should return all results (exact match on metadata)
-    assert len(filtered) > 0
+    assert all(submission.date.isoformat() == exact_date for submission in filtered)
 
 
 def test_filter_comparison_exclude_with_operator():
     """Test that exclude_ prefix works with comparison operators."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
+    filtered = filter_results(exclude_date="<2026-01-01")
 
-    # Exclude dates before 2026
-    filtered = filter_results(result, exclude_date="<2026-01-01")
-
-    # Should return results (submission date is after 2026-01-01, so not excluded)
     assert len(filtered) > 0
-    assert result.date.isoformat() >= "2026-01-01"
+    assert all(submission.date.isoformat() >= "2026-01-01" for submission in filtered)
 
 
 def test_filter_comparison_openmm_version():
     """Test comparison on openmm_version field."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Filter for OpenMM >= 8.0.0
-    filtered = filter_results(result, openmm_version=">=8.0.0")
+    filtered = filter_results(openmm_version=">=8.0.0")
 
     # Should return results if openmm_version >= 8.0.0
     assert isinstance(filtered, list)
@@ -650,10 +589,7 @@ def test_filter_comparison_openmm_version():
 
 def test_filter_comparison_openff_toolkit_version():
     """Test comparison on openff_toolkit_version field."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Filter for OpenFF Toolkit >= 0.10.0
-    filtered = filter_results(result, openff_toolkit_version=">=0.10.0")
+    filtered = filter_results(openff_toolkit_version=">=0.10.0")
 
     # Should return results if version matches
     assert isinstance(filtered, list)
@@ -661,14 +597,11 @@ def test_filter_comparison_openff_toolkit_version():
 
 def test_filter_comparison_warning_non_version_field():
     """Test that warning is issued when comparison operators used with non-date/version fields."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Using comparison operator with system_name (not a date/version field) should warn
     with pytest.warns(
         UserWarning,
         match="Comparison operator.*system_name.*designed for date and version fields",
     ):
-        filtered = filter_results(result, system_name=">=tyk2")
+        filtered = filter_results(system_name=">=tyk2")
 
     # Still returns results (falls back to string comparison)
     assert isinstance(filtered, list)
@@ -676,44 +609,38 @@ def test_filter_comparison_warning_non_version_field():
 
 def test_filter_quantity_comparison_greater_than():
     """Test filtering on pint Quantity fields with > operator."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Filter results where dg > 1.0 kcal/mol
-    # dg values are Quantity objects deserialized from JSON
-    filtered = filter_results(result, dg=">1.0 kilocalories_per_mole")
+    filtered = filter_results(dg=">1.0 kilocalories_per_mole")
 
     assert isinstance(filtered, list)
     assert len(filtered) > 0
-
-    # Verify all results have dg > 1.0 kcal/mol
-    for r in filtered:
-        assert r["dg"].magnitude > 1.0
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: "dg" in entry and entry["dg"].magnitude > 1.0,
+        )
+        for submission in filtered
+    )
 
 
 def test_filter_quantity_comparison_less_than_or_equal():
     """Test filtering on pint Quantity fields with <= operator."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Filter results where dg <= 2.0 kcal/mol
-    filtered = filter_results(result, dg="<=2.0 kilocalories_per_mole")
+    filtered = filter_results(dg="<=2.0 kilocalories_per_mole")
 
     assert isinstance(filtered, list)
     assert len(filtered) > 0
-
-    # Verify all results have dg <= 2.0 kcal/mol
-    for r in filtered:
-        assert r["dg"].magnitude <= 2.0
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: "dg" in entry and entry["dg"].magnitude <= 2.0,
+        )
+        for submission in filtered
+    )
 
 
 def test_filter_quantity_comparison_unit_conversion():
     """Test that pint Quantity comparison handles unit conversion automatically."""
-
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Filter with different but compatible units
-    # 1 kcal/mol ≈ 4.184 kJ/mol
-    filtered_kcal = filter_results(result, dg=">1.0 kilocalories_per_mole")
-    filtered_kj = filter_results(result, dg=">4.184 kilojoules_per_mole")
+    filtered_kcal = filter_results(dg=">1.0 kilocalories_per_mole")
+    filtered_kj = filter_results(dg=">4.184 kilojoules_per_mole")
 
     # Should get the same results (or very close due to floating point)
     assert (
@@ -724,40 +651,37 @@ def test_filter_quantity_comparison_unit_conversion():
 
 def test_filter_quantity_comparison_range():
     """Test filtering on pint Quantity with range (testing both filters separately)."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Filter for dg >= 0.5 kcal/mol
-    filtered_gte = filter_results(result, dg=">=0.5 kilocalories_per_mole")
-
-    # Filter for dg <= 2.0 kcal/mol
-    filtered_lte = filter_results(result, dg="<=2.0 kilocalories_per_mole")
+    filtered_gte = filter_results(dg=">=0.5 kilocalories_per_mole")
+    filtered_lte = filter_results(dg="<=2.0 kilocalories_per_mole")
 
     assert isinstance(filtered_gte, list)
     assert isinstance(filtered_lte, list)
     assert len(filtered_gte) > 0
     assert len(filtered_lte) > 0
 
-    # Verify ranges
-    for r in filtered_gte:
-        assert r["dg"].magnitude >= 0.5
-
-    for r in filtered_lte:
-        assert r["dg"].magnitude <= 2.0
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: "dg" in entry and entry["dg"].magnitude >= 0.5,
+        )
+        for submission in filtered_gte
+    )
+    assert all(
+        _has_matching_entry(
+            submission,
+            lambda entry: "dg" in entry and entry["dg"].magnitude <= 2.0,
+        )
+        for submission in filtered_lte
+    )
 
 
 def test_filter_quantity_incompatible_units_raises():
     """Test that incompatible units raise ValueError (no silent fallback)."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Try to compare energy (kcal/mol) with temperature (K) - dimensionally incompatible
     with pytest.raises(ValueError, match="Incompatible units"):
-        _ = filter_results(result, dg=">298 kelvin")
+        _ = filter_results(dg=">298 kelvin")
 
 
 def test_filter_quantity_invalid_string_raises():
     """Test that invalid quantity strings raise ValueError (no silent fallback)."""
-    result = get_benchmark_results(RBFE_SUBMISSION)
-
-    # Use a string that can't be parsed as a quantity
     with pytest.raises(ValueError, match="Invalid quantity filter value"):
-        _ = filter_results(result, dg=">not_a_quantity")
+        _ = filter_results(dg=">not_a_quantity")
