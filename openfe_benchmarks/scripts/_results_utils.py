@@ -9,6 +9,16 @@ from cinnabar import FEMap
 from openfe_benchmarks.data._benchmark_systems import get_benchmark_data_system
 
 
+def _asfe_result_key(result: dict) -> str:
+    """Build a consistent ASFE label and experimental lookup key."""
+    ligand = result.get("ligand", result.get("solute"))
+    if ligand is None:
+        raise ValueError("ASFE result entry must contain either 'ligand' or 'solute'")
+
+    solvent = result.get("solvent")
+    return f"{ligand},{solvent}" if solvent else ligand
+
+
 def build_femap_from_relative_results(
     results: list[dict],
 ) -> dict[tuple[str, str], FEMap]:
@@ -42,6 +52,10 @@ def build_femap_from_relative_results(
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
         benchmark_data = get_benchmark_data_system(system_group, system_name)
+        if benchmark_data.reference_data is None:
+            raise ValueError(
+                f"No reference data available for benchmark system {system_group}/{system_name}"
+            )
         unique_ligands = set()
 
         # Check if all edges have valid ddg_uncertainty (not NaN)
@@ -70,7 +84,7 @@ def build_femap_from_relative_results(
 
         # add experimental data for each of the ligands in the results
         experimental_file = benchmark_data.reference_data["experimental_binding_data"]
-        with open(experimental_file, "r") as f:
+        with open(experimental_file) as f:
             experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
 
         for ligand in unique_ligands:
@@ -99,17 +113,8 @@ def build_femap_from_absolute_results(
     Parameters
     ----------
     results: list[dict]
-        A list of absolute free energy estimates. Format depends on calculation_type:
-
-        For ASFE (absolute solvation):
-         - solute: str
-         - solvent: str
-         - system_group: str
-         - system_name: str
-         - dg or estimate: Quantity
-         - dg_uncertainty or estimate_error: Quantity
-
-        For RBFE (absolute binding reference values):
+        A list of absolute free energy estimates. ASFE and RBFE reference-value
+        records are both supported. Each record should include at least:
          - ligand: str
          - system_group: str
          - system_name: str
@@ -125,11 +130,11 @@ def build_femap_from_absolute_results(
         A dictionary mapping each unique combination of system_group and system_name to an FEMap with calculated
         and experimental data (where available).
     """
-    # Detect format from data if not specified
+    # Detect format from data if not specified.
+    # The presence of `solvent` distinguishes ASFE records from RBFE absolute references.
     if results and calculation_type == "asfe":
-        # Check if this is actually RBFE format
         first_result = results[0]
-        if "ligand" in first_result and "solute" not in first_result:
+        if "solvent" not in first_result:
             calculation_type = "rbfe"
 
     # get the unique combinations of system_group and system_name
@@ -142,86 +147,75 @@ def build_femap_from_absolute_results(
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
         benchmark_data = get_benchmark_data_system(system_group, system_name)
-
-        # Determine molecule key and value/error keys based on calculation type
-        if calculation_type == "asfe":
-            molecule_key = "solute"
-            has_solvent = True
-        else:  # rbfe
-            molecule_key = "ligand"
-            has_solvent = False
-
-        # Check if all molecules have valid uncertainty (not NaN)
-        molecules_no_uncertainty = [
-            result[molecule_key]
-            for result in system_results
-            if np.isnan(
-                result["dg_uncertainty"].magnitude
-                if "dg" in result
-                else result["estimate_error"].magnitude
-            )
-        ]
-        if molecules_no_uncertainty:
+        if benchmark_data.reference_data is None:
             raise ValueError(
-                f"Not all {molecule_key}s have uncertainty for {system_group} {system_name}: {molecules_no_uncertainty}"
+                f"No reference data available for benchmark system {system_group}/{system_name}"
+            )
+
+        # Check if all molecules have valid uncertainty (not NaN).
+        missing_required_fields = [
+            _asfe_result_key(result)
+            for result in system_results
+            if "dg" not in result or "dg_uncertainty" not in result
+        ]
+        if missing_required_fields:
+            raise ValueError(
+                "Absolute results must include both 'dg' and 'dg_uncertainty' "
+                f"for {system_group} {system_name}: {missing_required_fields}"
+            )
+
+        missing_uncertainty = [
+            _asfe_result_key(result)
+            for result in system_results
+            if np.isnan(result["dg_uncertainty"].magnitude)
+        ]
+        if missing_uncertainty:
+            raise ValueError(
+                "Not all molecules have uncertainty "
+                f"for {system_group} {system_name}: {missing_uncertainty}"
             )
 
         femap = FEMap()
         for result in system_results:
-            value_key = "dg" if "dg" in result else "estimate"
-            err_key = "dg_uncertainty" if value_key == "dg" else "estimate_error"
-
-            # Build label based on format
-            if has_solvent:
-                label = f"{result[molecule_key]},{result['solvent']}"
-            else:
-                label = result[molecule_key]
-
+            label = _asfe_result_key(result)
             femap.add_absolute_calculation(
                 label=label,
-                value=result[value_key],
-                uncertainty=result[err_key],
+                value=result["dg"],
+                uncertainty=result["dg_uncertainty"],
                 source="Computational",
             )
 
-        # Add experimental data if available
-        # For ASFE: experimental solvation free energy data
-        # For RBFE: experimental binding data
+        # Add experimental data if available.
+        # ASFE records map to solvation data; RBFE absolute references map to
+        # binding data.
         experimental_key = (
             "experimental_solvation_free_energy_data"
             if calculation_type == "asfe"
             else "experimental_binding_data"
         )
+        if experimental_key not in benchmark_data.reference_data:
+            femaps_by_system_key[system_key] = femap
+            continue
 
-        if experimental_key in benchmark_data.reference_data:
-            experimental_file = benchmark_data.reference_data[experimental_key]
-            with open(experimental_file, "r") as f:
-                experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
-            n_experimental_points = 0
-
-            for result in system_results:
-                # Build label to match experimental data format
-                if has_solvent:
-                    label = f"{result[molecule_key]},{result['solvent']}"
-                else:
-                    label = result[molecule_key]
-
-                exp_data = experimental_data.get(label, None)
-                if exp_data is not None:
-                    femap.add_experimental_measurement(
-                        label=label,
-                        value=exp_data["dg"],
-                        uncertainty=exp_data.get(
-                            "uncertainty", 0 * unit.kilocalories_per_mole
-                        ),
-                    )
-                    n_experimental_points += 1
-
-            if n_experimental_points == 0 and calculation_type == "asfe":
-                # Only raise error for ASFE where experimental data is expected
-                raise ValueError(
-                    "No experimental data points were found for ASFE submission"
+        experimental_file = benchmark_data.reference_data[experimental_key]
+        with open(experimental_file) as f:
+            experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
+        n_experimental_points = 0
+        for result in system_results:
+            label = _asfe_result_key(result)
+            exp_data = experimental_data.get(label, None)
+            if exp_data is not None:
+                femap.add_experimental_measurement(
+                    label=label,
+                    value=exp_data["dg"],
+                    uncertainty=exp_data.get(
+                        "uncertainty", 0 * unit.kilocalories_per_mole
+                    ),
                 )
+                n_experimental_points += 1
+
+        if n_experimental_points == 0 and calculation_type == "asfe":
+            raise ValueError("No experimental data points were found")
 
         femaps_by_system_key[system_key] = femap
 
