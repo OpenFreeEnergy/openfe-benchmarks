@@ -41,7 +41,7 @@ def main():
     femaps_by_system = results.ddg_femaps
     print(f"Generated {len(femaps_by_system)} FEMaps:")
     for (system_group, system_name), femap in femaps_by_system.items():
-        n_edges = len(femap.edges)
+        n_edges = femap.n_edges
         print(f"  - {system_group}/{system_name}: {n_edges} edges")
 
     output_dir = pathlib.Path(OUTPUT_DIR)
@@ -49,10 +49,10 @@ def main():
 
     print(f"\nGenerating plots in {output_dir}/...")
     for (system_group, system_name), femap in femaps_by_system.items():
-        leg_graph = femap.to_legacy_graph()
         output_file = output_dir / f"{system_group}_{system_name}_DDG.png"
+        legacy_graph = femap.to_legacy_graph()
         plotting.plot_DDGs(
-            graph=leg_graph,
+            graph=legacy_graph,
             title=f"{system_group}-{system_name}",
             figsize=5,
             scatter_kwargs={"s": 20, "marker": "o"},
