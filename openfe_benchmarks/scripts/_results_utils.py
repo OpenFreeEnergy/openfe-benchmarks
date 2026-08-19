@@ -9,6 +9,16 @@ from cinnabar import FEMap
 from openfe_benchmarks.data._benchmark_systems import get_benchmark_data_system
 
 
+def _asfe_result_key(result: dict) -> str:
+    """Build a consistent ASFE label and experimental lookup key."""
+    ligand = result.get("ligand", result.get("solute"))
+    if ligand is None:
+        raise ValueError("ASFE result entry must contain either 'ligand' or 'solute'")
+
+    solvent = result.get("solvent")
+    return f"{ligand},{solvent}" if solvent else ligand
+
+
 def build_femap_from_relative_results(
     results: list[dict],
 ) -> dict[tuple[str, str], FEMap]:
@@ -39,10 +49,14 @@ def build_femap_from_relative_results(
         results_by_system_key[key].append(result)
 
     femaps_by_system_key = {}
-    unique_ligands = set()
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
         benchmark_data = get_benchmark_data_system(system_group, system_name)
+        if benchmark_data.reference_data is None:
+            raise ValueError(
+                f"No reference data available for benchmark system {system_group}/{system_name}"
+            )
+        unique_ligands = set()
 
         # Check if all edges have valid ddg_uncertainty (not NaN)
         edges_no_uncertainty = [
@@ -70,7 +84,8 @@ def build_femap_from_relative_results(
 
         # add experimental data for each of the ligands in the results
         experimental_file = benchmark_data.reference_data["experimental_binding_data"]
-        experimental_data = json.load(open(experimental_file), cls=JSON_HANDLER.decoder)
+        with open(experimental_file) as f:
+            experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
 
         for ligand in unique_ligands:
             exp_data = experimental_data.get(ligand, None)
@@ -98,7 +113,7 @@ def build_femap_from_absolute_results(
     ----------
     results: list[dict]
         A list of absolute solvation free energy estimates which should include at least the following entries:
-         - solute: str
+         - ligand: str
          - system_group: str
          - system_name: str
          - dg: Quantity
@@ -120,10 +135,14 @@ def build_femap_from_absolute_results(
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
         benchmark_data = get_benchmark_data_system(system_group, system_name)
+        if benchmark_data.reference_data is None:
+            raise ValueError(
+                f"No reference data available for benchmark system {system_group}/{system_name}"
+            )
 
         # Check if all solutes have valid dg_uncertainty (not NaN)
         solutes_no_uncertainty = [
-            result["solute"]
+            result["ligand"]
             for result in system_results
             if np.isnan(
                 result["dg_uncertainty"].magnitude
@@ -140,7 +159,7 @@ def build_femap_from_absolute_results(
         for result in system_results:
             value_key = "dg" if "dg" in result else "estimate"
             err_key = "dg_uncertainty" if value_key == "dg" else "estimate_error"
-            label = f"{result['solute']},{result['solvent']}"
+            label = _asfe_result_key(result)
             femap.add_absolute_calculation(
                 label=label,
                 value=result[value_key],
@@ -152,10 +171,11 @@ def build_femap_from_absolute_results(
         experimental_file = benchmark_data.reference_data[
             "experimental_solvation_free_energy_data"
         ]
-        experimental_data = json.load(open(experimental_file), cls=JSON_HANDLER.decoder)
+        with open(experimental_file) as f:
+            experimental_data = json.load(f, cls=JSON_HANDLER.decoder)
         n_experimental_points = 0
         for result in system_results:
-            label = f"{result['solute']},{result['solvent']}"
+            label = _asfe_result_key(result)
             exp_data = experimental_data.get(label, None)
             if exp_data is not None:
                 femap.add_experimental_measurement(

@@ -35,13 +35,14 @@ def main():
 
     # load the results file, whether compressed or not
     results = _load_results(RESULTS_FILE)
-    if "dg" not in results:
+    dg_records = results.get("dg")
+    if not isinstance(dg_records, list):
         raise ValueError(
-            f"Results file {RESULTS_FILE} does not contain 'dg' values, cannot plot"
+            f"Results file {RESULTS_FILE} does not contain a valid 'dg' list, cannot plot"
         )
 
     # build FEMaps and load with experimental data
-    femaps_by_system = build_femap_from_absolute_results(results=results["dg"])
+    femaps_by_system = build_femap_from_absolute_results(results=dg_records)
 
     output_dir = pathlib.Path(OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
