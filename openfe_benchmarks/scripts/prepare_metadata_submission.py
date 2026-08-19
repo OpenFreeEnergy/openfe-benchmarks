@@ -1760,7 +1760,7 @@ def _make_submission_yaml(
     forcefield_yaml = _render_keyed_values_yaml(
         "forcefield", metadata.forcefield, "forcefield", "edges"
     )
-    if metadata.calculation_mode == ["rbfe", "septop"]:
+    if metadata.calculation_mode in ["rbfe", "septop"]:
         small_molecule_forcefield_yaml = _render_keyed_values_yaml(
             "small_molecule_forcefield",
             metadata.small_molecule_forcefield,
@@ -2351,8 +2351,8 @@ def main():
         "-t",
         "--tags",
         type=str,
-        default="openfe,alchemicalarchive",
-        help="Comma-separated tags (default: 'openfe,alchemicalarchive')",
+        default="",
+        help="Comma-separated extra tags to append (default: none)",
     )
 
     parser.add_argument(
