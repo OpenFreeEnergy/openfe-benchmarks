@@ -21,7 +21,7 @@ from pontibus.utils.settings import (
 )
 from openff.units import unit
 
-from openfe_benchmarks.data import get_benchmark_data_system
+from openfe_benchmarks.data import get_data_by_system_name
 from openfe_benchmarks.scripts import utils as ofebu
 
 logger = logging.getLogger(__name__)
@@ -39,14 +39,22 @@ def _configure_example_logging(level=logging.INFO):
     logging.getLogger("openfe_benchmarks").setLevel(level)
 
 
-SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True, ion_concentration=0.15 * unit.molar)
-BENCHMARK_SET = "mcs_docking_set"
-BENCHMARK_SYS = "hne"
+SOLVENT = SolventComponent(
+    positive_ion="Na",
+    negative_ion="Cl",
+    neutralize=True,
+    ion_concentration=0.15 * unit.molar,
+)
+SYSTEM_GROUP = "mcs_docking_set"
+SYSTEM_NAME = "hne"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
-FORCEFIELDS = ["openff_no_water-3.0.0-alpha0.offxml", "opc3.offxml"]  # List of force fields, as accepted by OpenFF Tk's ForceField object
+FORCEFIELDS = [
+    "openff_no_water-3.0.0-alpha0.offxml",
+    "opc3.offxml",
+]  # List of force fields, as accepted by OpenFF Tk's ForceField object
 LIG_NETWORK_FILE = "industry_benchmarks_network"
 FILENAME_ALCHEMICALNETWORK = (
-    f"alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
+    f"alchemical_network_{SYSTEM_GROUP}_{SYSTEM_NAME}_nacl.json"
 )
 OUTPUT_DIR = "outputs"
 
@@ -164,7 +172,9 @@ def compile_network_transformations(
             protocol_settings = HybridTopProtocol.default_settings()
             # Define the force field settings
             protocol_settings.forcefield_settings.forcefields = FORCEFIELDS
-            protocol_settings.forcefield_settings.nonbonded_cutoff = 0.9 * unit.nanometer
+            protocol_settings.forcefield_settings.nonbonded_cutoff = (
+                0.9 * unit.nanometer
+            )
             # These solvation settings should work, but might need revisiting
             # with the next update of pontibus. Adaptive settings (used later)
             # will auto adjust the solvent_padding depending on what leg we are in.
@@ -205,7 +215,7 @@ def main():
     and saves the resulting alchemical network to a JSON file.
     """
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
     lig_network, ligand_dict, protein, cofactors = process_components(benchmark_sys)
 
     transformations = compile_network_transformations(
@@ -214,16 +224,14 @@ def main():
         ligand_dict,
         protein,
         cofactors,
-        BENCHMARK_SET,
-        BENCHMARK_SYS,
+        SYSTEM_GROUP,
+        SYSTEM_NAME,
     )
 
     # Can be used as input for Alchemiscale
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
     # check each edge can validated before trying to run
-    logger.info(
-        f"Validating transformations for system {BENCHMARK_SET} {BENCHMARK_SYS}"
-    )
+    logger.info(f"Validating transformations for system {SYSTEM_GROUP} {SYSTEM_NAME}")
     for edge in alchem_network.edges:
         edge.create()
     # save to file
@@ -260,7 +268,7 @@ def validate_rbfe_network(network_file):
     logger.info("AlchemicalNetwork contains %d edges", len(network.edges))
 
     # Get benchmark data for validation
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
     expected_lig_network = openfe.LigandNetwork.from_json(
         file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE])
     )
@@ -358,13 +366,11 @@ def validate_rbfe_network(network_file):
                             f"Transformation '{name}' mapping missing '{required_key}' annotation"
                         )
                     elif mapping_annot[required_key] != (
-                        BENCHMARK_SET
-                        if required_key == "system_group"
-                        else BENCHMARK_SYS
+                        SYSTEM_GROUP if required_key == "system_group" else SYSTEM_NAME
                     ):
                         errors.append(
                             f"Transformation '{name}' mapping has incorrect '{required_key}': "
-                            f"expected '{BENCHMARK_SET if required_key == 'system_group' else BENCHMARK_SYS}', "
+                            f"expected '{SYSTEM_GROUP if required_key == 'system_group' else SYSTEM_NAME}', "
                             f"got '{mapping_annot[required_key]}'"
                         )
 

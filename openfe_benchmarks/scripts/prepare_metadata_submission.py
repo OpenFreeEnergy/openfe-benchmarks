@@ -263,8 +263,8 @@ class ProtocolSettingsInfo:
 class SystemInfo:
     """Per-system information extracted from edges."""
 
-    benchmark_set: str
-    benchmark_system: str
+    system_group: str
+    system_name: str
     calculation_mode: str
     source_file: str
     network_key: str
@@ -292,11 +292,11 @@ class SystemInfo:
         protein=None,
     ):
         if self.calculation_mode == "rbfe":
-            return f"{network_key} {self.benchmark_set}-{self.benchmark_system}: ligand_start={ligand_start}, ligand_final={ligand_final}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}, protein={protein or 'none'}"
+            return f"{network_key} {self.system_group}-{self.system_name}: ligand_start={ligand_start}, ligand_final={ligand_final}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}, protein={protein or 'none'}"
         elif self.calculation_mode == "asfe":
             if protein is not None or ligand_final is not None:
                 warnings.warn("ASFEs do not use final ligand or protein information.")
-            return f"{network_key} {self.benchmark_set}-{self.benchmark_system}: ligand_start={ligand_start}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}"
+            return f"{network_key} {self.system_group}-{self.system_name}: ligand_start={ligand_start}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}"
         else:
             raise ValueError(
                 "Set the calculation mode to a supported value: 'rbfe', 'asfe'"
@@ -330,7 +330,7 @@ class AutoMetadata:
     calculation_mode: str = ""
     network_key: str = ""
     n_transformations: int = 0
-    benchmark_sets_systems: list[tuple] = field(default_factory=list)
+    system_groups_systems: list[tuple] = field(default_factory=list)
     system_info_dict: dict[tuple, SystemInfo] = field(default_factory=dict)
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
@@ -348,7 +348,7 @@ class AutoMetadata:
 
     def update_from_system_info(self) -> None:
         """Update aggregated fields from the contained SystemInfo entries."""
-        self.benchmark_sets_systems = list(self.system_info_dict.keys())
+        self.system_groups_systems = list(self.system_info_dict.keys())
 
         self.openfe_version = []
         self.openmm_version = []
@@ -514,40 +514,42 @@ def _default_submission_id(network_key: str) -> str:
 
 def _generate_title(
     mode: str,
-    benchmark_set_systems: list[tuple[str, str]],
+    system_names: list[tuple[str, str]],
     submission_id: str,
 ) -> str:
     """
     Generate a descriptive title for the submission.
 
     Format rules:
-    - Single set, 1-3 systems: "OpenFE RBFE - set - sys1, sys2, sys3 - submission_id"
-    - Single set, 4+ systems: "OpenFE RBFE - set (N systems) - submission_id"
-    - 2-3 sets, any systems: "OpenFE RBFE - set1, set2 (N systems) - submission_id"
-    - 4+ sets: "OpenFE RBFE - Multi-set Benchmark (N sets, M systems) - submission_id"
+    - Single group, 1-3 systems: "OpenFE RBFE - group - sys1, sys2, sys3 - submission_id"
+    - Single group, 4+ systems: "OpenFE RBFE - group (N systems) - submission_id"
+    - 2-3 groups, any systems: "OpenFE RBFE - group1, group2 (N systems) - submission_id"
+    - 4+ groups: "OpenFE RBFE - Multi-group Benchmark (N groups, M systems) - submission_id"
     """
     mode = mode.upper()
-    n_set_systems = len(benchmark_set_systems)
+    n_systems = len(system_names)
 
-    if n_set_systems == 0:
-        # Fallback if no benchmark set detected
+    if n_systems == 0:
+        # Fallback if no system group detected
         return f"OpenFE {mode} Benchmark - {submission_id}"
 
-    if len(set([x[0] for x in benchmark_set_systems])) == 1:
-        set_name = benchmark_set_systems[0][0]
-        if n_set_systems <= 3:
+    if len(set([x[0] for x in system_names])) == 1:
+        group_name = system_names[0][0]
+        if n_systems <= 3:
             # List system names
-            systems_str = ", ".join([x[1] for x in benchmark_set_systems])
-            return f"OpenFE {mode} - {set_name} - {systems_str} - {submission_id}"
+            systems_str = ", ".join([x[1] for x in system_names])
+            return f"OpenFE {mode} - {group_name} - {systems_str} - {submission_id}"
         else:
             # Use count
-            return f"OpenFE {mode} - {set_name} ({n_set_systems} systems) - {submission_id}"
+            return (
+                f"OpenFE {mode} - {group_name} ({n_systems} systems) - {submission_id}"
+            )
 
-    if n_set_systems <= 3:
-        return f"OpenFE {mode} - {', '.join([f'{x}/{y}' for x, y in benchmark_set_systems])} - {submission_id}"
+    if n_systems <= 3:
+        return f"OpenFE {mode} - {', '.join([f'{x}/{y}' for x, y in system_names])} - {submission_id}"
 
-    # Many sets - use multi-set notation
-    return f"OpenFE {mode} - Multi-set Benchmark ({len(set([x[0] for x in benchmark_set_systems]))} sets, {len(set([x[1] for x in benchmark_set_systems]))} systems) - {submission_id}"
+    # Many groups - use multi-group notation
+    return f"OpenFE {mode} - Multi-group Benchmark ({len(set([x[0] for x in system_names]))} groups, {len(set([x[1] for x in system_names]))} systems) - {submission_id}"
 
 
 def _iter_nested_items(obj: Any) -> list[tuple[str, Any]]:
@@ -571,14 +573,14 @@ def _quantity_to_text(value: Any) -> str:
         return str(value)
 
 
-def _infer_benchmark_data_set_system(
+def _infer_system_group_and_name(
     trans: Transformation,
     override_system_group: str | None = None,
     override_system_name: str | None = None,
 ) -> tuple[str, str]:
-    """Infer benchmark set and system from Transformation contents using BenchmarkIndex.
+    """Infer system group and system name from Transformation contents using BenchmarkIndex.
 
-    This searches for any known benchmark set or system name in the transformation mapping metadata.
+    This searches for any known system group or system name in the transformation mapping metadata.
     If metadata is not available (e.g., from Alchemiscale archives), returns a generic placeholder.
     Override values (if provided) take precedence over all other sources, but must not conflict
     with existing annotations.
@@ -593,7 +595,7 @@ def _infer_benchmark_data_set_system(
         Optional override for system_name. If provided, must match the annotation (if present).
 
     Returns:
-        (benchmark_set, system_name) tuple
+        (system_group, system_name) tuple
 
     Raises:
         ValueError
@@ -601,67 +603,67 @@ def _infer_benchmark_data_set_system(
     """
     # Store original annotation values to detect conflicts
     if trans.mapping is None:
-        original_benchmark_set = None
-        original_system = None
+        original_system_group = None
+        original_system_name = None
     else:
-        original_benchmark_set = trans.mapping.annotations.get("system_group", None)
-        original_system = trans.mapping.annotations.get("system_name", None)
+        original_system_group = trans.mapping.annotations.get("system_group", None)
+        original_system_name = trans.mapping.annotations.get("system_name", None)
 
-    benchmark_set = original_benchmark_set
-    system = original_system
+    system_group = original_system_group
+    system_name = original_system_name
 
-    if benchmark_set is None and system is not None:
-        # Get all known benchmark sets and systems from the index
+    if system_group is None and system_name is not None:
+        # Get all known system groups and systems from the index
         try:
             index = BenchmarkIndex()
-            benchmark_sets_systems = index.list_systems_by_tag()
-            benchmark_set = [x[0] for x in benchmark_sets_systems if x[1] == system]
-            if benchmark_set:
-                benchmark_set = benchmark_set[0]  # just take the first one
+            system_groups_systems = index.list_system_names_by_tag()
+            system_group = [x[0] for x in system_groups_systems if x[1] == system_name]
+            if system_group:
+                system_group = system_group[0]  # just take the first one
         except Exception as e:
             warnings.warn(
-                f"Could not query BenchmarkIndex for system '{system}': {e}. Using generic fallback.",
+                f"Could not query BenchmarkIndex for system '{system_name}': {e}. Using generic fallback.",
                 category=UserWarning,
             )
-            benchmark_set = None
+            system_group = None
 
-    if system is None or benchmark_set is None:
+    if system_name is None or system_group is None:
         # Fallback for archives without explicit benchmark metadata (e.g., from Alchemiscale)
         warnings.warn(
-            f"Transformation '{trans.name}' lacks explicit benchmark set/system metadata in annotations. "
+            f"Transformation '{trans.name}' lacks explicit system group/system name metadata in annotations. "
             f"Using generic fallback values. This may occur with archives generated from Alchemiscale submissions "
             f"that were not created from openfe-benchmarks. If this is unexpected, verify the transformation "
             f"has 'system_group' and 'system_name' in its mapping annotations.",
             category=UserWarning,
         )
         # Use the transformation name prefix as a simple heuristic for categorization
-        system = system or "TODO"
-        benchmark_set = benchmark_set or "TODO"
+        system_name = system_name or "TODO"
+        system_group = system_group or "TODO"
 
     # Check for conflicts between overrides and annotations
-    if override_system_group is not None and original_benchmark_set is not None:
-        if override_system_group != original_benchmark_set:
+    if override_system_group is not None and original_system_group is not None:
+        if override_system_group != original_system_group:
             raise ValueError(
-                f"Transformation '{trans.name}' has annotation system_group='{original_benchmark_set}' "
+                f"Transformation '{trans.name}' has annotation system_group='{original_system_group}' "
                 f"but --system-group override specifies '{override_system_group}'. "
                 f"These values must match. Either remove the override or correct the annotation."
             )
 
-    if override_system_name is not None and original_system is not None:
-        if override_system_name != original_system:
+    if override_system_name is not None and original_system_name is not None:
+        if override_system_name != original_system_name:
             raise ValueError(
-                f"Transformation '{trans.name}' has annotation system_name='{original_system}' "
+                f"Transformation '{trans.name}' has annotation system_name='{original_system_name}' "
                 f"but --system-name override specifies '{override_system_name}'. "
                 f"These values must match. Either remove the override or correct the annotation."
             )
 
     # Apply overrides (only when annotations were missing)
     if override_system_group:
-        benchmark_set = override_system_group
+        system_group = override_system_group
     if override_system_name:
-        system = override_system_name
+        system_name = override_system_name
 
-    return benchmark_set, system
+    return system_group, system_name
 
 
 def _extract_sim_times(settings_block: dict[str, Any]) -> tuple[str, str]:
@@ -989,12 +991,12 @@ def _extract_auto_metadata(
     transformations = _transformation_refs(network_obj, network_mode)
     metadata.n_transformations = len(transformations)
     for trans in transformations:
-        benchmark_set_system = _infer_benchmark_data_set_system(
+        system_group_system = _infer_system_group_and_name(
             trans, override_system_group=system_group, override_system_name=system_name
         )
-        if benchmark_set_system not in metadata.system_info_dict:
-            metadata.system_info_dict[benchmark_set_system] = SystemInfo(
-                *benchmark_set_system,
+        if system_group_system not in metadata.system_info_dict:
+            metadata.system_info_dict[system_group_system] = SystemInfo(
+                *system_group_system,
                 metadata.calculation_mode,
                 source_file,
                 metadata.network_key,
@@ -1002,7 +1004,7 @@ def _extract_auto_metadata(
 
         system_info = _get_system_info(trans, metadata.calculation_mode)
         for key, value in system_info.items():
-            current_attr = getattr(metadata.system_info_dict[benchmark_set_system], key)
+            current_attr = getattr(metadata.system_info_dict[system_group_system], key)
             if isinstance(current_attr, set):
                 current_attr.update(value)
             elif isinstance(current_attr, list):
@@ -1015,7 +1017,7 @@ def _extract_auto_metadata(
         if metadata.calculation_mode == "rbfe":
             if len(system_info["ligands"]) == 0 or len(system_info["ligands"]) > 2:
                 raise ValueError(
-                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, set/system: {benchmark_set_system}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, set/system: {system_group_system}, transformation: {trans.name}, ligands: {system_info['ligands']}"
                 )
             ligand_start = system_info["ligands"][0]
             ligand_final = (
@@ -1024,12 +1026,12 @@ def _extract_auto_metadata(
         elif metadata.calculation_mode == "asfe":
             if len(system_info["ligands"]) < 1 or len(system_info["ligands"]) > 1:
                 raise ValueError(
-                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, set/system: {benchmark_set_system}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, set/system: {system_group_system}, transformation: {trans.name}, ligands: {system_info['ligands']}"
                 )
             ligand_start = system_info["ligands"][0]
             ligand_final = "none"
 
-        key = metadata.system_info_dict[benchmark_set_system].make_key(
+        key = metadata.system_info_dict[system_group_system].make_key(
             metadata.network_key,
             ligand_start,
             system_info["cofactors"],
@@ -1083,7 +1085,7 @@ def _extract_auto_metadata(
                 )
 
         protocol_info = ProtocolSettingsInfo(**protocol_settings_dict)
-        metadata.system_info_dict[benchmark_set_system].add_protocol_settings(
+        metadata.system_info_dict[system_group_system].add_protocol_settings(
             protocol_info, key
         )
 
@@ -1101,25 +1103,25 @@ def _extract_auto_metadata(
                 mapper_name = mapper_settings.get("__qualname__", "TODO").split(".")[-1]
                 mapping_algorithm = mapper_settings.get("_mapping_algorithm", "TODO")
                 mapper_str = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
-                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                metadata.system_info_dict[system_group_system].add_version_setting(
                     "mapper", mapper_str, key
                 )
 
         for annotation_key, value in annotations.items():
             if "openmm" in annotation_key:
-                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                metadata.system_info_dict[system_group_system].add_version_setting(
                     "openmm_version", value, annotation_key
                 )
             if "openfe" in annotation_key:
-                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                metadata.system_info_dict[system_group_system].add_version_setting(
                     "openfe_version", value, annotation_key
                 )
             if "openff" in annotation_key and "toolkit" in annotation_key:
-                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                metadata.system_info_dict[system_group_system].add_version_setting(
                     "openff_toolkit_version", value, annotation_key
                 )
             if "pontibus" in annotation_key:
-                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                metadata.system_info_dict[system_group_system].add_version_setting(
                     "pontibus_version", value, annotation_key
                 )
 
@@ -1296,8 +1298,8 @@ def _build_content_summary(
 
     # Group systems by benchmark set for explicit listing
     sets_to_systems: dict[str, list[str]] = defaultdict(list)
-    if metadata.benchmark_sets_systems:
-        for system_group, system_name in metadata.benchmark_sets_systems:
+    if metadata.system_groups_systems:
+        for system_group, system_name in metadata.system_groups_systems:
             sets_to_systems[system_group].append(system_name)
     else:
         for system_group, system_name in metadata.system_info_dict.keys():
@@ -1335,7 +1337,7 @@ def _build_content_summary(
         for key in all_structures.keys():
             all_structures[key].update(getattr(si, key))
         if si.cofactors:
-            systems_with_cofactors.append(f"{si.benchmark_set}/{si.benchmark_system}")
+            systems_with_cofactors.append(f"{si.system_group}/{si.system_name}")
 
     # Build summary
     if metadata.calculation_mode == "rbfe":
@@ -1650,7 +1652,7 @@ def _render_keyed_values_yaml(
     return "\n".join(lines)
 
 
-def _render_benchmark_system_yaml(system_info_dict: dict[tuple, SystemInfo]) -> str:
+def _render_system_provenance_yaml(system_info_dict: dict[tuple, SystemInfo]) -> str:
     """Render a list of SystemInfo objects into a list of network keys and the benchmark systems they contain
 
     Parameters
@@ -1666,7 +1668,7 @@ def _render_benchmark_system_yaml(system_info_dict: dict[tuple, SystemInfo]) -> 
 
     network_breakdown = defaultdict(lambda: defaultdict(str))
     for si in system_info_dict.values():
-        network_breakdown[si.benchmark_set][si.benchmark_system] = si.network_key
+        network_breakdown[si.system_group][si.system_name] = si.network_key
 
     benchmark_yaml = """
 ## BenchmarkData Provenance (from openfe-benchmarks planning script) with associated network key 
@@ -1674,12 +1676,10 @@ benchmark_data:
   source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
 """
 
-    for benchmark_set in sorted(network_breakdown):
-        benchmark_yaml += f"  {json.dumps(benchmark_set)}:\n"
-        for benchmark_system, network_key in sorted(
-            network_breakdown[benchmark_set].items()
-        ):
-            benchmark_yaml += f"    {json.dumps(benchmark_system)}: {network_key}\n"
+    for system_group in sorted(network_breakdown):
+        benchmark_yaml += f"  {json.dumps(system_group)}:\n"
+        for system_name, network_key in sorted(network_breakdown[system_group].items()):
+            benchmark_yaml += f"    {json.dumps(system_name)}: {network_key}\n"
 
     return benchmark_yaml
 
@@ -1750,7 +1750,7 @@ def _make_submission_yaml(
     protocol_settings_yaml = _render_protocol_settings_yaml(
         metadata.protocol_settings_list
     )
-    benchmark_system_yaml = _render_benchmark_system_yaml(metadata.system_info_dict)
+    system_provenance_yaml = _render_system_provenance_yaml(metadata.system_info_dict)
     openfe_version_yaml = _render_keyed_values_yaml(
         "openfe_version", metadata.openfe_version, "version", "edges"
     )
@@ -1830,7 +1830,7 @@ date: {submission_date}
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
 {partial_charges_yaml}
-{benchmark_system_yaml}
+{system_provenance_yaml}
 
 # REQUIRED: results file
 results: {results_file}
@@ -1877,7 +1877,7 @@ def _make_zenodo_description(
     protocol_settings_yaml = _render_protocol_settings_yaml(
         metadata.protocol_settings_list
     )
-    benchmark_system_yaml = _render_benchmark_system_yaml(metadata.system_info_dict)
+    system_provenance_yaml = _render_system_provenance_yaml(metadata.system_info_dict)
     openfe_version_yaml = _render_keyed_values_yaml(
         "openfe_version", metadata.openfe_version, "version", "edges"
     )
@@ -1928,9 +1928,7 @@ def _make_zenodo_description(
     network_keys_section = ""
     network_breakdown = defaultdict(list)
     for si in metadata.system_info_dict.values():
-        network_breakdown[si.network_key].append(
-            f"{si.benchmark_set}/{si.benchmark_system}"
-        )
+        network_breakdown[si.network_key].append(f"{si.system_group}/{si.system_name}")
 
     if network_breakdown:
         network_keys_lines = []
@@ -1972,7 +1970,7 @@ This submission is linked from the OpenFE Benchmarks repository:
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
 
-{benchmark_system_yaml}
+{system_provenance_yaml}
 
 ## Protocol Settings
 {protocol_settings_yaml}
@@ -2202,7 +2200,7 @@ def process_network(
             merged_metadata.network_key = metadata.network_key
         else:
             merged_metadata.network_key += f", {metadata.network_key}"
-        merged_metadata.benchmark_sets_systems.extend(metadata.benchmark_sets_systems)
+        merged_metadata.system_groups_systems.extend(metadata.system_groups_systems)
 
         # Use first non-empty value for scalar fields
         for key in [
@@ -2270,13 +2268,13 @@ def process_network(
         )
 
     sets_to_systems: dict[str, list[str]] = defaultdict(list)
-    for system_group, system_name in merged_metadata.benchmark_sets_systems:
+    for system_group, system_name in merged_metadata.system_groups_systems:
         sets_to_systems[system_group].append(system_name)
 
     # Generate a descriptive title
     submission_id = submission_id or _default_submission_id("_".join(all_network_keys))
 
-    title = _generate_title(mode, merged_metadata.benchmark_sets_systems, submission_id)
+    title = _generate_title(mode, merged_metadata.system_groups_systems, submission_id)
 
     submission_yaml_filename = "submission.yaml"
     zenodo_description_filename = "zenodo_description.md"
@@ -2290,7 +2288,7 @@ def process_network(
         forcefield=merged_metadata.forcefield,
         small_molecule_forcefield=merged_metadata.small_molecule_forcefield,
         partial_charge_tag=merged_metadata.partial_charges,
-        benchmark_data=merged_metadata.benchmark_sets_systems,
+        benchmark_data=merged_metadata.system_groups_systems,
         user_keywords=tags_list,
     )
 

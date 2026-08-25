@@ -10,7 +10,7 @@ The `benchmark_systems/` directory contains remediated benchmark inputs organize
 
 ```
 benchmark_systems/
-├── <benchmark_set>/                     # e.g., jacs_set, fragments, janssen_bace, mcs_docking_set
+├── <system_group>/                      # e.g., jacs_set, fragments, janssen_bace, mcs_docking_set
 │   └── <system_name>/                   # e.g., p38, tyk2, mcl1
 │       ├── PREPARATION_DETAILS.md       # (Required) System preparation documentation generated
 │       ├── ligands.sdf                  # (Required) Ligands without charges
