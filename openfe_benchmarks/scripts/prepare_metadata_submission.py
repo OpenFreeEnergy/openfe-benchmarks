@@ -276,6 +276,7 @@ class SystemInfo:
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
     mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
         default_factory=list
@@ -334,6 +335,7 @@ class AutoMetadata:
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
     mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocols: list[tuple[str, list[str]]] = field(default_factory=list)
     forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
@@ -351,6 +353,7 @@ class AutoMetadata:
         self.openfe_version = []
         self.openmm_version = []
         self.openff_toolkit_version = []
+        self.pontibus_version = []
         self.mapper = []
         self.protocols = []
         self.forcefield = []
@@ -365,6 +368,8 @@ class AutoMetadata:
                 _add_value_with_keys(self.openmm_version, version, keys)
             for version, keys in system_info.openff_toolkit_version:
                 _add_value_with_keys(self.openff_toolkit_version, version, keys)
+            for version, keys in system_info.pontibus_version:
+                _add_value_with_keys(self.pontibus_version, version, keys)
             for mapper_info, keys in system_info.mapper:
                 _add_value_with_keys(self.mapper, mapper_info, keys)
 
@@ -1113,6 +1118,10 @@ def _extract_auto_metadata(
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
                     "openff_toolkit_version", value, annotation_key
                 )
+            if "pontibus" in annotation_key:
+                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                    "pontibus_version", value, annotation_key
+                )
 
     metadata.update_from_system_info()
 
@@ -1751,6 +1760,18 @@ def _make_submission_yaml(
     openff_toolkit_version_yaml = _render_keyed_values_yaml(
         "openff_toolkit_version", metadata.openff_toolkit_version, "version", "edges"
     )
+    # Render pontibus_version if we have it, otherwise check if pontibus was used
+    if metadata.pontibus_version:
+        pontibus_version_yaml = _render_keyed_values_yaml(
+            "pontibus_version", metadata.pontibus_version, "version", "edges"
+        )
+    else:
+        # Check if pontibus was used by looking at protocol libraries
+        pontibus_used = any(lib == "pontibus" for lib, _ in metadata.protocol_libraries)
+        if pontibus_used:
+            pontibus_version_yaml = "pontibus_version: TODO"
+        else:
+            pontibus_version_yaml = "pontibus_version: None"
     if metadata.calculation_mode in ["rbfe", "septop"]:
         mapper_yaml = _render_keyed_values_yaml(
             "mapper", metadata.mapper, "mapper", "edges"
@@ -1804,6 +1825,7 @@ date: {submission_date}
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
+{pontibus_version_yaml}
 {mapper_yaml}
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
@@ -1868,6 +1890,18 @@ def _make_zenodo_description(
         "version",
         "edges",
     )
+    # Render pontibus_version if we have it, otherwise check if pontibus was used
+    if metadata.pontibus_version:
+        pontibus_version_yaml = _render_keyed_values_yaml(
+            "pontibus_version", metadata.pontibus_version, "version", "edges"
+        )
+    else:
+        # Check if pontibus was used by looking at protocol libraries
+        pontibus_used = any(lib == "pontibus" for lib, _ in metadata.protocol_libraries)
+        if pontibus_used:
+            pontibus_version_yaml = "pontibus_version: TODO"
+        else:
+            pontibus_version_yaml = "pontibus_version: None"
     forcefield_yaml = _render_keyed_values_yaml(
         "forcefield", metadata.forcefield, "forcefield", "edges"
     )
@@ -1928,6 +1962,7 @@ This submission is linked from the OpenFE Benchmarks repository:
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
+{pontibus_version_yaml}
 
 {network_keys_section}
 
@@ -1989,6 +2024,7 @@ def process_network(
     openfe_version: str | None = None,
     openmm_version: str | None = None,
     openff_toolkit_version: str | None = None,
+    pontibus_version: str | None = None,
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -2052,6 +2088,9 @@ def process_network(
         auto-detected versions from the archive.
     openff_toolkit_version:
         Optional OpenFF Toolkit version string to include in metadata instead of any
+        auto-detected versions from the archive.
+    pontibus_version:
+        Optional Pontibus version string to include in metadata instead of any
         auto-detected versions from the archive.
 
     Notes
@@ -2170,6 +2209,7 @@ def process_network(
             "openmm_version",
             "openfe_version",
             "openff_toolkit_version",
+            "pontibus_version",
             "forcefield",
             "partial_charges",
             "small_molecule_forcefield",
@@ -2213,6 +2253,8 @@ def process_network(
         merged_metadata.openff_toolkit_version = [
             (openff_toolkit_version, ["override"])
         ]
+    if pontibus_version is not None:
+        merged_metadata.pontibus_version = [(pontibus_version, ["override"])]
 
     # Build content summary from combined data
     # Get list of source file names
@@ -2444,6 +2486,13 @@ def main():
     )
 
     parser.add_argument(
+        "--pontibus-version",
+        type=str,
+        default=None,
+        help="Override the Pontibus version written into submission metadata.",
+    )
+
+    parser.add_argument(
         "--small-molecule-forcefield",
         type=str,
         default=None,
@@ -2492,6 +2541,7 @@ def main():
         openfe_version=args.openfe_version,
         openmm_version=args.openmm_version,
         openff_toolkit_version=args.openff_toolkit_version,
+        pontibus_version=args.pontibus_version,
     )
     logger.info("\n✓ Successfully generated submission metadata")
 
