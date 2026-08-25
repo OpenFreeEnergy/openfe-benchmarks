@@ -29,6 +29,7 @@ date: 2026-08-04
 openfe_version: 1.8.0
 openmm_version: 8.2.0
 openff_toolkit_version: 0.18
+pontibus_version: "0.4.0"
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
 forcefield: ["opc3.offxml", "openff-3.0.0-alpha1b"]
 small_molecule_forcefield: "openff-3.0.0-alpha1b"
