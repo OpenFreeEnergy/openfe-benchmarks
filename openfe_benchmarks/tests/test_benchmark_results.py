@@ -22,6 +22,11 @@ from openfe_benchmarks.results import (
     filter_results,
 )
 import openfe_benchmarks.results._benchmark_results as br_module
+from openfe_benchmarks.results._filtering import (
+    apply_filter,
+    compare_values,
+    extract_value,
+)
 
 
 # Test data submission IDs
@@ -614,15 +619,12 @@ def test_filter_exact_match_pontibus_version():
 
 
 def test_filter_comparison_warning_non_version_field():
-    """Test that warning is issued when comparison operators used with non-date/version fields."""
-    with pytest.warns(
-        UserWarning,
-        match="Comparison operator.*system_name.*designed for date and version fields",
+    """Test that error is raised when comparison operators used with non-date/version fields."""
+    with pytest.raises(
+        ValueError,
+        match="Invalid version filter value.*Cannot parse.*as semantic version",
     ):
-        filtered = filter_results(system_name=">=tyk2")
-
-    # Still returns results (falls back to string comparison)
-    assert isinstance(filtered, list)
+        filter_results(system_name=">=tyk2")
 
 
 def test_filter_quantity_comparison_greater_than():
@@ -716,27 +718,27 @@ def test_compare_values_list_of_quantities_inequality(mock_submission_yaml):
         ],
     )
     submission = BenchmarkResults(**yaml_data)
-    temperatures = br_module._get_nested_value(
-        submission, "protocol_settings__temperature"
+    temperatures = extract_value(
+        submission, "protocol_settings__temperature", is_nested=True
     )
-    system_names = br_module._get_nested_value(
-        submission, "protocol_settings__system_name"
+    system_names = extract_value(
+        submission, "protocol_settings__system_name", is_nested=True
     )
 
     assert isinstance(temperatures, list)
     assert len(temperatures) == 1
     assert system_names == ["tyk2"]
 
-    assert br_module._compare_values(
+    assert compare_values(
         temperatures, "290 kelvin", ">", "protocol_settings__temperature"
     )
-    assert br_module._compare_values(
+    assert compare_values(
         temperatures, "298 kelvin", ">=", "protocol_settings__temperature"
     )
-    assert not br_module._compare_values(
+    assert not compare_values(
         temperatures, "280 kelvin", "<=", "protocol_settings__temperature"
     )
-    assert not br_module._compare_values(
+    assert not compare_values(
         temperatures, "350 kelvin", ">", "protocol_settings__temperature"
     )
 
@@ -753,32 +755,32 @@ def test_filter_protocol_settings_quantity_inequality(mock_submission_yaml):
     )
     submission = BenchmarkResults(**yaml_data)
 
-    assert br_module._match_submission_filter(
+    assert apply_filter(
         submission,
         "benchmark_data__system_name",
         "tyk2",
         tags_mode="all",
     )
 
-    assert br_module._match_submission_filter(
+    assert apply_filter(
         submission,
         "protocol_settings__temperature",
         ">290 kelvin",
         tags_mode="all",
     )
-    assert br_module._match_submission_filter(
+    assert apply_filter(
         submission,
         "protocol_settings__temperature",
         "<=298 kelvin",
         tags_mode="all",
     )
-    assert not br_module._match_submission_filter(
+    assert not apply_filter(
         submission,
         "protocol_settings__temperature",
         "<298 kelvin",
         tags_mode="all",
     )
-    assert not br_module._match_submission_filter(
+    assert not apply_filter(
         submission,
         "protocol_settings__temperature",
         ">350 kelvin",

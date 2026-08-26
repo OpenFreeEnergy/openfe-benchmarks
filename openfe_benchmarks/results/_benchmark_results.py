@@ -7,22 +7,16 @@ Filtering functions are separate from the class, following functional programmin
 
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional, Any, Union
-from datetime import date as date_type
+from typing import Optional, Any
 import yaml
 import json
 import bz2
-import fnmatch
-import re
 import logging
-import warnings
-import operator as py_operator
-
-from packaging.version import Version, InvalidVersion
-import pint
 
 from gufe.tokenization import JSON_HANDLER
 from cinnabar import FEMap
+
+from openfe_benchmarks.results._filtering import apply_filter
 
 from openfe_benchmarks.scripts._results_utils import (
     build_femap_from_absolute_results,
@@ -115,15 +109,82 @@ class BenchmarkResults:
 
     Examples
     --------
-    >>> # Load results with computational data
+    **Loading and accessing metadata**
+
     >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing')
-    >>>
-    >>> # Fast YAML-only load (for CI validation)
+    >>> results.submission_id
+    '2026-03-18-openmm-840-qa-testing'
+    >>> results.calculation_type
+    'rbfe'
+    >>> results.tags  # doctest: +ELLIPSIS
+    ['rbfe', ..., 'jacs_set', ...]
+    >>> results.openfe_version
+    '1.9.1'
+    >>> results.small_molecule_forcefield
+    'openff-2.3.0'
+
+    **Accessing computational results**
+
+    >>> # Raw results loaded automatically (or via load_raw_results())
+    >>> sorted(results.raw_results.keys())
+    ['ddg', 'dg']
+    >>> len(results.raw_results['ddg'])
+    80
+    >>> # Access first result entry
+    >>> results.raw_results['ddg'][0]['system_name']
+    'tyk2'
+    >>> 'ligand_a' in results.raw_results['ddg'][0]
+    True
+
+    **Lazy-loaded FEMaps for analysis**
+
+    >>> # FEMaps computed on first access and cached
+    >>> ddg_femaps = results.ddg_femaps
+    >>> for (group, name), femap in sorted(ddg_femaps.items())[:2]:
+    ...     print(f"{name}: {femap.n_edges} transformations")  # doctest: +ELLIPSIS
+    egfr: ... transformations
+    irak4_s2: ... transformations
+    >>> # Absolute binding free energies (reference values)
+    >>> dg_femaps = results.dg_femaps
+    >>> # FEMap objects from cinnabar for statistics/plotting
+    >>> femap = ddg_femaps[('charge_annihilation_set', 'egfr')]
+    >>> femap.n_ligands
+    3
+
+    **ASFE (solvation) submissions**
+
+    >>> asfe_results = get_benchmark_results('2026-08-06-openff-2.3.0-solvation_set_freesolv')
+    >>> asfe_results.calculation_type
+    'asfe'
+    >>> # Absolute solvation free energies with experimental comparison
+    >>> dg_femaps = asfe_results.dg_femaps
+    >>> for (group, name), femap in dg_femaps.items():
+    ...     print(f"{name}: {femap.n_ligands} molecules")
+    freesolv: 603 molecules
+
+    **Fast YAML-only loading (no computational data)**
+
+    >>> # Useful for CI validation or metadata-only queries
     >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing', load_results=False)
-    >>>
-    >>> # Filter submissions globally
-    >>> rbfe_submissions = filter_results(tags='rbfe')
+    >>> results.raw_results is None
+    True
+    >>> # Accessing dg_femaps/ddg_femaps raises ValueError
+    >>> try:
+    ...     _ = results.ddg_femaps
+    ... except ValueError as e:
+    ...     print(str(e))
+    Cannot access ddg_femaps: raw_results is None. Initialize with load_results=True...
+
+    **Filtering submissions across the repository**
+
+    >>> # All RBFE submissions
+    >>> rbfe_submissions = filter_results(calculation_type='rbfe')
+    >>> len(rbfe_submissions)
+    7
+    >>> # Submissions containing TYK2 results
     >>> tyk2_submissions = filter_results(system_name='tyk2')
+    >>> # Recent OpenFE 1.x submissions
+    >>> recent = filter_results(openfe_version='>=1.0.0', date='>=2026-01-01')
     """
 
     # Required fields (match submission.yaml structure exactly)
@@ -249,17 +310,60 @@ class BenchmarkResults:
 
         Examples
         --------
-        >>> # ASFE submission
-        >>> results = BenchmarkResults(submission_id='2026-08-06-openff-2.3.0-solvation_set_freesolv')
+        **ASFE (solvation) submissions**
+
+        >>> # Load ASFE submission
+        >>> results = get_benchmark_results('2026-08-06-openff-2.3.0-solvation_set_freesolv')
+        >>> results.calculation_type
+        'asfe'
+        >>> # Access absolute solvation free energies
         >>> femaps = results.dg_femaps
         >>> for (group, name), femap in femaps.items():
-        ...     print(f"{group}/{name}: {len(femap.edges)} calculations")
-        >>>
-        >>> # RBFE submission
-        >>> results = BenchmarkResults(submission_id='2026-02-12_sage_230_jacs')
+        ...     print(f"{group}/{name}: {femap.n_ligands} molecules")
+        solvation_set/freesolv: 603 molecules
+        >>> # FEMap contains experimental vs calculated data
+        >>> femap = femaps[('solvation_set', 'freesolv')]
+        >>> # Can be used for statistics/plotting via cinnabar
+        >>> femap.n_ligands
+        603
+
+        **RBFE submissions (absolute binding reference values)**
+
+        >>> # Load RBFE submission
+        >>> results = get_benchmark_results('2026-02-12_sage_230_jacs_set')
+        >>> results.calculation_type
+        'rbfe'
+        >>> # Access absolute binding free energies (reference values)
+        >>> dg_femaps = results.dg_femaps
+        >>> for (group, name), femap in sorted(dg_femaps.items())[:2]:
+        ...     print(f"{group}/{name}: {femap.n_ligands} ligands")
+        jacs_set/bace: 36 ligands
+        jacs_set/cdk2: 16 ligands
+        >>> # These are reference values for relative calculations
+        >>> # Use ddg_femaps for relative binding free energies
+
+        **Lazy loading and caching**
+
+        >>> results = get_benchmark_results('2026-08-06-openff-2.3.0-solvation_set_freesolv')
+        >>> # First access triggers computation (may be slow)
+        >>> femaps1 = results.dg_femaps  # Computing FEMaps...
+        >>> # Subsequent access returns cached value (instant)
+        >>> femaps2 = results.dg_femaps
+        >>> femaps1 is femaps2
+        True
+
+        **Loading results after initialization**
+
+        >>> # Start with fast metadata-only load
+        >>> results = get_benchmark_results('2026-08-06-openff-2.3.0-solvation_set_freesolv', load_results=False)
+        >>> results.raw_results is None
+        True
+        >>> # Load computational results when needed
+        >>> results.load_raw_results()
+        >>> results.raw_results is not None
+        True
+        >>> # Now FEMaps are accessible
         >>> femaps = results.dg_femaps
-        >>> for (group, name), femap in femaps.items():
-        ...     print(f"{group}/{name}: absolute binding values")
         """
         if self.raw_results is None:
             raise ValueError(
@@ -306,10 +410,41 @@ class BenchmarkResults:
 
         Examples
         --------
-        >>> results = BenchmarkResults(submission_id='2026-03-18-openmm-840-qa-testing')
+        **Basic usage: relative binding free energies**
+
+        >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing')
+        >>> results.calculation_type
+        'rbfe'
+        >>> # Access relative binding free energies (returns dict of cinnabar FEMaps)
         >>> femaps = results.ddg_femaps
-        >>> for (group, name), femap in femaps.items():
-        ...     print(f"{group}/{name}: {len(femap.edges)} edges")
+        >>> for (group, name), femap in sorted(femaps.items())[:2]:
+        ...     print(f"{group}/{name}: {femap.n_edges} transformations")  # doctest: +ELLIPSIS
+        charge_annihilation_set/egfr: ... transformations
+        charge_annihilation_set/irak4_s2: ... transformations
+        >>> # Get FEMap for specific system (cinnabar.FEMap object)
+        >>> femap = femaps[('charge_annihilation_set', 'egfr')]
+        >>> # See cinnabar documentation for FEMap analysis/plotting methods
+
+        **Lazy loading and caching**
+
+        >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing')
+        >>> # First access triggers computation (may be slow for large networks)
+        >>> femaps1 = results.ddg_femaps  # Computing FEMaps...
+        >>> # Subsequent access returns cached value (instant)
+        >>> femaps2 = results.ddg_femaps
+        >>> femaps1 is femaps2
+        True
+
+        **Loading results after initialization**
+
+        >>> # Start with fast metadata-only load
+        >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing', load_results=False)
+        >>> results.raw_results is None
+        True
+        >>> # Load computational results when needed
+        >>> results.load_raw_results()
+        >>> # Now ddg_femaps are accessible
+        >>> femaps = results.ddg_femaps
         """
         if self.raw_results is None:
             raise ValueError(
@@ -475,14 +610,53 @@ def get_benchmark_results(
 
     Examples
     --------
+    **Basic usage: load with computational results**
+
     >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing')
     >>> results.title
     'OpenFE RBFE - Multi-set Benchmark...'
-
-    >>> # Fast YAML-only load for validation
-    >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing', load_results=False)
-    >>> print(results.calculation_type)
+    >>> results.calculation_type
     'rbfe'
+    >>> # Access computational data
+    >>> ddg_femaps = results.ddg_femaps  # Lazy-loaded FEMaps
+    >>> len(results.raw_results['ddg'])
+    80
+
+    **Fast metadata-only loading (for CI/validation)**
+
+    >>> # Skip loading large computational results JSON
+    >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing', load_results=False)
+    >>> results.raw_results is None
+    True
+    >>> # Metadata still available
+    >>> results.tags  # doctest: +ELLIPSIS
+    ['rbfe', ..., 'jacs_set', ...]
+    >>> results.openfe_version
+    '1.9.1'
+
+    **Accessing metadata and provenance**
+
+    >>> results = get_benchmark_results('2026-08-06-openff-2.3.0-solvation_set_freesolv')
+    >>> results.calculation_type
+    'asfe'
+    >>> results.small_molecule_forcefield is None
+    True
+    >>> 'solvation_set' in results.benchmark_data
+    True
+    >>> results.authors[0]['name']
+    'Jennifer A Clark'
+
+    **Loading results and accessing computed fields**
+
+    >>> results = get_benchmark_results('2026-02-12_sage_230_jacs_set')
+    >>> # Access lazy-loaded FEMaps (computed on first access)
+    >>> for (group, name), femap in sorted(results.ddg_femaps.items())[:2]:
+    ...     print(f"{name}: {femap.n_edges} transformations")
+    bace: 49 transformations
+    cdk2: 24 transformations
+    >>> # FEMaps cached after first access
+    >>> results.ddg_femaps is results.ddg_femaps
+    True
     """
     # Construct and validate paths
     submission_dir = _RESULTS_DIR / submission_id
@@ -548,11 +722,102 @@ def filter_results(
         - List: matches if ANY value matches (OR logic), except ``tags`` honoring
           ``tags_mode``
         - Use ``exclude_`` prefix for NOT logic (e.g. ``exclude_tags=['test']``)
+        - Inline comparison operators: ``>=``, ``>``, ``<=``, ``<`` for dates/versions
+        - Nested field access: use ``__`` separator (e.g. ``protocol_settings__temperature``)
 
     Returns
     -------
     list[BenchmarkResults]
         Matching BenchmarkResults objects
+
+    Examples
+    --------
+    **Basic tag filtering**
+
+    >>> # Single tag (exact match)
+    >>> results = filter_results(tags='rbfe')
+    >>>
+    >>> # Multiple tags with AND logic (default)
+    >>> results = filter_results(tags=['rbfe', 'jacs_set'])
+    >>>
+    >>> # Multiple tags with OR logic
+    >>> results = filter_results(tags=['rbfe', 'asfe'], tags_mode='any')
+
+    **Comparison operators (dates and versions)**
+
+    >>> # Submissions since 2026
+    >>> results = filter_results(date='>=2026-01-01')
+    >>>
+    >>> # OpenFE version 1.x (use version range syntax)
+    >>> results = filter_results(openfe_version='>=1.0.0,<2.0.0')
+    >>>
+    >>> # Recent submissions with specific OpenMM version
+    >>> results = filter_results(date='>2025-01-01', openmm_version='>=8.1.0')
+
+    **Wildcard matching**
+
+    >>> # All TYK2 variants
+    >>> results = filter_results(system_name='tyk2*')
+    >>>
+    >>> # OpenFF force fields
+    >>> results = filter_results(small_molecule_forcefield='openff*')
+
+    **Exclusion filters**
+
+    >>> # Exclude test submissions
+    >>> results = filter_results(exclude_tags=['test'])
+    >>>
+    >>> # Exclude specific calculation type
+    >>> results = filter_results(exclude_calculation_type='asfe')
+
+    **Nested field access**
+
+    >>> # Filter by nested protocol settings
+    >>> results = filter_results(protocol_settings__temperature='>298 K')
+    >>>
+    >>> # Filter by benchmark data provenance
+    >>> results = filter_results(benchmark_data__system_name='tyk2')
+
+    **Result-entry filtering (requires load_results=True)**
+
+    >>> # Find submissions containing specific system
+    >>> results = filter_results(system_name='tyk2')
+    >>>
+    >>> # Find submissions with specific ligand
+    >>> results = filter_results(ligand_name='jmc_23')
+    >>>
+    >>> # Combine submission and result-entry filters
+    >>> results = filter_results(tags='rbfe', system_name='tyk2', date='>=2026-01-01')
+
+    **OR logic with lists**
+
+    >>> # Any of these systems
+    >>> results = filter_results(system_name=['tyk2', 'mcl1', 'p38'])
+    >>>
+    >>> # Any of these force fields
+    >>> results = filter_results(small_molecule_forcefield=['gaff-2.11', 'openff-2.0.0'])
+
+    **Complex combinations**
+
+    >>> # RBFE submissions from 2026 excluding tests
+    >>> results = filter_results(
+    ...     tags='rbfe',
+    ...     date='>=2026-01-01',
+    ...     exclude_tags=['test', 'debug']
+    ... )
+    >>>
+    >>> # Recent OpenFE 1.x submissions for TYK2 or MCL1
+    >>> results = filter_results(
+    ...     openfe_version='>=1.0.0,<2.0.0',
+    ...     date='>2025-06-01',
+    ...     system_name=['tyk2', 'mcl1']
+    ... )
+
+    **Performance: fast YAML-only filtering**
+
+    >>> # Fast filtering without loading computational results
+    >>> results = filter_results(tags='rbfe', load_results=False)
+    >>> # Useful for CI validation or metadata-only queries
     """
     if tags_mode not in {"all", "any"}:
         raise ValueError(f"Invalid tags_mode: {tags_mode}. Must be 'all' or 'any'")
@@ -595,7 +860,7 @@ def filter_results(
             continue
 
         if not all(
-            _match_submission_filter(benchmark_results, key, value, tags_mode)
+            apply_filter(benchmark_results, key, value, tags_mode)
             for key, value in submission_filters.items()
         ):
             continue
@@ -615,7 +880,7 @@ def filter_results(
 
         if any(
             all(
-                _match_filter(result, benchmark_results, key, value, tags_mode)
+                apply_filter(result, key, value, tags_mode)
                 for key, value in result_entry_filters.items()
             )
             for result in all_results
@@ -632,444 +897,3 @@ def _is_submission_filter_key(filter_key: str) -> bool:
 
     root_key = filter_key.split("__", 1)[0]
     return root_key in BenchmarkResults.__dataclass_fields__
-
-
-def _match_submission_filter(
-    benchmark_results: BenchmarkResults,
-    filter_key: str,
-    filter_val: Union[str, list, Any],
-    tags_mode: str,
-) -> bool:
-    """Check if a submission-level field matches a filter predicate."""
-    EXCLUDE_PREFIX = "exclude_"
-    negate = False
-    if filter_key.startswith(EXCLUDE_PREFIX):
-        negate = True
-        filter_key = filter_key[len(EXCLUDE_PREFIX) :]
-
-    comparison_op = None
-    if isinstance(filter_val, str):
-        comparison_op, filter_val = _parse_inline_operator(filter_val)
-
-    if "__" in filter_key:
-        value = _get_nested_value(benchmark_results, filter_key)
-    else:
-        value = getattr(benchmark_results, filter_key, None)
-
-    if value is None:
-        result_matched = False
-        return not result_matched if negate else result_matched
-
-    if comparison_op is not None:
-        result_matched = _compare_values(value, filter_val, comparison_op, filter_key)
-    else:
-        result_matched = _match_value(value, filter_val, filter_key, tags_mode)
-
-    return not result_matched if negate else result_matched
-
-
-def _get_nested_value(result: Any, nested_key: str) -> Optional[Any]:
-    """
-    Extract value from nested dictionary using double-underscore separated keys.
-
-    Parameters
-    ----------
-    result : Any
-        Result object or dictionary to extract from
-    nested_key : str
-        Nested key with __ separator (e.g., 'protocol_settings__temperature')
-
-    Returns
-    -------
-    Optional[Any]
-        The nested value if found, None otherwise
-
-    Examples
-    --------
-    >>> result = {'protocol_settings': {'temperature': '298.15 K'}}
-    >>> _get_nested_value(result, 'protocol_settings__temperature')
-    '298.15 K'
-    >>> _get_nested_value(result, 'protocol_settings__missing')
-    None
-    """
-    keys = nested_key.split("__")
-    value = result
-    for key in keys:
-        if isinstance(value, dict):
-            value = value.get(key, None)
-        elif isinstance(value, list):
-            # Support list-of-dicts nesting (e.g. protocol_settings is a list of dicts)
-            next_values = []
-            for item in value:
-                if isinstance(item, dict):
-                    nested = item.get(key, None)
-                else:
-                    nested = getattr(item, key, None)
-
-                if nested is not None:
-                    next_values.append(nested)
-
-            value = next_values
-            if not value:
-                return None
-        else:
-            value = getattr(value, key, None)
-            if value is None:
-                return None
-    return value
-
-
-def _match_filter(
-    result: dict,
-    benchmark_results: BenchmarkResults,
-    filter_key: str,
-    filter_val: Union[str, list, Any],
-    tags_mode: str = "all",
-) -> bool:
-    """
-    Check if a result matches a filter predicate.
-
-    Parameters
-    ----------
-    result : dict
-        Result dictionary to check
-    benchmark_results : BenchmarkResults
-        BenchmarkResults object (for fallback field access to top-level metadata)
-    filter_key : str
-        Filter key (may have exclude_ prefix, may have __ for nested fields)
-    filter_val : Union[str, list, Any]
-        Filter value (single value for exact match, list for OR logic,
-        or string with leading comparison operator like '>=1.0.0')
-    tags_mode : str, default='all'
-        Mode for tags filtering: 'all' (AND) or 'any' (OR)
-
-    Returns
-    -------
-    bool
-        True if result matches filter, False otherwise
-    """
-    # Handle NOT logic (exclude_ prefix)
-    EXCLUDE_PREFIX = "exclude_"
-    negate = False
-    if filter_key.startswith(EXCLUDE_PREFIX):
-        negate = True
-        filter_key = filter_key[len(EXCLUDE_PREFIX) :]  # Remove 'exclude_' prefix
-
-    # Parse inline comparison operators from filter value (e.g., '>=2026-01-01')
-    comparison_op = None
-    if isinstance(filter_val, str):
-        comparison_op, filter_val = _parse_inline_operator(filter_val)
-
-    # Extract field value (handle nested access)
-    if "__" in filter_key:
-        value = _get_nested_value(result, filter_key)
-        if value is None:
-            # Field not found in result
-            result_matched = False
-            return not result_matched if negate else result_matched
-    else:
-        # Direct field access
-        # First try result dict, then fall back to BenchmarkResults attributes for top-level fields
-        if filter_key in result:
-            value = result[filter_key]
-        elif hasattr(benchmark_results, filter_key):
-            value = getattr(benchmark_results, filter_key)
-        else:
-            # Field not found
-            result_matched = False
-            return not result_matched if negate else result_matched
-
-    # Apply comparison or match logic
-    if comparison_op is not None:
-        result_matched = _compare_values(value, filter_val, comparison_op, filter_key)
-    else:
-        result_matched = _match_value(value, filter_val, filter_key, tags_mode)
-
-    # Apply negation if needed
-    return not result_matched if negate else result_matched
-
-
-def _match_value(
-    result_value: Any,
-    filter_val: Union[str, list, Any],
-    filter_key: str,
-    tags_mode: str,
-) -> bool:
-    """
-    Check if a result value matches a filter value with special tags handling.
-
-    Parameters
-    ----------
-    result_value : Any
-        Value from result to check against the filter
-    filter_val : Union[str, list, Any]
-        Filter value - single value for exact match, list for OR logic
-    filter_key : str
-        Filter key name (used for special handling of 'tags' field)
-    tags_mode : str
-        Mode for tags filtering: 'all' (AND logic) or 'any' (OR logic)
-
-    Returns
-    -------
-    bool
-        True if value matches filter, False otherwise
-
-    Raises
-    ------
-    ValueError
-        If tags_mode is not 'all' or 'any'
-    """
-    # Special handling for tags field with list filter_val
-    if filter_key == "tags" and isinstance(filter_val, list):
-        # Ensure result_value is a list
-        result_tags = result_value if isinstance(result_value, list) else [result_value]
-
-        if tags_mode == "all":
-            # AND logic: result must have ALL filter tags
-            return all(tag in result_tags for tag in filter_val)
-        elif tags_mode == "any":
-            # OR logic: result must have ANY filter tag
-            return any(tag in result_tags for tag in filter_val)
-        else:
-            raise ValueError(f"Invalid tags_mode: {tags_mode}. Must be 'all' or 'any'")
-
-    # OR logic for list filter values (non-tags fields)
-    if isinstance(filter_val, list):
-        # Check if ANY filter value matches
-        return any(_match_single_value(result_value, fv) for fv in filter_val)
-    else:
-        # Single value match
-        return _match_single_value(result_value, filter_val)
-
-
-def _match_single_value(result_value: Any, filter_val: Any) -> bool:
-    """
-    Check if a single result value matches a single filter value.
-
-    Handles wildcards and list-valued result fields.
-
-    Parameters
-    ----------
-    result_value : Any
-        Value from result to check
-    filter_val : Any
-        Single filter value (not a list)
-
-    Returns
-    -------
-    bool
-        True if value matches, False otherwise
-    """
-    # Handle list-valued result fields (check if ANY element matches)
-    if isinstance(result_value, list):
-        return any(_match_single_value(item, filter_val) for item in result_value)
-
-    # Wildcard matching for strings
-    if isinstance(filter_val, str) and ("*" in filter_val or "?" in filter_val):
-        return fnmatch.fnmatch(str(result_value), filter_val)
-
-    # Exact match
-    return result_value == filter_val
-
-
-def _parse_inline_operator(value: str) -> tuple[Optional[str], str]:
-    """
-    Parse inline comparison operator from a filter value string.
-
-    Detects operators like >=, >, <=, < at the start of the value.
-
-    Parameters
-    ----------
-    value : str
-        Filter value that may contain an inline operator (e.g., ">=2026-01-01")
-
-    Returns
-    -------
-    tuple[Optional[str], str]
-        (operator, value) where operator is '>=', '>', '<=', '<', or None
-        and value is the remaining string after removing the operator
-
-    Examples
-    --------
-    >>> _parse_inline_operator(">=2026-01-01")
-    ('>=', '2026-01-01')
-    >>> _parse_inline_operator("<1.0.0")
-    ('<', '1.0.0')
-    >>> _parse_inline_operator("2026-01-01")
-    (None, '2026-01-01')
-    """
-    # Match >=, >, <=, < at the start of the string
-    match = re.match(r"^(>=|>|<=|<)(.+)$", value)
-    if not match:
-        return None, value
-
-    op_str, remaining = match.groups()
-    return op_str, remaining.strip()
-
-
-def _compare_values(
-    result_value: Any, filter_val: Any, operator: str, field_name: str = ""
-) -> bool:
-    """
-    Compare result value against filter value using a comparison operator.
-
-    Handles semantic version comparison, date comparison, pint Quantity comparison,
-    and string comparison. Issues a warning if comparison operators are used with
-    non-date/version fields.
-
-    Parameters
-    ----------
-    result_value : Any
-        Value from result to compare
-    filter_val : Any
-        Filter value to compare against
-    operator : str
-        Comparison operator: '<', '<=', '>', or '>='
-    field_name : str, optional
-        Name of the field being compared (for warning messages)
-
-    Returns
-    -------
-    bool
-        True if comparison succeeds, False otherwise
-
-    Raises
-    ------
-    ValueError
-        If a Quantity comparison is requested with an invalid quantity string,
-        unsupported filter type, or incompatible dimensions.
-
-    Examples
-    --------
-    >>> _compare_values('2026-01-15', '2026-01-01', '>=', 'date')
-    True
-    >>> _compare_values('1.0.0', '2.0.0', '<', 'openfe_version')
-    True
-    >>> _compare_values('8.2.0', '8.1.0', '>', 'openmm_version')
-    True
-    >>> # pint Quantity comparison (from raw_results JSON)
-    >>> import pint
-    >>> ureg = pint.UnitRegistry()
-    >>> q1 = ureg.Quantity(298.15, 'kelvin')
-    >>> _compare_values(q1, '300 K', '<')
-    True
-    >>> _compare_values(q1, '25 celsius', '>=')  # Unit conversion handled automatically
-    True
-    """
-    # For list-valued nested fields, match if any element satisfies the comparison.
-    if isinstance(result_value, list):
-        return any(
-            _compare_values(item, filter_val, operator, field_name)
-            for item in result_value
-        )
-
-    _warn_if_nonsemantic_comparison(result_value, operator, field_name)
-
-    # Handle datetime.date objects (from YAML parsing)
-    if isinstance(result_value, date_type):
-        result_value, filter_val = _coerce_date_values(result_value, filter_val)
-        return _apply_comparison_operator(result_value, filter_val, operator)
-
-    # Handle pint Quantity objects (from JSON_HANDLER deserialization)
-    if isinstance(result_value, pint.Quantity):
-        filter_val = _coerce_quantity_filter_value(result_value, filter_val, field_name)
-
-        # Compare Quantities (pint handles unit conversion automatically)
-        try:
-            return _apply_comparison_operator(result_value, filter_val, operator)
-        except pint.errors.DimensionalityError as e:
-            raise ValueError(
-                f"Incompatible units for Quantity comparison on field '{field_name}': {e}"
-            ) from e
-
-    # Try semantic version comparison (for version fields)
-    try:
-        result_ver = Version(str(result_value))
-        filter_ver = Version(str(filter_val))
-        return _apply_comparison_operator(result_ver, filter_ver, operator)
-
-    except (InvalidVersion, TypeError):
-        # Fall back to string comparison
-        result_str = str(result_value)
-        filter_str = str(filter_val)
-        return _apply_comparison_operator(result_str, filter_str, operator)
-
-
-def _warn_if_nonsemantic_comparison(
-    result_value: Any, operator: str, field_name: str
-) -> None:
-    """Warn when comparison operators are used on fields that may not compare semantically."""
-    comparison_allowed_fields = {
-        "date",
-        "openfe_version",
-        "openmm_version",
-        "openff_toolkit_version",
-        "pontibus_version",
-    }
-    if (
-        field_name
-        and field_name not in comparison_allowed_fields
-        and not field_name.endswith("_version")
-        and not isinstance(result_value, pint.Quantity)
-    ):
-        warnings.warn(
-            f"Comparison operator '{operator}' used with field '{field_name}'. "
-            "Comparison operators are designed for date and version fields. "
-            "Results may not be semantically meaningful for other field types.",
-            UserWarning,
-            stacklevel=4,
-        )
-
-
-def _coerce_date_values(
-    result_value: date_type, filter_val: Any
-) -> tuple[date_type | str, Any]:
-    """Coerce date comparisons, preserving fallback-to-string behavior on parse failure."""
-    coerced_result_value: date_type | str = result_value
-    if isinstance(filter_val, str):
-        try:
-            # Parse ISO format date string YYYY-MM-DD
-            filter_val = date_type.fromisoformat(filter_val)
-        except (ValueError, AttributeError):
-            # If parsing fails, compare strings to preserve previous behavior
-            coerced_result_value = result_value.isoformat()
-
-    return coerced_result_value, filter_val
-
-
-def _coerce_quantity_filter_value(
-    result_value: pint.Quantity, filter_val: Any, field_name: str
-) -> Any:
-    """Convert quantity filter inputs into pint.Quantity using the result value registry."""
-    if isinstance(filter_val, str):
-        try:
-            ureg = result_value._REGISTRY
-            return ureg.Quantity(filter_val)
-        except (ValueError, pint.errors.UndefinedUnitError, AttributeError) as exc:
-            raise ValueError(
-                f"Invalid quantity filter value '{filter_val}' for field '{field_name}'. "
-                "Provide a valid quantity string with units."
-            ) from exc
-
-    if isinstance(filter_val, pint.Quantity):
-        return filter_val
-
-    raise ValueError(
-        f"Invalid filter type '{type(filter_val).__name__}' for Quantity field '{field_name}'. "
-        "Provide a quantity string or pint.Quantity value."
-    )
-
-
-def _apply_comparison_operator(left: Any, right: Any, operator: str) -> bool:
-    """Apply one of <, <=, >, >= operators to two comparable values."""
-    operator_map = {
-        "<": py_operator.lt,
-        "<=": py_operator.le,
-        ">": py_operator.gt,
-        ">=": py_operator.ge,
-    }
-    compare_func = operator_map.get(operator)
-    if compare_func is None:
-        raise ValueError(f"Unknown comparison operator: {operator}")
-
-    return compare_func(left, right)
