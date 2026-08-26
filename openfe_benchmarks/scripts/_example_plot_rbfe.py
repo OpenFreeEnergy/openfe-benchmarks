@@ -3,7 +3,7 @@
 This script showcases the new BenchmarkResults features:
 - Loading results using get_benchmark_results()
 - Filtering results with filter_results()
-- Using lazy .ddg_femaps property for automatic FEMap generation
+- Using lazy ddg_femaps() method for automatic FEMap generation
 - Generating plots using cinnabar
 
 Simply edit the SUBMISSION_ID variable to plot a different submission.
@@ -38,7 +38,7 @@ def main():
         )
 
     print("\nGenerating FEMaps...")
-    femaps_by_system = results.ddg_femaps
+    femaps_by_system = results.ddg_femaps()
     print(f"Generated {len(femaps_by_system)} FEMaps:")
     for (system_group, system_name), femap in femaps_by_system.items():
         n_edges = femap.n_edges

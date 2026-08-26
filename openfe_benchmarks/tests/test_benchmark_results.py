@@ -357,11 +357,11 @@ def test_filter_multi_and_logic():
 
 
 def test_ddg_femaps_lazy_load():
-    """Test ddg_femaps property with lazy loading and caching."""
+    """Test ddg_femaps method with lazy loading and caching."""
     result = get_benchmark_results(RBFE_SUBMISSION)
 
     # First access - should compute
-    femaps_first = result.ddg_femaps
+    femaps_first = result.ddg_femaps()
 
     # Verify structure
     assert isinstance(femaps_first, dict)
@@ -377,16 +377,16 @@ def test_ddg_femaps_lazy_load():
         assert isinstance(femap, FEMap)
 
     # Second access - should return cached
-    femaps_second = result.ddg_femaps
+    femaps_second = result.ddg_femaps()
     assert femaps_second is femaps_first  # Identity check for caching
 
 
 def test_dg_femaps():
-    """Test dg_femaps property with ASFE results."""
+    """Test dg_femaps method with ASFE results."""
     result = get_benchmark_results(ASFE_SUBMISSION)
 
     # Access dg_femaps
-    femaps = result.dg_femaps
+    femaps = result.dg_femaps()
 
     # Verify structure
     assert isinstance(femaps, dict)
@@ -494,7 +494,7 @@ def test_femaps_on_fast_loaded_results():
     result = get_benchmark_results(RBFE_SUBMISSION, load_results=False)
 
     with pytest.raises(ValueError) as excinfo:
-        _ = result.ddg_femaps
+        _ = result.ddg_femaps()
 
     expected_msg = (
         "Cannot access ddg_femaps: raw_results is None. "

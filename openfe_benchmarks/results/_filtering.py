@@ -65,6 +65,16 @@ class DateComparisonStrategy:
         return isinstance(value, date_type)
 
     def compare(self, left: date_type, right: Any, operator: str) -> bool:
+        # Coerce left operand to date if string
+        if isinstance(left, str):
+            try:
+                left = date_type.fromisoformat(left)
+            except (ValueError, AttributeError) as e:
+                raise ValueError(
+                    f"Invalid date value '{left}'. "
+                    f"Provide a valid ISO format date (YYYY-MM-DD): {e}"
+                )
+
         # Coerce right operand to date if string
         if isinstance(right, str):
             try:
@@ -80,12 +90,25 @@ class DateComparisonStrategy:
 
 @dataclass
 class QuantityComparisonStrategy:
-    """Handle pint.Quantity comparisons with automatic unit conversion."""
+    """Handle pint.Quantity comparisons with automatic unit conversion.
+
+    Handles both pint.Quantity objects and strings that can be parsed as quantities (e.g., '298.15 K').
+    """
 
     def can_handle(self, value: Any) -> bool:
         return isinstance(value, pint.Quantity)
 
-    def compare(self, left: pint.Quantity, right: Any, operator: str) -> bool:
+    def compare(self, left: Any, right: Any, operator: str) -> bool:
+        # Convert left to Quantity if it's a string
+        if isinstance(left, str):
+            try:
+                left = pint.Quantity(left)
+            except (ValueError, pint.errors.UndefinedUnitError) as e:
+                raise ValueError(
+                    f"Invalid quantity filter value '{left}'. "
+                    f"Provide a valid quantity string with units: {e}"
+                )
+
         # Coerce right operand to Quantity
         if isinstance(right, str):
             try:
@@ -117,6 +140,27 @@ class VersionComparisonStrategy:
         return False
 
     def compare(self, left: Any, right: Any, operator: str) -> bool:
+        # Try to parse quantity strings first (e.g., "298.15 K") and use quantity comparison
+        # if both left and right are valid quantities
+        if isinstance(left, str) and isinstance(right, str):
+            try:
+                left_q = pint.Quantity(left)
+                right_q = pint.Quantity(right)
+                # Only use quantity comparison if both parse with units (not dimensionless)
+                if (
+                    left_q.dimensionality != pint.Quantity("1").dimensionality
+                    or right_q.dimensionality != pint.Quantity("1").dimensionality
+                ):
+                    try:
+                        return _apply_operator(left_q, right_q, operator)
+                    except pint.errors.DimensionalityError as e:
+                        raise ValueError(
+                            f"Incompatible units for Quantity comparison: {e}"
+                        ) from e
+            except (ValueError, pint.errors.UndefinedUnitError, TypeError):
+                pass
+
+        # Fall back to version comparison
         try:
             left_ver = Version(str(left))
             right_ver = Version(str(right))
@@ -155,16 +199,10 @@ def _warn_if_nonsemantic_comparison(
     result_value: Any, operator: str, field_name: str
 ) -> None:
     """Warn when comparison operators are used on fields that may not compare semantically."""
-    semantic_fields = {
-        "date",
-        "openfe_version",
-        "openmm_version",
-        "openff_toolkit_version",
-        "pontibus_version",
-    }
     if (
         field_name
-        and field_name not in semantic_fields
+        and field_name not in _DATE_FIELDS
+        and field_name not in _VERSION_FIELDS
         and not field_name.endswith("_version")
         and not isinstance(result_value, pint.Quantity)
     ):
@@ -175,6 +213,16 @@ def _warn_if_nonsemantic_comparison(
             UserWarning,
             stacklevel=5,
         )
+
+
+# Field-name-aware strategy selection
+_DATE_FIELDS = {"date"}
+_VERSION_FIELDS = {
+    "openfe_version",
+    "openmm_version",
+    "openff_toolkit_version",
+    "pontibus_version",
+}
 
 
 # ============================================================================
@@ -516,11 +564,11 @@ def compare_values(
     """
     Compare result value against filter value using a comparison operator.
 
-    Uses strategy pattern to handle different value types:
-    - datetime.date objects
-    - pint.Quantity objects
-    - Semantic versions
-    - Fallback to string comparison
+    Uses field-name-aware strategy selection:
+    - Date fields (e.g., 'date') → DateComparisonStrategy
+    - Version fields (e.g., '*_version') → VersionComparisonStrategy
+    - Other typed values → value-type-based strategies
+    - Fallback to semantic version comparison
 
     Parameters
     ----------
@@ -531,7 +579,7 @@ def compare_values(
     operator : str
         Comparison operator: '<', '<=', '>', or '>='
     field_name : str, optional
-        Name of the field being compared (for warnings)
+        Name of the field being compared (for strategy selection and warnings)
 
     Returns
     -------
@@ -568,7 +616,14 @@ def compare_values(
 
     _warn_if_nonsemantic_comparison(result_value, operator, field_name)
 
-    # Try each comparison strategy
+    # Field-name-first routing (most explicit intent)
+    if field_name in _DATE_FIELDS:
+        return DateComparisonStrategy().compare(result_value, filter_val, operator)
+
+    if field_name.endswith("_version") or field_name in _VERSION_FIELDS:
+        return VersionComparisonStrategy().compare(result_value, filter_val, operator)
+
+    # Value-type-based routing (for unknown fields with typed values)
     for strategy in _COMPARISON_STRATEGIES:
         if strategy.can_handle(result_value):
             return strategy.compare(result_value, filter_val, operator)

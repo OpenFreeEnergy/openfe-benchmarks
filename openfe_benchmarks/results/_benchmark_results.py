@@ -18,7 +18,7 @@ from cinnabar import FEMap
 
 from openfe_benchmarks.results._filtering import apply_filter
 
-from openfe_benchmarks.scripts._results_utils import (
+from openfe_benchmarks.results._results_utils import (
     build_femap_from_absolute_results,
     build_femap_from_relative_results,
 )
@@ -139,13 +139,13 @@ class BenchmarkResults:
     **Lazy-loaded FEMaps for analysis**
 
     >>> # FEMaps computed on first access and cached
-    >>> ddg_femaps = results.ddg_femaps
+    >>> ddg_femaps = results.ddg_femaps()
     >>> for (group, name), femap in sorted(ddg_femaps.items())[:2]:
     ...     print(f"{name}: {femap.n_edges} transformations")  # doctest: +ELLIPSIS
     egfr: ... transformations
     irak4_s2: ... transformations
     >>> # Absolute binding free energies (reference values)
-    >>> dg_femaps = results.dg_femaps
+    >>> dg_femaps = results.dg_femaps()
     >>> # FEMap objects from cinnabar for statistics/plotting
     >>> femap = ddg_femaps[('charge_annihilation_set', 'egfr')]
     >>> femap.n_ligands
@@ -157,7 +157,7 @@ class BenchmarkResults:
     >>> asfe_results.calculation_type
     'asfe'
     >>> # Absolute solvation free energies with experimental comparison
-    >>> dg_femaps = asfe_results.dg_femaps
+    >>> dg_femaps = asfe_results.dg_femaps()
     >>> for (group, name), femap in dg_femaps.items():
     ...     print(f"{name}: {femap.n_ligands} molecules")
     freesolv: 603 molecules
@@ -170,7 +170,7 @@ class BenchmarkResults:
     True
     >>> # Accessing dg_femaps/ddg_femaps raises ValueError
     >>> try:
-    ...     _ = results.ddg_femaps
+    ...     _ = results.ddg_femaps()
     ... except ValueError as e:
     ...     print(str(e))
     Cannot access ddg_femaps: raw_results is None. Initialize with load_results=True...
@@ -180,7 +180,7 @@ class BenchmarkResults:
     >>> # All RBFE submissions
     >>> rbfe_submissions = filter_results(calculation_type='rbfe')
     >>> len(rbfe_submissions)
-    7
+    8
     >>> # Submissions containing TYK2 results
     >>> tyk2_submissions = filter_results(system_name='tyk2')
     >>> # Recent OpenFE 1.x submissions
@@ -287,8 +287,7 @@ class BenchmarkResults:
 
         logger.debug(f"Loaded raw_results for {self.submission_id}")
 
-    @property
-    def dg_femaps(self) -> dict[tuple[str, str], FEMap]:
+    def dg_femaps(self, source: str | None = None) -> dict[tuple[str, str], FEMap]:
         """
         Lazy-loaded FEMaps for absolute (dg) results grouped by system.
 
@@ -297,6 +296,11 @@ class BenchmarkResults:
         - RBFE: absolute binding free energies (reference values)
 
         Results are cached after first access to avoid repeated processing.
+
+        Parameters
+        ----------
+        source : str, optional
+            Override the default source identifier. By default, uses submission_id.
 
         Returns
         -------
@@ -317,7 +321,7 @@ class BenchmarkResults:
         >>> results.calculation_type
         'asfe'
         >>> # Access absolute solvation free energies
-        >>> femaps = results.dg_femaps
+        >>> femaps = results.dg_femaps()
         >>> for (group, name), femap in femaps.items():
         ...     print(f"{group}/{name}: {femap.n_ligands} molecules")
         solvation_set/freesolv: 603 molecules
@@ -334,21 +338,21 @@ class BenchmarkResults:
         >>> results.calculation_type
         'rbfe'
         >>> # Access absolute binding free energies (reference values)
-        >>> dg_femaps = results.dg_femaps
+        >>> dg_femaps = results.dg_femaps()
         >>> for (group, name), femap in sorted(dg_femaps.items())[:2]:
         ...     print(f"{group}/{name}: {femap.n_ligands} ligands")
         jacs_set/bace: 36 ligands
         jacs_set/cdk2: 16 ligands
         >>> # These are reference values for relative calculations
-        >>> # Use ddg_femaps for relative binding free energies
+        >>> # Use ddg_femaps() for relative binding free energies
 
         **Lazy loading and caching**
 
         >>> results = get_benchmark_results('2026-08-06-openff-2.3.0-solvation_set_freesolv')
         >>> # First access triggers computation (may be slow)
-        >>> femaps1 = results.dg_femaps  # Computing FEMaps...
+        >>> femaps1 = results.dg_femaps()  # Computing FEMaps...
         >>> # Subsequent access returns cached value (instant)
-        >>> femaps2 = results.dg_femaps
+        >>> femaps2 = results.dg_femaps()
         >>> femaps1 is femaps2
         True
 
@@ -363,7 +367,7 @@ class BenchmarkResults:
         >>> results.raw_results is not None
         True
         >>> # Now FEMaps are accessible
-        >>> femaps = results.dg_femaps
+        >>> femaps = results.dg_femaps()
         """
         if self.raw_results is None:
             raise ValueError(
@@ -382,21 +386,28 @@ class BenchmarkResults:
                 f"Available keys: {list(self.raw_results.keys())}"
             )
 
-        # Build FEMaps and cache, passing calculation type
+        # Build FEMaps and cache, passing calculation type and source identifier
         logger.info("Computing FEMaps for dg results - first access may be slow")
+        source_id = source if source is not None else self.submission_id
         self._dg_femaps_cache = build_femap_from_absolute_results(
-            self.raw_results["dg"], calculation_type=self.calculation_type
+            self.raw_results["dg"],
+            calculation_type=self.calculation_type,
+            source=source_id,
         )
 
         return self._dg_femaps_cache
 
-    @property
-    def ddg_femaps(self) -> dict[tuple[str, str], FEMap]:
+    def ddg_femaps(self, source: str | None = None) -> dict[tuple[str, str], FEMap]:
         """
         Lazy-loaded FEMaps for relative (ddg) results grouped by system.
 
         Returns FEMaps with calculated and experimental binding free energy data.
         Results are cached after first access to avoid repeated processing.
+
+        Parameters
+        ----------
+        source : str, optional
+            Override the default source identifier. By default, uses submission_id.
 
         Returns
         -------
@@ -416,7 +427,7 @@ class BenchmarkResults:
         >>> results.calculation_type
         'rbfe'
         >>> # Access relative binding free energies (returns dict of cinnabar FEMaps)
-        >>> femaps = results.ddg_femaps
+        >>> femaps = results.ddg_femaps()
         >>> for (group, name), femap in sorted(femaps.items())[:2]:
         ...     print(f"{group}/{name}: {femap.n_edges} transformations")  # doctest: +ELLIPSIS
         charge_annihilation_set/egfr: ... transformations
@@ -429,9 +440,9 @@ class BenchmarkResults:
 
         >>> results = get_benchmark_results('2026-03-18-openmm-840-qa-testing')
         >>> # First access triggers computation (may be slow for large networks)
-        >>> femaps1 = results.ddg_femaps  # Computing FEMaps...
+        >>> femaps1 = results.ddg_femaps()  # Computing FEMaps...
         >>> # Subsequent access returns cached value (instant)
-        >>> femaps2 = results.ddg_femaps
+        >>> femaps2 = results.ddg_femaps()
         >>> femaps1 is femaps2
         True
 
@@ -444,7 +455,7 @@ class BenchmarkResults:
         >>> # Load computational results when needed
         >>> results.load_raw_results()
         >>> # Now ddg_femaps are accessible
-        >>> femaps = results.ddg_femaps
+        >>> femaps = results.ddg_femaps()
         """
         if self.raw_results is None:
             raise ValueError(
@@ -462,10 +473,11 @@ class BenchmarkResults:
         if self._ddg_femaps_cache is not None:
             return self._ddg_femaps_cache
 
-        # Build FEMaps and cache
+        # Build FEMaps and cache, passing source identifier
         logger.info("Computing FEMaps for ddg results - first access may be slow")
+        source_id = source if source is not None else self.submission_id
         self._ddg_femaps_cache = build_femap_from_relative_results(
-            self.raw_results["ddg"]
+            self.raw_results["ddg"], source=source_id
         )
 
         return self._ddg_femaps_cache
@@ -618,7 +630,7 @@ def get_benchmark_results(
     >>> results.calculation_type
     'rbfe'
     >>> # Access computational data
-    >>> ddg_femaps = results.ddg_femaps  # Lazy-loaded FEMaps
+    >>> ddg_femaps = results.ddg_femaps()  # Lazy-loaded FEMaps
     >>> len(results.raw_results['ddg'])
     80
 
@@ -650,12 +662,12 @@ def get_benchmark_results(
 
     >>> results = get_benchmark_results('2026-02-12_sage_230_jacs_set')
     >>> # Access lazy-loaded FEMaps (computed on first access)
-    >>> for (group, name), femap in sorted(results.ddg_femaps.items())[:2]:
+    >>> for (group, name), femap in sorted(results.ddg_femaps().items())[:2]:
     ...     print(f"{name}: {femap.n_edges} transformations")
     bace: 49 transformations
     cdk2: 24 transformations
     >>> # FEMaps cached after first access
-    >>> results.ddg_femaps is results.ddg_femaps
+    >>> results.ddg_femaps() is results.ddg_femaps()
     True
     """
     # Construct and validate paths
@@ -748,8 +760,8 @@ def filter_results(
     >>> # Submissions since 2026
     >>> results = filter_results(date='>=2026-01-01')
     >>>
-    >>> # OpenFE version 1.x (use version range syntax)
-    >>> results = filter_results(openfe_version='>=1.0.0,<2.0.0')
+    >>> # OpenFE version 1.x or newer
+    >>> results = filter_results(openfe_version='>=1.0.0')
     >>>
     >>> # Recent submissions with specific OpenMM version
     >>> results = filter_results(date='>2025-01-01', openmm_version='>=8.1.0')
@@ -772,8 +784,8 @@ def filter_results(
 
     **Nested field access**
 
-    >>> # Filter by nested protocol settings
-    >>> results = filter_results(protocol_settings__temperature='>298 K')
+    >>> # Filter by nested protocol settings (quantity comparisons work on quantity strings)
+    >>> results = filter_results(protocol_settings__temperature='>298 kelvin')
     >>>
     >>> # Filter by benchmark data provenance
     >>> results = filter_results(benchmark_data__system_name='tyk2')
@@ -808,7 +820,7 @@ def filter_results(
     >>>
     >>> # Recent OpenFE 1.x submissions for TYK2 or MCL1
     >>> results = filter_results(
-    ...     openfe_version='>=1.0.0,<2.0.0',
+    ...     openfe_version='>=1.0.0',
     ...     date='>2025-06-01',
     ...     system_name=['tyk2', 'mcl1']
     ... )

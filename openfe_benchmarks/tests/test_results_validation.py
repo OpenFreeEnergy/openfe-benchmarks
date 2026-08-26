@@ -26,11 +26,11 @@ def _trigger_available_femaps(benchmark_result):
     loaded_any = False
 
     if "ddg" in benchmark_result.raw_results:
-        _ = benchmark_result.ddg_femaps
+        _ = benchmark_result.ddg_femaps()
         loaded_any = True
 
     if "dg" in benchmark_result.raw_results:
-        _ = benchmark_result.dg_femaps
+        _ = benchmark_result.dg_femaps()
         loaded_any = True
 
     assert loaded_any, (
