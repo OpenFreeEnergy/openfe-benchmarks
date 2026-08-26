@@ -596,6 +596,23 @@ def test_filter_comparison_openff_toolkit_version():
     assert isinstance(filtered, list)
 
 
+def test_filter_comparison_pontibus_version():
+    """Test comparison on pontibus_version field."""
+    filtered = filter_results(pontibus_version=">=0.4.0")
+
+    # Should return results if version matches
+    assert isinstance(filtered, list)
+
+
+def test_filter_exact_match_pontibus_version():
+    """Test exact match filtering on pontibus_version field."""
+    filtered = filter_results(pontibus_version="0.4.0")
+
+    # Should return submissions with pontibus_version='0.4.0'
+    assert isinstance(filtered, list)
+    assert all(sub.pontibus_version == "0.4.0" for sub in filtered)
+
+
 def test_filter_comparison_warning_non_version_field():
     """Test that warning is issued when comparison operators used with non-date/version fields."""
     with pytest.warns(

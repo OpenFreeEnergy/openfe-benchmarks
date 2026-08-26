@@ -98,6 +98,8 @@ class BenchmarkResults:
         OpenMM version string
     openff_toolkit_version : str, optional
         OpenFF Toolkit version string
+    pontibus_version : str, optional
+        Pontibus version string
     mapper : str, optional
         Mapper name and version
     forcefield : list[str] | str, optional
@@ -146,6 +148,7 @@ class BenchmarkResults:
     mapper: Optional[str] = None
     forcefield: Optional[list[str] | str] = None
     small_molecule_forcefield: Optional[str] = None
+    pontibus_version: Optional[str] = None
 
     # Computed fields (not from YAML, set by get_benchmark_results)
     raw_results: Optional[dict] = field(default=None, repr=False)
@@ -423,6 +426,7 @@ def _extract_benchmark_fields(yaml_data: dict, submission_id: str) -> BenchmarkR
             small_molecule_forcefield=yaml_fields.pop(
                 "small_molecule_forcefield", None
             ),
+            pontibus_version=yaml_fields.pop("pontibus_version", None),
         )
     except KeyError as e:
         raise ValueError(
@@ -1000,6 +1004,7 @@ def _warn_if_nonsemantic_comparison(
         "openfe_version",
         "openmm_version",
         "openff_toolkit_version",
+        "pontibus_version",
     }
     if (
         field_name
