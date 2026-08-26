@@ -21,6 +21,7 @@ def _asfe_result_key(result: dict) -> str:
 
 def build_femap_from_relative_results(
     results: list[dict],
+    source: str = "",
 ) -> dict[tuple[str, str], FEMap]:
     """
     Build FEMaps for each of the unique combinations of system_group and system_name in the DDG results and add experimental data
@@ -36,6 +37,8 @@ def build_femap_from_relative_results(
          - system_name: str
          - ddg: Quantity
          - ddg_uncertainty: Quantity
+    source: str, default=''
+        Source of computed data, used in ``cinnabar`` for results comparisons between different BenchmarkResults.
 
     Returns
     -------
@@ -80,6 +83,7 @@ def build_femap_from_relative_results(
                 labelB=ligand_b,
                 value=result["ddg"],
                 uncertainty=result["ddg_uncertainty"],
+                source=source,
             )
 
         # add experimental data for each of the ligands in the results
@@ -96,6 +100,7 @@ def build_femap_from_relative_results(
                     uncertainty=exp_data.get(
                         "uncertainty", 0 * unit.kilocalories_per_mole
                     ),
+                    source="experimental",
                 )
 
         femaps_by_system_key[system_key] = femap
@@ -105,6 +110,7 @@ def build_femap_from_relative_results(
 def build_femap_from_absolute_results(
     results: list[dict],
     calculation_type: str = "asfe",
+    source: str = "",
 ) -> dict[tuple[str, str], FEMap]:
     """
     Build FEMaps for each of the unique combinations of system_group and system_name in the absolute results
@@ -123,6 +129,8 @@ def build_femap_from_absolute_results(
 
     calculation_type: str, default='asfe'
         Type of calculation: 'asfe' for absolute solvation, 'rbfe' for relative binding
+    source: str, default=''
+        Source of computed data, used in ``cinnabar`` for results comparisons between different BenchmarkResults.
 
     Returns
     -------
@@ -182,7 +190,7 @@ def build_femap_from_absolute_results(
                 label=label,
                 value=result["dg"],
                 uncertainty=result["dg_uncertainty"],
-                source="Computational",
+                source=source,
             )
 
         # Add experimental data if available.
@@ -211,6 +219,7 @@ def build_femap_from_absolute_results(
                     uncertainty=exp_data.get(
                         "uncertainty", 0 * unit.kilocalories_per_mole
                     ),
+                    source="experimental",
                 )
                 n_experimental_points += 1
 
