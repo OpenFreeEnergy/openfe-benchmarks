@@ -991,12 +991,12 @@ def _extract_auto_metadata(
     transformations = _transformation_refs(network_obj, network_mode)
     metadata.n_transformations = len(transformations)
     for trans in transformations:
-        system_group_system = _infer_system_group_and_name(
+        system_group_n_name = _infer_system_group_and_name(
             trans, override_system_group=system_group, override_system_name=system_name
         )
-        if system_group_system not in metadata.system_info_dict:
-            metadata.system_info_dict[system_group_system] = SystemInfo(
-                *system_group_system,
+        if system_group_n_name not in metadata.system_info_dict:
+            metadata.system_info_dict[system_group_n_name] = SystemInfo(
+                *system_group_n_name,
                 metadata.calculation_mode,
                 source_file,
                 metadata.network_key,
@@ -1004,7 +1004,7 @@ def _extract_auto_metadata(
 
         system_info = _get_system_info(trans, metadata.calculation_mode)
         for key, value in system_info.items():
-            current_attr = getattr(metadata.system_info_dict[system_group_system], key)
+            current_attr = getattr(metadata.system_info_dict[system_group_n_name], key)
             if isinstance(current_attr, set):
                 current_attr.update(value)
             elif isinstance(current_attr, list):
@@ -1017,7 +1017,7 @@ def _extract_auto_metadata(
         if metadata.calculation_mode == "rbfe":
             if len(system_info["ligands"]) == 0 or len(system_info["ligands"]) > 2:
                 raise ValueError(
-                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, set/system: {system_group_system}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, set/system: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
                 )
             ligand_start = system_info["ligands"][0]
             ligand_final = (
@@ -1026,12 +1026,12 @@ def _extract_auto_metadata(
         elif metadata.calculation_mode == "asfe":
             if len(system_info["ligands"]) < 1 or len(system_info["ligands"]) > 1:
                 raise ValueError(
-                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, set/system: {system_group_system}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, set/system: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
                 )
             ligand_start = system_info["ligands"][0]
             ligand_final = "none"
 
-        key = metadata.system_info_dict[system_group_system].make_key(
+        key = metadata.system_info_dict[system_group_n_name].make_key(
             metadata.network_key,
             ligand_start,
             system_info["cofactors"],
@@ -1085,7 +1085,7 @@ def _extract_auto_metadata(
                 )
 
         protocol_info = ProtocolSettingsInfo(**protocol_settings_dict)
-        metadata.system_info_dict[system_group_system].add_protocol_settings(
+        metadata.system_info_dict[system_group_n_name].add_protocol_settings(
             protocol_info, key
         )
 
@@ -1103,25 +1103,25 @@ def _extract_auto_metadata(
                 mapper_name = mapper_settings.get("__qualname__", "TODO").split(".")[-1]
                 mapping_algorithm = mapper_settings.get("_mapping_algorithm", "TODO")
                 mapper_str = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
-                metadata.system_info_dict[system_group_system].add_version_setting(
+                metadata.system_info_dict[system_group_n_name].add_version_setting(
                     "mapper", mapper_str, key
                 )
 
         for annotation_key, value in annotations.items():
             if "openmm" in annotation_key:
-                metadata.system_info_dict[system_group_system].add_version_setting(
+                metadata.system_info_dict[system_group_n_name].add_version_setting(
                     "openmm_version", value, annotation_key
                 )
             if "openfe" in annotation_key:
-                metadata.system_info_dict[system_group_system].add_version_setting(
+                metadata.system_info_dict[system_group_n_name].add_version_setting(
                     "openfe_version", value, annotation_key
                 )
             if "openff" in annotation_key and "toolkit" in annotation_key:
-                metadata.system_info_dict[system_group_system].add_version_setting(
+                metadata.system_info_dict[system_group_n_name].add_version_setting(
                     "openff_toolkit_version", value, annotation_key
                 )
             if "pontibus" in annotation_key:
-                metadata.system_info_dict[system_group_system].add_version_setting(
+                metadata.system_info_dict[system_group_n_name].add_version_setting(
                     "pontibus_version", value, annotation_key
                 )
 
