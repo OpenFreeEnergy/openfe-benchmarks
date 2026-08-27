@@ -1017,7 +1017,7 @@ def _extract_auto_metadata(
         if metadata.calculation_mode == "rbfe":
             if len(system_info["ligands"]) == 0 or len(system_info["ligands"]) > 2:
                 raise ValueError(
-                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, set/system: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, system_group/system_name: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
                 )
             ligand_start = system_info["ligands"][0]
             ligand_final = (
@@ -1026,7 +1026,7 @@ def _extract_auto_metadata(
         elif metadata.calculation_mode == "asfe":
             if len(system_info["ligands"]) < 1 or len(system_info["ligands"]) > 1:
                 raise ValueError(
-                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, set/system: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, system_group/system_name: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
                 )
             ligand_start = system_info["ligands"][0]
             ligand_final = "none"

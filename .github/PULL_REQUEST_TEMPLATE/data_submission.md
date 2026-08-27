@@ -16,7 +16,7 @@ Please ensure the following criteria are met before submitting the PR:
   - The source of the data
   - The method used to generate the data
   - Any assumptions or limitations
-- [ ] Ensure this new set/system is represented in `benchmark_system_indexing.yml`
+- [ ] Ensure this new system_group/system_name is represented in `benchmark_system_indexing.yml`
 - [ ] If there is a new partial charge method, it must be added to PARTIAL_CHARGE_TYPES in `_benchmark_systems.py`
 
 ## Update System Checklist
