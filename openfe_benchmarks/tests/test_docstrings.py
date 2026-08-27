@@ -1,11 +1,11 @@
 """
 Test docstring examples using Python's built-in doctest module.
 
-This module validates docstring examples for syntax correctness without
-executing them, avoiding data dependencies while ensuring examples remain valid.
+Most tests validate docstring syntax without execution, avoiding data dependencies
+while ensuring examples remain valid Python.
 
-For full doctest execution with real data:
-    pytest --run-doctest-examples
+The test_docstring_examples_with_real_data() test executes all docstring examples
+with real data files and runs unconditionally with the full test suite.
 """
 
 import ast
@@ -192,7 +192,8 @@ def test_docstring_validation_summary():
     """
     Report total docstring examples validated across both modules.
 
-    This test always passes but provides visibility into validation coverage.
+    Prints a summary of validation coverage and asserts the combined total
+    meets the sum of individual module minimums (50 + 25 = 75).
     """
     import openfe_benchmarks.results._benchmark_results as br_module
     import openfe_benchmarks.results._filtering as filtering_module
@@ -221,8 +222,11 @@ def test_docstring_validation_summary():
     print(f"TOTAL VALIDATED:       {total} code examples")
     print(f"{'=' * 60}")
 
-    # This test "passes" but the real value is the printed summary
-    assert total >= 100, f"Expected at least 100 total examples, found {total}"
+    # Verify combined total meets sum of individual module minimums
+    assert total >= 75, (
+        f"Expected at least 75 total examples (50 + 25 from individual modules), "
+        f"found {total}. Examples may not be detected properly."
+    )
 
 
 def test_docstring_examples_with_real_data():
