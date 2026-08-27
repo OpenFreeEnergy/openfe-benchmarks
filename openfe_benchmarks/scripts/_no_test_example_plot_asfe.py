@@ -53,7 +53,7 @@ def main():
         output_file = output_dir / f"{system_group}_{system_name}_DG.png"
         plotting.plot_DGs(
             femap,
-            source="Computational",
+            source=results.submission_id,
             title=f"{system_group}-{system_name}",
             figsize=5,
             scatter_kwargs={"s": 20, "marker": "o"},
