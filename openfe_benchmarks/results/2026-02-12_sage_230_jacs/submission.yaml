@@ -14,6 +14,9 @@ summary: |
 # REQUIRED: list of submission tags
 tags: [rbfe, ff14SB, phosaa10, tip3p_HFE_multivalent, tip3p_standard, openff-2.3.0, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, openfe, alchemicalarchive]
 
+# REQUIRED: calculation type (asfe, rbfe, etc.)
+calculation_type: rbfe
+
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
   - name: Josh Horton

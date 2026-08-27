@@ -3,8 +3,9 @@ channels:
   - conda-forge
 dependencies:
   - gufe
-  - openfe<1.9
+  - openfe<1.9 # From alchemiscale stack dependence?
   - pytest
   - pre-commit
   - pontibus==0.4.0
   - pint
+#  - cinnabar >= 0.6.1

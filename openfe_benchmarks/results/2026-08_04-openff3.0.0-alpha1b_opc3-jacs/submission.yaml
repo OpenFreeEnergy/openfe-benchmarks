@@ -15,7 +15,10 @@ summary: |
   resources/submissions/2026_07_15_openff-3.0.0-alpha1b_opc3/alchemiscale_submission.ipynb
 
 # REQUIRED: list of submission tags
-tags: [rbfe, opc3.offxml, openff-3.0.0-alpha1b, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, openfe]
+tags: [rbfe, alchemicalarchive, opc3.offxml, openff-3.0.0-alpha1b, bace, cdk2, jacs_set, jnk1, mcl1, p38, ptp1b, thrombin, tyk2, nagl_openff-gnn-am1bcc-1.0.0.pt, benchmark, pontibus]
+
+# REQUIRED: calculation type (asfe, rbfe, etc.)
+calculation_type: rbfe
 
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
@@ -26,6 +29,7 @@ date: 2026-08-04
 openfe_version: 1.8.0
 openmm_version: 8.2.0
 openff_toolkit_version: 0.18
+pontibus_version: "0.4.0"
 mapper: "KartografAtomMapper 1.2.0 (LSA)"
 forcefield: ["opc3.offxml", "openff-3.0.0-alpha1b"]
 small_molecule_forcefield: "openff-3.0.0-alpha1b"

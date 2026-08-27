@@ -5,6 +5,8 @@ Uses the Python API directly to invoke the three-step workflow:
 1. Pull alchemical network from Alchemiscale
 2. Generate computational results
 3. Generate submission metadata
+
+Also works for ASFEs
 """
 
 import logging
@@ -32,7 +34,7 @@ SUMMARY_SUFFIX = (
     " and provide an indication of the variability in results. For scripts to generate this network: "
     "github.com/openforcefield/alchemical-benchmark-resources/submissions/2026_03_17_openff-2.3.0_jacs_tyk2/alchemiscale_submission.ipynb"
 )
-TAGS = "rbfe,benchmark,openfe"
+TAGS = ""
 OPENFE_VER = "1.8.0"
 OPENMM_VER = "8.2.0"
 OFFTOOL_VER = "0.18"

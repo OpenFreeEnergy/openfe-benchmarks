@@ -276,6 +276,7 @@ class SystemInfo:
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
     mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
         default_factory=list
@@ -334,6 +335,7 @@ class AutoMetadata:
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
     mapper: list[tuple[str, list[str]]] = field(default_factory=list)
     protocols: list[tuple[str, list[str]]] = field(default_factory=list)
     forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
@@ -351,6 +353,7 @@ class AutoMetadata:
         self.openfe_version = []
         self.openmm_version = []
         self.openff_toolkit_version = []
+        self.pontibus_version = []
         self.mapper = []
         self.protocols = []
         self.forcefield = []
@@ -365,6 +368,8 @@ class AutoMetadata:
                 _add_value_with_keys(self.openmm_version, version, keys)
             for version, keys in system_info.openff_toolkit_version:
                 _add_value_with_keys(self.openff_toolkit_version, version, keys)
+            for version, keys in system_info.pontibus_version:
+                _add_value_with_keys(self.pontibus_version, version, keys)
             for mapper_info, keys in system_info.mapper:
                 _add_value_with_keys(self.mapper, mapper_info, keys)
 
@@ -595,8 +600,12 @@ def _infer_benchmark_data_set_system(
             If an override conflicts with an existing annotation value.
     """
     # Store original annotation values to detect conflicts
-    original_benchmark_set = trans.mapping.annotations.get("system_group", None)
-    original_system = trans.mapping.annotations.get("system_name", None)
+    if trans.mapping is None:
+        original_benchmark_set = None
+        original_system = None
+    else:
+        original_benchmark_set = trans.mapping.annotations.get("system_group", None)
+        original_system = trans.mapping.annotations.get("system_name", None)
 
     benchmark_set = original_benchmark_set
     system = original_system
@@ -1078,10 +1087,14 @@ def _extract_auto_metadata(
             protocol_info, key
         )
 
-        annotations = trans.mapping.annotations
+        annotations = trans.mapping.annotations if trans.mapping is not None else {}
 
-        # Extract mapper info if available (Option 1: concatenated string)
-        if "mapper_settings" in annotations and "mapper_version" in annotations:
+        # Extract mapper info if available (only for RBFE)
+        if (
+            metadata.calculation_mode in ["rbfe", "septop"]
+            and "mapper_settings" in annotations
+            and "mapper_version" in annotations
+        ):
             mapper_settings = annotations.get("mapper_settings")
             mapper_version = annotations.get("mapper_version", "TODO")
             if isinstance(mapper_settings, dict):
@@ -1104,6 +1117,10 @@ def _extract_auto_metadata(
             if "openff" in annotation_key and "toolkit" in annotation_key:
                 metadata.system_info_dict[benchmark_set_system].add_version_setting(
                     "openff_toolkit_version", value, annotation_key
+                )
+            if "pontibus" in annotation_key:
+                metadata.system_info_dict[benchmark_set_system].add_version_setting(
+                    "pontibus_version", value, annotation_key
                 )
 
     metadata.update_from_system_info()
@@ -1344,12 +1361,12 @@ def _build_content_summary(
     else:
         if len(unique_sets) > 1:
             summary_parts = [
-                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
+                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents and {charge_info} for solutes and cofactors.",
                 f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique solutes, and {len(all_structures['solvents'])} unique solvents.",
             ]
         else:
             summary_parts = [
-                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents, and {small_mol_ff_info} with {charge_info} for solutes and cofactors.",
+                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents and {charge_info} for solutes and cofactors.",
                 f"The archive contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique solutes and {len(all_structures['solvents'])} unique solvents.",
             ]
 
@@ -1706,11 +1723,29 @@ def _make_submission_yaml(
     license_name: str,
     results_file: str,
     submission_date: date | str | None = None,
+    network_mode: str = "alchemicalnetwork",
 ) -> str:
     if not authors:
         authors = ["TODO add author name"]
 
-    tags_yaml = ", ".join(tags)
+    # Add calculation type and protocol libraries to tags
+    enhanced_tags = list(tags)
+    enhanced_tags.append(metadata.calculation_mode)
+    enhanced_tags.append(network_mode)
+
+    # Extract unique protocol libraries
+    protocol_libraries = set()
+    for protocol_settings, _ in metadata.protocol_settings_list:
+        if (
+            protocol_settings.protocol_library
+            and protocol_settings.protocol_library != "TODO"
+        ):
+            protocol_libraries.add(protocol_settings.protocol_library)
+    for lib in sorted(protocol_libraries):
+        enhanced_tags.append(lib)
+
+    # Remove duplicates while preserving order.
+    tags_yaml = ", ".join(dict.fromkeys(enhanced_tags))
     authors_yaml = "\n".join(f"  - name: {name}" for name in authors)
     protocol_settings_yaml = _render_protocol_settings_yaml(
         metadata.protocol_settings_list
@@ -1725,18 +1760,37 @@ def _make_submission_yaml(
     openff_toolkit_version_yaml = _render_keyed_values_yaml(
         "openff_toolkit_version", metadata.openff_toolkit_version, "version", "edges"
     )
-    mapper_yaml = _render_keyed_values_yaml(
-        "mapper", metadata.mapper, "mapper", "edges"
-    )
+    # Render pontibus_version if we have it, otherwise check if pontibus was used
+    if metadata.pontibus_version:
+        pontibus_version_yaml = _render_keyed_values_yaml(
+            "pontibus_version", metadata.pontibus_version, "version", "edges"
+        )
+    else:
+        # Check if pontibus was used by looking at protocol libraries
+        pontibus_used = any(lib == "pontibus" for lib, _ in metadata.protocol_libraries)
+        if pontibus_used:
+            pontibus_version_yaml = "pontibus_version: TODO"
+        else:
+            pontibus_version_yaml = "pontibus_version: None"
+    if metadata.calculation_mode in ["rbfe", "septop"]:
+        mapper_yaml = _render_keyed_values_yaml(
+            "mapper", metadata.mapper, "mapper", "edges"
+        )
+    else:
+        mapper_yaml = ""
     forcefield_yaml = _render_keyed_values_yaml(
         "forcefield", metadata.forcefield, "forcefield", "edges"
     )
-    small_molecule_forcefield_yaml = _render_keyed_values_yaml(
-        "small_molecule_forcefield",
-        metadata.small_molecule_forcefield,
-        "small_molecule_forcefield",
-        "edges",
-    )
+    if metadata.calculation_mode in ["rbfe", "septop"]:
+        small_molecule_forcefield_yaml = _render_keyed_values_yaml(
+            "small_molecule_forcefield",
+            metadata.small_molecule_forcefield,
+            "small_molecule_forcefield",
+            "edges",
+        )
+    else:
+        small_molecule_forcefield_yaml = ""
+
     partial_charges_yaml = _render_keyed_values_yaml(
         "partial_charges",
         metadata.partial_charges,
@@ -1759,6 +1813,9 @@ summary: |
 # REQUIRED: list of submission tags
 tags: [{tags_yaml}]
 
+# REQUIRED: calculation type (asfe, rbfe, etc.)
+calculation_type: {metadata.calculation_mode}
+
 # REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
 authors:
 {authors_yaml}
@@ -1768,6 +1825,7 @@ date: {submission_date}
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
+{pontibus_version_yaml}
 {mapper_yaml}
 {forcefield_yaml}
 {small_molecule_forcefield_yaml}
@@ -1832,21 +1890,39 @@ def _make_zenodo_description(
         "version",
         "edges",
     )
+    # Render pontibus_version if we have it, otherwise check if pontibus was used
+    if metadata.pontibus_version:
+        pontibus_version_yaml = _render_keyed_values_yaml(
+            "pontibus_version", metadata.pontibus_version, "version", "edges"
+        )
+    else:
+        # Check if pontibus was used by looking at protocol libraries
+        pontibus_used = any(lib == "pontibus" for lib, _ in metadata.protocol_libraries)
+        if pontibus_used:
+            pontibus_version_yaml = "pontibus_version: TODO"
+        else:
+            pontibus_version_yaml = "pontibus_version: None"
     forcefield_yaml = _render_keyed_values_yaml(
         "forcefield", metadata.forcefield, "forcefield", "edges"
     )
 
     # make the user add the charges manually as ligand charges might take priority over those in the protocol settings
     partial_charges_yaml = "partial_charges: TODO"
-    mapper_yaml = _render_keyed_values_yaml(
-        "mapper", metadata.mapper, "mapper", "edges"
-    )
-    small_molecule_forcefield_yaml = _render_keyed_values_yaml(
-        "small_molecule_forcefield",
-        metadata.small_molecule_forcefield,
-        "small_molecule_forcefield",
-        "edges",
-    )
+    if mode in ["rbfe", "septop"]:
+        mapper_yaml = _render_keyed_values_yaml(
+            "mapper", metadata.mapper, "mapper", "edges"
+        )
+    else:
+        mapper_yaml = ""
+    if mode in ["rbfe", "septop"]:
+        small_molecule_forcefield_yaml = _render_keyed_values_yaml(
+            "small_molecule_forcefield",
+            metadata.small_molecule_forcefield,
+            "small_molecule_forcefield",
+            "edges",
+        )
+    else:
+        small_molecule_forcefield_yaml = ""
 
     # Build network keys to systems mapping section
     network_keys_section = ""
@@ -1886,14 +1962,15 @@ This submission is linked from the OpenFE Benchmarks repository:
 {openfe_version_yaml}
 {openmm_version_yaml}
 {openff_toolkit_version_yaml}
+{pontibus_version_yaml}
 
 {network_keys_section}
 
 ## Recommended Descriptors
-{forcefield_yaml}
-{small_molecule_forcefield_yaml}
 {partial_charges_yaml}
 {mapper_yaml}
+{forcefield_yaml}
+{small_molecule_forcefield_yaml}
 
 {benchmark_system_yaml}
 
@@ -1933,7 +2010,7 @@ def process_network(
     systems: Any = None,
     output_dir: Path = Path("."),
     submission_id: str | None = None,
-    tags: str = "openfe,alchemicalarchive",
+    tags: str = "",
     author: list[str] | None = None,
     license: str = "CC-BY-4.0",
     used_alchemiscale: bool = True,
@@ -1947,6 +2024,7 @@ def process_network(
     openfe_version: str | None = None,
     openmm_version: str | None = None,
     openff_toolkit_version: str | None = None,
+    pontibus_version: str | None = None,
 ) -> tuple[Path, Path]:
     """Generate submission metadata from one or more archived OpenFE JSON networks.
 
@@ -2010,6 +2088,9 @@ def process_network(
         auto-detected versions from the archive.
     openff_toolkit_version:
         Optional OpenFF Toolkit version string to include in metadata instead of any
+        auto-detected versions from the archive.
+    pontibus_version:
+        Optional Pontibus version string to include in metadata instead of any
         auto-detected versions from the archive.
 
     Notes
@@ -2077,12 +2158,14 @@ def process_network(
     # Process all input files and collect metadata
     all_network_objs: list[dict[str, Any]] = []
     modes: set[str] = set()
+    network_modes: set[str] = set()
     all_network_keys: list[str] = []
     all_metadata: list[AutoMetadata] = []
     for input_path in input_paths:
         resolved_path = input_path.resolve()
         network_obj, network_mode = _load_network(resolved_path)
         all_network_objs.append(network_obj)
+        network_modes.add(network_mode)
 
         override_group, override_name = system_overrides.get(
             resolved_path, (system_group, system_name)
@@ -2103,7 +2186,12 @@ def process_network(
         raise ValueError(
             f"Mixed modes detected across input files: {modes}. All files must be either ASFE or RBFE."
         )
+    if len(network_modes) > 1:
+        raise ValueError(
+            f"Mixed network modes detected across input files: {network_modes}. All files must be either AlchemicalArchive or AlchemicalNetwork."
+        )
     mode = modes.pop()
+    network_mode = network_modes.pop()
 
     # Merge metadata from all files
     merged_metadata = AutoMetadata()
@@ -2121,6 +2209,7 @@ def process_network(
             "openmm_version",
             "openfe_version",
             "openff_toolkit_version",
+            "pontibus_version",
             "forcefield",
             "partial_charges",
             "small_molecule_forcefield",
@@ -2164,6 +2253,8 @@ def process_network(
         merged_metadata.openff_toolkit_version = [
             (openff_toolkit_version, ["override"])
         ]
+    if pontibus_version is not None:
+        merged_metadata.pontibus_version = [(pontibus_version, ["override"])]
 
     # Build content summary from combined data
     # Get list of source file names
@@ -2215,6 +2306,7 @@ def process_network(
         license_name=license,
         results_file=results_file,
         submission_date=submission_date,
+        network_mode=network_mode,
     )
     submission_yaml_path.write_text(submission_yaml_text)
 
@@ -2301,8 +2393,8 @@ def main():
         "-t",
         "--tags",
         type=str,
-        default="openfe,alchemicalarchive",
-        help="Comma-separated tags (default: 'openfe,alchemicalarchive')",
+        default="",
+        help="Comma-separated extra tags to append (default: none)",
     )
 
     parser.add_argument(
@@ -2394,6 +2486,13 @@ def main():
     )
 
     parser.add_argument(
+        "--pontibus-version",
+        type=str,
+        default=None,
+        help="Override the Pontibus version written into submission metadata.",
+    )
+
+    parser.add_argument(
         "--small-molecule-forcefield",
         type=str,
         default=None,
@@ -2442,6 +2541,7 @@ def main():
         openfe_version=args.openfe_version,
         openmm_version=args.openmm_version,
         openff_toolkit_version=args.openff_toolkit_version,
+        pontibus_version=args.pontibus_version,
     )
     logger.info("\n✓ Successfully generated submission metadata")
 
