@@ -559,3 +559,70 @@ def test_ci_hybrid_workflow():
     assert total_100 < 360, (
         f"Extrapolated CI time {total_100:.1f}s exceeds 6 min target"
     )
+
+
+def test_submission_id_date_format():
+    """
+    Test that all submission_ids use hyphenated date format (YYYY-MM-DD).
+
+    Success criteria:
+    - All submission_ids with dates use hyphens (YYYY-MM-DD) not underscores (YYYY_MM_DD)
+    - Follows ISO 8601 standard for dates
+    - Ensures consistency across all submissions
+
+    Note: This only validates the date portion. The separator between date and
+    the rest of the submission_id can be either hyphen or underscore.
+    """
+    import re
+
+    all_ids = get_all_submission_ids()
+
+    assert len(all_ids) > 0, "Expected at least one submission in results directory"
+
+    print(f"\n{'=' * 60}")
+    print(f"Submission ID Date Format Validation: {len(all_ids)} submissions")
+    print(f"{'=' * 60}")
+
+    # Pattern for date with underscores (invalid format)
+    underscore_date_pattern = re.compile(r"^\d{4}_\d{2}_\d{2}")
+    # Pattern for date with hyphens (valid format, ISO 8601)
+    hyphen_date_pattern = re.compile(r"^\d{4}-\d{2}-\d{2}")
+
+    invalid_submissions = []
+
+    for submission_id in all_ids:
+        has_underscore_date = underscore_date_pattern.match(submission_id)
+        has_hyphen_date = hyphen_date_pattern.match(submission_id)
+
+        if has_underscore_date:
+            status = "✗"
+            invalid_submissions.append(submission_id)
+            print(
+                f"  {status} {submission_id} - uses YYYY_MM_DD (should be YYYY-MM-DD)"
+            )
+        elif has_hyphen_date:
+            status = "✓"
+            print(f"  {status} {submission_id} - correct format (YYYY-MM-DD)")
+        else:
+            # No date pattern detected, which is okay
+            status = "○"
+            print(f"  {status} {submission_id} - no date prefix (okay)")
+
+    print(f"{'=' * 60}\n")
+
+    # Assert all submission_ids with dates use hyphenated format
+    if invalid_submissions:
+        error_msg = (
+            f"\n{len(invalid_submissions)} submission(s) use underscored date format (YYYY_MM_DD).\n"
+            f"All dates must use hyphenated format (YYYY-MM-DD) per ISO 8601 standard.\n\n"
+            f"Invalid submissions:\n"
+        )
+        for submission_id in invalid_submissions:
+            # Suggest corrected name
+            corrected = submission_id.replace(
+                underscore_date_pattern.match(submission_id).group(0),
+                underscore_date_pattern.match(submission_id).group(0).replace("_", "-"),
+            )
+            error_msg += f"  - {submission_id}\n"
+            error_msg += f"    Suggested: {corrected}\n"
+        assert False, error_msg
