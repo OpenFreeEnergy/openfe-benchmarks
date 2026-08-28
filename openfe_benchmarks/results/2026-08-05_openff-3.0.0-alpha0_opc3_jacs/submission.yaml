@@ -1,8 +1,8 @@
 # REQUIRED: unique, kebab-case identifier for this submission
-submission_id: 2026_08_05_openff-3.0.0-alpha0_opc3_jacs
+submission_id: 2026-08-05_openff-3.0.0-alpha0_opc3_jacs
 
 # REQUIRED: short descriptive title
-title: OpenFE RBFE - jacs_set (8 systems) - 2026_08_05_openff-3.0.0-alpha0_opc3_jacs
+title: OpenFE RBFE - jacs_set (8 systems) - 2026-08-05_openff-3.0.0-alpha0_opc3_jacs
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |

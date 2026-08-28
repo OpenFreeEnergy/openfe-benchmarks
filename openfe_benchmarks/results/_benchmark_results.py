@@ -219,6 +219,8 @@ class BenchmarkResults:
     # FEMap caches (private)
     _dg_femaps_cache: Optional[dict] = field(default=None, repr=False, init=False)
     _ddg_femaps_cache: Optional[dict] = field(default=None, repr=False, init=False)
+    _dg_femaps_source: Optional[str] = field(default=None, repr=False, init=False)
+    _ddg_femaps_source: Optional[str] = field(default=None, repr=False, init=False)
 
     def __post_init__(self):
         """
@@ -242,9 +244,11 @@ class BenchmarkResults:
         if isinstance(self.archive, dict):
             self.archive = Archive(**self.archive)
 
-        # Initialize FEMap caches
+        # Initialize FEMap caches and source tracking
         self._dg_femaps_cache = None
         self._ddg_femaps_cache = None
+        self._dg_femaps_source = None
+        self._ddg_femaps_source = None
 
     def __repr__(self):
         """Return concise string representation with submission_id and calculation_type."""
@@ -287,7 +291,9 @@ class BenchmarkResults:
 
         logger.debug(f"Loaded raw_results for {self.submission_id}")
 
-    def dg_femaps(self, source: str | None = None) -> dict[tuple[str, str], FEMap]:
+    def dg_femaps(
+        self, source: str | None = None, force_source_update: bool = False
+    ) -> dict[tuple[str, str], FEMap]:
         """
         Lazy-loaded FEMaps for absolute (dg) results grouped by system.
 
@@ -301,6 +307,12 @@ class BenchmarkResults:
         ----------
         source : str, optional
             Override the default source identifier. By default, uses submission_id.
+            If FEMaps are already cached with a different source, raises ValueError
+            unless force_source_update=True.
+        force_source_update : bool, default False
+            If True, regenerate FEMaps with the new source even if already cached
+            with a different source. Use when you need to switch sources for the
+            same submission object.
 
         Returns
         -------
@@ -310,7 +322,8 @@ class BenchmarkResults:
         Raises
         ------
         ValueError
-            If raw_results is None (load_results=False was used) or if 'dg' key not found
+            If raw_results is None (load_results=False was used), if 'dg' key not found,
+            or if source differs from cached source without force_source_update=True
 
         Examples
         --------
@@ -375,9 +388,25 @@ class BenchmarkResults:
                 "Initialize with load_results=True to access computational data."
             )
 
-        # Return cached value if available
+        # Determine the source identifier for this call
+        source_id = source if source is not None else self.submission_id
+        logger.debug(f"dg_femaps called with source={source_id!r}")
+
+        # Check if cache exists and source matches
         if self._dg_femaps_cache is not None:
-            return self._dg_femaps_cache
+            if self._dg_femaps_source == source_id:
+                logger.debug(f"Returning cached dg_femaps with source={source_id!r}")
+                return self._dg_femaps_cache
+            elif not force_source_update:
+                raise ValueError(
+                    f"dg_femaps was already computed with source={self._dg_femaps_source!r}, "
+                    f"but you are requesting source={source_id!r}. "
+                    f"To regenerate with the new source, pass force_source_update=True."
+                )
+            else:
+                logger.info(
+                    f"Regenerating dg_femaps with new source={source_id!r} (previous: {self._dg_femaps_source!r})"
+                )
 
         # Build FEMaps from absolute results (both ASFE and RBFE supported)
         if "dg" not in self.raw_results:
@@ -388,16 +417,18 @@ class BenchmarkResults:
 
         # Build FEMaps and cache, passing calculation type and source identifier
         logger.info("Computing FEMaps for dg results - first access may be slow")
-        source_id = source if source is not None else self.submission_id
         self._dg_femaps_cache = build_femap_from_absolute_results(
             self.raw_results["dg"],
             calculation_type=self.calculation_type,
             source=source_id,
         )
+        self._dg_femaps_source = source_id
 
         return self._dg_femaps_cache
 
-    def ddg_femaps(self, source: str | None = None) -> dict[tuple[str, str], FEMap]:
+    def ddg_femaps(
+        self, source: str | None = None, force_source_update: bool = False
+    ) -> dict[tuple[str, str], FEMap]:
         """
         Lazy-loaded FEMaps for relative (ddg) results grouped by system.
 
@@ -408,6 +439,12 @@ class BenchmarkResults:
         ----------
         source : str, optional
             Override the default source identifier. By default, uses submission_id.
+            If FEMaps are already cached with a different source, raises ValueError
+            unless force_source_update=True.
+        force_source_update : bool, default False
+            If True, regenerate FEMaps with the new source even if already cached
+            with a different source. Use when you need to switch sources for the
+            same submission object.
 
         Returns
         -------
@@ -417,7 +454,8 @@ class BenchmarkResults:
         Raises
         ------
         ValueError
-            If raw_results is None (load_results=False was used) or if 'ddg' key not found
+            If raw_results is None (load_results=False was used), if 'ddg' key not found,
+            or if source differs from cached source without force_source_update=True
 
         Examples
         --------
@@ -469,16 +507,32 @@ class BenchmarkResults:
                 f"Available keys: {list(self.raw_results.keys())}"
             )
 
-        # Return cached value if available
+        # Determine the source identifier for this call
+        source_id = source if source is not None else self.submission_id
+        logger.debug(f"ddg_femaps called with source={source_id!r}")
+
+        # Check if cache exists and source matches
         if self._ddg_femaps_cache is not None:
-            return self._ddg_femaps_cache
+            if self._ddg_femaps_source == source_id:
+                logger.debug(f"Returning cached ddg_femaps with source={source_id!r}")
+                return self._ddg_femaps_cache
+            elif not force_source_update:
+                raise ValueError(
+                    f"ddg_femaps was already computed with source={self._ddg_femaps_source!r}, "
+                    f"but you are requesting source={source_id!r}. "
+                    f"To regenerate with the new source, pass force_source_update=True."
+                )
+            else:
+                logger.info(
+                    f"Regenerating ddg_femaps with new source={source_id!r} (previous: {self._ddg_femaps_source!r})"
+                )
 
         # Build FEMaps and cache, passing source identifier
         logger.info("Computing FEMaps for ddg results - first access may be slow")
-        source_id = source if source is not None else self.submission_id
         self._ddg_femaps_cache = build_femap_from_relative_results(
             self.raw_results["ddg"], source=source_id
         )
+        self._ddg_femaps_source = source_id
 
         return self._ddg_femaps_cache
 

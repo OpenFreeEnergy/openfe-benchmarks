@@ -50,7 +50,7 @@ benchmark_data:
 
 
 # REQUIRED: results file
-results: computational_results.json
+results: computational_results.json.bz2
 
 # REQUIRED: long-term archive pointer (at least doi or url)
 archive:
