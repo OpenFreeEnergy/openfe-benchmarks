@@ -513,8 +513,10 @@ class BenchmarkResults:
 
         # Check if cache exists and source matches
         if self._ddg_femaps_cache is not None:
-            if self._ddg_femaps_source == source_id:
-                logger.debug(f"Returning cached ddg_femaps with source={source_id!r}")
+            if self._ddg_femaps_source == source_id or source is None:
+                logger.debug(
+                    f"Returning cached ddg_femaps with source={self._ddg_femaps_source!r}"
+                )
                 return self._ddg_femaps_cache
             elif not force_source_update:
                 raise ValueError(
