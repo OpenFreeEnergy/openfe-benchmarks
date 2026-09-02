@@ -15,7 +15,7 @@ summary: |
   for ligands, solutes, and cofactors. The submission contains 1690 edges, 411 unique ligands. 4
   systems include cofactors (EPE-1, cofactors_molecule, cofactors_molecule1, glycerol,
   pfkfb3_automap_cofactor1, pfkfb3_automap_cofactor2, pfkfb3_automap_cofactor3). Results are derived
-  from archived Alchemiscale workflow data.
+  from archived Alchemiscale workflow data. The results interpolate the 1-4 exceptions using the `turn_off_core_unique_exceptions` setting.
 
 # REQUIRED: list of submission tags
 tags: [rbfe, openff-2.3.0, bace_ciordia_prospective, bace_p3_arg368_in, brd4, btk, cdk8, chk1, ciordia_retro, cmet, eg5, faah, fragments, galectin, hif2a, hiv1_protease, hne, hsp90_2rings, hsp90_kung, hsp90_single_ring, hsp90_woodhead, jak2_set1, jak2_set2, janssen_bace, keranen_p2, liga, mcl1, mcs_docking_set, merck, miscellaneous_set, mup1, p38, pfkfb3, renin, scyt_dehyd, shp2, syk, t4_lysozyme, taf12, thrombin, tnks2, urokinase, water_set, nagl_openff-gnn-am1bcc-1.0.0.pt, alchemicalarchive, openfe]
