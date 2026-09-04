@@ -16,7 +16,7 @@ Main functions include:
 """
 
 from dataclasses import dataclass
-from typing import Optional, Any, Union, Protocol
+from typing import Optional, Any, Union, Protocol, Literal
 from datetime import date as date_type
 import fnmatch
 import re
@@ -38,6 +38,7 @@ __all__ = [
 
 # Type aliases
 FilterValue = Union[str, list, Any]
+TagsMode = Literal["all", "any"]
 
 
 # ============================================================================
@@ -160,16 +161,40 @@ class VersionComparisonStrategy:
             except (ValueError, pint.errors.UndefinedUnitError, TypeError):
                 pass
 
-        # Fall back to version comparison
+        # Fall back to semantic version comparison.
+        # Right-hand value is user filter input: invalid values should raise.
         try:
-            left_ver = Version(str(left))
             right_ver = Version(str(right))
-            return _apply_operator(left_ver, right_ver, operator)
         except (InvalidVersion, TypeError) as e:
             raise ValueError(
-                f"Invalid version filter value. Cannot parse '{left}' or '{right}' as semantic version. "
-                f"Comparison operators with non-version fields are not supported: {e}"
+                f"Invalid version filter value '{right}'. "
+                "Use a semantic version string like '1.2.3': "
+                f"{e}"
             )
+
+        # Left-hand value comes from submission data.
+        # Missing values should not match version comparisons.
+        if left is None:
+            return False
+
+        if isinstance(left, str):
+            left_normalized = left.strip()
+            if left_normalized == "" or left_normalized.lower() in {"none", "null"}:
+                return False
+        else:
+            left_normalized = str(left).strip()
+
+        # Non-missing values must be valid semantic versions.
+        try:
+            left_ver = Version(left_normalized)
+        except (InvalidVersion, TypeError) as e:
+            raise ValueError(
+                f"Invalid submission version value '{left}' for comparison. "
+                "Expected semantic version format like '1.2.3', or use null/None for missing values. "
+                f"Filter value was '{right}'. Details: {e}"
+            )
+
+        return _apply_operator(left_ver, right_ver, operator)
 
 
 # Registry of comparison strategies (order matters - first match wins)
@@ -451,7 +476,7 @@ def match_value(
     result_value: Any,
     filter_val: FilterValue,
     filter_key: str,
-    tags_mode: str,
+    tags_mode: TagsMode,
 ) -> bool:
     """
     Check if a result value matches a filter value.
@@ -470,7 +495,7 @@ def match_value(
         Filter value (single value, list, or wildcard pattern)
     filter_key : str
         Filter key name (for special tags handling)
-    tags_mode : str
+    tags_mode : {'all', 'any'}
         Mode for tags filtering: 'all' (AND) or 'any' (OR)
 
     Returns
@@ -641,7 +666,7 @@ def apply_filter(
     source: Any,
     filter_key: str,
     filter_val: FilterValue,
-    tags_mode: str = "all",
+    tags_mode: TagsMode = "all",
 ) -> bool:
     """
     Apply a filter to a source object.
@@ -657,7 +682,7 @@ def apply_filter(
         Filter key (may have exclude_ prefix, may have __ for nested fields)
     filter_val : FilterValue
         Filter value (single value, list, or comparison string)
-    tags_mode : str, default='all'
+    tags_mode : {'all', 'any'}, default='all'
         Mode for tags filtering: 'all' (AND) or 'any' (OR)
 
     Returns

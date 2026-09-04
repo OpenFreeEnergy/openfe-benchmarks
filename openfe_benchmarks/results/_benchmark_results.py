@@ -16,7 +16,7 @@ import logging
 from gufe.tokenization import JSON_HANDLER
 from cinnabar import FEMap
 
-from openfe_benchmarks.results._filtering import apply_filter
+from openfe_benchmarks.results._filtering import apply_filter, TagsMode
 
 from openfe_benchmarks.results._results_utils import (
     build_femap_from_absolute_results,
@@ -177,8 +177,8 @@ class BenchmarkResults:
 
     **Filtering submissions across the repository**
 
-    >>> # All RBFE submissions
-    >>> rbfe_submissions = filter_results(calculation_type='rbfe')
+    >>> # RBFE submissions before 2026-09
+    >>> rbfe_submissions = filter_results(calculation_type='rbfe', date='<2026-09-01')
     >>> len(rbfe_submissions)
     8
     >>> # Submissions containing TYK2 results
@@ -762,7 +762,7 @@ def get_benchmark_results(
 
 
 def filter_results(
-    tags_mode: str = "all", load_results: Optional[bool] = None, **filters
+    tags_mode: TagsMode = "all", load_results: Optional[bool] = None, **filters
 ) -> list[BenchmarkResults]:
     """
     Filter submissions by metadata and/or raw result-entry fields.
