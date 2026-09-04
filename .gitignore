@@ -7,6 +7,7 @@ __pycache__/
 **/zenodo_description.md
 # Test dir
 openfe_benchmarks/scripts/outputs/*
+examples/outputs/*
 
 # C extensions
 *.so

@@ -1,62 +1,67 @@
-"""Plot ASFEs, only for cinnabar >= 0.6.1, which is not compatible with current env"""
+"""Example script demonstrating BenchmarkResults API for ASFE plotting.
+
+This script showcases the new BenchmarkResults features:
+- Loading results using get_benchmark_results()
+- Filtering results with filter_results()
+- Using lazy dg_femaps() method for automatic FEMap generation
+- Generating plots using cinnabar
+
+Simply edit the SUBMISSION_ID variable to plot a different submission.
+
+Note: Requires cinnabar >= 0.6.1 for ASFE plotting support.
+"""
 
 import pathlib
-import json
-import bz2
 
-from gufe.tokenization import JSON_HANDLER
 from cinnabar import plotting
 
-from openfe_benchmarks.scripts._results_utils import build_femap_from_absolute_results
+from openfe_benchmarks.results import get_benchmark_results
 
-RESULTS_FILE = "../results/2026-08-06-openff-2.3.0-solvation_set_freesolv/computational_results.json.bz2"
+# Edit this to plot a different submission
+SUBMISSION_ID = "2026-08-06-openff-2.3.0-solvation_set_freesolv"
 OUTPUT_DIR = "outputs"
 
 
-def _load_results(results_file: str) -> dict:
-    results_path = pathlib.Path(results_file)
-
-    if not results_path.exists():
-        raise FileNotFoundError(f"Could not find results file: {results_path}")
-
-    open_func = bz2.open if "bz2" in results_file else open
-
-    with open_func(results_path, "rt") as handle:
-        return json.load(handle, cls=JSON_HANDLER.decoder)
-
-
 def main():
-    """
-    An example script which can load the calculated DG values from ASFE calculations and plot vs experimental solvation data.
+    """Load ASFE results and plot vs experimental solvation data for each system."""
 
-    This script creates plots comparing the computed absolute solvation free energies (DG)
-    to experimental values for each benchmark system.
-    """
+    print(f"Loading submission: {SUBMISSION_ID}")
+    results = get_benchmark_results(SUBMISSION_ID)
+    print(f"Loaded: {results.title}")
+    print(f"Calculation type: {results.calculation_type}")
+    print(f"Tags: {', '.join(results.tags)}")
 
-    # load the results file, whether compressed or not
-    results = _load_results(RESULTS_FILE)
-    dg_records = results.get("dg")
-    if not isinstance(dg_records, list):
+    # Verify this is an ASFE submission
+    if "dg" not in results.raw_results:
         raise ValueError(
-            f"Results file {RESULTS_FILE} does not contain a valid 'dg' list, cannot plot"
+            f"Submission {SUBMISSION_ID} does not contain 'dg' values. "
+            f"This script is for ASFE calculations only."
         )
 
-    # build FEMaps and load with experimental data
-    femaps_by_system = build_femap_from_absolute_results(results=dg_records)
+    print("\nGenerating FEMaps...")
+    femaps_by_system = results.dg_femaps()
+    print(f"Generated {len(femaps_by_system)} FEMaps:")
+    for (system_group, system_name), femap in femaps_by_system.items():
+        n_values = len(femap.graph.nodes)
+        print(f"  - {system_group}/{system_name}: {n_values} calculations")
 
     output_dir = pathlib.Path(OUTPUT_DIR)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # for each system plot the ASFE results compared to experimental data
+    print(f"\nGenerating plots in {output_dir}/...")
     for (system_group, system_name), femap in femaps_by_system.items():
+        output_file = output_dir / f"{system_group}_{system_name}_DG.png"
         plotting.plot_DGs(
             femap,
-            source="Computational",
+            source=results.submission_id,
             title=f"{system_group}-{system_name}",
             figsize=5,
             scatter_kwargs={"s": 20, "marker": "o"},
-            filename=(output_dir / f"{system_group}_{system_name}_DG.png").as_posix(),
+            filename=output_file.as_posix(),
         )
+        print(f"  Created: {output_file}")
+
+    print(f"\nComplete! Generated {len(femaps_by_system)} plots.")
 
 
 if __name__ == "__main__":
