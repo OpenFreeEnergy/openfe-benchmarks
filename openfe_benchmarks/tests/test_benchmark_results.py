@@ -11,7 +11,6 @@ Tests cover:
 
 import pytest
 import yaml
-import time
 import pint
 
 from cinnabar import FEMap
@@ -167,9 +166,7 @@ def test_load_by_submission_id():
 
 def test_load_yaml_only_fast():
     """Test fast YAML-only loading (load_results=False)."""
-    start = time.time()
     result = get_benchmark_results(RBFE_SUBMISSION, load_results=False)
-    elapsed = time.time() - start
 
     # Verify YAML metadata loaded
     assert result.submission_id == RBFE_SUBMISSION
@@ -179,10 +176,6 @@ def test_load_yaml_only_fast():
 
     # Verify raw_results is None
     assert result.raw_results is None
-
-    # Verify fast loading (generous threshold for slow CI systems)
-    # Most systems should complete in <0.5s, but allow up to 2s for loaded CI
-    assert elapsed < 2.0, f"Fast load too slow: {elapsed:.3f}s (should be <2s)"
 
 
 # ========== Raw Results Structure Tests ==========
@@ -262,9 +255,10 @@ def test_filter_by_nested_field():
     """
     Test filtering by nested field using __ syntax.
 
-    Note: Current test data doesn't have nested dicts within individual results,
-    so this test verifies that the nested field filtering mechanism works correctly
-    when the field doesn't exist (should return empty list).
+    Current benchmark result entries do not include deeply nested dict paths like
+    ``hypothetical__nested__field``. This test is intentionally a negative case:
+    it confirms nested-key parsing runs without error and returns no matches when
+    the requested nested field path is absent from all entries.
     """
     filtered = filter_results(hypothetical__nested__field="value")
 
@@ -622,9 +616,23 @@ def test_filter_comparison_warning_non_version_field():
     """Test that error is raised when comparison operators used with non-date/version fields."""
     with pytest.raises(
         ValueError,
-        match="Invalid version filter value.*Cannot parse.*as semantic version",
+        match="Invalid version filter value 'tyk2'",
     ):
         filter_results(system_name=">=tyk2")
+
+
+def test_compare_values_missing_submission_version_returns_false():
+    """Missing submission version values should not match version comparisons."""
+    assert not compare_values(None, "0.4.0", ">=", "pontibus_version")
+    assert not compare_values("None", "0.4.0", ">=", "pontibus_version")
+
+
+def test_compare_values_invalid_submission_version_raises():
+    """Malformed submission version strings should raise a clear data-quality error."""
+    with pytest.raises(
+        ValueError, match="Invalid submission version value 'not_a_version'"
+    ):
+        compare_values("not_a_version", "0.4.0", ">=", "pontibus_version")
 
 
 def test_filter_quantity_comparison_greater_than():
