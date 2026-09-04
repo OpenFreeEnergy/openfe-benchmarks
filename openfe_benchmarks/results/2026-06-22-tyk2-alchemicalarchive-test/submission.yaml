@@ -6,7 +6,7 @@ title: OpenFE RBFE - jacs_set - tyk2 - 2026-06-22-tyk2-alchemicalarchive-test
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
-  This submission describes the RBFE benchmark covering the jacs_set benchmark set (tyk2) prepared
+  This submission describes the RBFE benchmark covering the jacs_set (system names: tyk2) prepared
   with ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and
   openff-2.3.0 with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and cofactors. The network
   contains 44 edges across 16 unique ligands. Results are derived from archived Alchemiscale workflow

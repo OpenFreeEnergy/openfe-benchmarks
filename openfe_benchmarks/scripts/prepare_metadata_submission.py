@@ -1296,7 +1296,7 @@ def _build_content_summary(
     if not charge_info:
         charge_info = "an unspecified partial charges (TODO)"
 
-    # Group systems by benchmark set for explicit listing
+    # Group systems by system group for explicit listing
     sets_to_systems: dict[str, list[str]] = defaultdict(list)
     if metadata.system_groups_systems:
         for system_group, system_name in metadata.system_groups_systems:
@@ -1320,7 +1320,7 @@ def _build_content_summary(
     elif len(unique_sets) == 1:
         systems_desc = ", ".join(sets_to_systems[unique_sets[0]])
         systems_desc_phrase = (
-            f" covering the {unique_sets[0]} benchmark set ({systems_desc})"
+            f" covering the {unique_sets[0]} (system names: {systems_desc})"
         )
     else:
         systems_desc_phrase = ""
@@ -2064,7 +2064,7 @@ def process_network(
         datetime.date or ISO 8601 date string (YYYY-MM-DD). If omitted, the
         current date is used.
     system_group:
-        Optional benchmark set name (e.g., 'jacs_set', 'solvation_set'). If provided,
+        Optional benchmark system group/name (e.g., 'jacs_set', 'solvation_set'). If provided,
         overrides the system_group extracted from transformation annotations.
     system_name:
         Optional system name (e.g., 'tyk2', 'hsp90'). If provided, overrides the
