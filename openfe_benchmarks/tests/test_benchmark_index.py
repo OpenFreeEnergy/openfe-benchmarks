@@ -43,11 +43,11 @@ class TestBenchmarkIndex:
     def test_reload(self):
         """Test that reload method works."""
         index = BenchmarkIndex()
-        initial_systems = index.list_benchmark_sets()
+        initial_systems = index.list_system_groups()
 
         # Reload should not crash and should return same data
         index.reload()
-        reloaded_systems = index.list_benchmark_sets()
+        reloaded_systems = index.list_system_groups()
 
         assert initial_systems == reloaded_systems, (
             "Reloaded systems should match initial systems"
@@ -59,12 +59,12 @@ class TestBenchmarkIndex:
         tags = index.list_available_tags()
 
         for tag in tags:
-            systems = index.list_systems_by_tag([tag])
+            systems = index.list_system_names_by_tag([tag])
             assert isinstance(systems, list), (
                 f"Systems for tag '{tag}' should be a list"
             )
-            for benchmark_set, system_name in systems:
-                assert isinstance(benchmark_set, str)
+            for system_group, system_name in systems:
+                assert isinstance(system_group, str)
                 assert isinstance(system_name, str)
 
     def test_pytest_tag_defined_criteria(self):
@@ -82,9 +82,9 @@ class TestBenchmarkIndex:
 
         if len(tags) > 1:
             tag1, tag2 = tags[0], tags[1]
-            systems_tag1 = set(index.list_systems_by_tag([tag1]))
-            systems_tag2 = set(index.list_systems_by_tag([tag2]))
-            systems_both_tags = set(index.list_systems_by_tag([tag1, tag2]))
+            systems_tag1 = set(index.list_system_names_by_tag([tag1]))
+            systems_tag2 = set(index.list_system_names_by_tag([tag2]))
+            systems_both_tags = set(index.list_system_names_by_tag([tag1, tag2]))
 
             # The systems for both tags should be the intersection of the two sets
             assert systems_both_tags == systems_tag1 & systems_tag2, (
@@ -95,7 +95,7 @@ class TestBenchmarkIndex:
         """Test that listing systems by a nonexistent tag returns an empty list."""
         index = BenchmarkIndex()
         nonexistent_tag = "nonexistent_tag"
-        systems = index.list_systems_by_tag([nonexistent_tag])
+        systems = index.list_system_names_by_tag([nonexistent_tag])
 
         assert systems == [], (
             f"Systems for nonexistent tag '{nonexistent_tag}' should be an empty list"
@@ -105,11 +105,11 @@ class TestBenchmarkIndex:
         """Test that listing systems by an empty tag list returns all systems."""
         index = BenchmarkIndex()
         all_systems = [
-            (benchmark_set, system_name)
-            for benchmark_set, systems in index._data["systems"].items()
+            (system_group, system_name)
+            for system_group, systems in index._data["systems"].items()
             for system_name in systems
         ]
-        systems = index.list_systems_by_tag([])
+        systems = index.list_system_names_by_tag([])
 
         assert set(systems) == set(all_systems), (
             "Systems for an empty tag list should include all systems in the index"
@@ -132,29 +132,29 @@ class TestBenchmarkIndex:
             return
 
         all_systems = [
-            (benchmark_set, system_name)
-            for benchmark_set, systems in index._data["systems"].items()
+            (system_group, system_name)
+            for system_group, systems in index._data["systems"].items()
             for system_name in systems
         ]
 
-        for benchmark_set, system_name in all_systems:
+        for system_group, system_name in all_systems:
             if system_name in exceptions:
                 continue
 
-            system_path = _BASE_DIR / benchmark_set / system_name
+            system_path = _BASE_DIR / system_group / system_name
             has_file = any(
                 any(system_path.glob(pattern)) for pattern in candidate_files
             )
-            has_tag = tag in index._data["systems"][benchmark_set][system_name]
+            has_tag = tag in index._data["systems"][system_group][system_name]
 
             if has_tag:
                 assert has_file, (
-                    f"System '{system_name}' in '{benchmark_set}' is tagged '{tag}' but "
+                    f"System '{system_name}' in '{system_group}' is tagged '{tag}' but "
                     f"has none of {candidate_files}"
                 )
             else:
                 assert not has_file, (
-                    f"System '{system_name}' in '{benchmark_set}' has a '{tag}' candidate "
+                    f"System '{system_name}' in '{system_group}' has a '{tag}' candidate "
                     f"file but is not tagged '{tag}'"
                 )
 
@@ -169,9 +169,9 @@ class TestBenchmarkIndex:
 
         # Build a set of expected paths from the index
         indexed_systems = set()
-        for benchmark_set, systems in index._data["systems"].items():
+        for system_group, systems in index._data["systems"].items():
             for system_name in systems:
-                system_path = _BASE_DIR / benchmark_set / system_name
+                system_path = _BASE_DIR / system_group / system_name
                 indexed_systems.add(system_path)
 
         # Check that all found relevant files are in the index

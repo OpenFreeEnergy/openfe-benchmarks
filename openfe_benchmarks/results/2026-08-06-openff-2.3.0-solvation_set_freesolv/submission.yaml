@@ -6,7 +6,7 @@ title: OpenFE ASFE - solvation_set - freesolv - 2026-08-06-openff-2.3.0-solvatio
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
-  This submission describes the ASFE benchmark covering the solvation_set benchmark set (freesolv)
+  This submission describes the ASFE benchmark covering the solvation_set (system names: freesolv)
   prepared with openff-2.3.0/tip3p for solvents and nagl_openff-gnn-am1bcc-1.0.0.pt for solutes and
   cofactors. The archive contains 603 edges across 603 unique solutes and 1 unique solvents. Results
   are derived from archived Alchemiscale workflow data. This is the full freesolv set that is

@@ -6,7 +6,7 @@ from gufe.tokenization import JSON_HANDLER
 from openff.units import unit
 from cinnabar import FEMap
 
-from openfe_benchmarks.data._benchmark_systems import get_benchmark_data_system
+from openfe_benchmarks.data._benchmark_systems import get_data_by_system_name
 
 
 def _asfe_result_key(result: dict) -> str:
@@ -54,7 +54,7 @@ def build_femap_from_relative_results(
     femaps_by_system_key = {}
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
-        benchmark_data = get_benchmark_data_system(system_group, system_name)
+        benchmark_data = get_data_by_system_name(system_group, system_name)
         if benchmark_data.reference_data is None:
             raise ValueError(
                 f"No reference data available for benchmark system {system_group}/{system_name}"
@@ -154,7 +154,7 @@ def build_femap_from_absolute_results(
     femaps_by_system_key = {}
     for system_key, system_results in results_by_system_key.items():
         system_group, system_name = system_key
-        benchmark_data = get_benchmark_data_system(system_group, system_name)
+        benchmark_data = get_data_by_system_name(system_group, system_name)
         if benchmark_data.reference_data is None:
             raise ValueError(
                 f"No reference data available for benchmark system {system_group}/{system_name}"

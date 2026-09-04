@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 __all__ = [
     "BenchmarkData",
     "BenchmarkIndex",
-    "get_benchmark_data_system",
-    "get_benchmark_set_data_systems",
+    "get_data_by_system_name",
+    "get_data_by_system_group",
     "PARTIAL_CHARGE_TYPES",
 ]
 
@@ -75,7 +75,7 @@ class BenchmarkIndex:
 
         logger.debug("Benchmark index successfully reloaded and validated.")
 
-    def list_systems_by_tag(self, tags: list[str] = []) -> list[tuple[str, str]]:
+    def list_system_names_by_tag(self, tags: list[str] = []) -> list[tuple[str, str]]:
         """
         Get all systems that match **all** of the provided tags.
 
@@ -89,7 +89,7 @@ class BenchmarkIndex:
         Returns
         -------
         list[tuple[str, str]]
-            List of tuples containing (benchmark_set, system_name).
+            List of tuples containing (system_group, system_name).
 
         Examples
         --------
@@ -107,11 +107,11 @@ class BenchmarkIndex:
 
         matching_systems = []
 
-        for benchmark_set, systems in self._data["systems"].items():
+        for system_group, systems in self._data["systems"].items():
             for system_name, system_data in systems.items():
                 # Check if all of the requested tags match
                 if all(tag in system_data for tag in tags):
-                    matching_systems.append((benchmark_set, system_name))
+                    matching_systems.append((system_group, system_name))
 
         return matching_systems
 
@@ -135,45 +135,45 @@ class BenchmarkIndex:
 
         return tags
 
-    def list_systems_by_benchmark_set(self, benchmark_set: str) -> list[str]:
+    def list_system_names_by_group(self, system_group: str) -> list[str]:
         """
-        Get all system names in a specific benchmark set.
+        Get all system names in a specific system group.
 
         Parameters
         ----------
-        benchmark_set : str
-            The benchmark set name.
+        system_group : str
+            The system group name.
 
         Returns
         -------
         list[str]
-            List of system names in the benchmark set.
+            List of system names in the system group.
 
         Raises
         ------
         ValueError
-            If the benchmark set doesn't exist.
+            If the system group doesn't exist.
         """
         if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
             return []
 
-        if benchmark_set not in self._data["systems"]:
+        if system_group not in self._data["systems"]:
             available = list(self._data["systems"].keys())
             raise ValueError(
-                f"Benchmark set '{benchmark_set}' not found. Available sets: {available}"
+                f"System group '{system_group}' not found. Available groups: {available}"
             )
 
-        return list(self._data["systems"][benchmark_set].keys())
+        return list(self._data["systems"][system_group].keys())
 
-    def list_benchmark_sets(self) -> list[str]:
+    def list_system_groups(self) -> list[str]:
         """
-        List all available benchmark sets.
+        List all available system groups.
 
         Returns
         -------
         list[str]
-            Sorted list of benchmark set names.
+            Sorted list of system group names.
         """
         if not self._data or not self._data.get("systems"):
             logger.error("Benchmark index data is not loaded or is invalid.")
@@ -194,10 +194,10 @@ class BenchmarkData:
 
     Attributes
     ----------
-    name : str
+    system_name : str
         Name of the benchmark data system
-    benchmark_set : str
-        Fully qualified name of the benchmark set this data system belongs to
+    system_group : str
+        Fully qualified name of the system group this data system belongs to
         (e.g., 'charge_annihilation_set')
     protein : Path | None
         Path to the protein PDB file (optional, can be None)
@@ -222,8 +222,8 @@ class BenchmarkData:
         Information available in the preparation_details.md file
     """
 
-    name: str
-    benchmark_set: str
+    system_name: str
+    system_group: str
     protein: Path | None  # Updated typing to allow None
     ligands: dict[str, Path]
     cofactors: dict[str, Path] | None
@@ -234,8 +234,8 @@ class BenchmarkData:
 
     def __repr__(self):
         return (
-            f"BenchmarkData(name='{self.name}', "
-            f"benchmark_set='{self.benchmark_set}', "
+            f"BenchmarkData(system_name='{self.system_name}', "
+            f"system_group='{self.system_group}', "
             f"protein={self.protein.name if self.protein else 'None'}, "
             f"ligands={list(self.ligands.keys())}, "
             f"cofactors={list(self.cofactors.keys()) if self.cofactors is not None else 'None'}, "
@@ -246,7 +246,7 @@ class BenchmarkData:
 
 
 def _validate_and_load_data_system(
-    system_path: Path, system_name: str, benchmark_set: str
+    system_path: Path, system_name: str, system_group: str
 ) -> BenchmarkData:
     """
     Validate and load a benchmark system from a directory.
@@ -257,8 +257,8 @@ def _validate_and_load_data_system(
         Path to the system directory.
     system_name : str
         Name of the system.
-    benchmark_set : str
-        Name of the benchmark set.
+    system_group : str
+        Name of the system group.
 
     Returns
     -------
@@ -314,7 +314,7 @@ def _validate_and_load_data_system(
             if charge_type not in PARTIAL_CHARGE_TYPES:
                 raise ValueError(
                     f"Unsupported partial charge type '{charge_type}' in file '{filename}' "
-                    f"for system '{system_name}' in benchmark set '{benchmark_set}'. "
+                    f"for system '{system_name}' in system group '{system_group}'. "
                     f"Supported types: {PARTIAL_CHARGE_TYPES}. "
                     f"If this is a new charge type, please contribute it by adding to "
                     f"PARTIAL_CHARGE_TYPES in the module."
@@ -337,7 +337,7 @@ def _validate_and_load_data_system(
             if charge_type not in PARTIAL_CHARGE_TYPES:
                 raise ValueError(
                     f"Unsupported partial charge type '{charge_type}' in file '{filename}' "
-                    f"for system '{system_name}' in benchmark set '{benchmark_set}'. "
+                    f"for system '{system_name}' in system group '{system_group}'. "
                     f"Supported types: {PARTIAL_CHARGE_TYPES}. "
                     f"If this is a new charge type, please contribute it by adding to "
                     f"PARTIAL_CHARGE_TYPES in the module."
@@ -380,13 +380,13 @@ def _validate_and_load_data_system(
         if filename.endswith(".pdb"):
             raise ValueError(
                 f"Uncategorized PDB file '{filename}' found in system '{system_name}' "
-                f"in benchmark set '{benchmark_set}'. Expected 'protein.pdb'."
+                f"in system group '{system_group}'. Expected 'protein.pdb'."
             )
 
         if filename.endswith(".sdf"):
             raise ValueError(
                 f"Uncategorized SDF file '{filename}' found in system '{system_name}' "
-                f"in benchmark set '{benchmark_set}'. Expected format: "
+                f"in system group '{system_group}'. Expected format: "
                 f"'ligands_<charge_type>.sdf' or 'cofactors_<charge_type>.sdf' "
                 f"where <charge_type> is one of {PARTIAL_CHARGE_TYPES}."
             )
@@ -394,20 +394,20 @@ def _validate_and_load_data_system(
         if filename.endswith(".json"):
             raise ValueError(
                 f"Uncategorized JSON file '{filename}' found in system '{system_name}' "
-                f"in benchmark set '{benchmark_set}'. Expected format: "
+                f"in system group '{system_group}'. Expected format: "
                 f"'*network*.json' for ligand networks, 'experimental*data.json', or 'subset*.json'."
             )
 
         raise ValueError(
             f"Uncategorized file '{filename}' found in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'."
+            f"in system group '{system_group}'."
         )
 
     # Validate required files
     if not ligands:
         raise ValueError(
             f"No ligand files found in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'. Expected files named "
+            f"in system group '{system_group}'. Expected files named "
             f"'ligands_<charge_type>.sdf' where <charge_type> is one of "
             f"{PARTIAL_CHARGE_TYPES}."
         )
@@ -415,25 +415,25 @@ def _validate_and_load_data_system(
     if "no_charges" not in ligands:
         raise ValueError(
             f"Missing required 'ligands.sdf' file in system '{system_name}' "
-            f"in benchmark set '{benchmark_set}'."
+            f"in system group '{system_group}'."
         )
 
     if details is None:
         raise ValueError(
             "The file 'preparation_details.md' if missing from"
-            f"system '{system_name}' in benchmark set '{benchmark_set}'."
+            f"system '{system_name}' in system group '{system_group}'."
         )
 
     logger.info(
-        f"Loaded system '{system_name}' from benchmark set '{benchmark_set}' with:\n"
+        f"Loaded system '{system_name}' from system group '{system_group}' with:\n"
         f"  {len(ligands)} ligand file(s), and {len(cofactors)} cofactor file(s).\n"
         f"  Found protein file: {protein_path is not None}.\n"
         f"  Found {len(ligand_networks)} ligand network files with keys: {', '.join(list(ligand_networks.keys()))}"
     )
 
     return BenchmarkData(
-        name=system_name,
-        benchmark_set=benchmark_set,
+        system_name=system_name,
+        system_group=system_group,
         protein=protein_path,
         ligands=ligands,
         cofactors=cofactors or None,
@@ -444,16 +444,16 @@ def _validate_and_load_data_system(
     )
 
 
-def get_benchmark_data_system(benchmark_set: str, system_name: str) -> BenchmarkData:
+def get_data_by_system_name(system_group: str, system_name: str) -> BenchmarkData:
     """
-    Factory method to retrieve a benchmark system from a given benchmark set.
+    Factory method to retrieve a benchmark system from a given system group.
 
     Parameters
     ----------
-    benchmark_set : str
-        Fully qualified name of the benchmark set (e.g., 'charge_annihilation_set').
+    system_group : str
+        Fully qualified name of the system group (e.g., 'charge_annihilation_set').
     system_name : str
-        Name of the system within the benchmark set (e.g., 'cdk2', 'tyk2').
+        Name of the system within the system group (e.g., 'cdk2', 'tyk2').
 
     Returns
     -------
@@ -463,70 +463,70 @@ def get_benchmark_data_system(benchmark_set: str, system_name: str) -> Benchmark
     Raises
     ------
     ValueError
-        If the benchmark set or system does not exist, or if files are improperly formatted.
+        If the system group or system does not exist, or if files are improperly formatted.
 
     Examples
     --------
-    >>> system = get_benchmark_data_system('jacs_set', 'p38')
+    >>> system = get_data_by_system_name('jacs_set', 'p38')
     >>> print(system.protein)
     >>> print(system.ligands['antechamber_am1bcc'])
     """
-    # Check if benchmark set exists
-    available_sets = _benchmark_index.list_benchmark_sets()
-    if benchmark_set not in available_sets:
+    # Check if system group exists
+    available_groups = _benchmark_index.list_system_groups()
+    if system_group not in available_groups:
         raise ValueError(
-            f"Benchmark set '{benchmark_set}' not found. "
-            f"Available benchmark sets: {available_sets}"
+            f"System group '{system_group}' not found. "
+            f"Available system groups: {available_groups}"
         )
 
-    # Check if system exists in the benchmark set
-    available_systems = _benchmark_index.list_systems_by_benchmark_set(benchmark_set)
+    # Check if system exists in the system group
+    available_systems = _benchmark_index.list_system_names_by_group(system_group)
     if system_name not in available_systems:
         raise ValueError(
-            f"System '{system_name}' not found in benchmark set '{benchmark_set}'. "
-            f"Available systems in '{benchmark_set}': {available_systems}"
+            f"System '{system_name}' not found in system group '{system_group}'. "
+            f"Available systems in '{system_group}': {available_systems}"
         )
 
     # Load and validate the system - convert dot-separated path to filesystem path
-    system_path = _BASE_DIR / benchmark_set.replace(".", "/") / system_name
+    system_path = _BASE_DIR / system_group.replace(".", "/") / system_name
 
-    logger.debug(f"Loading benchmark system '{system_name}' from '{benchmark_set}'...")
+    logger.debug(f"Loading benchmark system '{system_name}' from '{system_group}'...")
 
-    return _validate_and_load_data_system(system_path, system_name, benchmark_set)
+    return _validate_and_load_data_system(system_path, system_name, system_group)
 
 
-def get_benchmark_set_data_systems(benchmark_set: str) -> dict[str, BenchmarkData]:
+def get_data_by_system_group(system_group: str) -> dict[str, BenchmarkData]:
     """
-    Retrieve all benchmark systems in a given benchmark set.
+    Retrieve all benchmark systems in a given system group.
 
     Parameters
     ----------
-    benchmark_set : str
-        The name of the benchmark set.
+    system_group : str
+        The name of the system group.
 
     Returns
     -------
     dict[str, BenchmarkData]
-        A dictionary of BenchmarkData objects for all systems in the benchmark set.
+        A dictionary of BenchmarkData objects for all systems in the system group.
 
     Raises
     ------
     ValueError
-        If the benchmark set does not exist.
+        If the system group does not exist.
     """
-    # Check if benchmark set exists
-    available_sets = _benchmark_index.list_benchmark_sets()
-    if benchmark_set not in available_sets:
+    # Check if system group exists
+    available_groups = _benchmark_index.list_system_groups()
+    if system_group not in available_groups:
         raise ValueError(
-            f"Benchmark set '{benchmark_set}' not found. "
-            f"Available benchmark sets: {available_sets}"
+            f"System group '{system_group}' not found. "
+            f"Available system groups: {available_groups}"
         )
 
-    # Retrieve all systems in the benchmark set
-    system_names = _benchmark_index.list_systems_by_benchmark_set(benchmark_set)
+    # Retrieve all systems in the system group
+    system_names = _benchmark_index.list_system_names_by_group(system_group)
 
     # Load and return all systems as BenchmarkData objects
     return {
-        system_name: get_benchmark_data_system(benchmark_set, system_name)
+        system_name: get_data_by_system_name(system_group, system_name)
         for system_name in system_names
     }

@@ -6,7 +6,7 @@ title: OpenFE RBFE - jacs_set (8 systems) - 2026-08-05_openff-3.0.0-alpha0_opc3_
 
 # REQUIRED: short descriptive summary (1-2 sentences)
 summary: |
-  This submission describes the RBFE benchmark covering the jacs_set benchmark set (bace, cdk2, jnk1,
+  This submission describes the RBFE benchmark covering the jacs_set (system names: bace, cdk2, jnk1,
   mcl1, p38, ptp1b, thrombin, tyk2) prepared with opc3.offxml/openff-3.0.0-alpha0 for proteins and
   solvents, and openff-3.0.0-alpha0 with nagl_openff-gnn-am1bcc-1.0.0.pt for ligands, solutes, and
   cofactors. The network contains 566 edges across 194 unique ligands. Results are derived from
