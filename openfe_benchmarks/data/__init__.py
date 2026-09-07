@@ -7,9 +7,9 @@ with the OpenFE toolkit.
 
 from ._benchmark_systems import BenchmarkData as BenchmarkData
 from ._benchmark_systems import BenchmarkIndex as BenchmarkIndex
-from ._benchmark_systems import get_benchmark_data_system as get_benchmark_data_system
+from ._benchmark_systems import get_data_by_system_name as get_data_by_system_name
 from ._benchmark_systems import (
-    get_benchmark_set_data_systems as get_benchmark_set_data_systems,
+    get_data_by_system_group as get_data_by_system_group,
 )
 from ._benchmark_systems import PARTIAL_CHARGE_TYPES as PARTIAL_CHARGE_TYPES
 

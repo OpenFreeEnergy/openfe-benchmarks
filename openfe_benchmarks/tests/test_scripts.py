@@ -10,6 +10,7 @@ import runpy
 import multiprocessing as mp
 import os
 import traceback
+from datetime import date
 
 from pathlib import Path
 import pytest
@@ -68,3 +69,24 @@ def test_example_scripts_run_as_main(script_path: Path):
 
     if not success:
         pytest.fail(msg)
+
+
+def test_normalize_submission_date_accepts_iso_strings_and_dates():
+    from openfe_benchmarks.scripts.prepare_metadata_submission import (
+        _normalize_submission_date,
+    )
+
+    assert _normalize_submission_date("2026-08-04") == "2026-08-04"
+    assert _normalize_submission_date(date(2026, 8, 4)) == "2026-08-04"
+
+
+def test_normalize_submission_date_rejects_invalid_strings():
+    from openfe_benchmarks.scripts.prepare_metadata_submission import (
+        _normalize_submission_date,
+    )
+
+    with pytest.raises(ValueError):
+        _normalize_submission_date("08-04-2026")
+
+    with pytest.raises(TypeError):
+        _normalize_submission_date(20260804)

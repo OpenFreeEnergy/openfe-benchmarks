@@ -1,0 +1,170 @@
+# REQUIRED: unique, kebab-case identifier for this submission
+submission_id: 2026-07-31_sage_230_all
+
+# REQUIRED: short descriptive title
+title: OpenFE RBFE - Multi-set Benchmark (6 sets, 35 systems) - 2026-07-31_sage_230_all
+
+# REQUIRED: short descriptive summary (1-2 sentences)
+summary: |
+  This submission describes the RBFE benchmark covering fragments: hsp90_2rings, hsp90_single_ring,
+  jak2_set1, jak2_set2, liga, mcl1, mup1, p38, t4_lysozyme, janssen_bace: bace_ciordia_prospective,
+  bace_p3_arg368_in, ciordia_retro, keranen_p2, mcs_docking_set: hne, renin, merck: cdk8, cmet, eg5,
+  hif2a, pfkfb3, shp2, syk, tnks2, miscellaneous_set: btk, cdk8, faah, galectin, hiv1_protease,
+  water_set: brd4, chk1, hsp90_kung, hsp90_woodhead, scyt_dehyd, taf12, thrombin, urokinase prepared
+  with ff14SB/phosaa10/tip3p_HFE_multivalent/tip3p_standard for proteins and solvents, and openff-2.3.0 with nagl_openff-gnn-am1bcc-1.0.0.pt
+  for ligands, solutes, and cofactors. The submission contains 1690 edges, 411 unique ligands. 4
+  systems include cofactors (EPE-1, cofactors_molecule, cofactors_molecule1, glycerol,
+  pfkfb3_automap_cofactor1, pfkfb3_automap_cofactor2, pfkfb3_automap_cofactor3). Results are derived
+  from archived Alchemiscale workflow data. The results interpolate the 1-4 exceptions using the `turn_off_core_unique_exceptions` setting.
+
+# REQUIRED: list of submission tags
+tags: [rbfe, openff-2.3.0, bace_ciordia_prospective, bace_p3_arg368_in, brd4, btk, cdk8, chk1, ciordia_retro, cmet, eg5, faah, fragments, galectin, hif2a, hiv1_protease, hne, hsp90_2rings, hsp90_kung, hsp90_single_ring, hsp90_woodhead, jak2_set1, jak2_set2, janssen_bace, keranen_p2, liga, mcl1, mcs_docking_set, merck, miscellaneous_set, mup1, p38, pfkfb3, renin, scyt_dehyd, shp2, syk, t4_lysozyme, taf12, thrombin, tnks2, urokinase, water_set, nagl_openff-gnn-am1bcc-1.0.0.pt, alchemicalarchive, openfe]
+
+# REQUIRED: calculation type (asfe, rbfe, etc.)
+calculation_type: rbfe
+
+# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
+authors:
+  - name: Josh Horton
+
+# REQUIRED: publication/submission date (ISO 8601)
+date: 2026-07-31
+openfe_version: "1.8.0"
+openmm_version: "8.2.0"
+openff_toolkit_version: "0.18"
+pontibus_version: None
+mapper: "KartografAtomMapper 1.2.0 (LSA)"
+forcefield: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+small_molecule_forcefield: "openff-2.3.0"
+partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+
+## BenchmarkData Provenance (from openfe-benchmarks planning script) with associated network key 
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  "fragments":
+    "hsp90_2rings": AlchemicalNetwork-1cf4db79a0e9914efe71be8f62f19b93
+    "hsp90_single_ring": AlchemicalNetwork-9c417d503820448f52ceeb725f521a3f
+    "jak2_set1": AlchemicalNetwork-b209cb59fe49e6242f5e0cf31cc0c9f9
+    "jak2_set2": AlchemicalNetwork-43e3ebb90496f2a672643e0efaccca24
+    "liga": AlchemicalNetwork-4c6e226d62542f3828aeffa43ed77460
+    "mcl1": AlchemicalNetwork-40c13f48947b5fef9c9de9f957d14348
+    "mup1": AlchemicalNetwork-f8fb7331c8b558e0bb193069bd5d4ff3
+    "p38": AlchemicalNetwork-1deee0dadce08c790b604b2cae1d9238
+    "t4_lysozyme": AlchemicalNetwork-f5fb78aa60ad1091443d126e672fca9e
+  "janssen_bace":
+    "bace_ciordia_prospective": AlchemicalNetwork-9cc7cdda32e5a1fae0dde4907e01a26f
+    "bace_p3_arg368_in": AlchemicalNetwork-693a15f8a4b037dc5e85153e5d3042b6
+    "ciordia_retro": AlchemicalNetwork-7fbb45d4609ba17b569d274d99306ee6
+    "keranen_p2": AlchemicalNetwork-f6849949819a640bb22b844732fa5441
+  "mcs_docking_set":
+    "hne": AlchemicalNetwork-a83fc65e262a2f5d0c02cb66ef8c3ee3
+    "renin": AlchemicalNetwork-4cfceaeae850ea1d63e66d4fad6a00f5
+  "merck":
+    "cdk8": AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7
+    "cmet": AlchemicalNetwork-e81fb9b351b67f8f4c6be988237fcab3
+    "eg5": AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e
+    "hif2a": AlchemicalNetwork-2e5cf3f44af2ffdc1b6812770f24c234
+    "pfkfb3": AlchemicalNetwork-683deb4d43ff1c442e2dfe99dd0fd06e
+    "shp2": AlchemicalNetwork-2e1c106af57e4330042fd92421db8414
+    "syk": AlchemicalNetwork-c96bef0ade3270b782142982860239b3
+    "tnks2": AlchemicalNetwork-7721f6760213ccd4d9bf8814db6ba198
+  "miscellaneous_set":
+    "btk": AlchemicalNetwork-8cbb558b19fe3b127d98e694170fd3ef
+    "cdk8": AlchemicalNetwork-94ba7dba0d5754460af0b0cf4cf9fcc7
+    "faah": AlchemicalNetwork-a17ee6a8ca4943b5e93c7c913f0274bb
+    "galectin": AlchemicalNetwork-2dc19c1605a7886cdc0c42cc42f5fd58
+    "hiv1_protease": AlchemicalNetwork-fceaa5a0c4b5a41f9e4afb9b0c79bec1
+  "water_set":
+    "brd4": AlchemicalNetwork-e0e789917490681fef6922a788de8dd2
+    "chk1": AlchemicalNetwork-dc81b509dbce527e8485c1794543e89b
+    "hsp90_kung": AlchemicalNetwork-956eb33724128566283dadc638347bae
+    "hsp90_woodhead": AlchemicalNetwork-bbe89b599aa804219cdfe44bc5abbf7a
+    "scyt_dehyd": AlchemicalNetwork-89f2c4f2ec6d12665e619cfaf248c6dc
+    "taf12": AlchemicalNetwork-e073ebf415d8ec3316b37c9455ea4a5d
+    "thrombin": AlchemicalNetwork-485e2b09ebac693a16d64b66226540a4
+    "urokinase": AlchemicalNetwork-a625e714bf0d17aa22de485c0818511e
+
+
+# REQUIRED: results file
+results: computational_results.json.bz2
+
+# REQUIRED: long-term archive pointer (at least doi or url)
+archive:
+  doi: https://doi.org/10.5281/zenodo.22252418
+  archive_provider: zenodo
+
+# REQUIRED: license for the submission
+license: CC-BY-4.0
+
+# RECOMMENDED / OPTIONAL metadata for protocol settings
+protocol_settings:
+  - protocol: "RelativeHybridTopologyProtocol"
+    protocol_library: "openfe"
+    timestep: "4.0 fs"
+    temperature: "298.15 K"
+    pressure: "1 bar"
+    forcefields: ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"]
+    small_molecule_forcefield: "openff-2.3.0"
+    partial_charges: "nagl_openff-gnn-am1bcc-1.0.0.pt"
+    equilibration_time: "1.0 ns"
+    production_time: "5.0 ns"
+    vacuum_equilibration_time: 
+    vacuum_production_time: 
+    solvent_equilibration_time: 
+    solvent_production_time: 
+    lambda_functions: "default"
+    lambda_windows: "11"
+    lambda_schedule: ""
+    notes: |
+      Applies to 831 edges:
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=13, ligand_final=37, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=13, ligand_final=42-flipped, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=14, ligand_final=16-flipped, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=15, ligand_final=14, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=15, ligand_final=16-flipped, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - etc.
+  - protocol: "RelativeHybridTopologyProtocol"
+    production_time: "20 ns"
+    lambda_windows: "22"
+    notes: |
+      Detailed protocol settings differ:
+      - alchemical_settings.explicit_charge_correction: False -> True
+      - lambda_settings.lambda_windows: 11 -> 22
+      - simulation_settings.n_replicas: 11 -> 22
+      - simulation_settings.production_length: 5.0 -> 20
+      Applies to 14 edges:
+      - AlchemicalNetwork-7721f6760213ccd4d9bf8814db6ba198 merck-tnks2: ligand_start=1a, ligand_final=8c_adjust, solvent={'O'}, cofactors={'cofactors_molecule1', 'cofactors_molecule'}, protein={'unknown'}
+      - AlchemicalNetwork-7721f6760213ccd4d9bf8814db6ba198 merck-tnks2: ligand_start=1a, ligand_final=8d, solvent={'O'}, cofactors={'cofactors_molecule1', 'cofactors_molecule'}, protein={'unknown'}
+      - AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e merck-eg5: ligand_start=CHEMBL1077227, ligand_final=CHEMBL1078998, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e merck-eg5: ligand_start=CHEMBL1084115, ligand_final=CHEMBL1077227, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e merck-eg5: ligand_start=CHEMBL1085666, ligand_final=CHEMBL1089056, solvent={'O'}, cofactors=none, protein={'unknown'}
+      - etc.
+  - protocol: "RelativeHybridTopologyProtocol"
+    production_time: "20 ns"
+    lambda_windows: "22"
+    notes: |
+      Detailed protocol settings differ:
+      - alchemical_settings.explicit_charge_correction: False -> True
+      - lambda_settings.lambda_windows: 11 -> 22
+      - simulation_settings.n_replicas: 11 -> 22
+      - simulation_settings.production_length: 5.0 -> 20
+      - solvation_settings.solvent_padding: 1 -> 1.5
+      Applies to 14 edges:
+      - AlchemicalNetwork-7721f6760213ccd4d9bf8814db6ba198 merck-tnks2: ligand_start=1a, ligand_final=8c_adjust, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-7721f6760213ccd4d9bf8814db6ba198 merck-tnks2: ligand_start=1a, ligand_final=8d, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e merck-eg5: ligand_start=CHEMBL1077227, ligand_final=CHEMBL1078998, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e merck-eg5: ligand_start=CHEMBL1084115, ligand_final=CHEMBL1077227, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-a3b580e27d619a6d7d29be9f58baff0e merck-eg5: ligand_start=CHEMBL1085666, ligand_final=CHEMBL1089056, solvent={'O'}, cofactors=none, protein=none
+      - etc.
+  - protocol: "RelativeHybridTopologyProtocol"
+    notes: |
+      Detailed protocol settings differ:
+      - solvation_settings.solvent_padding: 1 -> 1.5
+      Applies to 831 edges:
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=13, ligand_final=37, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=13, ligand_final=42-flipped, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=14, ligand_final=16-flipped, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=15, ligand_final=14, solvent={'O'}, cofactors=none, protein=none
+      - AlchemicalNetwork-1a9a07638a775df1ff9477ecdc403ce7 merck-cdk8: ligand_start=15, ligand_final=16-flipped, solvent={'O'}, cofactors=none, protein=none
+      - etc.
+

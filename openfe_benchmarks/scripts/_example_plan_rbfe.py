@@ -17,7 +17,7 @@ import openfe
 from openfe import SolventComponent, ProteinComponent
 from openfe.protocols.openmm_rfe.equil_rfe_methods import RelativeHybridTopologyProtocol
 
-from openfe_benchmarks.data import get_benchmark_data_system
+from openfe_benchmarks.data import get_data_by_system_name
 from openfe_benchmarks.scripts import utils as ofebu
 
 logger = logging.getLogger(__name__)
@@ -36,13 +36,13 @@ def _configure_example_logging(level=logging.INFO):
 
 
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
-BENCHMARK_SET = "mcs_docking_set"
-BENCHMARK_SYS = "hne"
+SYSTEM_GROUP = "mcs_docking_set"
+SYSTEM_NAME = "hne"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 LIG_NETWORK_FILE = "industry_benchmarks_network"
 FILENAME_ALCHEMICALNETWORK = (
-    f"alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
+    f"alchemical_network_{SYSTEM_GROUP}_{SYSTEM_NAME}_nacl.json"
 )
 OUTPUT_DIR = "outputs"
 
@@ -86,7 +86,13 @@ def process_components(benchmark_sys):
 
 
 def compile_network_transformations(
-    ligand_network, solvent, ligands_by_name, protein, cofactors
+    ligand_network,
+    solvent,
+    ligands_by_name,
+    protein,
+    cofactors,
+    system_group,
+    system_name,
 ):
     """
     Compile alchemical transformations for a given network.
@@ -103,6 +109,10 @@ def compile_network_transformations(
         The protein component for the transformations.
     cofactors : list or None
         List of cofactor components, if any.
+    system_group : str
+        The benchmark system group name (e.g., "jacs_set", "mcs_docking_set").
+    system_name : str
+        The benchmark system name (e.g., "p38", "hne").
 
     Returns
     -------
@@ -111,11 +121,20 @@ def compile_network_transformations(
     """
     transformations = []
     for edge in ligand_network.edges:
+        # Add system_group and system_name to the mapping annotations
+        mapping_annotations = dict(edge.annotations) if edge.annotations else {}
+        mapping_annotations.update(
+            {
+                "system_group": system_group,
+                "system_name": system_name,
+            }
+        )
+
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
             componentB=ligands_by_name[edge.componentB.name],
             componentA_to_componentB=edge.componentA_to_componentB,
-            annotations=edge.annotations,
+            annotations=mapping_annotations,
         )
 
         # create the transformations for the bound and solvent legs
@@ -172,15 +191,26 @@ def main():
     and saves the resulting alchemical network to a JSON file.
     """
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
     lig_network, ligand_dict, protein, cofactors = process_components(benchmark_sys)
 
     transformations = compile_network_transformations(
-        lig_network, SOLVENT, ligand_dict, protein, cofactors
+        lig_network,
+        SOLVENT,
+        ligand_dict,
+        protein,
+        cofactors,
+        SYSTEM_GROUP,
+        SYSTEM_NAME,
     )
 
     # Can be used as input for Alchemiscale
     alchem_network = openfe.AlchemicalNetwork(edges=transformations)
+    # check each edge can validated before trying to run
+    logger.info(f"Validating transformations for system {SYSTEM_GROUP} {SYSTEM_NAME}")
+    for edge in alchem_network.edges:
+        edge.create()
+    # save to file
     alchem_network.to_json(file=os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
 
 
@@ -214,7 +244,7 @@ def validate_rbfe_network(network_file):
     logger.info("AlchemicalNetwork contains %d edges", len(network.edges))
 
     # Get benchmark data for validation
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
     expected_lig_network = openfe.LigandNetwork.from_json(
         file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE])
     )
@@ -297,6 +327,28 @@ def validate_rbfe_network(network_file):
             transformation.create()
         except Exception as e:
             errors.append(f"Failed to create protocol for transformation '{name}': {e}")
+
+        # Validate mapping annotations
+        if transformation.mapping is None:
+            errors.append(f"Transformation '{name}' has no mapping")
+        else:
+            mapping_annot = transformation.mapping.annotations
+            if not mapping_annot:
+                errors.append(f"Transformation '{name}' mapping has no annotations")
+            else:
+                for required_key in ["system_group", "system_name"]:
+                    if required_key not in mapping_annot:
+                        errors.append(
+                            f"Transformation '{name}' mapping missing '{required_key}' annotation"
+                        )
+                    elif mapping_annot[required_key] != (
+                        SYSTEM_GROUP if required_key == "system_group" else SYSTEM_NAME
+                    ):
+                        errors.append(
+                            f"Transformation '{name}' mapping has incorrect '{required_key}': "
+                            f"expected '{SYSTEM_GROUP if required_key == 'system_group' else SYSTEM_NAME}', "
+                            f"got '{mapping_annot[required_key]}'"
+                        )
 
     # Validate that we have both complex and solvent legs for each ligand pair
     expected_ligand_pairs = len(expected_lig_network.edges)
