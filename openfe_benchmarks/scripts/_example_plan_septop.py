@@ -17,7 +17,7 @@ import openfe
 from openfe import SolventComponent, ProteinComponent
 from openfe.protocols.openmm_septop.equil_septop_method import SepTopProtocol
 
-from openfe_benchmarks.data import get_benchmark_data_system
+from openfe_benchmarks.data import get_data_by_system_name
 from openfe_benchmarks.scripts import utils as ofebu
 
 logger = logging.getLogger(__name__)
@@ -36,13 +36,13 @@ def _configure_example_logging(level=logging.INFO):
 
 
 SOLVENT = SolventComponent(positive_ion="Na", negative_ion="Cl", neutralize=True)
-BENCHMARK_SET = "fragments"
-BENCHMARK_SYS = "liga"
+SYSTEM_GROUP = "fragments"
+SYSTEM_NAME = "liga"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"  # for the ligand and cofactors
 FORCEFIELD = "openff-2.3.0"  # available [openmmforcefields SystemGenerator](https://github.com/openmm/openmmforcefields?tab=readme-ov-file#automating-force-field-management-with-systemgenerator)
 LIG_NETWORK_FILE = "industry_benchmarks_network"
 FILENAME_ALCHEMICALNETWORK = (
-    f"septop_alchemical_network_{BENCHMARK_SET}_{BENCHMARK_SYS}_nacl.json"
+    f"septop_alchemical_network_{SYSTEM_GROUP}_{SYSTEM_NAME}_nacl.json"
 )
 OUTPUT_DIR = "outputs"
 
@@ -113,8 +113,8 @@ def compile_network_transformations(
     for edge in ligand_network.edges:
         annotations = {
             **edge.annotations,
-            "system_group": BENCHMARK_SET,
-            "system_name": BENCHMARK_SYS,
+            "system_group": SYSTEM_GROUP,
+            "system_name": SYSTEM_NAME,
         }
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],
@@ -123,8 +123,16 @@ def compile_network_transformations(
             annotations=annotations,
         )
 
-        system_a_dict = {"protein": protein, "ligand": new_edge.componentA, "solvent": solvent}
-        system_b_dict = {"protein": protein, "ligand": new_edge.componentB, "solvent": solvent}
+        system_a_dict = {
+            "protein": protein,
+            "ligand": new_edge.componentA,
+            "solvent": solvent,
+        }
+        system_b_dict = {
+            "protein": protein,
+            "ligand": new_edge.componentB,
+            "solvent": solvent,
+        }
         if cofactors is not None:
             for i, cofactor in enumerate(cofactors):
                 cofactor_name = f"cofactor_{i}"
@@ -165,7 +173,7 @@ def main():
     and saves the resulting alchemical network to a JSON file.
     """
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
     lig_network, ligand_dict, protein, cofactors = process_components(benchmark_sys)
 
     transformations = compile_network_transformations(
@@ -209,7 +217,7 @@ def validate_septop_network(network_file):
     logger.info("AlchemicalNetwork contains %d edges", len(network.edges))
 
     # Get benchmark data for validation
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
     expected_lig_network = openfe.LigandNetwork.from_json(
         file=str(benchmark_sys.ligand_networks[LIG_NETWORK_FILE])
     )
@@ -248,7 +256,10 @@ def validate_septop_network(network_file):
         # SepTop: both stateA and stateB are fully solvated protein-ligand systems,
         # so required components must be present in both states independently.
         required = ["protein", "solvent", "ligand"]
-        for state_label, state in (("stateA", transformation.stateA), ("stateB", transformation.stateB)):
+        for state_label, state in (
+            ("stateA", transformation.stateA),
+            ("stateB", transformation.stateB),
+        ):
             components = state.components
 
             for comp in required:
@@ -265,7 +276,9 @@ def validate_septop_network(network_file):
                         f"Transformation '{name}' {state_label} missing cofactor component"
                     )
                 else:
-                    logger.info("Transformation '%s' %s includes cofactors", name, state_label)
+                    logger.info(
+                        "Transformation '%s' %s includes cofactors", name, state_label
+                    )
 
             # Log success if none of the required components were missing
             missing = [c for c in required if c not in components]
@@ -273,7 +286,6 @@ def validate_septop_network(network_file):
                 logger.info(
                     "Transformation '%s' %s has required components", name, state_label
                 )
-
 
         # check we can create the protocol DAG for this transformation this will run internal validation on the protocol settings and components
         try:
@@ -301,11 +313,15 @@ def validate_septop_network(network_file):
         for ligand in ligands:
             found_ligands.add(ligand.name)
             off_mol = ligand.to_openff()
-            if off_mol.partial_charges is not None and len(off_mol.partial_charges) == off_mol.n_atoms:
+            if (
+                off_mol.partial_charges is not None
+                and len(off_mol.partial_charges) == off_mol.n_atoms
+            ):
                 continue
             else:
-                errors.append(f"Ligand '{ligand.name}' in chemical system '{chem_system.key}' is missing partial charges")
-
+                errors.append(
+                    f"Ligand '{ligand.name}' in chemical system '{chem_system.key}' is missing partial charges"
+                )
 
     expected_keys = set(expected_ligands.keys()) | set(expected_cofactors.keys())
     missing_expected = expected_keys - found_ligands
@@ -317,6 +333,8 @@ def validate_septop_network(network_file):
 if __name__ == "__main__":
     _configure_example_logging(level=logging.INFO)
     main()
-    errors = validate_septop_network(os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK))
+    errors = validate_septop_network(
+        os.path.join(OUTPUT_DIR, FILENAME_ALCHEMICALNETWORK)
+    )
     if errors:
         raise RuntimeError("Network validation failed:\n" + "\n".join(errors))

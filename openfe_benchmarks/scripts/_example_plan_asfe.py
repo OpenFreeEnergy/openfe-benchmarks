@@ -22,7 +22,7 @@ from pontibus.protocols.solvation import ASFEProtocol, ASFESettings
 from pontibus.protocols.solvation.settings import PackmolSolvationSettings
 from pontibus.utils.molecules import WATER
 
-from openfe_benchmarks.data import get_benchmark_data_system
+from openfe_benchmarks.data import get_data_by_system_name
 from openfe_benchmarks.scripts import utils as ofebu
 
 logger = logging.getLogger(__name__)
@@ -42,13 +42,13 @@ def _configure_example_logging(level=logging.INFO):
     logging.getLogger("openfe_benchmarks").setLevel(level)
 
 
-BENCHMARK_SET = "solvation_set"
-BENCHMARK_SYS = "freesolv"
-# BENCHMARK_SYS = "mnsol_neutral"
+SYSTEM_GROUP = "solvation_set"
+SYSTEM_NAME = "freesolv"
+# SYSTEM_NAME = "mnsol_neutral"
 PARTIAL_CHARGE = "nagl_openff-gnn-am1bcc-1.0.0.pt"
 FORCEFIELD = "openff-2.3.0.offxml"  # Available to openff ForceField
 OUTPUT_DIR = "outputs"
-FILENAME = f"network_{BENCHMARK_SET}_{BENCHMARK_SYS}_asfe.json"
+FILENAME = f"network_{SYSTEM_GROUP}_{SYSTEM_NAME}_asfe.json"
 WATER_MODEL = "tip3p"  # or opc
 SUBSET = "subset_openff_filtered"
 
@@ -80,7 +80,7 @@ def get_chemical_systems(
     """
     if benchmark_sys.reference_data is None:
         raise ValueError(
-            f"The file 'experimental_solvation_free_energy_data.json' is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}"
+            f"The file 'experimental_solvation_free_energy_data.json' is missing for Benchmark System {SYSTEM_GROUP}/{SYSTEM_NAME}"
         )
 
     ref_path = benchmark_sys.reference_data["experimental_solvation_free_energy_data"]
@@ -89,13 +89,13 @@ def get_chemical_systems(
 
     if not hasattr(benchmark_sys, "subset_data") or benchmark_sys.subset_data is None:
         raise ValueError(
-            f"The subset data is missing for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}; "
+            f"The subset data is missing for Benchmark System {SYSTEM_GROUP}/{SYSTEM_NAME}; "
             f"expected subset '{SUBSET}'."
         )
     if SUBSET is not None:
         if SUBSET not in benchmark_sys.subset_data:
             raise ValueError(
-                f"The subset '{SUBSET}' is not available for Benchmark System {BENCHMARK_SET}/{BENCHMARK_SYS}."
+                f"The subset '{SUBSET}' is not available for Benchmark System {SYSTEM_GROUP}/{SYSTEM_NAME}."
             )
         else:
             subset_path = benchmark_sys.subset_data[SUBSET]
@@ -493,10 +493,10 @@ def main():
     script_dir = Path(__file__).parent
     out_dir = script_dir / OUTPUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Starting ASFE example: set={BENCHMARK_SET} sys={BENCHMARK_SYS}")
+    logger.info(f"Starting ASFE example: set={SYSTEM_GROUP} sys={SYSTEM_NAME}")
 
-    benchmark_sys = get_benchmark_data_system(BENCHMARK_SET, BENCHMARK_SYS)
-    logger.info(f"Loaded benchmark system {BENCHMARK_SET}/{BENCHMARK_SYS}")
+    benchmark_sys = get_data_by_system_name(SYSTEM_GROUP, SYSTEM_NAME)
+    logger.info(f"Loaded benchmark system {SYSTEM_GROUP}/{SYSTEM_NAME}")
 
     chemical_systems = get_chemical_systems(benchmark_sys)
     logger.info(

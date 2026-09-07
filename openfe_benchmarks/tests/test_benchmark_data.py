@@ -13,8 +13,8 @@ from openfe import ProteinComponent, LigandNetwork
 from openfe_benchmarks.data import (
     BenchmarkData,
     BenchmarkIndex,
-    get_benchmark_data_system,
-    get_benchmark_set_data_systems,
+    get_data_by_system_name,
+    get_data_by_system_group,
     PARTIAL_CHARGE_TYPES,
 )
 from openfe_benchmarks.scripts.utils import process_sdf
@@ -25,47 +25,47 @@ logging.getLogger("gufekey.gufe").setLevel(
 )  # Too many gufe logs to read pytest output otherwise
 
 
-def test_list_benchmark_sets_output():
-    """Test that BenchmarkIndex lists benchmark sets."""
+def test_list_system_groups_output():
+    """Test that BenchmarkIndex lists system groups."""
     index = BenchmarkIndex()
-    benchmark_sets = index.list_benchmark_sets()
-    assert isinstance(benchmark_sets, list)
-    assert all(isinstance(item, str) for item in benchmark_sets)
+    system_groups = index.list_system_groups()
+    assert isinstance(system_groups, list)
+    assert all(isinstance(item, str) for item in system_groups)
 
 
 @pytest.fixture(scope="module")
-def benchmark_sets():
-    """Fixture to provide all available benchmark sets."""
+def system_groups():
+    """Fixture to provide all available system groups."""
     index = BenchmarkIndex()
-    return index.list_benchmark_sets()
+    return index.list_system_groups()
 
 
 @pytest.mark.parametrize(
-    "benchmark_set",
-    [benchmark_set for benchmark_set in BenchmarkIndex().list_benchmark_sets()],
+    "system_group",
+    [system_group for system_group in BenchmarkIndex().list_system_groups()],
 )
-def test_benchmark_set_systems(benchmark_set):
-    """Test that systems in a benchmark set can be retrieved."""
-    systems = get_benchmark_set_data_systems(benchmark_set)
+def test_system_group_systems(system_group):
+    """Test that systems in a system group can be retrieved."""
+    systems = get_data_by_system_group(system_group)
     assert isinstance(systems, dict)
     assert all(isinstance(system, str) for system, _ in systems.items())
     assert all(isinstance(system, BenchmarkData) for _, system in systems.items())
 
 
 @pytest.mark.parametrize(
-    "benchmark_set, system_name",
+    "system_group, system_name",
     [
-        (benchmark_set, system_name)
-        for benchmark_set in BenchmarkIndex().list_benchmark_sets()
-        for system_name in get_benchmark_set_data_systems(benchmark_set)
+        (system_group, system_name)
+        for system_group in BenchmarkIndex().list_system_groups()
+        for system_name in get_data_by_system_group(system_group)
     ],
 )
-def test_benchmark_system_initialization(benchmark_set, system_name):
+def test_benchmark_system_initialization(system_group, system_name):
     """Test initialization of all BenchmarkData objects."""
-    system = get_benchmark_data_system(benchmark_set, system_name)
+    system = get_data_by_system_name(system_group, system_name)
     assert system is not None
-    assert system.name == system_name
-    assert system.benchmark_set == benchmark_set
+    assert system.system_name == system_name
+    assert system.system_group == system_group
 
     missing_ligand_charges = [
         charge for charge in PARTIAL_CHARGE_TYPES if charge not in system.ligands
@@ -86,36 +86,36 @@ def test_benchmark_system_initialization(benchmark_set, system_name):
 
 
 @pytest.mark.parametrize(
-    "benchmark_set, system_name",
+    "system_group, system_name",
     [
-        (benchmark_set, system_name)
-        for benchmark_set in BenchmarkIndex().list_benchmark_sets()
-        for system_name in get_benchmark_set_data_systems(benchmark_set)
+        (system_group, system_name)
+        for system_group in BenchmarkIndex().list_system_groups()
+        for system_name in get_data_by_system_group(system_group)
     ],
 )
-def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
+def test_benchmark_system_components_with_openfe(system_group, system_name):
     """Test loading and validation of BenchmarkData components through OpenFE."""
-    system = get_benchmark_data_system(benchmark_set, system_name)
+    system = get_data_by_system_name(system_group, system_name)
 
     # Validate protein can be loaded with OpenFE
     if system.protein:
         protein = ProteinComponent.from_pdb_file(str(system.protein))
         assert protein.to_rdkit().GetNumAtoms() > 0, (
-            f"Protein for {benchmark_set}/{system_name} has no atoms"
+            f"Protein for {system_group}/{system_name} has no atoms"
         )
 
     # Validate ligands can be loaded with RDKit and converted to OpenFE components
     for charge_type, ligand_path in system.ligands.items():
         ligands = process_sdf(str(ligand_path), return_dict=True)
         assert len(ligands) > 0, (
-            f"No valid ligands loaded from {charge_type} for {benchmark_set}/{system_name}"
+            f"No valid ligands loaded from {charge_type} for {system_group}/{system_name}"
         )
 
         # Verify each ligand has atoms
         for i, ligand in enumerate(ligands.values()):
             rdkit_mol = ligand.to_rdkit()
             assert rdkit_mol.GetNumAtoms() > 0, (
-                f"Ligand {i + 1} ({charge_type}) for {benchmark_set}/{system_name} has no atoms"
+                f"Ligand {i + 1} ({charge_type}) for {system_group}/{system_name} has no atoms"
             )
 
     # Validate cofactors can be loaded with RDKit and converted to OpenFE components
@@ -123,14 +123,14 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
         for charge_type, cofactor_path in system.cofactors.items():
             cofactors = process_sdf(str(cofactor_path))
             assert len(cofactors) > 0, (
-                f"No valid cofactors loaded from {charge_type} for {benchmark_set}/{system_name}"
+                f"No valid cofactors loaded from {charge_type} for {system_group}/{system_name}"
             )
 
             # Verify each cofactor has atoms
             for i, cofactor in enumerate(cofactors):
                 rdkit_mol = cofactor.to_rdkit()
                 assert rdkit_mol.GetNumAtoms() > 0, (
-                    f"Cofactor {i + 1} ({charge_type}) for {benchmark_set}/{system_name} has no atoms"
+                    f"Cofactor {i + 1} ({charge_type}) for {system_group}/{system_name} has no atoms"
                 )
 
     # Validate network can be loaded with OpenFE
@@ -138,16 +138,16 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
         for network_name, network_path in system.ligand_networks.items():
             network = LigandNetwork.from_json(file=str(network_path))
             assert hasattr(network, "edges"), (
-                f"Network {network_name} for {benchmark_set}/{system_name} has no edges attribute"
+                f"Network {network_name} for {system_group}/{system_name} has no edges attribute"
             )
             assert len(network.edges) > 0, (
-                f"Network {network_name} for {benchmark_set}/{system_name} has no edges"
+                f"Network {network_name} for {system_group}/{system_name} has no edges"
             )
             assert hasattr(network, "nodes"), (
-                f"Network {network_name} for {benchmark_set}/{system_name} has no nodes attribute"
+                f"Network {network_name} for {system_group}/{system_name} has no nodes attribute"
             )
             assert len(network.nodes) > 0, (
-                f"Network {network_name} for {benchmark_set}/{system_name} has no nodes"
+                f"Network {network_name} for {system_group}/{system_name} has no nodes"
             )
 
     # make sure the reference data is present and can be loaded and has dg
@@ -156,17 +156,17 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
             with open(ref_path, "r") as f:
                 ref_data = json.load(f, cls=JSON_HANDLER.decoder)
             assert isinstance(ref_data, dict), (
-                f"Reference data for {benchmark_set}/{system_name} is not a dict"
+                f"Reference data for {system_group}/{system_name} is not a dict"
             )
             for ref_entry in ref_data.values():
                 if ref_name.startswith("experimental_"):
                     assert "dg" in ref_entry, (
-                        f"Reference data, {ref_name},  for {benchmark_set}/{system_name} missing 'dg' key"
+                        f"Reference data, {ref_name},  for {system_group}/{system_name} missing 'dg' key"
                     )
                     # make sure the units are compatible with kilocalories per mole
                     dg = ref_entry["dg"]
                     assert isinstance(dg, unit.Quantity), (
-                        f"'dg' value for {benchmark_set}/{system_name}, {ref_name}, is not a Quantity"
+                        f"'dg' value for {system_group}/{system_name}, {ref_name}, is not a Quantity"
                     )
                     # convert to kcal/mol to check compatibility
                     dg.to("kcal/mol")
@@ -176,7 +176,7 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
                         str(system.ligands["no_charges"]), return_dict=True
                     )
                     assert "solute_name" in ref_entry, (
-                        f"Reference data for {benchmark_set}/{system_name}, {ref_name} is missing 'solute_name' key"
+                        f"Reference data for {system_group}/{system_name}, {ref_name} is missing 'solute_name' key"
                     )
                     assert (
                         ref_entry["solute_name"] in ligands
@@ -185,7 +185,7 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
                         f"Solute referenced in exp data, {ref_entry['solute_name']}, is not found in ligand.sdf"
                     )
                     assert "solvent_name" in ref_entry, (
-                        f"Reference data for {benchmark_set}/{system_name}, {ref_name} is missing 'solvent_name' key"
+                        f"Reference data for {system_group}/{system_name}, {ref_name} is missing 'solvent_name' key"
                     )
                     assert (
                         ref_entry["solvent_name"] in ligands
@@ -201,51 +201,51 @@ def test_benchmark_system_components_with_openfe(benchmark_set, system_name):
             with open(subset_path, "r") as f:
                 subset = json.load(f)
             assert isinstance(subset, dict), (
-                f"Subset data '{subset_name}' for {benchmark_set}/{system_name} is not a dict"
+                f"Subset data '{subset_name}' for {system_group}/{system_name} is not a dict"
             )
             for entry_key, entry in subset.items():
                 assert "solute_name" in entry, (
                     f"Subset entry '{entry_key}' in '{subset_name}' for "
-                    f"{benchmark_set}/{system_name} is missing 'solute_name' key"
+                    f"{system_group}/{system_name} is missing 'solute_name' key"
                 )
                 assert (
                     entry["solute_name"] in ligands or entry["solute_name"] == "water"
                 ), (
                     f"Solute '{entry['solute_name']}' referenced in subset '{subset_name}' "
-                    f"for {benchmark_set}/{system_name} is not found in ligands.sdf"
+                    f"for {system_group}/{system_name} is not found in ligands.sdf"
                 )
                 assert "solvent_name" in entry, (
                     f"Subset entry '{entry_key}' in '{subset_name}' for "
-                    f"{benchmark_set}/{system_name} is missing 'solvent_name' key"
+                    f"{system_group}/{system_name} is missing 'solvent_name' key"
                 )
                 assert (
                     entry["solvent_name"] in ligands or entry["solvent_name"] == "water"
                 ), (
                     f"Solvent '{entry['solvent_name']}' referenced in subset '{subset_name}' "
-                    f"for {benchmark_set}/{system_name} is not found in ligands.sdf"
+                    f"for {system_group}/{system_name} is not found in ligands.sdf"
                 )
 
 
 class TestErrorHandling:
     """Tests for error handling."""
 
-    def test_nonexistent_benchmark_set(self):
-        """Test accessing nonexistent benchmark set."""
+    def test_nonexistent_system_group(self):
+        """Test accessing nonexistent system group."""
         with pytest.raises(ValueError, match="not found"):
-            get_benchmark_data_system("nonexistent_set", "system")
+            get_data_by_system_name("nonexistent_set", "system")
 
     def test_nonexistent_system(self):
-        """Test accessing nonexistent system in valid set."""
+        """Test accessing nonexistent system in valid group."""
         index = BenchmarkIndex()
-        sets = index.list_benchmark_sets()
-        if sets:
+        groups = index.list_system_groups()
+        if groups:
             with pytest.raises(ValueError, match="not found"):
-                get_benchmark_data_system(sets[0], "nonexistent_system")
+                get_data_by_system_name(groups[0], "nonexistent_system")
 
-    def test_invalid_set_name_in_get_benchmark_set_data_systems(self):
-        """Test get_benchmark_set_data_systems with invalid set."""
+    def test_invalid_set_name_in_get_system_group_data_systems(self):
+        """Test get_data_by_system_group with invalid group."""
         with pytest.raises(ValueError, match="not found"):
-            get_benchmark_set_data_systems("nonexistent_set")
+            get_data_by_system_group("nonexistent_set")
 
 
 if __name__ == "__main__":
