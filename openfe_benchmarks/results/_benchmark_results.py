@@ -6,7 +6,7 @@ Filtering functions are separate from the class, following functional programmin
 """
 
 from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Optional, Any
 import yaml
 import json
@@ -35,6 +35,32 @@ __all__ = [
 _RESULTS_DIR = (
     Path(__file__).resolve().parent.parent.parent / "openfe_benchmarks" / "results"
 )
+
+_SUBMISSION_EXPORT_FIELDS = [
+    "submission_id",
+    "title",
+    "summary",
+    "tags",
+    "calculation_type",
+    "authors",
+    "date",
+    "results",
+    "archive",
+    "license",
+    "openfe_version",
+    "openmm_version",
+    "openff_toolkit_version",
+    "partial_charges",
+    "benchmark_data",
+    "protocol_settings",
+]
+
+_SUBMISSION_OPTIONAL_FIELDS = [
+    "mapper",
+    "forcefield",
+    "small_molecule_forcefield",
+    "pontibus_version",
+]
 
 
 @dataclass
@@ -253,6 +279,68 @@ class BenchmarkResults:
     def __repr__(self):
         """Return concise string representation with submission_id and calculation_type."""
         return f"BenchmarkResults(submission_id='{self.submission_id}', calculation_type='{self.calculation_type}')"
+
+    def to_submission_dict(self) -> dict[str, Any]:
+        """
+        Export this instance to a submission-compatible dictionary.
+
+        Returns
+        -------
+        dict[str, Any]
+            Dictionary matching the submission metadata contract.
+        """
+        data = asdict(self)
+        submission_data: dict[str, Any] = {
+            key: data[key]
+            for key in _SUBMISSION_EXPORT_FIELDS + _SUBMISSION_OPTIONAL_FIELDS
+            if key in data
+        }
+
+        # Convert date objects to ISO strings for stable YAML output.
+        date_value = submission_data.get("date")
+        if hasattr(date_value, "isoformat"):
+            submission_data["date"] = date_value.isoformat()
+
+        # Ensure optional submission fields are always present.
+        for key in _SUBMISSION_OPTIONAL_FIELDS:
+            if key not in submission_data:
+                submission_data[key] = None
+
+        return submission_data
+
+    def to_submission_yaml(self) -> str:
+        """
+        Export this instance as YAML text suitable for submission.yaml.
+
+        Returns
+        -------
+        str
+            YAML string for submission metadata.
+        """
+        return yaml.safe_dump(
+            self.to_submission_dict(),
+            sort_keys=False,
+            default_flow_style=False,
+            allow_unicode=False,
+        )
+
+    def write_submission_yaml(self, output_path: Path) -> Path:
+        """
+        Write submission YAML to disk.
+
+        Parameters
+        ----------
+        output_path : Path
+            Path to write the submission YAML file.
+
+        Returns
+        -------
+        Path
+            The output path that was written.
+        """
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(self.to_submission_yaml())
+        return output_path
 
     def load_raw_results(self) -> None:
         """
