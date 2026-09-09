@@ -1,0 +1,108 @@
+submission_id: 2026-09-03_openff-2.3.0_opc3_jacs_set
+title: OpenFE RBFE - jacs_set (7 systems) - 2026-09-03_openff-2.3.0_opc3_jacs_set
+summary: 'This submission describes the RBFE benchmark covering jacs_set: bace, jnk1,
+  mcl1, p38, ptp1b, thrombin, tyk2 prepared with ff14SB/lipid17_merged/opc3_standard/phosaa10
+  for proteins and solvents, and openff-2.3.0 with nagl_openff-gnn-am1bcc-1.0.0.pt
+  for ligands, solutes, and cofactors. The submission contains 518 edges across 183
+  unique ligands. Results are derived from archived Alchemiscale workflow data. For
+  scripts to generate this network: github.com/openforcefield/alchemical-benchmark-resources/submissions/2026-08-31_openff-2.3.0_opc3_jacs_set'
+tags:
+- rbfe
+- alchemicalarchive
+- ff14SB
+- lipid17_merged
+- opc3_standard
+- phosaa10
+- openff-2.3.0
+- jacs_set
+- bace
+- jnk1
+- mcl1
+- p38
+- ptp1b
+- thrombin
+- tyk2
+- nagl_openff-gnn-am1bcc-1.0.0.pt
+- openfe
+calculation_type: rbfe
+authors:
+- name: Jennifer A. Clark
+date: '2026-09-03'
+results: computational_results.json.bz2
+archive:
+  doi: 10.5281/zenodo.22681673
+  archive_provider: zenodo
+license: CC-BY-4.0
+openfe_version: 1.8.0
+openmm_version: 8.2.0
+openff_toolkit_version: '0.18'
+partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  jacs_set:
+    bace: AlchemicalNetwork-32c2e28da705b7c006ca4f1c71bf6cf9
+    jnk1: AlchemicalNetwork-d06f6ff24325f7ae79d4c8cee32c7acf
+    mcl1: AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065
+    p38: AlchemicalNetwork-39f75d5bc7d34d5a28023f9fdc46d70b
+    ptp1b: AlchemicalNetwork-15c3998a2e91e56453f9cd18744673ab
+    thrombin: AlchemicalNetwork-5565841551360554bf25765cccf20e3e
+    tyk2: AlchemicalNetwork-75914100409d53ea6dc3ac649789b451
+protocol_settings:
+- protocol: RelativeHybridTopologyProtocol
+  protocol_library: openfe
+  notes: |-
+    Applies to 259 edges:
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=23, ligand_final=42, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=23, ligand_final=66, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=26, ligand_final=27, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=26, ligand_final=44, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=26, ligand_final=57, solvent={'O'}, cofactors=none, protein=none
+    - etc.
+  timestep: 4.0 fs
+  temperature: 298.15 K
+  pressure: 1 bar
+  lambda_functions: default
+  lambda_windows: '11'
+  small_molecule_forcefield: openff-2.3.0
+  forcefields:
+  - ff14SB
+  - lipid17_merged
+  - opc3_standard
+  - phosaa10
+  partial_charges: am1bcc_at
+  equilibration_time: 1.0 ns
+  production_time: 5.0 ns
+- protocol: RelativeHybridTopologyProtocol
+  protocol_library: openfe
+  notes: |-
+    Detailed protocol settings differ:
+    - solvation_settings.solvent_padding: 1.5 -> 1
+    Applies to 259 edges:
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=23, ligand_final=42, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=23, ligand_final=66, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=26, ligand_final=27, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=26, ligand_final=44, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-0ce15c30485f25afd1a0bc1afe006065 jacs_set-mcl1: ligand_start=26, ligand_final=57, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - etc.
+  timestep: 4.0 fs
+  temperature: 298.15 K
+  pressure: 1 bar
+  lambda_functions: default
+  lambda_windows: '11'
+  small_molecule_forcefield: openff-2.3.0
+  forcefields:
+  - ff14SB
+  - lipid17_merged
+  - opc3_standard
+  - phosaa10
+  partial_charges: am1bcc_at
+  equilibration_time: 1.0 ns
+  production_time: 5.0 ns
+mapper: KartografAtomMapper 1.2.0 (LSA)
+forcefield:
+- ff14SB
+- lipid17_merged
+- opc3_standard
+- phosaa10
+small_molecule_forcefield: openff-2.3.0
+pontibus_version: None
