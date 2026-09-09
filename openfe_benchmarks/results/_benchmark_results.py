@@ -8,6 +8,7 @@ Filtering functions are separate from the class, following functional programmin
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
 from typing import Optional, Any
+from collections.abc import Mapping, Sequence
 import yaml
 import json
 import bz2
@@ -61,6 +62,32 @@ _SUBMISSION_OPTIONAL_FIELDS = [
     "small_molecule_forcefield",
     "pontibus_version",
 ]
+
+
+class LiteralStr(str):
+    """Marker string type to force YAML literal block style."""
+
+
+def _represent_literal_str(dumper: yaml.Dumper, data: LiteralStr) -> yaml.ScalarNode:
+    return dumper.represent_scalar("tag:yaml.org,2002:str", str(data), style="|")
+
+
+yaml.SafeDumper.add_representer(LiteralStr, _represent_literal_str)
+
+
+def _to_yaml_safe(value: Any) -> Any:
+    """Recursively coerce values into YAML-serializable built-in Python types."""
+    if value is None or isinstance(value, (str, int, float, bool)):
+        return value
+
+    if isinstance(value, Mapping):
+        return {str(key): _to_yaml_safe(item) for key, item in value.items()}
+
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        return [_to_yaml_safe(item) for item in value]
+
+    # Fall back to a stable text representation for tokenized objects (e.g., GufeKey).
+    return str(value)
 
 
 @dataclass
@@ -206,7 +233,7 @@ class BenchmarkResults:
     >>> # RBFE submissions before 2026-09
     >>> rbfe_submissions = filter_results(calculation_type='rbfe', date='<2026-09-01')
     >>> len(rbfe_submissions)
-    8
+    9
     >>> # Submissions containing TYK2 results
     >>> tyk2_submissions = filter_results(system_name='tyk2')
     >>> # Recent OpenFE 1.x submissions
@@ -305,6 +332,9 @@ class BenchmarkResults:
         for key in _SUBMISSION_OPTIONAL_FIELDS:
             if key not in submission_data:
                 submission_data[key] = None
+
+        # Ensure values are YAML-safe and do not contain tokenized object instances.
+        submission_data = _to_yaml_safe(submission_data)
 
         return submission_data
 

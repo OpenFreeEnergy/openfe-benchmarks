@@ -1,973 +1,567 @@
 #!/usr/bin/env python3
-"""Prepare benchmark submission artifacts from AlchemicalArchive or AlchemicalNetwork JSON files.
-
-This module generates `submission.yaml` and `zenodo_description.md` from one or more JSON archives
-exported by OpenFE/Alchemiscale. Supports single files, lists of files, or glob patterns with 
-potentially different protocol settings.
-
-Example (CLI):
-
-    # Explicit files
-    python prepare_metadata_submission.py archive1.json.bz2 archive2.json.bz2 \\
-        --output-dir ./output \\
-        --submission-id "2026-04-15-example" \\
-        --tags "openfe,alchemicalarchive" \\
-        --author "Jane Doe" \\
-        --license "CC-BY-4.0"
-    # Glob pattern
-    python prepare_metadata_submission.py "networks/*/*.json" \\
-        --output-dir ./output \\
-        --submission-id "2026-04-15-example"
-
-Example (Python API):
-
-    from pathlib import Path
-    from openfe_benchmarks.scripts.prepare_metadata_submission import process_network
-
-    # Using explicit file list
-    process_network(
-        input_files=[Path("archive1.json.bz2"), Path("archive2.json.bz2")],
-        output_dir=Path("."),
-        submission_id="2026-04-15-example",
-        tags="openfe,alchemicalarchive",
-        author=["Jane Doe"],
-        license="CC-BY-4.0",
-    )
-
-    # Using glob pattern
-    process_network(
-        input_files="networks/*/*.json",
-        output_dir=Path("."),
-        submission_id="2026-04-15-example",
-        tags="openfe,alchemicalarchive",
-        author=["Jane Doe"],
-        license="CC-BY-4.0",
-    )
-
-    # When a custom force field is stored as serialized XML/JSON inside the archive,
-    # supply a readable label so metadata and tags remain clean.
-    process_network(
-        input_files="networks/*/*.json",
-        output_dir=Path("."),
-        submission_id="2026-04-15-example",
-        tags="openfe,alchemicalarchive",
-        author=["Jane Doe"],
-        license="CC-BY-4.0",
-        forcefields=["openff-3.0.0-alpha1b-opc3"],
-        small_molecule_forcefield="openff-3.0.0-alpha1b",
-    )
-"""
+"""Prepare submission metadata from OpenFE archives using BenchmarkResults."""
 
 from __future__ import annotations
 
-import os
 import argparse
-import ast
 import bz2
-import glob as glob_module
-import json
-import re
-import sys
-import textwrap
+from collections.abc import Callable
 from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import date
-from pathlib import Path
-from typing import Any
-import warnings
-import pprint
+import glob as glob_module
+import json
 import logging
+from pathlib import Path
+import re
+import sys
+import textwrap
+from typing import cast
+import yaml
 
 from pint import Quantity
 
-from gufe.archival import AlchemicalArchive
 from gufe import (
     AlchemicalNetwork,
-    SolventComponent,
     ProteinComponent,
     SmallMoleculeComponent,
+    SolventComponent,
 )
+from gufe.archival import AlchemicalArchive
 from gufe.transformations.transformation import Transformation
 
 from openfe_benchmarks.data import BenchmarkIndex
+from openfe_benchmarks.results import BenchmarkResults
+from openfe_benchmarks.results._benchmark_results import Archive, LiteralStr
 
 logger = logging.getLogger(__name__)
 
 
-def _add_value_with_keys(
-    list_obj: list[tuple[Any, list[str]]],
-    value: Any,
+@dataclass(frozen=True)
+class _ModeSpec:
+    key: str
+    detect_prefixes: tuple[str, ...]
+    detect_default: bool
+    use_mapping_ligands: bool
+    rbfe_like: bool
+    ligand_count_min: int
+    ligand_count_max: int
+    summary_mode_label: str
+    summary_sentence_builder: Callable[[int, int, int], str]
+    simulation_setting_keys: tuple[tuple[str, str, str], ...]
+
+
+def _rbfe_summary_sentence(
+    n_transformations: int, n_ligands: int, _n_solvents: int
+) -> str:
+    return f"The submission contains {n_transformations} edges across {n_ligands} unique ligands."
+
+
+def _asfe_summary_sentence(
+    n_transformations: int, n_ligands: int, n_solvents: int
+) -> str:
+    return (
+        f"The submission contains {n_transformations} edges across {n_ligands} unique solutes and "
+        f"{n_solvents} unique solvents."
+    )
+
+
+_MODE_SPECS: dict[str, _ModeSpec] = {
+    "rbfe": _ModeSpec(
+        key="rbfe",
+        detect_prefixes=("complex_", "solvent_"),
+        detect_default=False,
+        use_mapping_ligands=True,
+        rbfe_like=True,
+        ligand_count_min=1,
+        ligand_count_max=2,
+        summary_mode_label="RBFE",
+        summary_sentence_builder=_rbfe_summary_sentence,
+        simulation_setting_keys=(
+            ("simulation_settings", "equilibration_time", "production_time"),
+        ),
+    ),
+    "asfe": _ModeSpec(
+        key="asfe",
+        detect_prefixes=(),
+        detect_default=True,
+        use_mapping_ligands=False,
+        rbfe_like=False,
+        ligand_count_min=1,
+        ligand_count_max=1,
+        summary_mode_label="ASFE",
+        summary_sentence_builder=_asfe_summary_sentence,
+        simulation_setting_keys=(
+            (
+                "vacuum_simulation_settings",
+                "vacuum_equilibration_time",
+                "vacuum_production_time",
+            ),
+            (
+                "solvent_simulation_settings",
+                "solvent_equilibration_time",
+                "solvent_production_time",
+            ),
+        ),
+    ),
+}
+
+
+def _mode_spec(mode: str) -> _ModeSpec:
+    if mode not in _MODE_SPECS:
+        raise ValueError(f"Unsupported calculation mode: {mode}")
+    return _MODE_SPECS[mode]
+
+
+def _as_obj_dict(value: object) -> dict[str, object]:
+    if isinstance(value, dict):
+        return cast(dict[str, object], value)
+    return {}
+
+
+def _add_str_value_with_keys(
+    values: list[tuple[str, list[str]]],
+    value: str,
     keys: list[str],
 ) -> None:
-    for existing_value, existing_keys in list_obj:
-        if existing_value == value:
+    for current_value, current_keys in values:
+        if current_value == value:
             for key in keys:
-                if key not in existing_keys:
-                    existing_keys.append(key)
+                if key not in current_keys:
+                    current_keys.append(key)
             return
-    list_obj.append((value, list(keys)))
+    values.append((value, list(keys)))
 
 
-def _extract_charge_provenance(component_dict: dict) -> dict | None:
-    """Extract and parse charge_provenance from component molprops.
-
-    Parameters
-    ----------
-    component_dict : dict
-        Component dictionary (after .to_dict() conversion)
-
-    Returns
-    -------
-    dict | None
-        Parsed charge_provenance dict if present and valid, None otherwise
-    """
-    molprops = component_dict.get("molprops") or {}
-    if not isinstance(molprops, dict):
-        return None
-
-    charge_provenance_str = molprops.get("charge_provenance")
-    if not charge_provenance_str:
-        return None
-
-    try:
-        # charge_provenance is stored as a JSON string in molprops
-        provenance_dict = json.loads(charge_provenance_str)
-        return provenance_dict
-    except (json.JSONDecodeError, TypeError) as e:
-        warnings.warn(
-            f"Failed to parse charge_provenance for component {component_dict.get('name', 'unknown')}: {e}",
-            category=UserWarning,
-        )
-        return None
+def _add_tuple_value_with_keys(
+    values: list[tuple[tuple[str, ...], list[str]]],
+    value: tuple[str, ...],
+    keys: list[str],
+) -> None:
+    for current_value, current_keys in values:
+        if current_value == value:
+            for key in keys:
+                if key not in current_keys:
+                    current_keys.append(key)
+            return
+    values.append((value, list(keys)))
 
 
-def _extract_charges_from_transformation(trans, calc_mode: str) -> dict:
-    """Extract charge_provenance from ligand and cofactor components in both states.
-
-    Parameters
-    ----------
-    trans : Transformation
-        Transformation object
-    calc_mode : str
-        Calculation mode ("rbfe" or "asfe")
-
-    Returns
-    -------
-    dict
-        Structure: {
-            "stateA": {
-                "ligand": {...provenance dict...} or None,
-                "cofactor": {...provenance dict...} or None
-            },
-            "stateB": {
-                "ligand": {...provenance dict...} or None,
-                "cofactor": {...provenance dict...} or None
-            }
-        }
-    """
-    result = {
-        "stateA": {"ligand": None, "cofactor": None},
-        "stateB": {"ligand": None, "cofactor": None},
-    }
-
-    for state_key in ("stateA", "stateB"):
-        chemical_system = getattr(trans, state_key)
-        if not chemical_system:
-            continue
-
-        for label, component in chemical_system.components.items():
-            qualname = str(type(component)).rstrip("'>").split(".")[-1]
-            component_dict = component.to_dict()
-
-            # Determine component type based on label and qualname
-            if calc_mode == "asfe":
-                # In ASFE mode, we care about "solute" (ligand)
-                if "solute" in label or qualname == "SmallMoleculeComponent":
-                    provenance = _extract_charge_provenance(component_dict)
-                    if provenance:
-                        result[state_key]["ligand"] = provenance
-            elif calc_mode == "rbfe":
-                # In RBFE mode, we care about "ligand" and "cofactor"
-                if "ligand" in label:
-                    provenance = _extract_charge_provenance(component_dict)
-                    if provenance:
-                        result[state_key]["ligand"] = provenance
-                elif "cofactor" in label:
-                    provenance = _extract_charge_provenance(component_dict)
-                    if provenance:
-                        result[state_key]["cofactor"] = provenance
-                elif qualname == "SmallMoleculeComponent" and "solvent" not in label:
-                    # Non-solvent small molecules that are not explicit ligands are treated as cofactors
-                    provenance = _extract_charge_provenance(component_dict)
-                    if provenance:
-                        result[state_key]["cofactor"] = provenance
-
-    return result
+def _add_protocol_value_with_keys(
+    values: list[tuple[dict[str, str | list[str]], list[str]]],
+    value: dict[str, str | list[str]],
+    keys: list[str],
+) -> None:
+    for current_value, current_keys in values:
+        if current_value == value:
+            for key in keys:
+                if key not in current_keys:
+                    current_keys.append(key)
+            return
+    values.append((value, list(keys)))
 
 
-@dataclass
-class ProtocolSettingsInfo:
-    """Container for protocol settings with source metadata."""
-
-    calculation_mode: str
-    protocol: str
-    full_protocol_settings: str
-    timestep: str
-    temperature: str
-    pressure: str
-    lambda_functions: str
-    partial_charges: str
-    small_molecule_forcefield: str = "TODO"
-    forcefields: tuple[str, ...] = ("TODO",)  # sorted tuple for deterministic ordering
-    protocol_library: str = "TODO"
-    lambda_windows: str = ""
-    lambda_schedule: str = ""
-    notes: str = ""
-    # for rbfe
-    equilibration_time: str | None = None
-    production_time: str | None = None
-    # for asfe
-    vacuum_equilibration_time: str | None = None
-    vacuum_production_time: str | None = None
-    solvent_equilibration_time: str | None = None
-    solvent_production_time: str | None = None
-
-    def __eq__(self, other: Any) -> bool:
-        if not isinstance(other, ProtocolSettingsInfo):
-            return NotImplemented
-        return (
-            self.calculation_mode == other.calculation_mode
-            and self.protocol == other.protocol
-            and self.notes == other.notes
-            and self.full_protocol_settings == other.full_protocol_settings
-            and self.timestep == other.timestep
-            and self.temperature == other.temperature
-            and self.pressure == other.pressure
-            and self.lambda_functions == other.lambda_functions
-            and self.lambda_windows == other.lambda_windows
-            and self.lambda_schedule == other.lambda_schedule
-            and self.small_molecule_forcefield == other.small_molecule_forcefield
-            and self.forcefields == other.forcefields
-            and self.protocol_library == other.protocol_library
-            and self.partial_charges == other.partial_charges
-            and self.equilibration_time == other.equilibration_time
-            and self.production_time == other.production_time
-            and self.vacuum_equilibration_time == other.vacuum_equilibration_time
-            and self.vacuum_production_time == other.vacuum_production_time
-            and self.solvent_equilibration_time == other.solvent_equilibration_time
-            and self.solvent_production_time == other.solvent_production_time
-        )
-
-
-@dataclass
-class SystemInfo:
-    """Per-system information extracted from edges."""
-
-    system_group: str
-    system_name: str
-    calculation_mode: str
-    source_file: str
-    network_key: str
-    ligands: set[str] = field(default_factory=set)
-    proteins: set[str] = field(default_factory=set)
-    cofactors: set[str] = field(default_factory=set)
-    solvents: set[str] = field(default_factory=set)
-    files: set[str] = field(default_factory=set)
-    openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    mapper: list[tuple[str, list[str]]] = field(default_factory=list)
-    protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
-        default_factory=list
-    )
-
-    def make_key(
-        self,
-        network_key,
-        ligand_start,
-        cofactors,
-        solvent,
-        ligand_final=None,
-        protein=None,
-    ):
-        if self.calculation_mode == "rbfe":
-            return f"{network_key} {self.system_group}-{self.system_name}: ligand_start={ligand_start}, ligand_final={ligand_final}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}, protein={protein or 'none'}"
-        elif self.calculation_mode == "asfe":
-            if protein is not None or ligand_final is not None:
-                warnings.warn("ASFEs do not use final ligand or protein information.")
-            return f"{network_key} {self.system_group}-{self.system_name}: ligand_start={ligand_start}, solvent={solvent or 'none'}, cofactors={cofactors or 'none'}"
-        else:
-            raise ValueError(
-                "Set the calculation mode to a supported value: 'rbfe', 'asfe'"
-            )
-
-    def add_version_setting(self, attribute, value, key):
-        """Add a version attribute to the appropriate list
-
-        Parameters
-        ----------
-        attribute : str
-            Attribute of SystemInfo, one of openmm_version, openfe_version, or openff_toolkit_version
-        value : str
-            Version string
-        key : str
-            String representing the calculation run with this version
-        """
-        _add_value_with_keys(getattr(self, attribute), value, [key])
-
-    def add_protocol_settings(self, protocol_settings: ProtocolSettingsInfo, key):
-        """Add or update protocol settings with associated transformation key.
-
-        Stores unique ProtocolSettingsInfo objects with a list of edge keys
-        that use that protocol configuration.
-        """
-        _add_value_with_keys(self.protocol_settings_list, protocol_settings, [key])
-
-
-@dataclass
-class AutoMetadata:
-    calculation_mode: str = ""
-    network_key: str = ""
-    n_transformations: int = 0
-    system_groups_systems: list[tuple] = field(default_factory=list)
-    system_info_dict: dict[tuple, SystemInfo] = field(default_factory=dict)
-    openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
-    mapper: list[tuple[str, list[str]]] = field(default_factory=list)
-    protocols: list[tuple[str, list[str]]] = field(default_factory=list)
-    forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
-    small_molecule_forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
-    partial_charges: list[tuple[str, list[str]]] = field(default_factory=list)
-    protocol_libraries: list[tuple[str, list[str]]] = field(default_factory=list)
-    protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]] = field(
-        default_factory=list
-    )
-
-    def update_from_system_info(self) -> None:
-        """Update aggregated fields from the contained SystemInfo entries."""
-        self.system_groups_systems = list(self.system_info_dict.keys())
-
-        self.openfe_version = []
-        self.openmm_version = []
-        self.openff_toolkit_version = []
-        self.pontibus_version = []
-        self.mapper = []
-        self.protocols = []
-        self.forcefield = []
-        self.small_molecule_forcefield = []
-        self.partial_charges = []
-        self.protocol_settings_list = []
-
-        for system_info in self.system_info_dict.values():
-            for version, keys in system_info.openfe_version:
-                _add_value_with_keys(self.openfe_version, version, keys)
-            for version, keys in system_info.openmm_version:
-                _add_value_with_keys(self.openmm_version, version, keys)
-            for version, keys in system_info.openff_toolkit_version:
-                _add_value_with_keys(self.openff_toolkit_version, version, keys)
-            for version, keys in system_info.pontibus_version:
-                _add_value_with_keys(self.pontibus_version, version, keys)
-            for mapper_info, keys in system_info.mapper:
-                _add_value_with_keys(self.mapper, mapper_info, keys)
-
-            for protocol_settings, keys in system_info.protocol_settings_list:
-                if protocol_settings.protocol:
-                    _add_value_with_keys(
-                        self.protocols, protocol_settings.protocol, keys
-                    )
-                if protocol_settings.forcefields:
-                    _add_value_with_keys(
-                        self.forcefield, protocol_settings.forcefields, keys
-                    )
-                if protocol_settings.small_molecule_forcefield:
-                    _add_value_with_keys(
-                        self.small_molecule_forcefield,
-                        protocol_settings.small_molecule_forcefield,
-                        keys,
-                    )
-                if protocol_settings.protocol_library:
-                    _add_value_with_keys(
-                        self.protocol_libraries,
-                        protocol_settings.protocol_library,
-                        keys,
-                    )
-                if protocol_settings.partial_charges:
-                    _add_value_with_keys(
-                        self.partial_charges,
-                        protocol_settings.partial_charges,
-                        keys,
-                    )
-
-                for existing_settings, existing_keys in self.protocol_settings_list:
-                    if existing_settings == protocol_settings:
-                        for key in keys:
-                            if key not in existing_keys:
-                                existing_keys.append(key)
-                        break
-                else:
-                    self.protocol_settings_list.append((protocol_settings, list(keys)))
-
-
-def _load_network(
-    input_path: Path,
-) -> tuple[AlchemicalNetwork | AlchemicalArchive, str]:
-    """Load an AlchemicalNetwork or AlchemicalArchive from JSON or bz2-compressed JSON.
-
-    Parameters
-    ----------
-    input_path : Path
-        Path to the JSON or JSON.bz2 file
-
-    Returns
-    -------
-    tuple[AlchemicalNetwork | AlchemicalArchive, str]
-        Tuple of (loaded network object, mode) where mode is either
-        "alchemicalarchive" or "alchemicalnetwork"
-        For "alchemicalarchive" mode, returns the AlchemicalArchive object.
-        For "alchemicalnetwork" mode, returns the AlchemicalNetwork object.
-    """
-    try:
-        if str(input_path).endswith(".bz2"):
-            with bz2.open(input_path, "rt") as f:
-                json_content = f.read()
-
-            alchemical_archive = AlchemicalArchive.from_json(content=json_content)
-        else:
-            alchemical_archive = AlchemicalArchive.from_json(file=str(input_path))
-        return alchemical_archive, "alchemicalarchive"
-    except Exception:
-        try:
-            if str(input_path).endswith(".bz2"):
-                with bz2.open(input_path, "rt") as f:
-                    json_content = f.read()
-
-                alchemical_network = AlchemicalNetwork.from_json(content=json_content)
-            else:
-                alchemical_network = AlchemicalNetwork.from_json(file=str(input_path))
-            return alchemical_network, "alchemicalnetwork"
-        except Exception:
-            raise ImportError(
-                f"Could not import file as either an AlchemicalArchive or AlchemicalNetwork: {input_path}"
-            )
-
-
-def _get_network_key(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    mode: str,
-) -> str:
-    if mode == "alchemicalarchive":
-        return network_obj.network.key
-    elif mode == "alchemicalnetwork":
-        return network_obj.key
-    else:
-        raise ValueError(
-            f"Network mode must be either 'alchemical network' or 'alchemicalarchive', not {mode},"
-        )
-
-
-def _transformation_refs(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    mode: str,
-) -> list[Any]:
-    """Get transformation references from either an AlchemicalArchive or AlchemicalNetwork.
-
-    For AlchemicalArchive, transformation_results contains tuples of (transformation, results),
-    so we extract the transformation (first element) from each tuple.
-
-    For AlchemicalNetwork, edges are transformation objects directly.
-    """
-    if mode == "alchemicalarchive":
-        # transformation_results is a list of (transformation, results) tuples
-        return [trans for trans, _ in network_obj.transformation_results]
-    elif mode == "alchemicalnetwork":
-        return network_obj.edges
-    else:
-        raise ValueError(
-            f"Network mode must be either 'alchemical network' or 'alchemicalarchive', not {mode},"
-        )
-
-
-def _detect_calc_mode(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    mode: str,
-) -> str:
-    names: list[str] = []
-
-    names = [trans.name for trans in _transformation_refs(network_obj, mode)]
-    if names:
-        # !!!! NoteHere !!! what is hard coded to detect calculation type?
-        if any(n.startswith("complex_") or n.startswith("solvent_") for n in names):
-            return "rbfe"
-        return "asfe"
-
-
-def _slugify(value: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
-
-
-def _default_submission_id(network_key: str) -> str:
-    return f"{date.today().isoformat()}-{_slugify(network_key)}"
-
-
-def _generate_title(
-    mode: str,
-    system_names: list[tuple[str, str]],
-    submission_id: str,
-) -> str:
-    """
-    Generate a descriptive title for the submission.
-
-    Format rules:
-    - Single group, 1-3 systems: "OpenFE RBFE - group - sys1, sys2, sys3 - submission_id"
-    - Single group, 4+ systems: "OpenFE RBFE - group (N systems) - submission_id"
-    - 2-3 groups, any systems: "OpenFE RBFE - group1, group2 (N systems) - submission_id"
-    - 4+ groups: "OpenFE RBFE - Multi-group Benchmark (N groups, M systems) - submission_id"
-    """
-    mode = mode.upper()
-    n_systems = len(system_names)
-
-    if n_systems == 0:
-        # Fallback if no system group detected
-        return f"OpenFE {mode} Benchmark - {submission_id}"
-
-    if len(set([x[0] for x in system_names])) == 1:
-        group_name = system_names[0][0]
-        if n_systems <= 3:
-            # List system names
-            systems_str = ", ".join([x[1] for x in system_names])
-            return f"OpenFE {mode} - {group_name} - {systems_str} - {submission_id}"
-        else:
-            # Use count
-            return (
-                f"OpenFE {mode} - {group_name} ({n_systems} systems) - {submission_id}"
-            )
-
-    if n_systems <= 3:
-        return f"OpenFE {mode} - {', '.join([f'{x}/{y}' for x, y in system_names])} - {submission_id}"
-
-    # Many groups - use multi-group notation
-    return f"OpenFE {mode} - Multi-group Benchmark ({len(set([x[0] for x in system_names]))} groups, {len(set([x[1] for x in system_names]))} systems) - {submission_id}"
-
-
-def _iter_nested_items(obj: Any) -> list[tuple[str, Any]]:
-    items: list[tuple[str, Any]] = []
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            items.append((str(k), v))
-            items.extend(_iter_nested_items(v))
-    elif isinstance(obj, list):
-        for v in obj:
-            items.extend(_iter_nested_items(v))
-    return items
-
-
-def _quantity_to_text(value: Any) -> str:
-    # For pint quantities that have been processed by pydantic model_dump()
+def _quantity_to_text(value: object) -> str:
     if isinstance(value, dict) and "unit" in value:
-        q = Quantity(value["val"], value["unit"])
-        return f"{q:#~}"
-    else:
-        return str(value)
+        quantity = Quantity(value["val"], value["unit"])
+        return f"{quantity:#~}"
+    return str(value)
 
 
-def _infer_system_group_and_name(
-    trans: Transformation,
-    override_system_group: str | None = None,
-    override_system_name: str | None = None,
-) -> tuple[str, str]:
-    """Infer system group and system name from Transformation contents using BenchmarkIndex.
+def _normalize_partial_charge_info(partial_charge_settings: dict[str, object]) -> str:
+    if not partial_charge_settings:
+        return ""
 
-    This searches for any known system group or system name in the transformation mapping metadata.
-    If metadata is not available (e.g., from Alchemiscale archives), returns a generic placeholder.
-    Override values (if provided) take precedence over all other sources, but must not conflict
-    with existing annotations.
-
-    Parameters
-    ----------
-    trans : Transformation
-        The transformation to infer metadata from
-    override_system_group : str | None
-        Optional override for system_group. If provided, must match the annotation (if present).
-    override_system_name : str | None
-        Optional override for system_name. If provided, must match the annotation (if present).
-
-    Returns:
-        (system_group, system_name) tuple
-
-    Raises:
-        ValueError
-            If an override conflicts with an existing annotation value.
-    """
-    # Store original annotation values to detect conflicts
-    if trans.mapping is None:
-        original_system_group = None
-        original_system_name = None
-    else:
-        original_system_group = trans.mapping.annotations.get("system_group", None)
-        original_system_name = trans.mapping.annotations.get("system_name", None)
-
-    system_group = original_system_group
-    system_name = original_system_name
-
-    if system_group is None and system_name is not None:
-        # Get all known system groups and systems from the index
-        try:
-            index = BenchmarkIndex()
-            system_groups_systems = index.list_system_names_by_tag()
-            system_group = [x[0] for x in system_groups_systems if x[1] == system_name]
-            if system_group:
-                system_group = system_group[0]  # just take the first one
-        except Exception as e:
-            warnings.warn(
-                f"Could not query BenchmarkIndex for system '{system_name}': {e}. Using generic fallback.",
-                category=UserWarning,
-            )
-            system_group = None
-
-    if system_name is None or system_group is None:
-        # Fallback for archives without explicit benchmark metadata (e.g., from Alchemiscale)
-        warnings.warn(
-            f"Transformation '{trans.name}' lacks explicit system group/system name metadata in annotations. "
-            f"Using generic fallback values. This may occur with archives generated from Alchemiscale submissions "
-            f"that were not created from openfe-benchmarks. If this is unexpected, verify the transformation "
-            f"has 'system_group' and 'system_name' in its mapping annotations.",
-            category=UserWarning,
-        )
-        # Use the transformation name prefix as a simple heuristic for categorization
-        system_name = system_name or "TODO"
-        system_group = system_group or "TODO"
-
-    # Check for conflicts between overrides and annotations
-    if override_system_group is not None and original_system_group is not None:
-        if override_system_group != original_system_group:
-            raise ValueError(
-                f"Transformation '{trans.name}' has annotation system_group='{original_system_group}' "
-                f"but --system-group override specifies '{override_system_group}'. "
-                f"These values must match. Either remove the override or correct the annotation."
-            )
-
-    if override_system_name is not None and original_system_name is not None:
-        if override_system_name != original_system_name:
-            raise ValueError(
-                f"Transformation '{trans.name}' has annotation system_name='{original_system_name}' "
-                f"but --system-name override specifies '{override_system_name}'. "
-                f"These values must match. Either remove the override or correct the annotation."
-            )
-
-    # Apply overrides (only when annotations were missing)
-    if override_system_group:
-        system_group = override_system_group
-    if override_system_name:
-        system_name = override_system_name
-
-    return system_group, system_name
-
-
-def _extract_sim_times(settings_block: dict[str, Any]) -> tuple[str, str]:
-    equilibration = settings_block.get("equilibration_length")
-    production = settings_block.get("production_length")
-    return _quantity_to_text(
-        equilibration
-    ) if equilibration is not None else "", _quantity_to_text(
-        production
-    ) if production is not None else ""
-
-
-def _build_protocol_settings(protocol_obj, calc_mode) -> dict[str, str | set(str)]:
-    if not protocol_obj:
-        return {
-            "protocol": "TODO",
-            "notes": "Protocol settings unavailable in archive.",
-        }
-
-    # Detect protocol name from the object
-    protocol_name = str(type(protocol_obj)).rstrip("'>").split(".")[-1]
-    out: dict[str, str] = {"protocol": protocol_name, "calculation_mode": calc_mode}
-    settings = protocol_obj.settings.model_dump()
-
-    if not settings:
-        out["notes"] = "Protocol class found, but detailed settings were unavailable."
-    else:
-        out["full_protocol_settings"] = pprint.pformat(settings)
-
-    integrator_settings = settings.get("integrator_settings") or {}
-    if isinstance(integrator_settings, dict):
-        timestep = integrator_settings.get("timestep")
-        if timestep is not None:
-            out["timestep"] = _quantity_to_text(timestep)
-
-    thermo_settings = settings.get("thermo_settings") or {}
-    if isinstance(thermo_settings, dict):
-        temperature = thermo_settings.get("temperature")
-        pressure = thermo_settings.get("pressure")
-        if temperature is not None:
-            out["temperature"] = _quantity_to_text(temperature)
-        if pressure is not None:
-            out["pressure"] = _quantity_to_text(pressure)
-
-    lambda_settings = settings.get("lambda_settings") or {}
-    if isinstance(lambda_settings, dict):
-        out["lambda_functions"] = lambda_settings.get("lambda_functions", "")
-        lambda_windows = lambda_settings.get("lambda_windows")
-        if lambda_windows is not None:
-            out["lambda_windows"] = str(lambda_windows)
-        else:
-            lambda_counts: list[str] = []
-            for lambda_key, values in lambda_settings.items():
-                if lambda_key not in ["lambda_functions", "lambda_windows"]:
-                    continue
-                lambda_counts.append(f"{lambda_key}:{len(values)}")
-            if lambda_counts:
-                out["lambda_schedule"] = ", ".join(lambda_counts)
-
-    forcefield_settings = (
-        settings.get("forcefield_settings")
-        or settings.get("solvent_forcefield_settings")
-        or settings.get("vacuum_forcefield_settings")
-        or {}
+    method = (
+        str(partial_charge_settings.get("partial_charge_method", "")).lower().strip()
     )
-    if forcefield_settings:
-        out["small_molecule_forcefield"] = _normalize_forcefield_tag(
-            str(forcefield_settings.get("small_molecule_forcefield") or "")
-        )
-        ffs = forcefield_settings.get("forcefields")
-        if isinstance(ffs, list) and ffs:
-            normalized_ffs: list[str] = []
-            for ff in ffs:
-                ff_str = str(ff)
-                if _looks_like_serialized_forcefield(ff_str):
-                    continue
-                normalized_ffs.append(os.path.splitext(ff_str.split("/")[-1])[0])
-            if normalized_ffs:
-                out["forcefields"] = tuple(sorted(normalized_ffs))
-
-    module_name = type(protocol_obj).__module__ if protocol_obj is not None else ""
-    if module_name:
-        library_name = module_name.split(".")[0]
-    else:
-        library_name = "TODO"
-    out["protocol_library"] = library_name
-
-    partial_charge_settings = settings.get("partial_charge_settings") or {}
-    if partial_charge_settings:
-        out["partial_charges"] = _normalize_partial_charge_info(partial_charge_settings)
-
-    # Protocol-specific handling: RBFE typically has a single simulation block;
-    # ASFE commonly has separate vacuum and solvent simulation settings.
-    if calc_mode == "rbfe":
-        sim = settings.get("simulation_settings") or {}
-        if isinstance(sim, dict):
-            eq, prod = _extract_sim_times(sim)
-            if eq:
-                out["equilibration_time"] = eq
-            if prod:
-                out["production_time"] = prod
-    elif calc_mode == "asfe":
-        for prefix, key in (
-            ("vacuum", "vacuum_simulation_settings"),
-            ("solvent", "solvent_simulation_settings"),
-        ):
-            sim = settings.get(key) or {}
-            if not isinstance(sim, dict):
-                continue
-            eq, prod = _extract_sim_times(sim)
-            if eq:
-                out[f"{prefix}_equilibration_time"] = eq
-            if prod:
-                out[f"{prefix}_production_time"] = prod
-    else:
-        ValueError(
-            f"Calculation type {calc_mode} is not yet supported. Add capability to `_build_protocol_settings`"
-        )
-
-    return out
-
-
-def _charge_method_from_provenance(provenance_dict: dict | None) -> str:
-    """Construct normalized charge method tag from charge_provenance dict.
-
-    Maps provenance charge_method to standardized tags matching _normalize_partial_charge_info():
-    - am1bcc_at (AM1BCC with AmberTools)
-    - am1bcc_oe (AM1BCC with OpenEye)
-    - am1bccelf10_oe (AM1BCC ELF10 with OpenEye)
-    - nagl_off (NAGL with OpenFF Toolkit)
-
-    For nagl_off, appends the model name if available in provenance.
-
-    Parameters
-    ----------
-    provenance_dict : dict | None
-        Provenance dict extracted from charge_provenance molprop
-
-    Returns
-    -------
-    str
-        Normalized method tag, e.g., "nagl_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe",
-        or empty string if provenance_dict is None
-    """
-    if not provenance_dict or not isinstance(provenance_dict, dict):
+    if not method:
         return ""
 
-    charge_method = provenance_dict.get("charge_method", "").lower().strip()
-    if not charge_method:
-        return ""
-
-    # Map method names to standardized tags
-    if "nagl" in charge_method:
-        nagl_model = provenance_dict.get("nagl_model", "").strip()
+    if "nagl" in method:
+        nagl_model = str(partial_charge_settings.get("nagl_model", "")).strip()
         if nagl_model:
             nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
             return f"nagl_{nagl_model}"
         return "nagl_off"
-    elif "am1bccelf10" in charge_method or "elf10" in charge_method:
+
+    if "am1bccelf10" in method or "elf10" in method:
         return "am1bccelf10_oe"
-    elif "am1bcc" in charge_method:
-        # Determine toolkit backend from provenance
-        if "ambertools_version" in provenance_dict:
+
+    if "am1bcc" in method:
+        backend = (
+            str(partial_charge_settings.get("off_toolkit_backend", "")).lower().strip()
+        )
+        if backend == "ambertools":
             return "am1bcc_at"
-        elif "oeomega" in provenance_dict or "oequacpac" in provenance_dict:
+        if backend == "openeye":
             return "am1bcc_oe"
-        else:
-            # Fallback: try to infer from charge_method name
-            if "ambertools" in charge_method.lower():
-                return "am1bcc_at"
-            else:
-                return "am1bcc_oe"
-    else:
-        # Fallback: normalize any other method name
-        normalized = re.sub(r"[^a-z0-9._-]+", "_", charge_method).strip("_")
-        return normalized
+        return "am1bcc_oe"
+
+    return re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
 
 
-def _reconcile_component_charges(
-    ligand_provenance: dict | None,
-    cofactor_provenance: dict | None,
-    trans_name: str,
-    state_label: str,
-) -> tuple[str, bool]:
-    """Compare ligand vs cofactor charges and return preferred method with warning flag.
+def _extract_charge_provenance(
+    component_dict: dict[str, object],
+) -> dict[str, object] | None:
+    """Extract and parse charge_provenance JSON from component molprops when available."""
+    molprops_raw = component_dict.get("molprops")
+    if not isinstance(molprops_raw, dict):
+        return None
 
-    Logic:
-    - If both present and differ: issue warning, return ligand method, has_warning=True
-    - If both present and same: return method, has_warning=False
-    - If only ligand present: return ligand method, has_warning=False
-    - If only cofactor present: return cofactor method, has_warning=False
-    - If neither: return empty string, has_warning=False
+    charge_provenance = molprops_raw.get("charge_provenance")
+    if not isinstance(charge_provenance, str) or not charge_provenance:
+        return None
 
-    Parameters
-    ----------
-    ligand_provenance : dict | None
-        Provenance dict for ligand component
-    cofactor_provenance : dict | None
-        Provenance dict for cofactor component
-    trans_name : str
-        Transformation name for warning message
-    state_label : str
-        State label (e.g., "stateA", "stateB") for warning message
+    try:
+        parsed = json.loads(charge_provenance)
+    except (json.JSONDecodeError, TypeError):
+        return None
 
-    Returns
-    -------
-    tuple[str, bool]
-        (preferred_charge_method_tag, has_warning)
-    """
-    ligand_method = (
-        _charge_method_from_provenance(ligand_provenance) if ligand_provenance else ""
-    )
-    cofactor_method = (
-        _charge_method_from_provenance(cofactor_provenance)
-        if cofactor_provenance
-        else ""
-    )
-
-    if ligand_method and cofactor_method:
-        if ligand_method != cofactor_method:
-            warnings.warn(
-                f"Ligand and cofactor in {trans_name}[{state_label}] have different charges: "
-                f"ligand={ligand_method}, cofactor={cofactor_method}. Using ligand charges.",
-                category=UserWarning,
-            )
-            return ligand_method, True
-        else:
-            # Both present and same
-            return ligand_method, False
-    elif ligand_method:
-        return ligand_method, False
-    elif cofactor_method:
-        return cofactor_method, False
-    else:
-        return "", False
+    if isinstance(parsed, dict):
+        return cast(dict[str, object], parsed)
+    return None
 
 
-def _component_name(component) -> str:
-    molprops = component.get("molprops") or {}
-    if isinstance(molprops, dict):
-        ofe_name = molprops.get("ofe-name")
-        if ofe_name:
-            return str(ofe_name)
+def _normalize_charge_method_from_provenance(provenance: dict[str, object]) -> str:
+    """Build normalized charge-method tag from parsed charge_provenance metadata."""
+    method = str(provenance.get("charge_method", "")).lower().strip()
+    if not method:
+        return ""
 
-    if component.get("name"):
-        return str(component.get("name"))
+    if "nagl" in method:
+        nagl_model = str(provenance.get("nagl_model", "")).strip()
+        if nagl_model:
+            nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
+            return f"nagl_{nagl_model}"
+        return "nagl_off"
 
-    if component.get("smiles"):
-        return str(component.get("smiles"))
+    if "am1bccelf10" in method or "elf10" in method:
+        return "am1bccelf10_oe"
 
-    if component.get("solvent_molecule"):
-        return str(component.get("solvent_molecule"))
+    if "am1bcc" in method:
+        backend = str(provenance.get("off_toolkit_backend", "")).lower().strip()
+        if backend == "ambertools":
+            return "am1bcc_at"
+        if backend == "openeye":
+            return "am1bcc_oe"
+        return "am1bcc_oe"
 
-    return "unknown"
+    return re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
 
 
-def _get_system_info(trans: Transformation, calc_mode: str) -> dict[str, set | list]:
-    # Per-system tracking
-    solvents = set()
-    proteins = set()
-    ligands = list()
-    cofactors = set()
+def _partial_charge_from_transformation(
+    trans: Transformation,
+    mode_spec: _ModeSpec,
+) -> str:
+    """Extract normalized ligand/cofactor partial-charge method(s) from component provenance."""
+    methods: set[str] = set()
+
     for state_key in ("stateA", "stateB"):
         chemical_system = getattr(trans, state_key)
         if not chemical_system:
             continue
 
         for label, component in chemical_system.components.items():
-            comp_name = _component_name(component.to_dict())
+            component_type_name = type(component).__name__
+            is_small_molecule = isinstance(component, SmallMoleculeComponent) or (
+                component_type_name == "SmallMoleculeComponent"
+            )
+            if not is_small_molecule:
+                continue
 
-            if calc_mode == "asfe":
-                # ASFE should only have solvents and solutes, should we raise an error for other things?
-                if isinstance(component, SolventComponent):
-                    solvents.add(comp_name)
-                elif isinstance(component, SmallMoleculeComponent):
-                    ligands.append(comp_name)
-            elif calc_mode == "rbfe":
-                # get the alchemical ligands
-                alchemical_ligands = {
-                    trans.mapping.componentA,
-                    trans.mapping.componentB,
-                }
-                if isinstance(component, ProteinComponent):
-                    proteins.add(comp_name)
-                elif (
-                    isinstance(component, SmallMoleculeComponent)
-                    and component in alchemical_ligands
-                ):
-                    if comp_name not in ligands:
-                        ligands.append(comp_name)
-                elif isinstance(component, SmallMoleculeComponent):
-                    cofactors.add(comp_name)
-                elif (
-                    isinstance(component, SmallMoleculeComponent)
-                    and "solvent" not in label
-                ):
-                    # Non-solvent small molecules that are not explicit ligands are treated as cofactors.
-                    cofactors.add(comp_name)
-                elif isinstance(component, SolventComponent):
-                    solvents.add(comp_name)
+            label_text = str(label).lower()
+            if mode_spec.rbfe_like:
+                if "solvent" in label_text:
+                    continue
             else:
-                raise ValueError(
-                    f"Calculation type {calc_mode} is not yet supported. Add capability to `_build_content_summary`"
+                if "solute" not in label_text and "solvent" in label_text:
+                    continue
+
+            component_to_dict = getattr(component, "to_dict", None)
+            if not callable(component_to_dict):
+                continue
+
+            provenance = _extract_charge_provenance(component_to_dict())
+            if provenance is None:
+                continue
+
+            method = _normalize_charge_method_from_provenance(provenance)
+            if method:
+                methods.add(method)
+
+    if not methods:
+        return ""
+
+    return "/".join(sorted(methods))
+
+
+def _looks_like_serialized_forcefield(value: str) -> bool:
+    trimmed = value.lstrip()
+    return trimmed.startswith("<?xml") or "<SMIRNOFF" in value or "<ForceField" in value
+
+
+def _normalize_forcefield_label(value: str) -> str:
+    if _looks_like_serialized_forcefield(value):
+        return ""
+    return value.strip()
+
+
+def _load_network(
+    input_path: Path,
+) -> tuple[AlchemicalArchive | AlchemicalNetwork, str]:
+    def _load_archive() -> AlchemicalArchive:
+        if str(input_path).endswith(".bz2"):
+            with bz2.open(input_path, "rt") as handle:
+                return cast(
+                    AlchemicalArchive,
+                    AlchemicalArchive.from_json(content=handle.read()),
                 )
+        return cast(AlchemicalArchive, AlchemicalArchive.from_json(file=input_path))
+
+    def _load_network_obj() -> AlchemicalNetwork:
+        if str(input_path).endswith(".bz2"):
+            with bz2.open(input_path, "rt") as handle:
+                return cast(
+                    AlchemicalNetwork,
+                    AlchemicalNetwork.from_json(content=handle.read()),
+                )
+        return cast(AlchemicalNetwork, AlchemicalNetwork.from_json(file=input_path))
+
+    try:
+        return _load_archive(), "alchemicalarchive"
+    except Exception:
+        try:
+            return _load_network_obj(), "alchemicalnetwork"
+        except Exception as exc:
+            raise ImportError(
+                "Could not import as AlchemicalArchive or AlchemicalNetwork: "
+                f"{input_path}"
+            ) from exc
+
+
+def _transformation_refs(
+    network_obj: AlchemicalArchive | AlchemicalNetwork,
+    network_mode: str,
+) -> list[Transformation]:
+    if network_mode == "alchemicalarchive":
+        archive_obj = cast(AlchemicalArchive, network_obj)
+        return [
+            cast(Transformation, trans)
+            for trans, _ in archive_obj.transformation_results
+        ]
+    network = cast(AlchemicalNetwork, network_obj)
+    return [cast(Transformation, trans) for trans in network.edges]
+
+
+def _network_key(
+    network_obj: AlchemicalArchive | AlchemicalNetwork, network_mode: str
+) -> str:
+    if network_mode == "alchemicalarchive":
+        return str(cast(AlchemicalArchive, network_obj).network.key)
+    return str(cast(AlchemicalNetwork, network_obj).key)
+
+
+def _detect_mode(transformations: list[Transformation]) -> str:
+    names = [str(trans.name or "") for trans in transformations]
+    for mode_key, spec in _MODE_SPECS.items():
+        if spec.detect_prefixes and any(
+            any(name.startswith(prefix) for prefix in spec.detect_prefixes)
+            for name in names
+        ):
+            return mode_key
+
+    defaults = [spec.key for spec in _MODE_SPECS.values() if spec.detect_default]
+    if len(defaults) == 1:
+        return defaults[0]
+
+    known_prefixes = sorted(
+        {
+            prefix
+            for spec in _MODE_SPECS.values()
+            for prefix in spec.detect_prefixes
+            if prefix
+        }
+    )
+    raise ValueError(
+        "Unable to detect calculation mode from transformation names. "
+        f"Observed names: {names[:5]}{'...' if len(names) > 5 else ''}. "
+        f"Known prefixes: {known_prefixes}."
+    )
+
+
+def _get_mapping_annotations(trans: Transformation) -> dict[str, object]:
+    """Return mapping annotations when present; otherwise an empty dict."""
+    mapping = trans.mapping
+    if mapping is None:
+        return {}
+    if hasattr(mapping, "annotations"):
+        annotations = getattr(mapping, "annotations")
+        if isinstance(annotations, dict):
+            return annotations
+    return {}
+
+
+def _get_alchemical_ligands(trans: Transformation) -> set[object]:
+    """Return alchemical ligand components for RBFE-style mappings when available."""
+    mapping = trans.mapping
+    if mapping is None:
+        return set()
+    component_a = getattr(mapping, "componentA", None)
+    component_b = getattr(mapping, "componentB", None)
+    if component_a is None or component_b is None:
+        return set()
+    return {component_a, component_b}
+
+
+def _default_submission_id(network_key: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", network_key.lower()).strip("-")
+    return f"{date.today().isoformat()}-{slug}"
+
+
+def _normalize_submission_date(value: date | str | None) -> str:
+    if value is None:
+        return date.today().isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    try:
+        return date.fromisoformat(value).isoformat()
+    except ValueError as exc:
+        raise ValueError("submission_date must be ISO 8601 YYYY-MM-DD") from exc
+
+
+def _dedupe_preserve_order(items: list[str]) -> list[str]:
+    out: list[str] = []
+    seen: set[str] = set()
+    for item in items:
+        value = item.strip()
+        if value and value not in seen:
+            seen.add(value)
+            out.append(value)
+    return out
+
+
+def _generate_title(
+    mode: str, systems: list[tuple[str, str]], submission_id: str
+) -> str:
+    n_systems = len(systems)
+    groups = sorted({group for group, _ in systems})
+    mode_upper = mode.upper()
+
+    if n_systems == 0:
+        return f"OpenFE {mode_upper} Benchmark - {submission_id}"
+
+    if len(groups) == 1:
+        group = groups[0]
+        names = [name for _, name in systems]
+        if n_systems <= 3:
+            return (
+                f"OpenFE {mode_upper} - {group} - {', '.join(names)} - {submission_id}"
+            )
+        return f"OpenFE {mode_upper} - {group} ({n_systems} systems) - {submission_id}"
+
+    if n_systems <= 3:
+        desc = ", ".join(f"{group}/{name}" for group, name in systems)
+        return f"OpenFE {mode_upper} - {desc} - {submission_id}"
+
+    unique_names = len({name for _, name in systems})
+    return (
+        f"OpenFE {mode_upper} - Multi-group Benchmark "
+        f"({len(groups)} groups, {unique_names} systems) - {submission_id}"
+    )
+
+
+def _component_name(component_dict: dict[str, object]) -> str:
+    molprops = component_dict.get("molprops") or {}
+    if isinstance(molprops, dict) and molprops.get("ofe-name"):
+        return str(molprops["ofe-name"])
+    for key in ("name", "smiles", "solvent_molecule"):
+        if component_dict.get(key):
+            return str(component_dict[key])
+    return "unknown"
+
+
+def _infer_system_group_name(
+    trans: Transformation,
+    override_group: str | None,
+    override_name: str | None,
+) -> tuple[str, str]:
+    annotations = _get_mapping_annotations(trans)
+    original_group = annotations.get("system_group")
+    original_name = annotations.get("system_name")
+
+    if override_group and original_group and override_group != original_group:
+        raise ValueError(
+            f"Transformation '{trans.name}' annotation system_group='{original_group}' "
+            f"conflicts with override '{override_group}'"
+        )
+    if override_name and original_name and override_name != original_name:
+        raise ValueError(
+            f"Transformation '{trans.name}' annotation system_name='{original_name}' "
+            f"conflicts with override '{override_name}'"
+        )
+
+    system_group = override_group or original_group
+    system_name = override_name or original_name
+
+    if system_name and not system_group:
+        try:
+            index = BenchmarkIndex()
+            all_systems = index.list_system_names_by_tag()
+            matching_groups = [
+                group for group, name in all_systems if name == system_name
+            ]
+            if matching_groups:
+                system_group = matching_groups[0]
+        except Exception:
+            system_group = None
+
+    if not system_group:
+        system_group = "TODO"
+    if not system_name:
+        system_name = "TODO"
+
+    return str(system_group), str(system_name)
+
+
+def _extract_system_components(
+    trans: Transformation,
+    mode_spec: _ModeSpec,
+) -> dict[str, set[str] | list[str]]:
+    solvents: set[str] = set()
+    proteins: set[str] = set()
+    ligands: list[str] = []
+    cofactors: set[str] = set()
+
+    alchemical_ligands: set[object] = set()
+    if mode_spec.use_mapping_ligands:
+        alchemical_ligands = _get_alchemical_ligands(trans)
+
+    for state_key in ("stateA", "stateB"):
+        chemical_system = getattr(trans, state_key)
+        if not chemical_system:
+            continue
+        for label, component in chemical_system.components.items():
+            name = _component_name(component.to_dict())
+            if isinstance(component, SolventComponent):
+                solvents.add(name)
+            elif isinstance(component, ProteinComponent):
+                proteins.add(name)
+            elif isinstance(component, SmallMoleculeComponent):
+                if not mode_spec.use_mapping_ligands:
+                    if name not in ligands:
+                        ligands.append(name)
+                elif component in alchemical_ligands:
+                    if name not in ligands:
+                        ligands.append(name)
+                elif "solvent" not in label:
+                    cofactors.add(name)
+
+    if not (mode_spec.ligand_count_min <= len(ligands) <= mode_spec.ligand_count_max):
+        raise ValueError(
+            f"{mode_spec.summary_mode_label} transformation has invalid ligand count: "
+            f"{trans.name} -> {ligands}"
+        )
 
     return {
         "solvents": solvents,
@@ -977,891 +571,467 @@ def _get_system_info(trans: Transformation, calc_mode: str) -> dict[str, set | l
     }
 
 
-def _extract_auto_metadata(
-    network_obj: AlchemicalArchive | AlchemicalNetwork,
-    network_mode: str,
-    source_file: str,
-    system_group: str | None = None,
-    system_name: str | None = None,
-) -> AutoMetadata:
-    metadata = AutoMetadata()
-    metadata.network_key = _get_network_key(network_obj, network_mode)
-    metadata.calculation_mode = _detect_calc_mode(network_obj, network_mode)
+def _make_edge_key(
+    network_key: str,
+    system_group: str,
+    system_name: str,
+    mode_spec: _ModeSpec,
+    components: dict[str, set[str] | list[str]],
+) -> str:
+    ligands = cast(list[str], components["ligands"])
+    ligand_start = ligands[0]
+    ligand_final = "none"
+    if mode_spec.rbfe_like and len(ligands) > 1:
+        ligand_final = ligands[1]
 
-    transformations = _transformation_refs(network_obj, network_mode)
-    metadata.n_transformations = len(transformations)
-    for trans in transformations:
-        system_group_n_name = _infer_system_group_and_name(
-            trans, override_system_group=system_group, override_system_name=system_name
+    return (
+        f"{network_key} {system_group}-{system_name}: "
+        f"ligand_start={ligand_start}, ligand_final={ligand_final}, "
+        f"solvent={components['solvents'] or 'none'}, "
+        f"cofactors={components['cofactors'] or 'none'}, "
+        f"protein={components['proteins'] or 'none'}"
+    )
+
+
+def _extract_protocol_settings(
+    protocol_obj: object | None,
+    mode_spec: _ModeSpec,
+) -> dict[str, str | list[str]]:
+    if protocol_obj is None:
+        return {
+            "protocol": "TODO",
+            "protocol_library": "TODO",
+            "notes": "Protocol settings unavailable in archive.",
+        }
+
+    protocol_name = str(type(protocol_obj)).rstrip("'>").split(".")[-1]
+    module_name = type(protocol_obj).__module__
+    library = module_name.split(".")[0] if module_name else "TODO"
+
+    settings_obj = getattr(protocol_obj, "settings", None)
+    model_dump = getattr(settings_obj, "model_dump", None)
+    settings = _as_obj_dict(model_dump() if callable(model_dump) else {})
+    payload: dict[str, str | list[str]] = {
+        "protocol": protocol_name,
+        "protocol_library": library,
+        "notes": "",
+    }
+
+    if not settings:
+        payload["notes"] = (
+            "Protocol class found, but detailed settings were unavailable."
         )
-        if system_group_n_name not in metadata.system_info_dict:
-            metadata.system_info_dict[system_group_n_name] = SystemInfo(
-                *system_group_n_name,
-                metadata.calculation_mode,
-                source_file,
-                metadata.network_key,
+        return payload
+
+    # Keep a full-settings fingerprint so aggregation does not collapse subtly
+    # different protocols into one entry.
+    payload["_settings_fingerprint"] = json.dumps(
+        settings,
+        sort_keys=True,
+        default=str,
+    )
+
+    integrator = _as_obj_dict(settings.get("integrator_settings") or {})
+    thermo = _as_obj_dict(settings.get("thermo_settings") or {})
+    lambda_settings = _as_obj_dict(settings.get("lambda_settings") or {})
+
+    if integrator.get("timestep") is not None:
+        payload["timestep"] = _quantity_to_text(integrator["timestep"])
+    if thermo.get("temperature") is not None:
+        payload["temperature"] = _quantity_to_text(thermo["temperature"])
+    if thermo.get("pressure") is not None:
+        payload["pressure"] = _quantity_to_text(thermo["pressure"])
+
+    payload["lambda_functions"] = str(lambda_settings.get("lambda_functions", ""))
+    if lambda_settings.get("lambda_windows") is not None:
+        payload["lambda_windows"] = str(lambda_settings["lambda_windows"])
+
+    ff_settings = _as_obj_dict(
+        settings.get("forcefield_settings")
+        or settings.get("solvent_forcefield_settings")
+        or settings.get("vacuum_forcefield_settings")
+        or {}
+    )
+    if ff_settings:
+        payload["small_molecule_forcefield"] = _normalize_forcefield_label(
+            str(ff_settings.get("small_molecule_forcefield") or "")
+        )
+        forcefields_raw = ff_settings.get("forcefields")
+        forcefields = forcefields_raw if isinstance(forcefields_raw, list) else []
+        normalized = []
+        for ff in forcefields:
+            label = _normalize_forcefield_label(str(ff).split("/")[-1].split(".")[0])
+            if label:
+                normalized.append(label)
+        payload["forcefields"] = sorted(set(normalized))
+
+    partial_charge_settings = _as_obj_dict(
+        settings.get("partial_charge_settings") or {}
+    )
+    payload["partial_charges"] = _normalize_partial_charge_info(partial_charge_settings)
+
+    for source_key, eq_key, prod_key in mode_spec.simulation_setting_keys:
+        sim = _as_obj_dict(settings.get(source_key) or {})
+        if sim.get("equilibration_length") is not None:
+            payload[eq_key] = _quantity_to_text(sim["equilibration_length"])
+        if sim.get("production_length") is not None:
+            payload[prod_key] = _quantity_to_text(sim["production_length"])
+
+    return payload
+
+
+@dataclass
+class _SystemRecord:
+    system_group: str
+    system_name: str
+    network_key: str
+    ligands: set[str] = field(default_factory=set)
+    proteins: set[str] = field(default_factory=set)
+    cofactors: set[str] = field(default_factory=set)
+    solvents: set[str] = field(default_factory=set)
+
+
+@dataclass
+class _Metadata:
+    mode: str
+    network_mode: str
+    n_transformations: int = 0
+    network_keys: list[str] = field(default_factory=list)
+    systems: dict[tuple[str, str], _SystemRecord] = field(default_factory=dict)
+    system_order: list[tuple[str, str]] = field(default_factory=list)
+    openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    mapper: list[tuple[str, list[str]]] = field(default_factory=list)
+    forcefield: list[tuple[tuple[str, ...], list[str]]] = field(default_factory=list)
+    small_molecule_forcefield: list[tuple[str, list[str]]] = field(default_factory=list)
+    partial_charges: list[tuple[str, list[str]]] = field(default_factory=list)
+    protocol_libraries: list[tuple[str, list[str]]] = field(default_factory=list)
+    protocol_settings: list[tuple[dict[str, str | list[str]], list[str]]] = field(
+        default_factory=list
+    )
+
+
+def _resolve_input_paths(
+    input_files: Path | list[Path] | str | None,
+    systems: list[tuple[str, str, str | Path]]
+    | tuple[tuple[str, str, str | Path], ...]
+    | None,
+    system_group: str | None,
+    system_name: str | None,
+) -> tuple[list[Path], dict[Path, tuple[str | None, str | None]]]:
+    if systems is not None:
+        if input_files is not None:
+            raise ValueError("Cannot specify both input_files and systems.")
+        if system_group is not None or system_name is not None:
+            raise ValueError(
+                "When systems is provided, do not pass system_group/system_name; "
+                "use per-item system tuples."
             )
-
-        system_info = _get_system_info(trans, metadata.calculation_mode)
-        for key, value in system_info.items():
-            current_attr = getattr(metadata.system_info_dict[system_group_n_name], key)
-            if isinstance(current_attr, set):
-                current_attr.update(value)
-            elif isinstance(current_attr, list):
-                current_attr.extend(value)
-            else:
-                raise TypeError(
-                    f"Unsupported system_info attribute type for {key}: {type(current_attr)}"
-                )
-
-        if metadata.calculation_mode == "rbfe":
-            if len(system_info["ligands"]) == 0 or len(system_info["ligands"]) > 2:
+        entries: list[tuple[str, str, Path]] = []
+        for item in systems:
+            if not isinstance(item, (list, tuple)) or len(item) != 3:
                 raise ValueError(
-                    f"Transformation detects a count other than one or two ligands: network_key={metadata.network_key}, system_group/system_name: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
+                    "Each systems item must be (system_group, system_name, archive_path)."
                 )
-            ligand_start = system_info["ligands"][0]
-            ligand_final = (
-                system_info["ligands"][1] if len(system_info["ligands"]) > 1 else "none"
-            )
-        elif metadata.calculation_mode == "asfe":
-            if len(system_info["ligands"]) < 1 or len(system_info["ligands"]) > 1:
-                raise ValueError(
-                    f"Transformation detects a count other than one ligand: network_key={metadata.network_key}, system_group/system_name: {system_group_n_name}, transformation: {trans.name}, ligands: {system_info['ligands']}"
-                )
-            ligand_start = system_info["ligands"][0]
-            ligand_final = "none"
+            group, name, archive_path = item
+            entries.append((str(group).strip(), str(name).strip(), Path(archive_path)))
+        if not entries:
+            raise ValueError("At least one systems entry is required.")
+        paths = [entry[2] for entry in entries]
+        overrides: dict[Path, tuple[str | None, str | None]] = {
+            entry[2].resolve(): (entry[0], entry[1]) for entry in entries
+        }
+        return paths, overrides
 
-        key = metadata.system_info_dict[system_group_n_name].make_key(
-            metadata.network_key,
-            ligand_start,
-            system_info["cofactors"],
-            system_info["solvents"],
-            ligand_final=ligand_final,
-            protein=system_info["proteins"],
-        )
+    if input_files is None:
+        raise ValueError("At least one input file must be provided")
 
-        trans_charge_provenance = _extract_charges_from_transformation(
-            trans, metadata.calculation_mode
-        )
-
-        # Detect ligand-cofactor charge mismatches
-        molprops_charge_methods = {}
-        for state_key in ("stateA", "stateB"):
-            charge_method, _ = _reconcile_component_charges(
-                trans_charge_provenance[state_key]["ligand"],
-                trans_charge_provenance[state_key]["cofactor"],
-                trans.name,
-                state_key,
-            )
-            molprops_charge_methods[state_key] = charge_method
-
-        # Use the first available charge method from molprops (prefer stateA, fallback to stateB)
-        molprops_charge_method = (
-            molprops_charge_methods["stateA"]
-            or molprops_charge_methods["stateB"]
-            or None
-        )
-
-        # Build protocol settings
-        protocol_settings_dict = _build_protocol_settings(
-            trans.protocol, metadata.calculation_mode
-        )
-        if molprops_charge_method:  # preferred source
-            protocol_settings_dict["partial_charges"] = molprops_charge_method
-        elif not protocol_settings_dict.get("partial_charges"):
-            protocol_settings_dict["partial_charges"] = "TODO"
-        else:
-            has_provenance = any(
-                trans_charge_provenance[state_key]["ligand"]
-                or trans_charge_provenance[state_key]["cofactor"]
-                for state_key in ("stateA", "stateB")
-            )
-            if not has_provenance:
-                warnings.warn(
-                    f"Transformation '{trans.name}' lacks charge_provenance in molprops. "
-                    f"Falling back to protocol settings: {protocol_settings_dict['partial_charges']}. "
-                    f"This may indicate molecules were not charged via charge_molecules.py.",
-                    category=UserWarning,
-                )
-
-        protocol_info = ProtocolSettingsInfo(**protocol_settings_dict)
-        metadata.system_info_dict[system_group_n_name].add_protocol_settings(
-            protocol_info, key
-        )
-
-        annotations = trans.mapping.annotations if trans.mapping is not None else {}
-
-        # Extract mapper info if available (only for RBFE)
-        if (
-            metadata.calculation_mode in ["rbfe", "septop"]
-            and "mapper_settings" in annotations
-            and "mapper_version" in annotations
-        ):
-            mapper_settings = annotations.get("mapper_settings")
-            mapper_version = annotations.get("mapper_version", "TODO")
-            if isinstance(mapper_settings, dict):
-                mapper_name = mapper_settings.get("__qualname__", "TODO").split(".")[-1]
-                mapping_algorithm = mapper_settings.get("_mapping_algorithm", "TODO")
-                mapper_str = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
-                metadata.system_info_dict[system_group_n_name].add_version_setting(
-                    "mapper", mapper_str, key
-                )
-
-        for annotation_key, value in annotations.items():
-            if "openmm" in annotation_key:
-                metadata.system_info_dict[system_group_n_name].add_version_setting(
-                    "openmm_version", value, annotation_key
-                )
-            if "openfe" in annotation_key:
-                metadata.system_info_dict[system_group_n_name].add_version_setting(
-                    "openfe_version", value, annotation_key
-                )
-            if "openff" in annotation_key and "toolkit" in annotation_key:
-                metadata.system_info_dict[system_group_n_name].add_version_setting(
-                    "openff_toolkit_version", value, annotation_key
-                )
-            if "pontibus" in annotation_key:
-                metadata.system_info_dict[system_group_n_name].add_version_setting(
-                    "pontibus_version", value, annotation_key
-                )
-
-    metadata.update_from_system_info()
-
-    return metadata
-
-
-def _normalize_partial_charge_info(partial_charge_settings: dict) -> str:
-    """Normalize partial charge settings to standardized method tags.
-
-    Maps protocol charge method names to the standard method names used in
-    openfe_benchmarks.data.data_generation.charge_molecules:
-    - am1bcc_at (AM1BCC with AmberTools)
-    - am1bcc_oe (AM1BCC with OpenEye)
-    - am1bccelf10_oe (AM1BCC ELF10 with OpenEye)
-    - nagl_off (NAGL with OpenFF Toolkit)
-
-    For nagl_off, appends the model name if available.
-
-    Parameters
-    ----------
-    partial_charge_settings : dict
-        Protocol partial charge settings dict containing 'partial_charge_method',
-        optionally 'off_toolkit_backend', and optionally 'nagl_model'.
-
-    Returns
-    -------
-    str
-        Normalized method tag, e.g., "nagl_openff-gnn-am1bcc-1.0.0.pt" or "am1bccelf10_oe".
-    """
-    if not partial_charge_settings or not isinstance(partial_charge_settings, dict):
-        return ""
-
-    method = partial_charge_settings.get("partial_charge_method", "").lower().strip()
-    if not method:
-        return ""
-
-    # Map method names to standardized tags matching charge_molecules.py
-    if "nagl" in method:
-        # nagl_off with optional model
-        nagl_model = partial_charge_settings.get("nagl_model", "").strip()
-        if nagl_model:
-            # Extract just the filename if it's a path
-            nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
-            return f"nagl_{nagl_model}"
-        return "nagl_off"
-    elif "am1bccelf10" in method or "elf10" in method:
-        return "am1bccelf10_oe"
-    elif "am1bcc" in method:
-        # Check toolkit backend to determine if AmberTools or OpenEye
-        backend = partial_charge_settings.get("off_toolkit_backend", "").lower().strip()
-        if backend == "ambertools":
-            return "am1bcc_at"
-        elif backend == "openeye":
-            return "am1bcc_oe"
-        else:
-            raise ValueError("Unknown charge backend")
+    if isinstance(input_files, str):
+        matched = glob_module.glob(input_files, recursive=True)
+        if not matched:
+            raise ValueError(f"No files matched glob pattern: {input_files}")
+        paths = [Path(path) for path in sorted(matched)]
+    elif isinstance(input_files, Path):
+        paths = [input_files]
     else:
-        # Fallback: normalize any other method name
-        normalized = re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
-        return normalized
+        paths = list(input_files)
+
+    if not paths:
+        raise ValueError("At least one input file must be provided")
+
+    return paths, {}
 
 
-def _looks_like_serialized_forcefield(value: str) -> bool:
-    if not isinstance(value, str):
-        return False
+def _collapse_value_keys(
+    values: list[tuple[str, list[str]]] | list[tuple[tuple[str, ...], list[str]]],
+    label: str,
+    keys_label: str = "edges",
+) -> str | list[str] | list[dict[str, str | list[str]]]:
+    if not values:
+        return "TODO"
 
-    trimmed = value.lstrip()
-    if trimmed.startswith("<?xml"):
-        return True
-    if "<SMIRNOFF" in value or "<ForceField" in value:
-        return True
-    return False
-
-
-def _normalize_forcefield_tag(value: str) -> str:
-    if not isinstance(value, str):
+    def _normalize(value: str | tuple[str, ...]) -> str | list[str]:
+        if isinstance(value, tuple):
+            return [str(item) for item in value]
         return str(value)
-    if _looks_like_serialized_forcefield(value):
-        return ""
-    return value.strip()
+
+    if len(values) == 1:
+        return _normalize(values[0][0])
+
+    collapsed: list[dict[str, str | list[str]]] = []
+    for value, keys in sorted(values, key=lambda item: (len(item[1]), str(item[0]))):
+        entry = {label: _normalize(value)}
+        if keys:
+            sorted_keys = sorted(str(key) for key in keys)
+            entry[keys_label] = sorted_keys[:5] + (
+                ["etc."] if len(sorted_keys) > 5 else []
+            )
+        collapsed.append(entry)
+    return collapsed
 
 
-def _make_tags(
-    *,
-    mode: str,
-    forcefield: list[tuple],
-    small_molecule_forcefield: list[tuple],
-    partial_charge_tag: list[tuple],
-    benchmark_data: list[tuple],
-    user_keywords: list[str],
+def _flatten_value_keys(
+    values: list[tuple[str, list[str]]] | list[tuple[tuple[str, ...], list[str]]],
 ) -> list[str]:
-    tags: list[str] = []
-    tags.append(mode)
-    if forcefield:
-        tags.extend(
-            sorted(
-                list(
-                    set(
-                        ff
-                        for ff_set, _ in forcefield
-                        for ff in ff_set
-                        if ff and not _looks_like_serialized_forcefield(str(ff))
-                    )
-                )
-            )
-        )
-    if small_molecule_forcefield:
-        tags.extend(
-            sorted(
-                list(
-                    set(
-                        x[0]
-                        for x in small_molecule_forcefield
-                        if x[0] and not _looks_like_serialized_forcefield(str(x[0]))
-                    )
-                )
-            )
-        )
-    if benchmark_data:
-        tags.extend(sorted(list(set(y for x in benchmark_data for y in x))))
-    if partial_charge_tag:
-        tags.extend(sorted(list(set(x[0] for x in partial_charge_tag))))
-    tags.extend(user_keywords)
-
-    # Deduplicate while preserving order.
-    out: list[str] = []
-    seen: set[str] = set()
-    for tag in tags:
-        t = tag.strip()
-        if not t or t in seen:
-            continue
-        seen.add(t)
-        out.append(t)
-    return out
+    """Return sorted unique string values from value-key pairs for summaries."""
+    flattened: set[str] = set()
+    for value, _ in values:
+        if isinstance(value, (list, tuple, set)):
+            for item in value:
+                text = str(item).strip()
+                if text:
+                    flattened.add(text)
+        else:
+            text = str(value).strip()
+            if text:
+                flattened.add(text)
+    return sorted(flattened)
 
 
-def _yaml_block(text: str, indent_spaces: int = 2) -> str:
-    indent = " " * indent_spaces
-    lines = text.splitlines() or [""]
-    return "\n".join(f"{indent}{line}" for line in lines)
+def _build_protocol_payload(
+    protocol_settings: list[tuple[dict[str, str | list[str]], list[str]]],
+) -> list[dict[str, str | list[str]]]:
+    if not protocol_settings:
+        return []
+
+    def _parsed_settings_fingerprint(settings: dict[str, str | list[str]]) -> object:
+        raw = settings.get("_settings_fingerprint")
+        if not isinstance(raw, str) or not raw:
+            return {}
+        try:
+            return json.loads(raw)
+        except json.JSONDecodeError:
+            return {}
+
+    def _format_path(path: list[str]) -> str:
+        dotted = ".".join(path)
+        if dotted.endswith(".val"):
+            return dotted[:-4]
+        return dotted
+
+    def _diff_settings(base: object, other: object) -> list[tuple[str, object, object]]:
+        diffs: list[tuple[str, object, object]] = []
+
+        def _recurse(path: list[str], left: object, right: object) -> None:
+            if type(left) is not type(right):
+                diffs.append((_format_path(path), left, right))
+                return
+
+            if isinstance(left, dict):
+                left_keys = set(left.keys())
+                right_keys = set(right.keys()) if isinstance(right, dict) else set()
+                for key in sorted(left_keys | right_keys):
+                    left_has = key in left
+                    right_has = isinstance(right, dict) and key in right
+                    if not left_has and right_has:
+                        diffs.append(
+                            (_format_path(path + [str(key)]), None, right[key])
+                        )
+                    elif left_has and not right_has:
+                        diffs.append((_format_path(path + [str(key)]), left[key], None))
+                    elif right_has:
+                        _recurse(path + [str(key)], left[key], right[key])
+                return
+
+            if isinstance(left, list):
+                if not isinstance(right, list) or left != right:
+                    diffs.append((_format_path(path), left, right))
+                return
+
+            if left != right:
+                diffs.append((_format_path(path), left, right))
+
+        _recurse([], base, other)
+        return diffs
+
+    output: list[dict[str, str | list[str]]] = []
+    ordered = sorted(
+        enumerate(protocol_settings),
+        key=lambda item: (len(item[1][1]), str(item[1][0]), item[0]),
+    )
+    primary_index = max(
+        range(len(protocol_settings)),
+        key=lambda i: (len(protocol_settings[i][1]), -i),
+    )
+    primary_settings = protocol_settings[primary_index][0]
+    primary_full_settings = _parsed_settings_fingerprint(primary_settings)
+
+    traversal_order = [primary_index] + [
+        idx for idx, _ in ordered if idx != primary_index
+    ]
+
+    for index in traversal_order:
+        settings, keys = protocol_settings[index]
+        entry = {k: v for k, v in settings.items() if not k.startswith("_")}
+        sorted_keys = sorted(str(key) for key in keys)
+
+        notes_lines: list[str] = []
+        existing_notes = entry.get("notes")
+        if isinstance(existing_notes, str) and existing_notes.strip():
+            notes_lines.append(existing_notes.strip())
+
+        if index != primary_index:
+            other_full_settings = _parsed_settings_fingerprint(settings)
+            diffs = _diff_settings(primary_full_settings, other_full_settings)
+            if diffs:
+                notes_lines.append("Detailed protocol settings differ:")
+                for path, base_value, other_value in diffs:
+                    notes_lines.append(f"- {path}: {base_value!r} -> {other_value!r}")
+
+        if len(sorted_keys) == 0:
+            notes_lines.append("Applies to all edges")
+        else:
+            notes_lines.append(f"Applies to {len(sorted_keys)} edges:")
+            for edge_key in sorted_keys[:5]:
+                notes_lines.append(f"- {edge_key}")
+            if len(sorted_keys) > 5:
+                notes_lines.append("- etc.")
+
+        entry["notes"] = LiteralStr("\n".join(notes_lines))
+        output.append(entry)
+    return output
 
 
 def _build_content_summary(
-    metadata: AutoMetadata,
-    used_alchemiscale: bool = True,
+    metadata: _Metadata,
+    mode_spec: _ModeSpec,
+    used_alchemiscale: bool,
 ) -> str:
-    """
-    Build content summary and extract per-system information.
-
-    Parameters
-    ----------
-    metadata : AutoMetadata
-        Consilidated
-
-    Returns:
-        (summary_text, list of SystemInfo objects)
-    """
-
-    field_info = "/".join(
-        sorted(set(ff for ff_set, _ in metadata.forcefield for ff in ff_set))
-    )
-    if not field_info:
-        field_info = "an unspecified force field (TODO)"
-
-    small_mol_ff_info = "/".join(set(x[0] for x in metadata.small_molecule_forcefield))
-    if not small_mol_ff_info:
-        small_mol_ff_info = "an unspecified small molecule force field (TODO)"
-
-    charge_info = "/".join(set(x[0] for x in metadata.partial_charges))
-    if not charge_info:
-        charge_info = "an unspecified partial charges (TODO)"
-
-    # Group systems by system group for explicit listing
-    sets_to_systems: dict[str, list[str]] = defaultdict(list)
-    if metadata.system_groups_systems:
-        for system_group, system_name in metadata.system_groups_systems:
-            sets_to_systems[system_group].append(system_name)
+    forcefields = _flatten_value_keys(metadata.forcefield)
+    if not forcefields or forcefields == ["TODO"]:
+        ff_text = "an unspecified force field (TODO)"
+    elif len(forcefields) == 1:
+        ff_text = forcefields[0]
     else:
-        for system_group, system_name in metadata.system_info_dict.keys():
-            sets_to_systems[system_group].append(system_name)
+        ff_text = "/".join(forcefields)
 
-    # Sort systems within each set
-    for systems_list in sets_to_systems.values():
-        systems_list.sort()
+    charge_methods = _flatten_value_keys(metadata.partial_charges)
+    if not charge_methods or charge_methods == ["TODO"]:
+        charge_text = "an unspecified partial charge method (TODO)"
+    elif len(charge_methods) == 1:
+        charge_text = charge_methods[0]
+    else:
+        charge_text = "/".join(charge_methods)
 
-    unique_sets = sorted(sets_to_systems.keys())
+    small_molecule_ffs = _flatten_value_keys(metadata.small_molecule_forcefield)
+    if not small_molecule_ffs or small_molecule_ffs == ["TODO"]:
+        small_molecule_ff_text = "an unspecified small molecule force field (TODO)"
+    elif len(small_molecule_ffs) == 1:
+        small_molecule_ff_text = small_molecule_ffs[0]
+    else:
+        small_molecule_ff_text = "/".join(small_molecule_ffs)
 
-    if len(unique_sets) > 1:
-        set_descriptions = [
-            f"{set_name}: {', '.join(sets_to_systems[set_name])}"
-            for set_name in unique_sets
-        ]
-        systems_desc_phrase = f" covering {', '.join(set_descriptions)}"
-    elif len(unique_sets) == 1:
-        systems_desc = ", ".join(sets_to_systems[unique_sets[0]])
-        systems_desc_phrase = (
-            f" covering the {unique_sets[0]} (system names: {systems_desc})"
+    systems_by_group: dict[str, list[str]] = defaultdict(list)
+    for group, name in metadata.system_order:
+        systems_by_group[group].append(name)
+
+    group_parts = []
+    for group in sorted(systems_by_group):
+        system_names = sorted(systems_by_group[group])
+        group_parts.append(f"{group}: {', '.join(system_names)}")
+    systems_desc = ", ".join(group_parts)
+
+    all_ligands = set()
+    all_solvents = set()
+    for system in metadata.systems.values():
+        all_ligands.update(system.ligands)
+        all_solvents.update(system.solvents)
+
+    if mode_spec.rbfe_like:
+        summary = (
+            f"This submission describes the {mode_spec.summary_mode_label} benchmark covering {systems_desc} "
+            f"prepared with {ff_text} for proteins and solvents, and {small_molecule_ff_text} with {charge_text} "
+            "for ligands, solutes, and cofactors. "
+            f"{mode_spec.summary_sentence_builder(metadata.n_transformations, len(all_ligands), len(all_solvents))}"
         )
     else:
-        systems_desc_phrase = ""
-
-    # Count totals across all edges
-    all_structures = {
-        "ligands": set(),
-        "proteins": set(),
-        "cofactors": set(),
-        "solvents": set(),
-    }
-    systems_with_cofactors = []
-    for si in metadata.system_info_dict.values():
-        for key in all_structures.keys():
-            all_structures[key].update(getattr(si, key))
-        if si.cofactors:
-            systems_with_cofactors.append(f"{si.system_group}/{si.system_name}")
-
-    # Build summary
-    if metadata.calculation_mode == "rbfe":
-        cofactor_list = (
-            ", ".join(sorted(all_structures["cofactors"]))
-            if all_structures["cofactors"]
-            else "none"
+        summary = (
+            f"This submission describes the {mode_spec.summary_mode_label} benchmark covering {systems_desc} "
+            f"prepared with {ff_text} for solvents and {charge_text} for solutes and cofactors. "
+            f"{mode_spec.summary_sentence_builder(metadata.n_transformations, len(all_ligands), len(all_solvents))}"
         )
-        if len(unique_sets) > 1:
-            summary_parts = [
-                f"This submission describes the RBFE benchmark{systems_desc_phrase} prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
-                f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique ligands.",
-            ]
-        else:
-            summary_parts = [
-                f"This submission describes the RBFE benchmark{systems_desc_phrase} prepared with {field_info} for proteins and solvents, and {small_mol_ff_info} with {charge_info} for ligands, solutes, and cofactors.",
-                f"The network contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique ligands.",
-            ]
-        if systems_with_cofactors:
-            summary_parts.append(
-                f"{len(systems_with_cofactors)} systems include cofactors ({cofactor_list})."
-            )
-    else:
-        if len(unique_sets) > 1:
-            summary_parts = [
-                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents and {charge_info} for solutes and cofactors.",
-                f"The submission contains {metadata.n_transformations} edges, {len(all_structures['ligands'])} unique solutes, and {len(all_structures['solvents'])} unique solvents.",
-            ]
-        else:
-            summary_parts = [
-                f"This submission describes the ASFE benchmark{systems_desc_phrase} prepared with {field_info} for solvents and {charge_info} for solutes and cofactors.",
-                f"The archive contains {metadata.n_transformations} edges across {len(all_structures['ligands'])} unique solutes and {len(all_structures['solvents'])} unique solvents.",
-            ]
 
     if used_alchemiscale:
-        summary_parts.append(
-            "Results are derived from archived Alchemiscale workflow data."
-        )
-    summary_text = " ".join(summary_parts)
-    return textwrap.fill(summary_text, width=100)
+        summary += " Results are derived from archived Alchemiscale workflow data."
+
+    return summary
 
 
-def _render_protocol_settings_yaml(
-    protocol_settings_list: list[tuple[ProtocolSettingsInfo, list[str]]],
-) -> str:
-    """Take a list of alchemical protocols pairs with strings identifying systems that use it
+def _make_tags(metadata: _Metadata, user_tags: str) -> list[str]:
+    tags: list[str] = [metadata.mode, metadata.network_mode]
 
-    All keys in the ProtocolSettingsInfo class are listed except for ``full_protocol_settings``.
+    for value, _ in metadata.forcefield:
+        values = value if isinstance(value, (list, tuple, set)) else [value]
+        for ff in values:
+            label = str(ff).strip()
+            if label:
+                tags.append(label)
 
-    If only one protocol is used, it is labeled as the submission protocol and the notes specify "Applies to all
-    edges". If more than one protocol is present, the protocol that represents the largest number of systems is
-    listed last and notes specify as "All remaining edges". The other protocols are listed with notes containing
-    the list of identifying strings.
+    for value, _ in metadata.small_molecule_forcefield:
+        label = str(value).strip()
+        if label:
+            tags.append(label)
 
-    Parameters
-    ----------
-    protocol_settings_list : list[tuple[ProtocolSettingsInfo, list[str]]]
-        List of unique protocol settings paired with system identifiers that use that protocol.
+    for group, name in metadata.system_order:
+        tags.extend([group, name])
 
-    Returns
-    -------
-    str
-        Output yaml section
-    """
-    if not protocol_settings_list:
-        return "protocol_settings: []\n"
+    for value, _ in metadata.partial_charges:
+        label = str(value).strip()
+        if label:
+            tags.append(label)
 
-    def _format_value(value: Any) -> str:
-        """Format a value for YAML. Quantity fields (with units) are rendered unquoted."""
-        if value is None:
-            return ""
-        if isinstance(value, bool):
-            return "true" if value else "false"
-        if isinstance(value, (int, float)):
-            return str(value)
-        return json.dumps(str(value))
+    for value, _ in metadata.protocol_libraries:
+        label = str(value).strip()
+        if label and label != "TODO":
+            tags.append(label)
 
-    def _format_identifier(identifier: Any) -> str:
-        if identifier is None:
-            return "None"
-        if isinstance(identifier, str):
-            return identifier
-        if isinstance(identifier, (list, tuple, set)):
-            return ", ".join(str(item) for item in sorted(identifier))
-        return str(identifier)
-
-    ordered_settings = sorted(
-        enumerate(protocol_settings_list),
-        key=lambda item: (len(item[1][1]), str(item[1][0].protocol), item[0]),
-    )
-
-    primary_index = max(
-        range(len(protocol_settings_list)),
-        key=lambda i: (len(protocol_settings_list[i][1]), -i),
-    )
-    primary_settings, _ = protocol_settings_list[primary_index]
-
-    def _parse_full_protocol_settings(value: str) -> Any:
-        try:
-            return ast.literal_eval(value)
-        except Exception:
-            return None
-
-    def _format_path(path: list[str]) -> str:
-        formatted = ".".join(path)
-        # Strip .val suffix for pint Quantities
-        if formatted.endswith(".val"):
-            formatted = formatted[:-4]
-        return formatted
-
-    def _compare_full_protocol_settings(
-        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
-    ) -> list[tuple[str, Any, Any]]:
-        base_obj = _parse_full_protocol_settings(base.full_protocol_settings)
-        other_obj = _parse_full_protocol_settings(other.full_protocol_settings)
-        diffs: list[tuple[str, Any, Any]] = []
-
-        def recurse(path: list[str], a: Any, b: Any) -> None:
-            if type(a) is not type(b):
-                diffs.append((_format_path(path), a, b))
-                return
-            if isinstance(a, dict):
-                for key in sorted(set(a) | set(b)):
-                    if key not in a:
-                        diffs.append((_format_path(path + [key]), None, b[key]))
-                    elif key not in b:
-                        diffs.append((_format_path(path + [key]), a[key], None))
-                    else:
-                        recurse(path + [key], a[key], b[key])
-            elif isinstance(a, list):
-                if a != b:
-                    diffs.append((_format_path(path), a, b))
-            else:
-                if a != b:
-                    diffs.append((_format_path(path), a, b))
-
-        if isinstance(base_obj, dict) and isinstance(other_obj, dict):
-            recurse([], base_obj, other_obj)
-        return diffs
-
-    def _full_protocol_setting_notes(
-        base: ProtocolSettingsInfo, other: ProtocolSettingsInfo
-    ) -> list[str]:
-        diffs = _compare_full_protocol_settings(base, other)
-        if not diffs:
-            return []
-        notes: list[str] = [
-            "Detailed protocol settings differ:",
-        ]
-        for path, base_value, other_value in diffs:
-            notes.append(f"- {path}: {base_value!r} -> {other_value!r}")
-        return notes
-
-    output_lines = ["protocol_settings:"]
-    multiple_protocols = len(protocol_settings_list) > 1
-    field_names = [
-        "protocol",
-        "protocol_library",
-        "timestep",
-        "temperature",
-        "pressure",
-        "forcefields",
-        "small_molecule_forcefield",
-        "partial_charges",
-        "equilibration_time",
-        "production_time",
-        "vacuum_equilibration_time",
-        "vacuum_production_time",
-        "solvent_equilibration_time",
-        "solvent_production_time",
-        "lambda_functions",
-        "lambda_windows",
-        "lambda_schedule",
-        "notes",
-    ]
-
-    primary_order = [primary_index] + [
-        idx for idx, _ in ordered_settings if idx != primary_index
-    ]
-    for index in primary_order:
-        protocol_settings, identifiers = protocol_settings_list[index]
-        is_primary = index == primary_index
-        sorted_ids = sorted(_format_identifier(item) for item in identifiers)
-
-        if is_primary:
-            if multiple_protocols:
-                notes_lines = [f"Applies to {len(sorted_ids)} edges:"] + [
-                    f"- {item}" for item in sorted_ids[:5]
-                ]
-                if len(notes_lines) - 1 != len(sorted_ids):
-                    notes_lines.append("- etc.")
-                notes = "\n".join(notes_lines)
-                notes_is_multiline = True
-            else:
-                notes = "Applies to all edges"
-                notes_is_multiline = False
-        else:
-            notes_lines = _full_protocol_setting_notes(
-                primary_settings, protocol_settings
-            )
-            trans_lines = [f"Applies to {len(sorted_ids)} edges:"] + [
-                f"- {item}" for item in sorted_ids[:5]
-            ]
-            if len(trans_lines) - 1 != len(sorted_ids):
-                trans_lines.append("- etc.")
-            notes = "\n".join(notes_lines + trans_lines)
-            notes_is_multiline = True
-
-        output_lines.append(
-            "  - protocol: " + _format_value(protocol_settings.protocol)
-        )
-        for field_name in field_names:
-            if field_name == "protocol":
-                continue
-            if field_name == "notes":
-                if notes_is_multiline:
-                    output_lines.append("    notes: |")
-                    for line in notes.splitlines():
-                        output_lines.append("      " + line)
-                else:
-                    output_lines.append("    notes: " + _format_value(notes))
-                continue
-            # Special handling for forcefields: render as JSON array
-            if field_name == "forcefields":
-                ff_value = getattr(protocol_settings, field_name)
-                if isinstance(ff_value, (list, tuple, set)) and ff_value:
-                    items = [json.dumps(str(x)) for x in sorted(ff_value)]
-                    if is_primary:
-                        output_lines.append(f"    {field_name}: [{', '.join(items)}]")
-                    else:
-                        # For non-primary, output if different from primary
-                        primary_ff_value = getattr(primary_settings, field_name, None)
-                        if primary_ff_value != ff_value:
-                            output_lines.append(
-                                f"    {field_name}: [{', '.join(items)}]"
-                            )
-                continue
-            if is_primary:
-                output_lines.append(
-                    f"    {field_name}: {_format_value(getattr(protocol_settings, field_name))}"
-                )
-            else:
-                # For non-primary protocols, output field if it differs from primary
-                current_value = getattr(protocol_settings, field_name)
-                primary_value = getattr(primary_settings, field_name, None)
-                if current_value != primary_value:
-                    output_lines.append(
-                        f"    {field_name}: {_format_value(current_value)}"
-                    )
-
-    return "\n".join(output_lines) + "\n"
+    tags.extend(tag.strip() for tag in user_tags.split(",") if tag.strip())
+    return _dedupe_preserve_order(tags)
 
 
-def _render_keyed_values_yaml(
-    section_name: str,
-    value_keys: list[tuple[Any, list[str]]],
-    value_label: str = "value",
-    keys_label: str = "edges",
-) -> str:
-    """Render simple value-with-systems metadata into YAML.
-
-    Parameters
-    ----------
-    section_name:
-        YAML section name.
-    value_keys:
-        List of (value, system identifiers) pairs.
-    value_label:
-        Label to use for the scalar value.
-    keys_label:
-        Label to use for the identifying system keys.
-
-    Returns
-    -------
-    str
-        Output yaml section.
-    """
-    if not value_keys:
-        return f"{section_name}: TODO"
-    if len(value_keys) == 1:
-        if isinstance(value_keys[0][0], str):
-            return f"{section_name}: {json.dumps(str(value_keys[0][0]))}"
-        elif isinstance(value_keys[0][0], (list, tuple, set)):
-            items = [json.dumps(str(x)) for x in sorted(value_keys[0][0])]
-            return f"{section_name}: [{', '.join(items)}]"
-        else:
-            raise ValueError(f"Unknown value type to print: {value_keys[0][0]}")
-
-    ordered_settings = sorted(
-        enumerate(value_keys),
-        key=lambda item: (len(item[1][1]), str(item[1][0]), item[0]),
-    )
-
-    lines = [f"{section_name}:"]
-    for _, (value, keys) in ordered_settings:
-        if isinstance(value, str):
-            lines.append(f"  - {value_label}: {json.dumps(str(value))}")
-        elif isinstance(value, (list, tuple, set)):
-            items = [json.dumps(str(x)) for x in sorted(value)]
-            lines.append(f"  - {value_label}: [{', '.join(items)}]")
-        else:
-            raise ValueError(f"Unknown value type to print: {value_label}")
-        if keys:
-            lines.append(f"    {keys_label}:")
-            for i, key in enumerate(sorted(keys)):
-                if i < 5:
-                    lines.append(f"      - {json.dumps(str(key))}")
-                else:
-                    lines.append("      - etc.")
-                    break
-
-    return "\n".join(lines)
-
-
-def _render_system_provenance_yaml(system_info_dict: dict[tuple, SystemInfo]) -> str:
-    """Render a list of SystemInfo objects into a list of network keys and the benchmark systems they contain
-
-    Parameters
-    ----------
-    system_info_dict : dict[tuple, SystemInfo]
-        List of unique protocol settings paired with system identifiers that use that protocol.
-
-    Returns
-    -------
-    str
-        Output yaml section
-    """
-
-    network_breakdown = defaultdict(lambda: defaultdict(str))
-    for si in system_info_dict.values():
-        network_breakdown[si.system_group][si.system_name] = si.network_key
-
-    benchmark_yaml = """
-## BenchmarkData Provenance (from openfe-benchmarks planning script) with associated network key 
-benchmark_data:
-  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
-"""
-
-    for system_group in sorted(network_breakdown):
-        benchmark_yaml += f"  {json.dumps(system_group)}:\n"
-        for system_name, network_key in sorted(network_breakdown[system_group].items()):
-            benchmark_yaml += f"    {json.dumps(system_name)}: {network_key}\n"
-
-    return benchmark_yaml
-
-
-def _normalize_submission_date(submission_date: date | str | None) -> str:
-    """Normalize the submission date to an ISO 8601 date string.
-
-    Parameters
-    ----------
-    submission_date:
-        A date object or ISO 8601 date string. If None, uses today's date.
-
-    Returns
-    -------
-    str
-        ISO 8601 formatted date string.
-    """
-    if submission_date is None:
-        return date.today().isoformat()
-    if isinstance(submission_date, date):
-        return submission_date.isoformat()
-    if isinstance(submission_date, str):
-        try:
-            return date.fromisoformat(submission_date).isoformat()
-        except ValueError as exc:
-            raise ValueError(
-                "submission_date must be an ISO 8601 date string like YYYY-MM-DD"
-            ) from exc
-    raise TypeError("submission_date must be a datetime.date or ISO 8601 date string")
-
-
-def _make_submission_yaml(
-    metadata: AutoMetadata,
-    submission_id: str,
-    title: str,
-    summary: str,
-    tags: list[str],
-    authors: list[str],
-    archive_doi: str,
-    archive_provider: str,
-    license_name: str,
-    results_file: str,
-    submission_date: date | str | None = None,
-    network_mode: str = "alchemicalnetwork",
-) -> str:
-    if not authors:
-        authors = ["TODO add author name"]
-
-    # Add calculation type and protocol libraries to tags
-    enhanced_tags = list(tags)
-    enhanced_tags.append(metadata.calculation_mode)
-    enhanced_tags.append(network_mode)
-
-    # Extract unique protocol libraries
-    protocol_libraries = set()
-    for protocol_settings, _ in metadata.protocol_settings_list:
-        if (
-            protocol_settings.protocol_library
-            and protocol_settings.protocol_library != "TODO"
-        ):
-            protocol_libraries.add(protocol_settings.protocol_library)
-    for lib in sorted(protocol_libraries):
-        enhanced_tags.append(lib)
-
-    # Remove duplicates while preserving order.
-    tags_yaml = ", ".join(dict.fromkeys(enhanced_tags))
-    authors_yaml = "\n".join(f"  - name: {name}" for name in authors)
-    protocol_settings_yaml = _render_protocol_settings_yaml(
-        metadata.protocol_settings_list
-    )
-    system_provenance_yaml = _render_system_provenance_yaml(metadata.system_info_dict)
-    openfe_version_yaml = _render_keyed_values_yaml(
-        "openfe_version", metadata.openfe_version, "version", "edges"
-    )
-    openmm_version_yaml = _render_keyed_values_yaml(
-        "openmm_version", metadata.openmm_version, "version", "edges"
-    )
-    openff_toolkit_version_yaml = _render_keyed_values_yaml(
-        "openff_toolkit_version", metadata.openff_toolkit_version, "version", "edges"
-    )
-    # Render pontibus_version if we have it, otherwise check if pontibus was used
-    if metadata.pontibus_version:
-        pontibus_version_yaml = _render_keyed_values_yaml(
-            "pontibus_version", metadata.pontibus_version, "version", "edges"
-        )
-    else:
-        # Check if pontibus was used by looking at protocol libraries
-        pontibus_used = any(lib == "pontibus" for lib, _ in metadata.protocol_libraries)
-        if pontibus_used:
-            pontibus_version_yaml = "pontibus_version: TODO"
-        else:
-            pontibus_version_yaml = "pontibus_version: None"
-    if metadata.calculation_mode in ["rbfe", "septop"]:
-        mapper_yaml = _render_keyed_values_yaml(
-            "mapper", metadata.mapper, "mapper", "edges"
-        )
-    else:
-        mapper_yaml = ""
-    forcefield_yaml = _render_keyed_values_yaml(
-        "forcefield", metadata.forcefield, "forcefield", "edges"
-    )
-    if metadata.calculation_mode in ["rbfe", "septop"]:
-        small_molecule_forcefield_yaml = _render_keyed_values_yaml(
-            "small_molecule_forcefield",
-            metadata.small_molecule_forcefield,
-            "small_molecule_forcefield",
-            "edges",
-        )
-    else:
-        small_molecule_forcefield_yaml = ""
-
-    partial_charges_yaml = _render_keyed_values_yaml(
-        "partial_charges",
-        metadata.partial_charges,
-        "partial_charges",
-        "edges",
-    )
-
-    submission_date = _normalize_submission_date(submission_date)
-
-    return f"""# REQUIRED: unique, kebab-case identifier for this submission
-submission_id: {submission_id}
-
-# REQUIRED: short descriptive title
-title: {title}
-
-# REQUIRED: short descriptive summary (1-2 sentences)
-summary: |
-{_yaml_block(summary, 2)}
-
-# REQUIRED: list of submission tags
-tags: [{tags_yaml}]
-
-# REQUIRED: calculation type (asfe, rbfe, etc.)
-calculation_type: {metadata.calculation_mode}
-
-# REQUIRED: list of contributing authors (name, affiliation; ORCID optional)
-authors:
-{authors_yaml}
-
-# REQUIRED: publication/submission date (ISO 8601)
-date: {submission_date}
-{openfe_version_yaml}
-{openmm_version_yaml}
-{openff_toolkit_version_yaml}
-{pontibus_version_yaml}
-{mapper_yaml}
-{forcefield_yaml}
-{small_molecule_forcefield_yaml}
-{partial_charges_yaml}
-{system_provenance_yaml}
-
-# REQUIRED: results file
-results: {results_file}
-
-# REQUIRED: long-term archive pointer (at least doi or url)
-archive:
-  doi: {archive_doi}
-  archive_provider: {archive_provider}
-
-# REQUIRED: license for the submission
-license: {license_name}
-
-# RECOMMENDED / OPTIONAL metadata for protocol settings
-{protocol_settings_yaml}
-"""
+def _build_benchmark_data(
+    systems: dict[tuple[str, str], _SystemRecord],
+) -> dict[str, object]:
+    out: dict[str, object] = {
+        "source_repository": "https://github.com/OpenFreeEnergy/openfe-benchmarks"
+    }
+    grouped: dict[str, dict[str, str]] = defaultdict(dict)
+    for system in systems.values():
+        grouped[system.system_group][system.system_name] = system.network_key
+    for group in sorted(grouped):
+        out[group] = {name: grouped[group][name] for name in sorted(grouped[group])}
+    return out
 
 
 def _make_zenodo_description(
-    metadata: AutoMetadata,
+    benchmark_results: BenchmarkResults,
     network_mode: str,
-    title: str,
-    archive_filename: str,
-    mode: str,
-    content_summary: str,
-    license_name: str,
     used_alchemiscale: bool,
-    submission_id: str,
 ) -> str:
-    content_kind = "ASFE" if mode == "asfe" else "RBFE"
+    payload = benchmark_results.to_submission_dict()
 
-    # Determine the source type for the overview text
     if network_mode == "alchemicalarchive":
         source_description = "AlchemicalArchive"
     elif network_mode == "alchemicalnetwork":
@@ -1869,143 +1039,312 @@ def _make_zenodo_description(
     else:
         source_description = "OpenFE archive"
 
-    # Build workflow description
     workflow_text = "OpenFE"
     if used_alchemiscale:
         workflow_text += " and Alchemiscale"
 
-    protocol_settings_yaml = _render_protocol_settings_yaml(
-        metadata.protocol_settings_list
+    authors = payload.get("authors", [])
+    author_names = [
+        entry.get("name", "")
+        for entry in authors
+        if isinstance(entry, dict) and isinstance(entry.get("name"), str)
+    ]
+
+    tags = payload.get("tags", [])
+    tag_text = (
+        ", ".join(str(tag) for tag in tags) if isinstance(tags, list) else str(tags)
     )
-    system_provenance_yaml = _render_system_provenance_yaml(metadata.system_info_dict)
-    openfe_version_yaml = _render_keyed_values_yaml(
-        "openfe_version", metadata.openfe_version, "version", "edges"
+
+    benchmark_data = payload.get("benchmark_data", {})
+    system_lines: list[str] = []
+    provenance_lines: list[str] = []
+    network_lines: list[str] = []
+    if isinstance(benchmark_data, dict):
+        source_repo = benchmark_data.get("source_repository")
+        if isinstance(source_repo, str) and source_repo.strip():
+            provenance_lines.append(f"- source_repository: {source_repo}")
+        for group, group_data in sorted(benchmark_data.items()):
+            if group == "source_repository":
+                continue
+            if isinstance(group_data, dict):
+                names = sorted(str(name) for name in group_data)
+                system_lines.append(f"- {group}: {', '.join(names)}")
+                for name in names:
+                    key_value = group_data.get(name)
+                    network_lines.append(f"- {key_value}: {group}/{name}")
+
+    systems_block = "\n".join(system_lines) if system_lines else "- TODO"
+    network_block = "\n".join(network_lines) if network_lines else "- TODO"
+    provenance_block = (
+        "\n".join(provenance_lines) if provenance_lines else "- source_repository: TODO"
     )
-    openmm_version_yaml = _render_keyed_values_yaml(
-        "openmm_version", metadata.openmm_version, "version", "edges"
+
+    protocol_settings = payload.get("protocol_settings", [])
+    protocol_count = (
+        len(protocol_settings) if isinstance(protocol_settings, list) else 0
     )
-    openff_toolkit_version_yaml = _render_keyed_values_yaml(
-        "openff_toolkit_version",
-        metadata.openff_toolkit_version,
-        "version",
-        "edges",
-    )
-    # Render pontibus_version if we have it, otherwise check if pontibus was used
-    if metadata.pontibus_version:
-        pontibus_version_yaml = _render_keyed_values_yaml(
-            "pontibus_version", metadata.pontibus_version, "version", "edges"
-        )
+    if isinstance(protocol_settings, list):
+        protocol_yaml_block = yaml.safe_dump(
+            {"protocol_settings": protocol_settings},
+            sort_keys=False,
+            default_flow_style=False,
+            allow_unicode=False,
+        ).rstrip()
     else:
-        # Check if pontibus was used by looking at protocol libraries
-        pontibus_used = any(lib == "pontibus" for lib, _ in metadata.protocol_libraries)
-        if pontibus_used:
-            pontibus_version_yaml = "pontibus_version: TODO"
+        protocol_yaml_block = "protocol_settings: []"
+
+    benchmark_data_yaml_block = yaml.safe_dump(
+        {"benchmark_data": benchmark_data if isinstance(benchmark_data, dict) else {}},
+        sort_keys=False,
+        default_flow_style=False,
+        allow_unicode=False,
+    ).rstrip()
+
+    repository_reference = (
+        "https://github.com/OpenFreeEnergy/openfe-benchmarks/tree/main/openfe_benchmarks/results/"
+        f"{benchmark_results.submission_id}"
+    )
+
+    software_versions_block = "\n".join(
+        [
+            f"- openfe_version: {payload.get('openfe_version', 'TODO')}",
+            f"- openmm_version: {payload.get('openmm_version', 'TODO')}",
+            f"- openff_toolkit_version: {payload.get('openff_toolkit_version', 'TODO')}",
+            f"- pontibus_version: {payload.get('pontibus_version', 'TODO')}",
+        ]
+    )
+
+    recommended_descriptors_block = "\n".join(
+        [
+            f"- partial_charges: {payload.get('partial_charges', 'TODO')}",
+            f"- mapper: {payload.get('mapper', 'TODO')}",
+            f"- forcefield: {payload.get('forcefield', 'TODO')}",
+            f"- small_molecule_forcefield: {payload.get('small_molecule_forcefield', 'TODO')}",
+        ]
+    )
+
+    lines = [
+        f"# {benchmark_results.title}",
+        "",
+        "## Overview",
+        (
+            f"{benchmark_results.calculation_type.upper()} benchmark results prepared from "
+            f"{source_description} JSON file(s) generated with {workflow_text}."
+        ),
+        "",
+        benchmark_results.summary,
+        "",
+        "## Submission Snapshot",
+        f"- Submission ID: {benchmark_results.submission_id}",
+        f"- Date: {benchmark_results.date}",
+        f"- Results file: {benchmark_results.results}",
+        f"- License: {benchmark_results.license}",
+        f"- Authors: {', '.join(author_names) if author_names else 'TODO'}",
+        f"- Tags: {tag_text if tag_text else 'TODO'}",
+        "",
+        "## Systems Covered",
+        systems_block,
+        "",
+        "## Repository Reference",
+        repository_reference,
+        "",
+        "## Software Versions",
+        software_versions_block,
+        "",
+        "## Alchemical Network Keys",
+        network_block,
+        "",
+        "## Recommended Descriptors",
+        recommended_descriptors_block,
+        "",
+        "## BenchmarkData Provenance",
+        provenance_block,
+        "",
+        "```yaml",
+        benchmark_data_yaml_block,
+        "```",
+        "",
+        "## Protocol Settings",
+        f"- Protocol settings entries: {protocol_count}",
+        "",
+        "```yaml",
+        protocol_yaml_block,
+        "```",
+    ]
+
+    return "\n".join(lines) + "\n"
+
+
+def _update_metadata_from_transformation(
+    metadata: _Metadata,
+    trans: Transformation,
+    network_key: str,
+    override_group: str | None,
+    override_name: str | None,
+    mode_spec: _ModeSpec,
+) -> None:
+    system_group, system_name = _infer_system_group_name(
+        trans, override_group, override_name
+    )
+    system_key = (system_group, system_name)
+
+    if system_key not in metadata.systems:
+        metadata.systems[system_key] = _SystemRecord(
+            system_group, system_name, network_key
+        )
+        metadata.system_order.append(system_key)
+
+    system_record = metadata.systems[system_key]
+    components = _extract_system_components(trans, mode_spec)
+    system_record.solvents.update(components["solvents"])
+    system_record.proteins.update(components["proteins"])
+    system_record.cofactors.update(components["cofactors"])
+    system_record.ligands.update(components["ligands"])
+
+    edge_key = _make_edge_key(
+        network_key, system_group, system_name, mode_spec, components
+    )
+
+    annotations = _get_mapping_annotations(trans)
+
+    for key, value in annotations.items():
+        value_str = str(value)
+        if "openfe" in key:
+            _add_str_value_with_keys(metadata.openfe_version, value_str, [key])
+        if "openmm" in key:
+            _add_str_value_with_keys(metadata.openmm_version, value_str, [key])
+        if "openff" in key and "toolkit" in key:
+            _add_str_value_with_keys(metadata.openff_toolkit_version, value_str, [key])
+        if "pontibus" in key:
+            _add_str_value_with_keys(metadata.pontibus_version, value_str, [key])
+
+    mapper_settings = annotations.get("mapper_settings")
+    mapper_version = annotations.get("mapper_version")
+    if mode_spec.rbfe_like and isinstance(mapper_settings, dict) and mapper_version:
+        mapper_name = str(mapper_settings.get("__qualname__", "TODO")).split(".")[-1]
+        mapping_algorithm = str(mapper_settings.get("_mapping_algorithm", "TODO"))
+        mapper_value = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
+        _add_str_value_with_keys(metadata.mapper, mapper_value, [edge_key])
+
+    protocol_settings = _extract_protocol_settings(trans.protocol, mode_spec)
+    _add_protocol_value_with_keys(
+        metadata.protocol_settings, protocol_settings, [edge_key]
+    )
+
+    if protocol_settings.get("forcefields"):
+        forcefields = protocol_settings["forcefields"]
+        if isinstance(forcefields, list):
+            _add_tuple_value_with_keys(
+                metadata.forcefield, tuple(forcefields), [edge_key]
+            )
+    if protocol_settings.get("small_molecule_forcefield"):
+        small_molecule_ff = protocol_settings["small_molecule_forcefield"]
+        if isinstance(small_molecule_ff, str):
+            _add_str_value_with_keys(
+                metadata.small_molecule_forcefield, small_molecule_ff, [edge_key]
+            )
+    partial_charges = _partial_charge_from_transformation(trans, mode_spec)
+    if not partial_charges:
+        protocol_partial_charges = protocol_settings.get("partial_charges")
+        if isinstance(protocol_partial_charges, str):
+            partial_charges = protocol_partial_charges
+    if partial_charges:
+        _add_str_value_with_keys(metadata.partial_charges, partial_charges, [edge_key])
+    if protocol_settings.get("protocol_library"):
+        protocol_library = protocol_settings["protocol_library"]
+        if isinstance(protocol_library, str):
+            _add_str_value_with_keys(
+                metadata.protocol_libraries, protocol_library, [edge_key]
+            )
+
+
+def _collect_metadata(
+    input_paths: list[Path],
+    system_overrides: dict[Path, tuple[str | None, str | None]],
+    system_group: str | None,
+    system_name: str | None,
+) -> tuple[_Metadata, _ModeSpec]:
+    metadata: _Metadata | None = None
+    selected_mode_spec: _ModeSpec | None = None
+
+    for path in input_paths:
+        resolved = path.resolve()
+        if not resolved.exists():
+            raise FileNotFoundError(f"Input file not found: {resolved}")
+
+        network_obj, network_mode = _load_network(resolved)
+        transformations = _transformation_refs(network_obj, network_mode)
+        mode = _detect_mode(transformations)
+        mode_spec = _mode_spec(mode)
+        network_key = _network_key(network_obj, network_mode)
+
+        if metadata is None:
+            metadata = _Metadata(mode=mode, network_mode=network_mode)
+            selected_mode_spec = mode_spec
         else:
-            pontibus_version_yaml = "pontibus_version: None"
-    forcefield_yaml = _render_keyed_values_yaml(
-        "forcefield", metadata.forcefield, "forcefield", "edges"
-    )
+            if metadata.mode != mode:
+                raise ValueError("Mixed ASFE/RBFE input files are not supported")
+            if metadata.network_mode != network_mode:
+                raise ValueError(
+                    "Mixed AlchemicalArchive/AlchemicalNetwork inputs are not supported"
+                )
 
-    # make the user add the charges manually as ligand charges might take priority over those in the protocol settings
-    partial_charges_yaml = "partial_charges: TODO"
-    if mode in ["rbfe", "septop"]:
-        mapper_yaml = _render_keyed_values_yaml(
-            "mapper", metadata.mapper, "mapper", "edges"
+        metadata.network_keys.append(network_key)
+        metadata.n_transformations += len(transformations)
+
+        override_group, override_name = system_overrides.get(
+            resolved,
+            (system_group, system_name),
         )
-    else:
-        mapper_yaml = ""
-    if mode in ["rbfe", "septop"]:
-        small_molecule_forcefield_yaml = _render_keyed_values_yaml(
-            "small_molecule_forcefield",
-            metadata.small_molecule_forcefield,
-            "small_molecule_forcefield",
-            "edges",
-        )
-    else:
-        small_molecule_forcefield_yaml = ""
-
-    # Build network keys to systems mapping section
-    network_keys_section = ""
-    network_breakdown = defaultdict(list)
-    for si in metadata.system_info_dict.values():
-        network_breakdown[si.network_key].append(f"{si.system_group}/{si.system_name}")
-
-    if network_breakdown:
-        network_keys_lines = []
-        for network_key_item, systems in sorted(network_breakdown.items()):
-            network_keys_lines.append(
-                f"  - {network_key_item}: {', '.join(sorted(set(systems)))}"
+        for trans in transformations:
+            _update_metadata_from_transformation(
+                metadata,
+                trans,
+                network_key,
+                override_group,
+                override_name,
+                mode_spec,
             )
-        network_keys_section = "## Alchemical Network Keys\n" + "\n".join(
-            network_keys_lines
-        )
 
-    repo_link = (
-        f"https://github.com/OpenFreeEnergy/openfe-benchmarks/tree/main/"
-        f"openfe_benchmarks/results/{submission_id}"
-    )
-
-    return f"""# {title}
-
-## Overview
-{content_kind} benchmark results prepared from {source_description} JSON file(s) generated with {workflow_text}.
-
-{content_summary}
-
-## Repository Reference
-This submission is linked from the OpenFE Benchmarks repository:
-{repo_link}
-
-## Software Versions
-{openfe_version_yaml}
-{openmm_version_yaml}
-{openff_toolkit_version_yaml}
-{pontibus_version_yaml}
-
-{network_keys_section}
-
-## Recommended Descriptors
-{partial_charges_yaml}
-{mapper_yaml}
-{forcefield_yaml}
-{small_molecule_forcefield_yaml}
-
-{system_provenance_yaml}
-
-## Protocol Settings
-{protocol_settings_yaml}
-
-## Rights
-- License: {license_name}
-"""
+    if metadata is None or selected_mode_spec is None:
+        raise ValueError("No metadata could be extracted from input files")
+    return metadata, selected_mode_spec
 
 
-def _parse_systems_input(
-    systems: Any,
-) -> list[tuple[str, str, Path]]:
-    parsed: list[tuple[str, str, Path]] = []
-    for item in systems:
-        if not isinstance(item, (list, tuple)) or len(item) != 3:
-            raise ValueError(
-                "Each item in systems must be a tuple/list of "
-                "(system_group, system_name, archive_path)"
-            )
-        system_group, system_name, archive_path = item
-        if not str(system_group).strip() or not str(system_name).strip():
-            raise ValueError(
-                "Each systems entry must include a non-empty system_group and system_name"
-            )
-        parsed.append(
-            (str(system_group).strip(), str(system_name).strip(), Path(archive_path))
-        )
-    if not parsed:
-        raise ValueError("At least one system must be provided in systems")
-    return parsed
+def _apply_overrides(
+    metadata: _Metadata,
+    forcefields: list[str] | str | None,
+    small_molecule_forcefield: str | None,
+    openfe_version: str | None,
+    openmm_version: str | None,
+    openff_toolkit_version: str | None,
+    pontibus_version: str | None,
+) -> None:
+    if forcefields is not None:
+        labels = [forcefields] if isinstance(forcefields, str) else list(forcefields)
+        cleaned = [_normalize_forcefield_label(str(label)) for label in labels]
+        cleaned = [label for label in cleaned if label]
+        if cleaned:
+            metadata.forcefield = [(tuple(cleaned), ["override"])]
+
+    if small_molecule_forcefield:
+        metadata.small_molecule_forcefield = [(small_molecule_forcefield, ["override"])]
+
+    if openfe_version is not None:
+        metadata.openfe_version = [(openfe_version, ["override"])]
+    if openmm_version is not None:
+        metadata.openmm_version = [(openmm_version, ["override"])]
+    if openff_toolkit_version is not None:
+        metadata.openff_toolkit_version = [(openff_toolkit_version, ["override"])]
+    if pontibus_version is not None:
+        metadata.pontibus_version = [(pontibus_version, ["override"])]
 
 
 def process_network(
     input_files: Path | list[Path] | str | None = None,
-    systems: Any = None,
+    systems: list[tuple[str, str, str | Path]]
+    | tuple[tuple[str, str, str | Path], ...]
+    | None = None,
     output_dir: Path = Path("."),
     submission_id: str | None = None,
     tags: str = "",
@@ -2024,320 +1363,136 @@ def process_network(
     openff_toolkit_version: str | None = None,
     pontibus_version: str | None = None,
 ) -> tuple[Path, Path]:
-    """Generate submission metadata from one or more archived OpenFE JSON networks.
-
-    Parameters
-    ----------
-    input_files:
-        Path to a single AlchemicalArchive/AlchemicalNetwork JSON file, a list
-        of such files, or a glob pattern string (e.g., "networks/*/*.json").
-        Supported extensions are `.json`, `.bz2`, and `.json.bz2`.
-        When multiple files are provided, protocol settings from each are collected
-        and grouped in the output.
-    output_dir:
-        Directory where `submission.yaml` and `zenodo_description.md` will be
-        written. Defaults to the current working directory.
-    submission_id:
-        Optional identifier to use in `submission.yaml`. If omitted, a default
-        value is generated from the current date and network key.
-    tags:
-        Comma-separated list of additional tags to include in the submission
-        metadata. The generated tag list also always includes the detected
-        `mode` (either ``asfe`` or ``rbfe``), the resolved forcefield string,
-        the detected small-molecule forcefield, and normalized partial charge
-        information.
-    author:
-        Optional list of author entries for the submission YAML. Each entry is
-        treated as a raw string and written to the `authors` section.
-    license:
-        License string to write into the submission metadata.
-    used_alchemiscale:
-        Whether Alchemiscale was used to generate the results. If True, the
-        description will mention Alchemiscale. Defaults to True.
-    summary_suffix:
-        Optional text to append to the auto-generated summary.
-    results_file:
-        Name of the results file to reference in submission.yaml and validate
-        exists in output_dir. Defaults to 'computational_results.json'.
-    submission_date:
-        Optional publication or submission date for the YAML file, as a
-        datetime.date or ISO 8601 date string (YYYY-MM-DD). If omitted, the
-        current date is used.
-    system_group:
-        Optional benchmark system group/name (e.g., 'jacs_set', 'solvation_set'). If provided,
-        overrides the system_group extracted from transformation annotations.
-    system_name:
-        Optional system name (e.g., 'tyk2', 'hsp90'). If provided, overrides the
-        system_name extracted from transformation annotations.
-    forcefields:
-        Optional human-readable labels for the protein/solvent force fields.
-        This is required when the archive contains a custom force field encoded as
-        serialized JSON or XML (for example, a SMIRNOFF XML string) because the
-        archive cannot always be auto-normalized into a clean tag.
-    small_molecule_forcefield:
-        Optional human-readable label for the small-molecule force field.
-        This is required when the archive contains a custom force field encoded as
-        serialized JSON or XML.
-    openfe_version:
-        Optional OpenFE version string to include in metadata instead of any
-        auto-detected versions from the archive.
-    openmm_version:
-        Optional OpenMM version string to include in metadata instead of any
-        auto-detected versions from the archive.
-    openff_toolkit_version:
-        Optional OpenFF Toolkit version string to include in metadata instead of any
-        auto-detected versions from the archive.
-    pontibus_version:
-        Optional Pontibus version string to include in metadata instead of any
-        auto-detected versions from the archive.
-
-    Notes
-    -----
-    The generated submission YAML will include placeholder values for archive
-    DOI and provider, which are intentionally not propagated into the Zenodo
-    description output.
-
-    Returns
-    -------
-    tuple[Path, Path]
-        Paths to the generated `submission.yaml` and `zenodo_description.md`.
-    """
-
+    """Generate submission metadata artifacts from OpenFE archive inputs."""
     out_dir = output_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # Check for required results file
     results_path = out_dir / results_file
     if not results_path.exists():
         raise FileNotFoundError(
             f"Required file '{results_file}' not found in output directory: {out_dir}"
         )
 
-    if systems is not None:
-        if input_files is not None:
-            raise ValueError(
-                "Cannot specify both input_files and systems. Use one input style only."
-            )
-        if system_group is not None or system_name is not None:
-            raise ValueError(
-                "When providing systems, do not also pass system_group or system_name. "
-                "Use per-system overrides in systems instead."
-            )
-        system_entries = _parse_systems_input(systems)
-        input_paths = [entry[2] for entry in system_entries]
-        system_overrides = {
-            entry[2].resolve(): (entry[0], entry[1]) for entry in system_entries
-        }
-    else:
-        # Normalize input to list and expand glob patterns
-        if input_files is None:
-            raise ValueError("At least one input file must be provided")
-        if isinstance(input_files, str):
-            # Glob pattern
-            matched_files = glob_module.glob(input_files, recursive=True)
-            if not matched_files:
-                raise ValueError(f"No files matched glob pattern: {input_files}")
-            input_paths = [Path(f) for f in sorted(matched_files)]
-        elif isinstance(input_files, Path):
-            input_paths = [input_files]
-        else:
-            input_paths = input_files
-        system_overrides = {}
-
-    if not input_paths:
-        raise ValueError("At least one input file must be provided")
-
-    # Validate all input files exist
-    for input_path in input_paths:
-        resolved_path = input_path.resolve()
-        if not resolved_path.exists():
-            raise FileNotFoundError(f"Input file not found: {resolved_path}")
-
-    # Process all input files and collect metadata
-    all_network_objs: list[dict[str, Any]] = []
-    modes: set[str] = set()
-    network_modes: set[str] = set()
-    all_network_keys: list[str] = []
-    all_metadata: list[AutoMetadata] = []
-    for input_path in input_paths:
-        resolved_path = input_path.resolve()
-        network_obj, network_mode = _load_network(resolved_path)
-        all_network_objs.append(network_obj)
-        network_modes.add(network_mode)
-
-        override_group, override_name = system_overrides.get(
-            resolved_path, (system_group, system_name)
-        )
-        metadata = _extract_auto_metadata(
-            network_obj,
-            network_mode,
-            str(resolved_path),
-            system_group=override_group,
-            system_name=override_name,
-        )
-        modes.add(metadata.calculation_mode)
-        all_network_keys.append(metadata.network_key)
-        all_metadata.append(metadata)
-
-    # Check consistency
-    if len(modes) > 1:
-        raise ValueError(
-            f"Mixed modes detected across input files: {modes}. All files must be either ASFE or RBFE."
-        )
-    if len(network_modes) > 1:
-        raise ValueError(
-            f"Mixed network modes detected across input files: {network_modes}. All files must be either AlchemicalArchive or AlchemicalNetwork."
-        )
-    mode = modes.pop()
-    network_mode = network_modes.pop()
-
-    # Merge metadata from all files
-    merged_metadata = AutoMetadata()
-    merged_metadata.calculation_mode = mode
-    for metadata in all_metadata:
-        merged_metadata.n_transformations += metadata.n_transformations
-        if not merged_metadata.network_key:
-            merged_metadata.network_key = metadata.network_key
-        else:
-            merged_metadata.network_key += f", {metadata.network_key}"
-        merged_metadata.system_groups_systems.extend(metadata.system_groups_systems)
-
-        # Use first non-empty value for scalar fields
-        for key in [
-            "openmm_version",
-            "openfe_version",
-            "openff_toolkit_version",
-            "pontibus_version",
-            "forcefield",
-            "partial_charges",
-            "small_molecule_forcefield",
-            "protocols",
-            "protocol_settings_list",
-            "mapper",
-        ]:
-            for value, keys in getattr(metadata, key):
-                _add_value_with_keys(getattr(merged_metadata, key), value, keys)
-
-        if any(
-            [
-                x in merged_metadata.system_info_dict
-                for x in metadata.system_info_dict.keys()
-            ]
-        ):
-            raise ValueError(
-                f"System is already documented: {[x for x in metadata.system_info_dict.keys() if x in merged_metadata.system_info_dict]}"
-            )
-
-        merged_metadata.system_info_dict.update(metadata.system_info_dict)
-
-    if forcefields is not None:
-        if isinstance(forcefields, str):
-            forcefields = [forcefields]
-        forcefields_tuple = tuple(str(ff) for ff in forcefields)
-        merged_metadata.forcefield = [(forcefields_tuple, ["override"])]
-        for protocol_settings, _ in merged_metadata.protocol_settings_list:
-            protocol_settings.forcefields = forcefields_tuple
-    if small_molecule_forcefield:
-        merged_metadata.small_molecule_forcefield = [
-            (small_molecule_forcefield, ["override"])
-        ]
-        for protocol_settings, _ in merged_metadata.protocol_settings_list:
-            protocol_settings.small_molecule_forcefield = small_molecule_forcefield
-    if openfe_version is not None:
-        merged_metadata.openfe_version = [(openfe_version, ["override"])]
-    if openmm_version is not None:
-        merged_metadata.openmm_version = [(openmm_version, ["override"])]
-    if openff_toolkit_version is not None:
-        merged_metadata.openff_toolkit_version = [
-            (openff_toolkit_version, ["override"])
-        ]
-    if pontibus_version is not None:
-        merged_metadata.pontibus_version = [(pontibus_version, ["override"])]
-
-    # Build content summary from combined data
-    # Get list of source file names
-    content_summary = _build_content_summary(
-        merged_metadata,
-        used_alchemiscale,
+    input_paths, system_overrides = _resolve_input_paths(
+        input_files=input_files,
+        systems=systems,
+        system_group=system_group,
+        system_name=system_name,
     )
 
-    # Append additional summary text if provided
-    if summary_suffix:
-        content_summary = textwrap.fill(
-            content_summary.rstrip() + " " + summary_suffix.strip(), width=100
-        )
-
-    sets_to_systems: dict[str, list[str]] = defaultdict(list)
-    for system_group, system_name in merged_metadata.system_groups_systems:
-        sets_to_systems[system_group].append(system_name)
-
-    # Generate a descriptive title
-    submission_id = submission_id or _default_submission_id("_".join(all_network_keys))
-
-    title = _generate_title(mode, merged_metadata.system_groups_systems, submission_id)
-
-    submission_yaml_filename = "submission.yaml"
-    zenodo_description_filename = "zenodo_description.md"
-
-    submission_yaml_path = out_dir / submission_yaml_filename
-    zenodo_description_path = out_dir / zenodo_description_filename
-
-    tags_list = [k.strip() for k in tags.split(",") if k.strip()]
-    tags_final = _make_tags(
-        mode=mode,
-        forcefield=merged_metadata.forcefield,
-        small_molecule_forcefield=merged_metadata.small_molecule_forcefield,
-        partial_charge_tag=merged_metadata.partial_charges,
-        benchmark_data=merged_metadata.system_groups_systems,
-        user_keywords=tags_list,
+    metadata, mode_spec = _collect_metadata(
+        input_paths=input_paths,
+        system_overrides=system_overrides,
+        system_group=system_group,
+        system_name=system_name,
     )
 
-    submission_yaml_text = _make_submission_yaml(
-        merged_metadata,
-        submission_id=submission_id,
-        title=title,
-        summary=content_summary,
-        tags=tags_final,
-        authors=author or [],
-        archive_doi="TODO add DOI",
-        archive_provider="TODO add archive provider",
-        license_name=license,
-        results_file=results_file,
-        submission_date=submission_date,
-        network_mode=network_mode,
+    _apply_overrides(
+        metadata,
+        forcefields=forcefields,
+        small_molecule_forcefield=small_molecule_forcefield,
+        openfe_version=openfe_version,
+        openmm_version=openmm_version,
+        openff_toolkit_version=openff_toolkit_version,
+        pontibus_version=pontibus_version,
     )
-    submission_yaml_path.write_text(submission_yaml_text)
 
-    # For Zenodo description, list all input files
-    archive_filenames = ", ".join(p.name for p in input_paths)
-
-    zenodo_description_text = _make_zenodo_description(
-        merged_metadata,
-        network_mode=network_mode,
-        title=title,
-        archive_filename=archive_filenames,
-        mode=mode,
-        content_summary=content_summary,
-        license_name=license,
+    summary = _build_content_summary(
+        metadata,
+        mode_spec=mode_spec,
         used_alchemiscale=used_alchemiscale,
-        submission_id=submission_id,
     )
-    zenodo_description_path.write_text(zenodo_description_text)
+    if summary_suffix:
+        summary = summary.rstrip() + " " + summary_suffix.strip()
+
+    systems_for_title = list(metadata.system_order)
+    final_submission_id = submission_id or _default_submission_id(
+        "_".join(metadata.network_keys)
+    )
+    title = _generate_title(metadata.mode, systems_for_title, final_submission_id)
+    final_tags = _make_tags(metadata, user_tags=tags)
+
+    mapper_value: str | None = None
+    small_molecule_ff_value: str | None = None
+    if mode_spec.rbfe_like:
+        mapper_raw = _collapse_value_keys(metadata.mapper, "mapper")
+        if isinstance(mapper_raw, str):
+            mapper_value = mapper_raw
+
+        small_molecule_ff_raw = _collapse_value_keys(
+            metadata.small_molecule_forcefield,
+            "small_molecule_forcefield",
+        )
+        if isinstance(small_molecule_ff_raw, str):
+            small_molecule_ff_value = small_molecule_ff_raw
+
+    forcefield_raw = _collapse_value_keys(metadata.forcefield, "forcefield")
+    forcefield_value: list[str] | str | None = None
+    if isinstance(forcefield_raw, str):
+        forcefield_value = forcefield_raw
+    elif isinstance(forcefield_raw, list):
+        if all(isinstance(item, str) for item in forcefield_raw):
+            forcefield_value = cast(list[str], forcefield_raw)
+
+    benchmark_results = BenchmarkResults(
+        submission_id=final_submission_id,
+        title=title,
+        summary=summary,
+        tags=final_tags,
+        calculation_type=metadata.mode,
+        authors=[{"name": name} for name in (author or ["TODO add author name"])],
+        date=_normalize_submission_date(submission_date),
+        results=results_file,
+        archive=Archive(
+            doi="TODO add DOI",
+            archive_provider="TODO add archive provider",
+        ),
+        license=license,
+        openfe_version=str(_collapse_value_keys(metadata.openfe_version, "version")),
+        openmm_version=str(_collapse_value_keys(metadata.openmm_version, "version")),
+        openff_toolkit_version=str(
+            _collapse_value_keys(metadata.openff_toolkit_version, "version")
+        ),
+        partial_charges=str(
+            _collapse_value_keys(metadata.partial_charges, "partial_charges")
+        ),
+        benchmark_data=cast(dict[str, object], _build_benchmark_data(metadata.systems)),
+        protocol_settings=cast(
+            list[dict[str, object]], _build_protocol_payload(metadata.protocol_settings)
+        ),
+        mapper=mapper_value,
+        forcefield=forcefield_value,
+        small_molecule_forcefield=small_molecule_ff_value,
+        pontibus_version=str(
+            _collapse_value_keys(metadata.pontibus_version, "version")
+        ),
+    )
+
+    submission_yaml_path = out_dir / "submission.yaml"
+    zenodo_description_path = out_dir / "zenodo_description.md"
+
+    benchmark_results.write_submission_yaml(submission_yaml_path)
+    zenodo_description_path.write_text(
+        _make_zenodo_description(
+            benchmark_results=benchmark_results,
+            network_mode=metadata.network_mode,
+            used_alchemiscale=used_alchemiscale,
+        )
+    )
 
     logger.info(f"Processed {len(input_paths)} input file(s)")
-    logger.info(f"Detected mode: {mode}")
+    logger.info(f"Detected mode: {metadata.mode}")
     logger.info(f"Submission YAML: {submission_yaml_path}")
-    logger.info(f"Zenodo description: {zenodo_description_path}")
 
     return submission_yaml_path, zenodo_description_path
 
 
-def main():
-    """CLI entry point for prepare_metadata_submission."""
+def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Generate submission.yaml and zenodo_description.md from OpenFE JSON archives",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=textwrap.dedent("""
+        epilog=textwrap.dedent(
+            """
             Examples:
               # Single archive file
               %(prog)s archive.json.bz2
@@ -2359,7 +1514,8 @@ def main():
                   --author "Jane Doe" \\
                   --author "John Smith" \\
                   --license "CC-BY-4.0"
-        """),
+            """
+        ),
     )
 
     parser.add_argument(
@@ -2370,7 +1526,6 @@ def main():
         help="One or more file paths or glob patterns (e.g., 'networks/*/*.json'). "
         "Glob patterns support * and ** wildcards.",
     )
-
     parser.add_argument(
         "-o",
         "--output-dir",
@@ -2378,7 +1533,6 @@ def main():
         default=Path("."),
         help="Output directory for submission.yaml and zenodo_description.md (default: current directory)",
     )
-
     parser.add_argument(
         "-s",
         "--submission-id",
@@ -2386,7 +1540,6 @@ def main():
         default=None,
         help="Submission ID (default: auto-generated from date and network key)",
     )
-
     parser.add_argument(
         "-t",
         "--tags",
@@ -2394,7 +1547,6 @@ def main():
         default="",
         help="Comma-separated extra tags to append (default: none)",
     )
-
     parser.add_argument(
         "-a",
         "--author",
@@ -2403,7 +1555,6 @@ def main():
         dest="authors",
         help="Author name (can be specified multiple times)",
     )
-
     parser.add_argument(
         "-l",
         "--license",
@@ -2411,27 +1562,23 @@ def main():
         default="CC-BY-4.0",
         help="License identifier (default: CC-BY-4.0)",
     )
-
     parser.add_argument(
         "--submission-date",
         type=str,
         required=True,
         help="Submission date in ISO 8601 format (YYYY-MM-DD). This date is required for submission.yaml.",
     )
-
     parser.add_argument(
         "--no-alchemiscale",
         action="store_true",
         help="Indicate that Alchemiscale was NOT used to generate the results",
     )
-
     parser.add_argument(
         "--summary-suffix",
         type=str,
         default=None,
         help="Additional text to append to the auto-generated summary",
     )
-
     parser.add_argument(
         "-r",
         "--results-file",
@@ -2439,21 +1586,18 @@ def main():
         default="computational_results.json",
         help="Name of the results file in output directory (default: computational_results.json)",
     )
-
     parser.add_argument(
         "--system-group",
         type=str,
         default=None,
         help="Benchmark set name (e.g., 'jacs_set', 'solvation_set'); overrides values from transformation annotations",
     )
-
     parser.add_argument(
         "--system-name",
         type=str,
         default=None,
         help="System name (e.g., 'tyk2', 'hsp90'); overrides values from transformation annotations",
     )
-
     parser.add_argument(
         "--forcefields",
         type=str,
@@ -2461,35 +1605,30 @@ def main():
         default=None,
         help="Custom protein/solvent force field labels when the archive uses serialized force field contents. Repeat to add multiple values.",
     )
-
     parser.add_argument(
         "--openfe-version",
         type=str,
         default=None,
         help="Override the OpenFE version written into submission metadata.",
     )
-
     parser.add_argument(
         "--openmm-version",
         type=str,
         default=None,
         help="Override the OpenMM version written into submission metadata.",
     )
-
     parser.add_argument(
         "--openff-toolkit-version",
         type=str,
         default=None,
         help="Override the OpenFF Toolkit version written into submission metadata.",
     )
-
     parser.add_argument(
         "--pontibus-version",
         type=str,
         default=None,
         help="Override the Pontibus version written into submission metadata.",
     )
-
     parser.add_argument(
         "--small-molecule-forcefield",
         type=str,
@@ -2497,29 +1636,31 @@ def main():
         help="Custom small molecule force field label when the archive uses serialized force field contents.",
     )
 
+    return parser
+
+
+def main() -> int:
+    parser = _build_parser()
     args = parser.parse_args()
 
-    # Expand glob patterns and collect all matching files
     all_files: list[Path] = []
     for pattern in args.input_patterns:
         matched = glob_module.glob(pattern, recursive=True)
         if matched:
-            all_files.extend(Path(f) for f in sorted(matched))
+            all_files.extend(Path(path) for path in sorted(matched))
         else:
-            # If no glob match, treat as literal file path
             all_files.append(Path(pattern))
 
     if not all_files:
         logger.error("No input files found")
         return 1
 
-    # Remove duplicates while preserving order
-    seen = set()
-    unique_files = []
-    for f in all_files:
-        if f not in seen:
-            seen.add(f)
-            unique_files.append(f)
+    unique_files: list[Path] = []
+    seen: set[Path] = set()
+    for path in all_files:
+        if path not in seen:
+            seen.add(path)
+            unique_files.append(path)
 
     process_network(
         input_files=unique_files,
@@ -2541,7 +1682,9 @@ def main():
         openff_toolkit_version=args.openff_toolkit_version,
         pontibus_version=args.pontibus_version,
     )
-    logger.info("\n✓ Successfully generated submission metadata")
+
+    logger.info("Successfully generated submission metadata")
+    return 0
 
 
 if __name__ == "__main__":
