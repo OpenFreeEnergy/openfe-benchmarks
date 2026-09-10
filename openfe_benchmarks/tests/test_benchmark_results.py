@@ -505,7 +505,7 @@ def test_filter_date_greater_than_or_equal():
     filtered = filter_results(date=">=2026-03-01")
 
     assert len(filtered) > 0
-    assert all(submission.date.isoformat() >= "2026-03-01" for submission in filtered)
+    assert all(submission.date >= "2026-03-01" for submission in filtered)
 
 
 def test_filter_date_less_than():
@@ -513,7 +513,7 @@ def test_filter_date_less_than():
     filtered = filter_results(date="<2027-01-01")
 
     assert len(filtered) > 0
-    assert all(submission.date.isoformat() < "2027-01-01" for submission in filtered)
+    assert all(submission.date < "2027-01-01" for submission in filtered)
 
 
 def test_filter_date_range():
@@ -556,7 +556,7 @@ def test_filter_comparison_with_other_filters():
     assert isinstance(filtered, list)
     if len(filtered) > 0:
         for submission in filtered:
-            assert submission.date.isoformat() >= "2026-01-01"
+            assert submission.date >= "2026-01-01"
             assert _has_matching_entry(
                 submission,
                 lambda entry: entry.get("system_group") == "jacs_set",
@@ -568,7 +568,7 @@ def test_filter_comparison_no_operator():
     exact_date = "2026-03-18"
     filtered = filter_results(date=exact_date)
 
-    assert all(submission.date.isoformat() == exact_date for submission in filtered)
+    assert all(submission.date == exact_date for submission in filtered)
 
 
 def test_filter_comparison_exclude_with_operator():
@@ -576,7 +576,7 @@ def test_filter_comparison_exclude_with_operator():
     filtered = filter_results(exclude_date="<2026-01-01")
 
     assert len(filtered) > 0
-    assert all(submission.date.isoformat() >= "2026-01-01" for submission in filtered)
+    assert all(submission.date >= "2026-01-01" for submission in filtered)
 
 
 def test_filter_comparison_openmm_version():
