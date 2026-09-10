@@ -31,7 +31,7 @@ date: '2026-09-03'
 results: computational_results.json.bz2
 archive:
   doi: 10.5281/zenodo.22681673
-  archive_provider: zenodo
+  archive_provider: Zenodo
 license: CC-BY-4.0
 openfe_version: 1.8.0
 openmm_version: 8.2.0
@@ -69,7 +69,7 @@ protocol_settings:
   - lipid17_merged
   - opc3_standard
   - phosaa10
-  partial_charges: am1bcc_at
+  partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
   equilibration_time: 1.0 ns
   production_time: 5.0 ns
 - protocol: RelativeHybridTopologyProtocol
@@ -95,7 +95,7 @@ protocol_settings:
   - lipid17_merged
   - opc3_standard
   - phosaa10
-  partial_charges: am1bcc_at
+  partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
   equilibration_time: 1.0 ns
   production_time: 5.0 ns
 mapper: KartografAtomMapper 1.2.0 (LSA)
