@@ -196,7 +196,7 @@ def _normalize_partial_charge_info(partial_charge_settings: dict[str, object]) -
             return "am1bcc_at"
         if backend == "openeye":
             return "am1bcc_oe"
-        return "am1bcc_oe"
+        return "TODO"
 
     return re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
 
@@ -245,7 +245,7 @@ def _normalize_charge_method_from_provenance(provenance: dict[str, object]) -> s
             return "am1bcc_at"
         if backend == "openeye":
             return "am1bcc_oe"
-        return "am1bcc_oe"
+        return "TODO"
 
     return re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
 
