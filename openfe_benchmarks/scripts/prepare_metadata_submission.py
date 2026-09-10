@@ -665,10 +665,7 @@ def _extract_protocol_settings(
                 normalized.append(label)
         payload["forcefields"] = sorted(set(normalized))
 
-    partial_charge_settings = _as_obj_dict(
-        settings.get("partial_charge_settings") or {}
-    )
-    payload["partial_charges"] = _normalize_partial_charge_info(partial_charge_settings)
+    payload["partial_charges"] = "TODO"  # partial charges come from BenchmarkData
 
     for source_key, eq_key, prod_key in mode_spec.simulation_setting_keys:
         sim = _as_obj_dict(settings.get(source_key) or {})
