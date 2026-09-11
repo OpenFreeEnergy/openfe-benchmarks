@@ -26,6 +26,11 @@ fragments:
   mup1: ["protein", "bfe", "ross"]
   p38: ["protein", "bfe", "ross"]
   t4_lysozyme: ["protein", "bfe", "ross"]
+gpcrs:
+  a2a: ["protein", "bfe", "ross"]
+  p2y1_meta: ["protein", "bfe", "ross"]
+  p2y1_ortho: ["protein", "bfe", "ross"]
+  ox2: ["protein", "bfe", "ross"]
 jacs_set:
   bace: ["protein", "bfe", "ross"]
   cdk2: ["protein", "bfe", "ross"]
