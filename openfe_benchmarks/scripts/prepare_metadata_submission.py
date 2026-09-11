@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import bz2
 from collections.abc import Callable
 from collections import defaultdict
 from dataclasses import dataclass, field
@@ -33,8 +32,23 @@ from gufe.transformations.transformation import Transformation
 from openfe_benchmarks.data import BenchmarkIndex
 from openfe_benchmarks.results import BenchmarkResults
 from openfe_benchmarks.results._benchmark_results import Archive, LiteralStr
+from openfe_benchmarks.scripts.utils import load_archive, load_alchemical_network
+from openfe.protocols.openmm_rfe import RelativeHybridTopologyProtocol
+from openfe.protocols.openmm_septop import SepTopProtocol
+from openfe.protocols.openmm_afe import AbsoluteSolvationProtocol
+from pontibus.protocols.relative import HybridTopProtocol
+from pontibus.protocols.solvation import ASFEProtocol
 
 logger = logging.getLogger(__name__)
+
+# map the protocol to a calculation type for the purposes of metadata aggregation and summary
+_PROTOCOL_MAPPING = {
+    RelativeHybridTopologyProtocol: "rbfe",
+    HybridTopProtocol: "rbfe",
+    SepTopProtocol: "rbfe",
+    ASFEProtocol: "rbfe",
+    AbsoluteSolvationProtocol: "rbfe",
+}
 
 
 @dataclass(frozen=True)
@@ -168,39 +182,6 @@ def _quantity_to_text(value: object) -> str:
     return str(value)
 
 
-def _normalize_partial_charge_info(partial_charge_settings: dict[str, object]) -> str:
-    if not partial_charge_settings:
-        return ""
-
-    method = (
-        str(partial_charge_settings.get("partial_charge_method", "")).lower().strip()
-    )
-    if not method:
-        return ""
-
-    if "nagl" in method:
-        nagl_model = str(partial_charge_settings.get("nagl_model", "")).strip()
-        if nagl_model:
-            nagl_model = nagl_model.split("/")[-1].split("\\")[-1]
-            return f"nagl_{nagl_model}"
-        return "nagl_off"
-
-    if "am1bccelf10" in method or "elf10" in method:
-        return "am1bccelf10_oe"
-
-    if "am1bcc" in method:
-        backend = (
-            str(partial_charge_settings.get("off_toolkit_backend", "")).lower().strip()
-        )
-        if backend == "ambertools":
-            return "am1bcc_at"
-        if backend == "openeye":
-            return "am1bcc_oe"
-        return "TODO"
-
-    return re.sub(r"[^a-z0-9._-]+", "_", method).strip("_")
-
-
 def _extract_charge_provenance(
     component_dict: dict[str, object],
 ) -> dict[str, object] | None:
@@ -310,29 +291,11 @@ def _normalize_forcefield_label(value: str) -> str:
 def _load_network(
     input_path: Path,
 ) -> tuple[AlchemicalArchive | AlchemicalNetwork, str]:
-    def _load_archive() -> AlchemicalArchive:
-        if str(input_path).endswith(".bz2"):
-            with bz2.open(input_path, "rt") as handle:
-                return cast(
-                    AlchemicalArchive,
-                    AlchemicalArchive.from_json(content=handle.read()),
-                )
-        return cast(AlchemicalArchive, AlchemicalArchive.from_json(file=input_path))
-
-    def _load_network_obj() -> AlchemicalNetwork:
-        if str(input_path).endswith(".bz2"):
-            with bz2.open(input_path, "rt") as handle:
-                return cast(
-                    AlchemicalNetwork,
-                    AlchemicalNetwork.from_json(content=handle.read()),
-                )
-        return cast(AlchemicalNetwork, AlchemicalNetwork.from_json(file=input_path))
-
     try:
-        return _load_archive(), "alchemicalarchive"
+        return load_archive(input_path), "alchemicalarchive"
     except Exception:
         try:
-            return _load_network_obj(), "alchemicalnetwork"
+            return load_alchemical_network(input_path), "alchemicalnetwork"
         except Exception as exc:
             raise ImportError(
                 "Could not import as AlchemicalArchive or AlchemicalNetwork: "
@@ -363,31 +326,20 @@ def _network_key(
 
 
 def _detect_mode(transformations: list[Transformation]) -> str:
-    names = [str(trans.name or "") for trans in transformations]
-    for mode_key, spec in _MODE_SPECS.items():
-        if spec.detect_prefixes and any(
-            any(name.startswith(prefix) for prefix in spec.detect_prefixes)
-            for name in names
-        ):
-            return mode_key
+    """
+    Use the protocol type to detect the calculation mode (RBFE vs ASFE) for the submission.
+    """
+    # grab the first one here we are assuming that all transformations in the archive are of the same type
+    protocol_cls = transformations[0].protocol.__class__
+    mode_key = _PROTOCOL_MAPPING.get(protocol_cls, None)
 
-    defaults = [spec.key for spec in _MODE_SPECS.values() if spec.detect_default]
-    if len(defaults) == 1:
-        return defaults[0]
-
-    known_prefixes = sorted(
-        {
-            prefix
-            for spec in _MODE_SPECS.values()
-            for prefix in spec.detect_prefixes
-            if prefix
-        }
-    )
-    raise ValueError(
-        "Unable to detect calculation mode from transformation names. "
-        f"Observed names: {names[:5]}{'...' if len(names) > 5 else ''}. "
-        f"Known prefixes: {known_prefixes}."
-    )
+    if mode_key is None:
+        raise ValueError(
+            "Unable to detect calculation from transformation protocol. "
+            f"Observed protocol class: {protocol_cls}. "
+            f"Known classes: {''.join(cls.__name__ for cls in _PROTOCOL_MAPPING.keys())}."
+        )
+    return mode_key
 
 
 def _get_mapping_annotations(trans: Transformation) -> dict[str, object]:
@@ -403,7 +355,9 @@ def _get_mapping_annotations(trans: Transformation) -> dict[str, object]:
 
 
 def _get_alchemical_ligands(trans: Transformation) -> set[object]:
-    """Return alchemical ligand components for RBFE-style mappings when available."""
+    """Return alchemical ligand components for RBFE-style mappings when available
+    TODO update to look for SMC differences for SepTop style calculations
+    """
     mapping = trans.mapping
     if mapping is None:
         return set()
