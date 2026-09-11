@@ -27,11 +27,11 @@ tags:
 calculation_type: rbfe
 authors:
 - name: Jennifer A. Clark
-date: '2026-09-03'
+date: 2026-09-03
 results: computational_results.json.bz2
 archive:
   doi: 10.5281/zenodo.22681673
-  archive_provider: Zenodo
+  archive_provider: zenodo
 license: CC-BY-4.0
 openfe_version: 1.8.0
 openmm_version: 8.2.0
