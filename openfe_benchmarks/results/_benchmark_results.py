@@ -76,6 +76,16 @@ def _represent_literal_str(dumper: yaml.Dumper, data: LiteralStr) -> yaml.Scalar
 yaml.SafeDumper.add_representer(LiteralStr, _represent_literal_str)
 
 
+_NONE_LIKE_STRINGS = {"none", "null", ""}
+
+
+def _coerce_none_string(value: Any) -> Any:
+    """Coerce a string like 'None'/'null'/'' (case-insensitive) to None."""
+    if isinstance(value, str) and value.strip().lower() in _NONE_LIKE_STRINGS:
+        return None
+    return value
+
+
 def _to_yaml_safe(value: Any) -> Any:
     """Recursively coerce values into YAML-serializable built-in Python types."""
     if value is None or isinstance(value, (str, int, float, bool, date_type)):
@@ -282,6 +292,7 @@ class BenchmarkResults:
 
         Normalizations performed:
         - Converts single tag string to list
+        - Coerces literal 'none'/'null'/'' strings to None for optional fields
         - Converts single forcefield string to list
         - Converts archive dict to Archive dataclass
         - Validates and normalizes date to an ISO 8601 string
@@ -290,6 +301,14 @@ class BenchmarkResults:
         # Ensure tags is a list
         if not isinstance(self.tags, list):
             self.tags = [self.tags]
+
+        # Coerce literal "none"/"null"/"" strings to None for optional fields.
+        self.mapper = _coerce_none_string(self.mapper)
+        self.forcefield = _coerce_none_string(self.forcefield)
+        self.small_molecule_forcefield = _coerce_none_string(
+            self.small_molecule_forcefield
+        )
+        self.pontibus_version = _coerce_none_string(self.pontibus_version)
 
         # Ensure forcefield is normalized (if present)
         if self.forcefield is not None and not isinstance(self.forcefield, list):
