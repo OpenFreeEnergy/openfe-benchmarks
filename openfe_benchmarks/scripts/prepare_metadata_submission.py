@@ -29,15 +29,17 @@ from gufe import (
 from gufe.archival import AlchemicalArchive
 from gufe.transformations.transformation import Transformation
 
+from openfe.protocols.openmm_rfe import RelativeHybridTopologyProtocol
+from openfe.protocols.openmm_septop import SepTopProtocol
+from openfe.protocols.openmm_afe import AbsoluteSolvationProtocol
+from openfe.protocols.openmm_utils.system_validation import get_alchemical_components
+from pontibus.protocols.relative import HybridTopProtocol
+from pontibus.protocols.solvation import ASFEProtocol
+
 from openfe_benchmarks.data import BenchmarkIndex
 from openfe_benchmarks.results import BenchmarkResults
 from openfe_benchmarks.results._benchmark_results import Archive, LiteralStr
 from openfe_benchmarks.scripts.utils import load_archive, load_alchemical_network
-from openfe.protocols.openmm_rfe import RelativeHybridTopologyProtocol
-from openfe.protocols.openmm_septop import SepTopProtocol
-from openfe.protocols.openmm_afe import AbsoluteSolvationProtocol
-from pontibus.protocols.relative import HybridTopProtocol
-from pontibus.protocols.solvation import ASFEProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -45,9 +47,9 @@ logger = logging.getLogger(__name__)
 _PROTOCOL_MAPPING = {
     RelativeHybridTopologyProtocol: "rbfe",
     HybridTopProtocol: "rbfe",
-    SepTopProtocol: "rbfe",
-    ASFEProtocol: "rbfe",
-    AbsoluteSolvationProtocol: "rbfe",
+    SepTopProtocol: "septop",
+    ASFEProtocol: "asfe",
+    AbsoluteSolvationProtocol: "asfe",
 }
 
 
@@ -56,7 +58,7 @@ class _ModeSpec:
     key: str
     detect_prefixes: tuple[str, ...]
     detect_default: bool
-    use_mapping_ligands: bool
+    alchemical_ligands_fn: Callable[[Transformation], set[object]] | None
     rbfe_like: bool
     ligand_count_min: int
     ligand_count_max: int
@@ -80,12 +82,48 @@ def _asfe_summary_sentence(
     )
 
 
+def _get_alchemical_ligands_by_mapping(trans: Transformation) -> set[object]:
+    """Return alchemical ligand components from the transformation's atom mapping.
+
+    Used for hybrid-topology-style protocols (e.g. RelativeHybridTopologyProtocol,
+    HybridTopProtocol), which require an atom mapping between componentA and componentB.
+    """
+    mapping = trans.mapping
+    if mapping is None:
+        return set()
+    component_a = getattr(mapping, "componentA", None)
+    component_b = getattr(mapping, "componentB", None)
+    if component_a is None or component_b is None:
+        return set()
+    return {component_a, component_b}
+
+
+def _get_alchemical_ligands_by_state_diff(trans: Transformation) -> set[object]:
+    """Return alchemical ligand components by diffing stateA/stateB.
+
+    Used for separated-topologies protocols (SepTopProtocol), which do not use or
+    require an atom mapping: stateA and stateB are independently solvated systems,
+    and the alchemical ligand(s) are whichever SmallMoleculeComponents differ between
+    the two states. Mirrors openfe's own
+    openmm_utils.system_validation.get_alchemical_components, which SepTopProtocol
+    itself uses internally to identify alchemical components.
+    """
+    state_a = getattr(trans, "stateA", None)
+    state_b = getattr(trans, "stateB", None)
+    if state_a is None or state_b is None:
+        return set()
+    alchemical_components = get_alchemical_components(state_a, state_b)
+    return set(alchemical_components.get("stateA", [])) | set(
+        alchemical_components.get("stateB", [])
+    )
+
+
 _MODE_SPECS: dict[str, _ModeSpec] = {
     "rbfe": _ModeSpec(
         key="rbfe",
         detect_prefixes=("complex_", "solvent_"),
         detect_default=False,
-        use_mapping_ligands=True,
+        alchemical_ligands_fn=_get_alchemical_ligands_by_mapping,
         rbfe_like=True,
         ligand_count_min=1,
         ligand_count_max=2,
@@ -95,11 +133,34 @@ _MODE_SPECS: dict[str, _ModeSpec] = {
             ("simulation_settings", "equilibration_time", "production_time"),
         ),
     ),
+    "septop": _ModeSpec(
+        key="septop",
+        detect_prefixes=(),
+        detect_default=False,
+        alchemical_ligands_fn=_get_alchemical_ligands_by_state_diff,
+        rbfe_like=True,
+        ligand_count_min=1,
+        ligand_count_max=2,
+        summary_mode_label="SEPTOP",
+        summary_sentence_builder=_rbfe_summary_sentence,
+        simulation_setting_keys=(
+            (
+                "complex_simulation_settings",
+                "complex_equilibration_time",
+                "complex_production_time",
+            ),
+            (
+                "solvent_simulation_settings",
+                "solvent_equilibration_time",
+                "solvent_production_time",
+            ),
+        ),
+    ),
     "asfe": _ModeSpec(
         key="asfe",
         detect_prefixes=(),
         detect_default=True,
-        use_mapping_ligands=False,
+        alchemical_ligands_fn=None,
         rbfe_like=False,
         ligand_count_min=1,
         ligand_count_max=1,
@@ -354,20 +415,6 @@ def _get_mapping_annotations(trans: Transformation) -> dict[str, object]:
     return {}
 
 
-def _get_alchemical_ligands(trans: Transformation) -> set[object]:
-    """Return alchemical ligand components for RBFE-style mappings when available
-    TODO update to look for SMC differences for SepTop style calculations
-    """
-    mapping = trans.mapping
-    if mapping is None:
-        return set()
-    component_a = getattr(mapping, "componentA", None)
-    component_b = getattr(mapping, "componentB", None)
-    if component_a is None or component_b is None:
-        return set()
-    return {component_a, component_b}
-
-
 def _default_submission_id(network_key: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", network_key.lower()).strip("-")
     return f"{date.today().isoformat()}-{slug}"
@@ -499,8 +546,8 @@ def _extract_system_components(
     cofactors: set[str] = set()
 
     alchemical_ligands: set[object] = set()
-    if mode_spec.use_mapping_ligands:
-        alchemical_ligands = _get_alchemical_ligands(trans)
+    if mode_spec.alchemical_ligands_fn is not None:
+        alchemical_ligands = mode_spec.alchemical_ligands_fn(trans)
 
     for state_key in ("stateA", "stateB"):
         chemical_system = getattr(trans, state_key)
@@ -513,7 +560,7 @@ def _extract_system_components(
             elif isinstance(component, ProteinComponent):
                 proteins.add(name)
             elif isinstance(component, SmallMoleculeComponent):
-                if not mode_spec.use_mapping_ligands:
+                if mode_spec.alchemical_ligands_fn is None:
                     if name not in ligands:
                         ligands.append(name)
                 elif component in alchemical_ligands:
