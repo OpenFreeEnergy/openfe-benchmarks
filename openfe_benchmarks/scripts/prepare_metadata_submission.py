@@ -373,15 +373,26 @@ def _default_submission_id(network_key: str) -> str:
     return f"{date.today().isoformat()}-{slug}"
 
 
-def _normalize_submission_date(value: date | str | None) -> str:
-    if value is None:
-        return date.today().isoformat()
-    if isinstance(value, date):
-        return value.isoformat()
-    try:
-        return date.fromisoformat(value).isoformat()
-    except ValueError as exc:
-        raise ValueError("submission_date must be ISO 8601 YYYY-MM-DD") from exc
+def _normalize_submission_date(
+    value: date | str | None, submission_id: str | None = None
+) -> str:
+    if value is not None:
+        if isinstance(value, date):
+            return value.isoformat()
+        try:
+            return date.fromisoformat(value).isoformat()
+        except ValueError as exc:
+            raise ValueError("submission_date must be ISO 8601 YYYY-MM-DD") from exc
+
+    # No explicit date given: fall back to the ISO date embedded in the
+    # submission_id, so the two stay consistent by construction.
+    if submission_id is not None:
+        try:
+            return date.fromisoformat(submission_id[:10]).isoformat()
+        except ValueError:
+            pass
+
+    return date.today().isoformat()
 
 
 def _dedupe_preserve_order(items: list[str]) -> list[str]:
@@ -1392,7 +1403,7 @@ def process_network(
         tags=final_tags,
         calculation_type=metadata.mode,
         authors=[{"name": name} for name in (author or ["TODO add author name"])],
-        date=_normalize_submission_date(submission_date),
+        date=_normalize_submission_date(submission_date, final_submission_id),
         results=results_file,
         archive=Archive(
             doi="TODO add DOI",

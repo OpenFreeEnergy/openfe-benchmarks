@@ -7,6 +7,7 @@ Filtering functions are separate from the class, following functional programmin
 
 from pathlib import Path
 from dataclasses import dataclass, field, asdict
+from datetime import date as date_type
 from typing import Optional, Any
 from collections.abc import Mapping, Sequence
 import yaml
@@ -77,7 +78,7 @@ yaml.SafeDumper.add_representer(LiteralStr, _represent_literal_str)
 
 def _to_yaml_safe(value: Any) -> Any:
     """Recursively coerce values into YAML-serializable built-in Python types."""
-    if value is None or isinstance(value, (str, int, float, bool)):
+    if value is None or isinstance(value, (str, int, float, bool, date_type)):
         return value
 
     if isinstance(value, Mapping):
@@ -283,6 +284,7 @@ class BenchmarkResults:
         - Converts single tag string to list
         - Converts single forcefield string to list
         - Converts archive dict to Archive dataclass
+        - Validates and normalizes date to an ISO 8601 string
         - Initializes FEMap caches to None
         """
         # Ensure tags is a list
@@ -296,6 +298,23 @@ class BenchmarkResults:
         # Convert archive dict to Archive dataclass if needed
         if isinstance(self.archive, dict):
             self.archive = Archive(**self.archive)
+
+        # Validate date is (or can be parsed as) an ISO 8601 date, normalized to str.
+        if isinstance(self.date, date_type):
+            self.date = self.date.isoformat()
+        elif isinstance(self.date, str):
+            try:
+                date_type.fromisoformat(self.date)
+            except ValueError as e:
+                raise ValueError(
+                    f"Invalid date '{self.date}' for submission {self.submission_id}. "
+                    f"Expected ISO 8601 format (YYYY-MM-DD): {e}"
+                ) from e
+        else:
+            raise ValueError(
+                f"date must be a str (ISO 8601 YYYY-MM-DD) or datetime.date, "
+                f"got {type(self.date).__name__} for submission {self.submission_id}"
+            )
 
         # Initialize FEMap caches and source tracking
         self._dg_femaps_cache = None
@@ -323,10 +342,10 @@ class BenchmarkResults:
             if key in data
         }
 
-        # Convert date objects to ISO strings for stable YAML output.
+        # Emit date as a native YAML date (unquoted) to match existing submission.yaml files.
         date_value = submission_data.get("date")
-        if hasattr(date_value, "isoformat"):
-            submission_data["date"] = date_value.isoformat()
+        if isinstance(date_value, str):
+            submission_data["date"] = date_type.fromisoformat(date_value)
 
         # Ensure optional submission fields are always present.
         for key in _SUBMISSION_OPTIONAL_FIELDS:
