@@ -20,6 +20,8 @@ Please ensure the following files are present in your submission directory:
 - [ ] **Network keys valid**: AlchemicalNetwork keys in `benchmark_data` are valid
 - [ ] **Calculation type valid**: Type matches actual calculations performed
 - [ ] **No duplicate submission_id**: This submission_id is unique in the repository
+- [ ] **Single experiment**: This submission contains results from a single experiment (not multiple experiments combined) and details of the experiment are clearly described in the metadata (see summary field)
+- [ ] **Settings and parameters**: All noteable settings differences from default OpenFE settings are clearly described in the metadata (see summary field) also consider adding a tag in the tags field
 
 ## Testing
 
