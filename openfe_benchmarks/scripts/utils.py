@@ -1,9 +1,15 @@
 import logging
+
+from gufe import AlchemicalNetwork
 from rdkit import Chem
+import pathlib
+import bz2
+
 
 from openff.toolkit.utils.toolkit_registry import ToolkitRegistry
 from openff.toolkit.utils.toolkits import RDKitToolkitWrapper
 import openfe
+from gufe.archival import AlchemicalArchive
 
 logger = logging.getLogger(__name__)
 
@@ -132,3 +138,56 @@ def process_sdf(
                 )
 
     return molecules
+
+
+def load_archive(archive_path: pathlib.Path):
+    """
+    Load an AlchemicalArchive from a bz2-compressed JSON archive.
+
+    Parameters
+    ----------
+    archive_path : pathlib.Path
+        Path to the .json.bz2 archive file
+
+    Returns
+    -------
+    AlchemicalArchive
+        The deserialized alchemical archive
+    """
+
+    archive_path = pathlib.Path(archive_path)
+
+    if str(archive_path).endswith(".bz2"):
+        with bz2.open(archive_path, "rt") as f:
+            json_content = f.read()
+        archive = AlchemicalArchive.from_json(content=json_content)
+    else:
+        archive = AlchemicalArchive.from_json(file=archive_path)
+
+    return archive
+
+def load_alchemical_network(network_path: pathlib.Path):
+    """
+    Load an AlchemicalNetwork from a bz2-compressed JSON archive.
+
+    Parameters
+    ----------
+    network_path : pathlib.Path
+        Path to the .json.bz2 archive file
+
+    Returns
+    -------
+    AlchemicalNetwork
+        The deserialized alchemical network
+    """
+
+    network_path = pathlib.Path(network_path)
+    if str(network_path).endswith(".bz2"):
+        with bz2.open(network_path, "rt") as f:
+            json_content = f.read()
+        network = AlchemicalNetwork.from_json(content=json_content)
+
+    else:
+        network = AlchemicalNetwork.from_json(file=network_path)
+
+    return network
