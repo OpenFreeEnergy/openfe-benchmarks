@@ -11,42 +11,15 @@ from openfe.protocols.openmm_rfe import RelativeHybridTopologyProtocol
 from openfe.protocols.openmm_septop import SepTopProtocol
 from gufe.tokenization import JSON_HANDLER
 from gufe import ProteinComponent, SolventComponent
-from gufe.archival import AlchemicalArchive
 from openff.units import unit
 from cinnabar import FEMap
 from pontibus.protocols.relative import HybridTopProtocol
 from pontibus.protocols.solvation import ASFEProtocol
+from openfe_benchmarks.scripts.utils import load_archive
 
 logger = logging.getLogger(__name__)
 
 MIN_ALLOWED_REPEATS = 3  # Less than this results in an error
-
-
-def _load_archive(archive_path: pathlib.Path):
-    """
-    Load an AlchemicalArchive from a bz2-compressed JSON archive.
-
-    Parameters
-    ----------
-    archive_path : pathlib.Path
-        Path to the .json.bz2 archive file
-
-    Returns
-    -------
-    AlchemicalArchive
-        The deserialized alchemical archive
-    """
-
-    archive_path = pathlib.Path(archive_path)
-
-    if str(archive_path).endswith(".bz2"):
-        with bz2.open(archive_path, "rt") as f:
-            json_content = f.read()
-        archive = AlchemicalArchive.from_json(content=json_content)
-    else:
-        archive = AlchemicalArchive.from_json(str(archive_path))
-
-    return archive
 
 
 def _extract_hybrid_topology_rfe_data(transformation, results):
@@ -382,7 +355,7 @@ def run_generate_results(
         system_entries = _parse_systems_input(systems)
         for system_group_entry, system_name_entry, archive_path in system_entries:
             logger.info(f"Loading archive:{archive_path}")
-            alchemical_archive = _load_archive(archive_path)
+            alchemical_archive = load_archive(archive_path)
             logger.info("Extracting results from archive")
             archive_results = _extract_results_from_archive(alchemical_archive)
             for protocol_cls, results in archive_results.items():
@@ -396,7 +369,7 @@ def run_generate_results(
 
         # Load from archive
         logger.info(f"Loading archive:{archive}")
-        alchemical_archive = _load_archive(archive)
+        alchemical_archive = load_archive(archive)
 
         logger.info("Extracting results from archive")
         archive_results_by_protocol = _extract_results_from_archive(alchemical_archive)

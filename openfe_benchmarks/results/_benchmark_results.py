@@ -6,8 +6,10 @@ Filtering functions are separate from the class, following functional programmin
 """
 
 from pathlib import Path
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
+from datetime import date as date_type
 from typing import Optional, Any
+from collections.abc import Mapping, Sequence
 import yaml
 import json
 import bz2
@@ -35,6 +37,68 @@ __all__ = [
 _RESULTS_DIR = (
     Path(__file__).resolve().parent.parent.parent / "openfe_benchmarks" / "results"
 )
+
+_SUBMISSION_EXPORT_FIELDS = [
+    "submission_id",
+    "title",
+    "summary",
+    "tags",
+    "calculation_type",
+    "authors",
+    "date",
+    "results",
+    "archive",
+    "license",
+    "openfe_version",
+    "openmm_version",
+    "openff_toolkit_version",
+    "partial_charges",
+    "benchmark_data",
+    "protocol_settings",
+]
+
+_SUBMISSION_OPTIONAL_FIELDS = [
+    "mapper",
+    "forcefield",
+    "small_molecule_forcefield",
+    "pontibus_version",
+]
+
+
+class LiteralStr(str):
+    """Marker string type to force YAML literal block style."""
+
+
+def _represent_literal_str(dumper: yaml.Dumper, data: LiteralStr) -> yaml.ScalarNode:
+    return dumper.represent_scalar("tag:yaml.org,2002:str", str(data), style="|")
+
+
+yaml.SafeDumper.add_representer(LiteralStr, _represent_literal_str)
+
+
+_NONE_LIKE_STRINGS = {"none", "null", ""}
+
+
+def _coerce_none_string(value: Any) -> Any:
+    """Coerce a string like 'None'/'null'/'' (case-insensitive) to None."""
+    if isinstance(value, str) and value.strip().lower() in _NONE_LIKE_STRINGS:
+        return None
+    return value
+
+
+def _to_yaml_safe(value: Any) -> Any:
+    """Recursively coerce values into YAML-serializable built-in Python types."""
+    if value is None or isinstance(value, (str, int, float, bool, date_type)):
+        return value
+
+    if isinstance(value, Mapping):
+        return {str(key): _to_yaml_safe(item) for key, item in value.items()}
+
+    if isinstance(value, Sequence) and not isinstance(value, (str, bytes, bytearray)):
+        return [_to_yaml_safe(item) for item in value]
+
+    # Fall back to a stable text representation for tokenized objects (e.g., GufeKey).
+    return str(value)
 
 
 @dataclass
@@ -228,13 +292,23 @@ class BenchmarkResults:
 
         Normalizations performed:
         - Converts single tag string to list
+        - Coerces literal 'none'/'null'/'' strings to None for optional fields
         - Converts single forcefield string to list
         - Converts archive dict to Archive dataclass
+        - Validates and normalizes date to an ISO 8601 string
         - Initializes FEMap caches to None
         """
         # Ensure tags is a list
         if not isinstance(self.tags, list):
             self.tags = [self.tags]
+
+        # Coerce literal "none"/"null"/"" strings to None for optional fields.
+        self.mapper = _coerce_none_string(self.mapper)
+        self.forcefield = _coerce_none_string(self.forcefield)
+        self.small_molecule_forcefield = _coerce_none_string(
+            self.small_molecule_forcefield
+        )
+        self.pontibus_version = _coerce_none_string(self.pontibus_version)
 
         # Ensure forcefield is normalized (if present)
         if self.forcefield is not None and not isinstance(self.forcefield, list):
@@ -243,6 +317,23 @@ class BenchmarkResults:
         # Convert archive dict to Archive dataclass if needed
         if isinstance(self.archive, dict):
             self.archive = Archive(**self.archive)
+
+        # Validate date is (or can be parsed as) an ISO 8601 date, normalized to str.
+        if isinstance(self.date, date_type):
+            self.date = self.date.isoformat()
+        elif isinstance(self.date, str):
+            try:
+                date_type.fromisoformat(self.date)
+            except ValueError as e:
+                raise ValueError(
+                    f"Invalid date '{self.date}' for submission {self.submission_id}. "
+                    f"Expected ISO 8601 format (YYYY-MM-DD): {e}"
+                ) from e
+        else:
+            raise ValueError(
+                f"date must be a str (ISO 8601 YYYY-MM-DD) or datetime.date, "
+                f"got {type(self.date).__name__} for submission {self.submission_id}"
+            )
 
         # Initialize FEMap caches and source tracking
         self._dg_femaps_cache = None
@@ -253,6 +344,71 @@ class BenchmarkResults:
     def __repr__(self):
         """Return concise string representation with submission_id and calculation_type."""
         return f"BenchmarkResults(submission_id='{self.submission_id}', calculation_type='{self.calculation_type}')"
+
+    def to_submission_dict(self) -> dict[str, Any]:
+        """
+        Export this instance to a submission-compatible dictionary.
+
+        Returns
+        -------
+        dict[str, Any]
+            Dictionary matching the submission metadata contract.
+        """
+        data = asdict(self)
+        submission_data: dict[str, Any] = {
+            key: data[key]
+            for key in _SUBMISSION_EXPORT_FIELDS + _SUBMISSION_OPTIONAL_FIELDS
+            if key in data
+        }
+
+        # Emit date as a native YAML date (unquoted) to match existing submission.yaml files.
+        date_value = submission_data.get("date")
+        if isinstance(date_value, str):
+            submission_data["date"] = date_type.fromisoformat(date_value)
+
+        # Ensure optional submission fields are always present.
+        for key in _SUBMISSION_OPTIONAL_FIELDS:
+            if key not in submission_data:
+                submission_data[key] = None
+
+        # Ensure values are YAML-safe and do not contain tokenized object instances.
+        submission_data = _to_yaml_safe(submission_data)
+
+        return submission_data
+
+    def to_submission_yaml(self) -> str:
+        """
+        Export this instance as YAML text suitable for submission.yaml.
+
+        Returns
+        -------
+        str
+            YAML string for submission metadata.
+        """
+        return yaml.safe_dump(
+            self.to_submission_dict(),
+            sort_keys=False,
+            default_flow_style=False,
+            allow_unicode=False,
+        )
+
+    def write_submission_yaml(self, output_path: Path) -> Path:
+        """
+        Write submission YAML to disk.
+
+        Parameters
+        ----------
+        output_path : Path
+            Path to write the submission YAML file.
+
+        Returns
+        -------
+        Path
+            The output path that was written.
+        """
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(self.to_submission_yaml())
+        return output_path
 
     def load_raw_results(self) -> None:
         """
