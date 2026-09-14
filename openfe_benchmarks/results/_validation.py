@@ -11,6 +11,7 @@ Target CI performance: <6 min for 100 submissions with 10% changed.
 
 import subprocess
 import random
+from datetime import date as date_type
 from pathlib import Path
 
 from openfe_benchmarks.results import get_benchmark_results
@@ -71,6 +72,17 @@ def validate_submission_yaml_fast(yaml_path: Path) -> dict:
         result["errors"].append(
             "Non-canonical submission path. Expected "
             f"{canonical_yaml_path}, got {yaml_path.resolve()}"
+        )
+        return result
+
+    # submission_id must start with an ISO 8601 date (YYYY-MM-DD).
+    try:
+        date_type.fromisoformat(submission_id[:10])
+    except ValueError:
+        result["valid"] = False
+        result["errors"].append(
+            f"submission_id '{submission_id}' must start with an ISO 8601 date "
+            "(YYYY-MM-DD)"
         )
         return result
 
