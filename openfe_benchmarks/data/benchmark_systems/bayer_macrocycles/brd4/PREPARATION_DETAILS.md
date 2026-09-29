@@ -25,3 +25,7 @@ Done by J. Bluck
 <li>Run input through validation script
 <li>Scrub files of sensitive information
 </ol>
+
+Ligands were charged using the "charge_molecules.py" script.
+The Lomap network was generated using the Kartograf atom mapper and the Lomap scorer. 
+Details to the mapper settings can be found in the lomap_network.json file.
