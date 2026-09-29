@@ -31,7 +31,8 @@ def main(system_group: str, system_name: str, csv_name: str, out_dir: pathlib.Pa
     system_name : str
         The industry system name ie TYK2 used to find the reference data.
     csv_name: str
-        The name of the exp ligand csv file in the Schrodinger repo.
+        The name of the exp ligand csv file in the Schrodinger repo
+        (https://github.com/schrodinger/public_binding_free_energy_benchmark/tree/main/21_4_results/ligand_predictions)
     out_dir : pathlib.Path
         The output dir name where the extracted reference data will be saved.
     input_sdf
