@@ -1,22 +1,24 @@
 """
-Generate partial charges for a set of molecules using OpenFE's bulk charge assignment utility will also add software version metadata to each ligand
-as an sdf property.
+Generate partial charges for molecules in one or more SDF files.
+
+Molecules are charged individually so failures can be reported without
+preventing successfully charged molecules from being written. Software
+version and charge-method provenance is stored on each output molecule.
 """
 
+import json
 import pathlib
-import os
 
+import click
+import openfe
+import tqdm
+from gufe import SmallMoleculeComponent
 from openfe.protocols.openmm_utils.charge_generation import (
     assign_offmol_partial_charges,
 )
-import click
-from rdkit import Chem
-from gufe import SmallMoleculeComponent
-import openfe
 from openff import toolkit
 from openff.utilities.provenance import get_ambertools_version
-import json
-import tqdm
+from rdkit import Chem
 
 
 CHARGE_METHODS = {
@@ -46,12 +48,35 @@ CHARGE_METHODS = {
     },
 }
 
+
+def load_molecules(input_path: pathlib.Path) -> list[SmallMoleculeComponent]:
+    """Load molecules with the OpenFF Toolkit from an SDF file or a directory of SDF files."""
+    if input_path.is_dir():
+        sdf_paths = sorted(input_path.glob("*.sdf"))
+        if not sdf_paths:
+            raise ValueError(f"No SDF files found in {input_path}")
+    else:
+        sdf_paths = [input_path]
+
+    mols = []
+    for sdf_path in sdf_paths:
+        off_mols = toolkit.Molecule.from_file(
+            sdf_path.as_posix(), allow_undefined_stereo=True
+        )
+        # Handle both single molecule and multiple molecules
+        if not isinstance(off_mols, list):
+            off_mols = [off_mols]
+        mols.extend(SmallMoleculeComponent.from_openff(off_mol) for off_mol in
+                    off_mols)
+    return mols
+
+
 @click.command()
 @click.option(
     "--input-path",
-    type=click.Path(exists=True, dir_okay=False, path_type=pathlib.Path),
+    type=click.Path(exists=True, dir_okay=True, path_type=pathlib.Path),
     required=True,
-    help="Path to the input SDF file containing the molecules to be charged.",
+    help="SDF file containing the molecules to be charged, or a directory of SDF files.",
 )
 @click.option(
     "--output-dir",
@@ -63,7 +88,7 @@ CHARGE_METHODS = {
 )
 @click.option(
     "--charge-method",
-    type=click.Choice(["am1bcc_at", "am1bccelf10_oe", "nagl_off", "am1bcc_oe"]),
+    type=click.Choice(list(CHARGE_METHODS)),
     default="am1bcc_at",
     help="The method to use for charge assignment.",
 )
@@ -79,12 +104,12 @@ def main(
     charge_method: str,
     nagl_model: None | str,
 ):
-    """Generate partial charges for a set of molecules using OpenFE's bulk charge assignment utility.
+    """Generate partial charges for molecules in one or more SDF files.
 
     Parameters
     ----------
     input_path : pathlib.Path
-        Path to the input SDF file containing the molecules.
+        Path to the input SDF file containing the molecules, or the directory containing the input SDF files.
     output_dir : pathlib.Path
         Directory where the output SDF file with charged molecules will be saved.
     charge_method : str
@@ -105,32 +130,41 @@ def main(
     - Antechamber will be used for the am1bcc_at charge assignment method, the charges are calculated at the input geometry.
     - OpenEye toolkit is required for am1bccelf10_oe charge assignment method and am1bcc_oe.
     - The output SDF file will include software version metadata as a property for each ligand and will be named <input_name>_<charge_method>.sdf
+    - Molecules that fail charge assignment are skipped and reported at the end.
     - Water is always skipped
 
     """
-    off_mols = toolkit.Molecule.from_file(
-        input_path.as_posix(), allow_undefined_stereo=True
-    )
-    # Handle both single molecule and multiple molecules
-    if not isinstance(off_mols, list):
-        off_mols = [off_mols]
-    mols = [SmallMoleculeComponent.from_openff(mol) for mol in off_mols]
+    mols = load_molecules(input_path=input_path)
+    # water partial charges should come from a specific water model
+    mols = [
+        mol
+        for mol in mols
+        if mol.to_openff().to_inchikey(fixed_hydrogens=True) != "XLYOFNOQVPJJNP-UHFFFAOYNA-N"
+    ]
 
     charge_settings = CHARGE_METHODS[charge_method]
+    backend = charge_settings["backend"]
+    output_name = charge_settings["output_name"]
+
+    # resolve the NAGL model before charging so the provenance matches the model actually used
+    if charge_method == "nagl_off":
+        if nagl_model is None:
+            from openff.nagl_models import get_models_by_type
+
+            nagl_model = get_models_by_type(
+                model_type="am1bcc", production_only=True
+            )[-1].as_posix()
+        output_name = f"nagl_{pathlib.Path(nagl_model).name}"
 
     charged_ligands = []
     failed_molecules = []
     for mol in tqdm.tqdm(mols, desc="Generating charges", ncols=80):
-        # water partial charges should come from a specific water model
-        if mol.to_openff().to_inchikey(fixed_hydrogens=True) == "XLYOFNOQVPJJNP-UHFFFAOYNA-N": # water
-            continue
-
         try:
             charged_molecule = assign_offmol_partial_charges(
                 offmol=mol.to_openff(),
                 overwrite=True,
                 method=charge_settings["method"],
-                toolkit_backend=charge_settings["backend"],
+                toolkit_backend=backend,
                 generate_n_conformers=charge_settings["generate_n_conformers"],
                 nagl_model=nagl_model,
             )
@@ -150,9 +184,6 @@ def main(
         "charge_method": charge_method,
     }
 
-    backend = charge_settings["backend"]
-    output_name = charge_settings["output_name"]
-
     if backend == "ambertools":
         provenance["ambertools_version"] = get_ambertools_version()
 
@@ -161,25 +192,16 @@ def main(
 
         provenance["oeomega"] = str(oeomega.OEOmegaGetVersion())
         provenance["oequacpac"] = str(oequacpac.OE_OEQUACPAC_VERSION)
-    elif backend == "rdkit" and charge_method == "nagl_off":
+    elif charge_method == "nagl_off":
         from openff import nagl
-        from openff.nagl_models import get_models_by_type
 
-        if nagl_model is None:
-            # get the latest production nagl model
-            nagl_model = get_models_by_type(
-                model_type="am1bcc", production_only=True
-            )[-1].name
-        else:
-            nagl_model = os.path.split(nagl_model)
         provenance["nagl_version"] = str(nagl.__version__)
-        provenance["nagl_model"] = nagl_model
-        output_name = f"nagl_{nagl_model_name}"
+        provenance["nagl_model"] = pathlib.Path(nagl_model).name
 
     # construct the output path
-    output_path = (
-        output_dir / f"{input_path.stem}_{output_name}.sdf"
-    )
+    input_stem = input_path.resolve().name if input_path.is_dir() else input_path.stem
+    output_path = output_dir / f"{input_stem}_{output_name}.sdf"
+
     with Chem.SDWriter(str(output_path)) as writer:
         for ligand in charged_ligands:
             rdkit_mol = ligand.to_rdkit()
@@ -189,6 +211,7 @@ def main(
 
     for failed_mol in failed_molecules:
         print(f"Failed molecules: {failed_mol.name}")
+
 
 if __name__ == "__main__":
     main()
