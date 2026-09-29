@@ -3,7 +3,7 @@
 Done by J. Bluck
 
 <ol type="1">
-<li>Read in original inputs from the repo
+<li>Read in original inputs from the repo (https://github.com/schrodinger/public_binding_free_energy_benchmark/tree/main)
 <li>Duplicate the input, to ensure there is a reference to comapre to
 <li>Check the sequence to see if it contains any non-natural amino acids
 <li>Check all caps to see if any need to be charged or not.
