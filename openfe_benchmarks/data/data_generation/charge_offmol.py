@@ -19,6 +19,33 @@ import json
 import tqdm
 
 
+CHARGE_METHODS = {
+    "am1bcc_at": {
+        "method": "am1bcc",
+        "backend": "ambertools",
+        "generate_n_conformers": None,
+        "output_name": "antechamber_am1bcc",
+    },
+    "am1bcc_oe": {
+        "method": "am1bcc",
+        "backend": "openeye",
+        "generate_n_conformers": None,
+        "output_name": "openeye_am1bcc",
+    },
+    "am1bccelf10_oe": {
+        "method": "am1bccelf10",
+        "backend": "openeye",
+        "generate_n_conformers": 500,
+        "output_name": "openeye_am1bccelf10",
+    },
+    "nagl_off": {
+        "method": "nagl",
+        "backend": "rdkit",
+        "generate_n_conformers": None,
+        "output_name": None,
+    },
+}
+
 @click.command()
 @click.option(
     "--input-path",
@@ -46,18 +73,11 @@ import tqdm
     default=None,
     help="Path to the NAGL model to use for charge assignment when using the 'nagl_off' method if None the latest model will be used.",
 )
-@click.option(
-    "--n-cores",
-    type=int,
-    default=1,
-    help="Number of CPU cores to use for parallel processing.",
-)
 def main(
     input_path: pathlib.Path,
     output_dir: pathlib.Path,
     charge_method: str,
     nagl_model: None | str,
-    n_cores: int,
 ):
     """Generate partial charges for a set of molecules using OpenFE's bulk charge assignment utility.
 
@@ -75,8 +95,6 @@ def main(
         - 'am1bccelf10_oe': AM1BCC Elf10 applied with OpenEye Toolkit using 500 conformers
         - 'nagl_off': NAGL charges applied with OpenFF-Toolkit
 
-    n_cores : int
-        Number of CPU cores to use for parallel processing.
     nagl_model : str
         Model *.pt file (i.e., "openff-gnn-am1bcc-1.0.0.pt"), optionally with path, for the NAGL model to use for
         charge assignment when using the ``'nagl'`` method. If None the latest model will be used. See
@@ -87,6 +105,7 @@ def main(
     - Antechamber will be used for the am1bcc_at charge assignment method, the charges are calculated at the input geometry.
     - OpenEye toolkit is required for am1bccelf10_oe charge assignment method and am1bcc_oe.
     - The output SDF file will include software version metadata as a property for each ligand and will be named <input_name>_<charge_method>.sdf
+    - Water is always skipped
 
     """
     off_mols = toolkit.Molecule.from_file(
@@ -96,20 +115,8 @@ def main(
     if not isinstance(off_mols, list):
         off_mols = [off_mols]
     mols = [SmallMoleculeComponent.from_openff(mol) for mol in off_mols]
-    # construct the toolkit backend
-    method_to_backend = {
-        "am1bcc_at": "ambertools",
-        "am1bcc_oe": "openeye",
-        "am1bccelf10_oe": "openeye",
-        "nagl_off": "rdkit",
-    }
-    backend = method_to_backend[charge_method]
 
-    # convert the charge method to the expected format for openff
-    openff_charge_method = charge_method.split("_")[0]
-
-    # we need to generate conformers for am1bccelf10_oe or use the input conformer for other methods which is the None case
-    generate_n_conformers = None if charge_method != "am1bccelf10_oe" else 500
+    charge_settings = CHARGE_METHODS[charge_method]
 
     charged_ligands = []
     failed_molecules = []
@@ -118,14 +125,19 @@ def main(
         if mol.to_openff().to_inchikey(fixed_hydrogens=True) == "XLYOFNOQVPJJNP-UHFFFAOYNA-N": # water
             continue
 
-        charged_molecule = assign_offmol_partial_charges(
-            offmol=mol.to_openff(),
-            overwrite=True,
-            method=openff_charge_method,
-            toolkit_backend=backend,
-            generate_n_conformers=generate_n_conformers,
-            nagl_model=nagl_model,
-        )
+        try:
+            charged_molecule = assign_offmol_partial_charges(
+                offmol=mol.to_openff(),
+                overwrite=True,
+                method=charge_settings["method"],
+                toolkit_backend=charge_settings["backend"],
+                generate_n_conformers=charge_settings["generate_n_conformers"],
+                nagl_model=nagl_model,
+            )
+        except Exception as e:
+            print(f"Failed to generate charges for molecule {mol.name} with error: {e}")
+            failed_molecules.append(mol)
+            continue
 
         charged_ligands.append(SmallMoleculeComponent.from_openff(charged_molecule))
 
@@ -137,6 +149,10 @@ def main(
         "rdkit_version": Chem.rdBase.rdkitVersion,
         "charge_method": charge_method,
     }
+
+    backend = charge_settings["backend"]
+    output_name = charge_settings["output_name"]
+
     if backend == "ambertools":
         provenance["ambertools_version"] = get_ambertools_version()
 
@@ -158,17 +174,11 @@ def main(
             nagl_model = os.path.split(nagl_model)
         provenance["nagl_version"] = str(nagl.__version__)
         provenance["nagl_model"] = nagl_model
+        output_name = f"nagl_{nagl_model_name}"
 
     # construct the output path
-    method_to_name = {
-        "am1bcc_at": "antechamber_am1bcc",
-        "am1bccelf10_oe": "openeye_am1bccelf10",
-        "nagl_off": f"nagl_{nagl_model}",
-        "am1bcc_oe": "openeye_am1bcc",
-    }
-
     output_path = (
-        output_dir / f"{input_path.stem}_{method_to_name[charge_method]}.sdf"
+        output_dir / f"{input_path.stem}_{output_name}.sdf"
     )
     with Chem.SDWriter(str(output_path)) as writer:
         for ligand in charged_ligands:
@@ -177,6 +187,8 @@ def main(
             rdkit_mol.SetProp("charge_provenance", json.dumps(provenance))
             writer.write(rdkit_mol)
 
+    for failed_mol in failed_molecules:
+        print(f"Failed molecules: {failed_mol.name}")
 
 if __name__ == "__main__":
     main()
