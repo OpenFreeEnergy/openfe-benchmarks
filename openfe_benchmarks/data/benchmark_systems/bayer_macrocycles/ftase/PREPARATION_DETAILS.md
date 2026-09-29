@@ -3,7 +3,7 @@
 Done by J. Bluck
 
 <ol type="1">
-<li>Read in original inputs from the repo
+<li>Read in original inputs from the repo (https://github.com/schrodinger/public_binding_free_energy_benchmark/tree/main)
 <li>Duplicate the input, to ensure there is a reference to comapre to
 <li>If multiple ligands, extract preferred ligand input (after discussion with the OpenFE team)
 <li>Extract all cofactors into a single maestro entries that are saved into one file
