@@ -13,8 +13,14 @@ from gufe.tokenization import JSON_HANDLER
 from gufe import ProteinComponent, SolventComponent
 from openff.units import unit
 from cinnabar import FEMap
-from pontibus.protocols.relative import HybridTopProtocol
-from pontibus.protocols.solvation import ASFEProtocol
+
+try:
+    from pontibus.protocols.relative import HybridTopProtocol
+    from pontibus.protocols.solvation import ASFEProtocol
+except ImportError:  # pontibus is an optional dependency
+    HybridTopProtocol = None
+    ASFEProtocol = None
+
 from openfe_benchmarks.scripts.utils import load_archive
 
 logger = logging.getLogger(__name__)
@@ -248,15 +254,19 @@ def _extract_results_from_archive(alchemical_archive):
     extraction_functions = {
         # default openfe hybrid rbfe in openfe using a split leg protocol
         RelativeHybridTopologyProtocol: _extract_hybrid_topology_rfe_data,
-        # default hybrid rbfe in pontibus using the split leg protocol
-        HybridTopProtocol: _extract_hybrid_topology_rfe_data,
-        # pontibus ASFE
-        ASFEProtocol: _extract_asfe_data,
         # SepTop RBFE
         SepTopProtocol: _extract_septop_rbfe_data,
         # TODO add support for openfe ASFE
         # TODO add support for openfe ABFE
     }
+
+    # pontibus protocols are only supported when pontibus is installed
+    if HybridTopProtocol is not None:
+        # default hybrid rbfe in pontibus using the split leg protocol
+        extraction_functions[HybridTopProtocol] = _extract_hybrid_topology_rfe_data
+    if ASFEProtocol is not None:
+        # pontibus ASFE
+        extraction_functions[ASFEProtocol] = _extract_asfe_data
 
     raw_results = defaultdict(list)
 
@@ -267,6 +277,16 @@ def _extract_results_from_archive(alchemical_archive):
             )
         protocol_cls = transformation.protocol.__class__
         extract_func = extraction_functions.get(protocol_cls)
+        if extract_func is None:
+            if protocol_cls.__module__.startswith("pontibus"):
+                pontibus_hint = " This is a pontibus protocol and pontibus is either not installed or not compatible."
+            else:
+                pontibus_hint = ""
+            raise ValueError(
+                f"Unsupported protocol {protocol_cls.__name__}; "
+                f"{pontibus_hint} "
+                "pontibus protocols require pontibus to be installed."
+            )
         result_data = extract_func(transformation, dag_results_list)
         raw_results[protocol_cls].append(result_data)
 
@@ -274,7 +294,7 @@ def _extract_results_from_archive(alchemical_archive):
         raw_results[RelativeHybridTopologyProtocol] = _combine_hybrid_topology_results(
             raw_results[RelativeHybridTopologyProtocol]
         )
-    if HybridTopProtocol in raw_results:
+    if HybridTopProtocol is not None and HybridTopProtocol in raw_results:
         raw_results[HybridTopProtocol] = _combine_hybrid_topology_results(
             raw_results[HybridTopProtocol]
         )
@@ -375,9 +395,13 @@ def run_generate_results(
         archive_results_by_protocol = _extract_results_from_archive(alchemical_archive)
 
     # raise an error if we find specific mixes of protocols
-    if ASFEProtocol in archive_results_by_protocol and (
-        HybridTopProtocol in archive_results_by_protocol
-        or RelativeHybridTopologyProtocol in archive_results_by_protocol
+    if (
+        ASFEProtocol is not None
+        and ASFEProtocol in archive_results_by_protocol
+        and (
+            HybridTopProtocol in archive_results_by_protocol
+            or RelativeHybridTopologyProtocol in archive_results_by_protocol
+        )
     ):
         raise RuntimeError(
             f"Found a mix of ASFE and Hybrid Topology protocols in the archive. This is not supported. Found protocols: {list(archive_results_by_protocol.keys())}"
@@ -404,7 +428,7 @@ def run_generate_results(
         logger.info("System groups and names are set per archive from systems input")
 
     # workout what we are going to do based on the found protocols
-    if ASFEProtocol in archive_results_by_protocol:
+    if ASFEProtocol is not None and ASFEProtocol in archive_results_by_protocol:
         # if its just absolute values add them to the DGs and be done
         for result in archive_results_by_protocol[ASFEProtocol]:
             if final_system_group is not None:
