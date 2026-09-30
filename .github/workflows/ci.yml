@@ -22,7 +22,7 @@ defaults:
 jobs:
   tests:
     runs-on: ${{ matrix.OS }}
-    name: "💻-${{matrix.os }} 🐍-${{ matrix.python-version }}"
+    name: "💻-${{matrix.os }} 🐍-${{ matrix.python-version }} 🌉-pontibus-${{ matrix.pontibus }}"
     strategy:
       fail-fast: false
       matrix:
@@ -31,6 +31,12 @@ jobs:
           - "3.11"
           - "3.12"
           - "3.13"
+        pontibus: [true]
+        include:
+          # pontibus is optional: check that everything works without it
+          - os: ubuntu-latest
+            python-version: "3.12"
+            pontibus: false
 
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +54,14 @@ jobs:
           create-args: >-
             python=${{ matrix.python-version }}
           init-shell: bash
+
+      - name: "Remove pontibus"
+        if: ${{ !matrix.pontibus }}
+        run: |
+          micromamba remove -y --force pontibus
+          if python -c "import pontibus" 2>/dev/null; then
+            echo "pontibus is still importable" && exit 1
+          fi
 
       - name: "Install"
         run: python -m pip install --no-deps -e .
