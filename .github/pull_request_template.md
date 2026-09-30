@@ -1,36 +1,26 @@
-# Pull Request Template: Benchmark Results Submission
+# Benchmark Results Submission
 
 ## Description
-[Provide a brief description of this benchmark submission, including what systems were calculated and any notable features]
+<!-- Systems calculated, single experiment, notable settings. -->
 
-## Required Files Checklist
+## Release (author)
+See [RELEASE.md](../RELEASE.md).
 
-Please ensure the following files are present in your submission directory:
+Version level:
+- [ ] `major`: changes existing data
+- [ ] `minor`: additive
+- [ ] `bug`: fix, script, docs, new results
 
-- [ ] **`submission.yaml`**: Complete metadata file with all required fields using `openfe_benchmarks/scripts/prepare_metadata_submission.py`
-- [ ] **`computational_results.json.bz2`**: Compressed results file using `openfe_benchmarks/scripts/generate_results_archives.py`
-- [ ] **Archive DOI**: Results uploaded to long-term archive (Zenodo, etc.) with DOI included in submission.yaml
+## Submission (author)
+- [ ] Labeled PR with version level `major`, `minor`, or `bug`
+- [ ] `submission.yaml` made with `prepare_metadata_submission.py`
+- [ ] `computational_results.json.bz2` made with `generate_results_archives.py`
+- [ ] Single experiment; settings differing from OpenFE defaults described in `summary` (and `tags` if useful)
+- [ ] [CHANGELOG.md](../../CHANGELOG.md) updated under `Unreleased`
 
-## Validation Checklist
+## Checked by CI
+- `submission.yaml` is valid and loads
+- `submission_id` matches directory name and is unique
+- Results file exists at the path in `results`
 
-- [ ] **YAML validation**: `submission.yaml` is valid YAML and loads without errors
-- [ ] **ID consistency**: `submission_id` in YAML matches directory name
-- [ ] **Results file exists**: Compressed results file exists at path specified in `results` field
-- [ ] **Archive accessible**: DOI resolves and archive is publicly accessible
-- [ ] **Network keys valid**: AlchemicalNetwork keys in `benchmark_data` are valid
-- [ ] **Calculation type valid**: Type matches actual calculations performed
-- [ ] **No duplicate submission_id**: This submission_id is unique in the repository
-- [ ] **Single experiment**: This submission contains results from a single experiment (not multiple experiments combined) and details of the experiment are clearly described in the metadata (see summary field)
-- [ ] **Settings and parameters**: All noteable settings differences from default OpenFE settings are clearly described in the metadata (see summary field) also consider adding a tag in the tags field
-
-## Testing
-
-- [ ] CI validation checks pass
-
-## Additional Notes
-
-[Any additional context, special considerations, or notes about this submission]
-
----
-
-Thank you for contributing to the OpenFE Benchmarks!
+## Notes
