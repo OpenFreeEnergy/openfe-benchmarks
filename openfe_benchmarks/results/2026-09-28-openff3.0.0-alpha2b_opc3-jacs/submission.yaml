@@ -1,0 +1,101 @@
+submission_id: 2026-09-28-openff3.0.0-alpha2b_opc3-jacs
+title: OpenFE RBFE - jacs_set (8 systems) - 2026-09-28-openff3.0.0-alpha2b_opc3-jacs
+summary: 'This submission describes the RBFE benchmark covering jacs_set: bace, cdk2,
+  jnk1, mcl1, p38, ptp1b, thrombin, tyk2 prepared with opc3.offxml/openff-3.0.0-alpha2b
+  for proteins and solvents, and openff-3.0.0-alpha2b with nagl_openff-gnn-am1bcc-1.0.0.pt
+  for ligands, solutes, and cofactors. The submission contains 566 edges across 194
+  unique ligands. Results are derived from archived Alchemiscale workflow data. For
+  scripts to generate this network: github.com/openforcefield/alchemical-benchmark-resources/submissions/2026-09-11_openff-3.0.0-alpha2b_opc3/alchemiscale_submission.ipynb'
+tags:
+- rbfe
+- alchemicalarchive
+- opc3.offxml
+- openff-3.0.0-alpha2b
+- jacs_set
+- bace
+- cdk2
+- jnk1
+- mcl1
+- p38
+- ptp1b
+- thrombin
+- tyk2
+- nagl_openff-gnn-am1bcc-1.0.0.pt
+- pontibus
+calculation_type: rbfe
+authors:
+- name: Jennifer A. Clark
+date: 2026-09-28
+results: computational_results.json.bz2
+archive:
+  doi: 10.5281/zenodo.23018985
+  archive_provider: zenodo
+license: CC-BY-4.0
+openfe_version: 1.8.0
+openmm_version: 8.2.0
+openff_toolkit_version: '0.18'
+partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/openfe-benchmarks
+  jacs_set:
+    bace: AlchemicalNetwork-5dc9c9cfdb1cd11f50dffe8ea01d660b
+    cdk2: AlchemicalNetwork-c90824fca3b38fad4f0fa88b50ac3e15
+    jnk1: AlchemicalNetwork-f923711e3af1e04e523547c137f67fed
+    mcl1: AlchemicalNetwork-77a1bd8a9a8888aabb307df3306cb763
+    p38: AlchemicalNetwork-332dd0d866b70b97b9e0c8c48db020c5
+    ptp1b: AlchemicalNetwork-5012b5ccb6ab213efdb22238e293130c
+    thrombin: AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2
+    tyk2: AlchemicalNetwork-9ed5fef0e0f4127532ef49599402ccd0
+protocol_settings:
+- protocol: HybridTopProtocol
+  protocol_library: pontibus
+  notes: |-
+    Applies to 283 edges:
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1a, ligand_final=1c, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1a, ligand_final=3b, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1a, ligand_final=5, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1b, ligand_final=1a, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1d, ligand_final=1b, solvent={'O'}, cofactors=none, protein={'unknown'}
+    - etc.
+  timestep: 4.0 fs
+  temperature: 298.15 K
+  pressure: 1 bar
+  lambda_functions: default
+  lambda_windows: '11'
+  small_molecule_forcefield: openff-3.0.0-alpha2b
+  forcefields:
+  - opc3.offxml
+  - openff-3.0.0-alpha2b
+  partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+  equilibration_time: 1.0 ns
+  production_time: 5.0 ns
+- protocol: HybridTopProtocol
+  protocol_library: pontibus
+  notes: |-
+    Detailed protocol settings differ:
+    - solvation_settings.solvent_padding: 1 -> 1.2
+    Applies to 283 edges:
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1a, ligand_final=1c, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1a, ligand_final=3b, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1a, ligand_final=5, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1b, ligand_final=1a, solvent={'O'}, cofactors=none, protein=none
+    - AlchemicalNetwork-2e24db5f3ed614ab10c499c0ec6165c2 jacs_set-thrombin: ligand_start=1d, ligand_final=1b, solvent={'O'}, cofactors=none, protein=none
+    - etc.
+  timestep: 4.0 fs
+  temperature: 298.15 K
+  pressure: 1 bar
+  lambda_functions: default
+  lambda_windows: '11'
+  small_molecule_forcefield: openff-3.0.0-alpha2b
+  forcefields:
+  - opc3.offxml
+  - openff-3.0.0-alpha2b
+  partial_charges: nagl_openff-gnn-am1bcc-1.0.0.pt
+  equilibration_time: 1.0 ns
+  production_time: 5.0 ns
+mapper: KartografAtomMapper 1.2.0 (LSA)
+forcefield:
+- opc3.offxml
+- openff-3.0.0-alpha2b
+small_molecule_forcefield: openff-3.0.0-alpha2b
+pontibus_version: 0.4.0
