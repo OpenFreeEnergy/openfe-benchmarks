@@ -22,7 +22,7 @@ After filtering, **2420 systems** are retained.
 
 ## Partial Charges
 
-Charges were generated using the [charge_mnsol.py](../../../data_generation/charge_mnsol.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
+Charges were generated using the [charge_offmol.py](../../../data_generation/charge_offmol.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
 Some ligands could not be charged with all methods, the following lists the ligands that could not be charged with each method:
 
 - `am1bcc_oe`, `am1bcc_at`, `am1bccelf10_oe`: hydrogen
