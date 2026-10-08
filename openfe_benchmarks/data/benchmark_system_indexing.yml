@@ -78,7 +78,7 @@ solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
 metadata:
-  last_updated: "2026-03-18"
+  last_updated: "2026-10-07"
   notes:
     - "Systems may or may not include cofactor files"
     - "All systems can be used for ASFEs and RSFEs"
