@@ -79,6 +79,7 @@ scaffold_hopping:
   bace_baumann: ["protein", "bfe"]
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
+  chk1_set2: ["protein", "bfe", "ross"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
