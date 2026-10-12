@@ -6,7 +6,8 @@ By J.T.Horton
 * Input structures taken from https://github.com/OpenFreeEnergy/IndustryBenchmarks2024/blob/a84180505e97de3ee0de55176fd1009240e889c2/industry_benchmarks/input_structures/original_structures/opls_stress
 * ACE and NME caps added to chain A
 * Broken loop charged termini capped with ACE and NME
-* TER removed from NME caps
+* TER removed from terminal NME caps
+* TER added between broken loop caps
 * Used the `charge_molecules.py` script to assign charges to the ligands 
 * Used the `generate_lomap_networks.py` script to generate the networks
 * Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
