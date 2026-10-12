@@ -9,6 +9,7 @@ By J.T.Horton
 * TER removed from terminal NME caps
 * TER added between broken loop caps
 * Renamed H22 to H in ASN 51
+* Mutated CSS to CYS
 * Used the `charge_molecules.py` script to assign charges to the ligands 
 * Used the `generate_lomap_networks.py` script to generate the networks
 * Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
