@@ -78,6 +78,8 @@ water_set:
 scaffold_hopping:
   bace_baumann: ["protein", "bfe"]
 opls_stress_set:
+  chk1_set1: ["protein", "bfe", "ross"]
+  chk1_set2: ["protein", "bfe", "ross"]
   chk1_set4: ["protein", "bfe", "ross", "cofactor"]
 solvation_set:
   freesolv: ["sfe"]
