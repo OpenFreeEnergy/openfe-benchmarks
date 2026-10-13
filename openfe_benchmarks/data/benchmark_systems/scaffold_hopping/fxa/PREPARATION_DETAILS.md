@@ -5,3 +5,8 @@ natural amino acids were found.
 3. tested successfully the input protein with `input_validation.py`
 
 using maestro v2024-2
+
+Done by H. Baumann
+* Used the `charge_molecules.py` script to assign charges to the ligands
+* Used the `generate_lomap_networks.py` script to generate the networks
+* Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
