@@ -7,6 +7,7 @@ By J.T.Horton
 * ACE and NME caps added to chain A
 * Broken loop termini capped with ACE and NME
 * TER removed from NME caps
+* TER added between broken loop caps
 * Extracted cofactors to SDF cofactors SDF file
 * Renamed atom HA2 in TYR 20 to HA
 * Used the `charge_molecules.py` script to assign charges to the ligands and cofactors
