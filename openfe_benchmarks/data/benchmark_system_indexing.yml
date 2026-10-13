@@ -79,12 +79,13 @@ scaffold_hopping:
   bace_baumann: ["protein", "bfe"]
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
+  chk1_set2: ["protein", "bfe", "ross"]
   chk1_set3: ["protein", "bfe", "ross"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
 metadata:
-  last_updated: "2026-10-07"
+  last_updated: "2026-10-12"
   notes:
     - "Systems may or may not include cofactor files"
     - "All systems can be used for ASFEs and RSFEs"
