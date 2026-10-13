@@ -1,4 +1,7 @@
-ATOM      1  C   ACE A  57     -26.057  -3.191 -16.316  1.00  0.00           C  
+SSBOND   1 CYS A  330    CYS A  380
+SSBOND   2 CYS A  278    CYS A  443
+SSBOND   3 CYS A  216    CYS A  420
+ATOM      1  C   ACE A  57     -26.057  -3.191 -16.316  1.00  0.00           C
 ATOM      2  O   ACE A  57     -26.052  -2.071 -16.844  1.00  0.00           O  
 ATOM      3  CH3 ACE A  57     -27.018  -3.520 -15.194  1.00  0.00           C  
 ATOM      4 1HH3 ACE A  57     -28.037  -3.406 -15.534  1.00  0.00           H  
