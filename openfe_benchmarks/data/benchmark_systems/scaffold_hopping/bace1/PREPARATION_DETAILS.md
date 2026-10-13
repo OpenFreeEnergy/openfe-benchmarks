@@ -28,3 +28,8 @@ Done by J. Bluck
 </ol>
 
 NOTE: There is a crystallographic GOL residue that has been isolated as a cofactor. But this should probably be excldued from future calculations.
+
+Done by H. Baumann
+* Used the `charge_molecules.py` script to assign charges to the ligands and cofactors
+* Used the `generate_lomap_networks.py` script to generate the networks
+* Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
