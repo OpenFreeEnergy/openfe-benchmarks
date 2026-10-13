@@ -80,7 +80,7 @@ scaffold_hopping:
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
   chk1_set2: ["protein", "bfe", "ross"]
-  chk1_set3: ["protein", "bfe", "ross"]
+  chk1_set3: ["protein", "bfe", "ross", "cofactor"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
