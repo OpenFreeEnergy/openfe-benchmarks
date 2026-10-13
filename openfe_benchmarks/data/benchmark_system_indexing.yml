@@ -82,6 +82,7 @@ opls_stress_set:
   chk1_set2: ["protein", "bfe", "ross"]
   chk1_set3: ["protein", "bfe", "ross", "cofactor"]
   chk1_set4: ["protein", "bfe", "ross", "cofactor"]
+  chk1_set5: ["protein", "bfe", "ross"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
