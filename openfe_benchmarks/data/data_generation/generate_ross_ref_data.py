@@ -42,7 +42,7 @@ def main(system_group: str, system_name: str, csv_name: str, out_dir: pathlib.Pa
     ross_et_al_doi = "https://doi.org/10.1038/s42004-023-01019-9"
     # load the ref data from the industry benchmark results stored on github
     csv_file = f"https://raw.githubusercontent.com/schrodinger/public_binding_free_energy_benchmark/refs/heads/main/21_4_results/ligand_predictions/{system_group}/{csv_name}"
-    ref_dg_data = pd.read_csv(csv_file)
+    ref_dg_data = pd.read_csv(csv_file, dtype={"Ligand name": str})
     print(f"Extracted reference data for system group {system_group} and system name {system_name} with {len(ref_dg_data)} ligands.")
     # load the ligands with openff toolkit to extract the identifiers
     molecules = Molecule.from_file(input_sdf.as_posix(), allow_undefined_stereo=True)
