@@ -4,6 +4,7 @@ By J.T.Horton
 
 * Prep done with PyMol 3.0.0
 * Input structures taken from https://github.com/OpenFreeEnergy/IndustryBenchmarks2024/blob/a84180505e97de3ee0de55176fd1009240e889c2/industry_benchmarks/input_structures/original_structures/opls_stress
+* No ACE cap added to chain A, the charged termini forms a salt bridge with ASP 194 which is important to maintain binding site structure
 * NME cap added to chain A
 * ACE and NME caps added to chain B
 * TER removed from terminal NME caps
