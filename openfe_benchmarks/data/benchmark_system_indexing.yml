@@ -77,6 +77,7 @@ water_set:
   urokinase: ["protein", "bfe", "ross", "industry_benchmark"]
 scaffold_hopping:
   bace_baumann: ["protein", "bfe"]
+  bace1: ["protein", "bfe", "ross", "cofactor"]
   tpsb2: ["protein", "cofactor", "bfe", "ross"]
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
