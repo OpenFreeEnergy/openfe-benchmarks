@@ -6,6 +6,7 @@ By J.T.Horton
 * Input structures taken from https://github.com/OpenFreeEnergy/IndustryBenchmarks2024/blob/a84180505e97de3ee0de55176fd1009240e889c2/industry_benchmarks/input_structures/original_structures/opls_stress
 * ACE and NME caps added to chain A
 * TER removed from terminal NME caps
+* The structure was energy minimized using OpenMM with heavy restraints on all atoms except the ACE cap and the connecting SER residue to remove a clash involving the ACE cap
 * Used the `charge_molecules.py` script to assign charges to the ligands 
 * Used the `generate_lomap_networks.py` script to generate the networks
 * Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
