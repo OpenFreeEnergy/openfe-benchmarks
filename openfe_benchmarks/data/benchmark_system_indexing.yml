@@ -78,7 +78,9 @@ water_set:
 scaffold_hopping:
   bace_baumann: ["protein", "bfe"]
   bace1: ["protein", "bfe", "ross", "cofactor"]
+  chk1: ["protein", "bfe", "ross"]
   ezh2: ["protein", "bfe", "ross"]
+  fxa: ["protein", "bfe", "ross"]
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
   chk1_set2: ["protein", "bfe", "ross"]
