@@ -7,7 +7,7 @@ natural amino acids were found.
 using maestro v2024-2
 
 Done by H. Baumann
-* Added caps to all charged termini
+* Added caps to all charged termini, except the N terminus in chain A which was left charge to form a salt bridge with an ASP to stabilize the binding site.
 * Used the `charge_molecules.py` script to assign charges to the ligands
 * Used the `generate_lomap_networks.py` script to generate the networks
 * Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
