@@ -9,6 +9,8 @@ By H. Baumann
 * TER added between broken loop cap
 * TER removed from terminal NME caps
 * Removed HG atoms on CYS residues 523, 530, 543, 560, 566, 580 for coordination with the ZN
+* CONECT records between the SG and ZN atoms were removed
+* The protein structure contains many broken loops, in the future we may want to model those in.
 * Used the `charge_molecules.py` script to assign charges to the ligands 
 * Used the `generate_lomap_networks.py` script to generate the networks
 * Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
