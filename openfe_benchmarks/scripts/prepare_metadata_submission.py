@@ -33,8 +33,14 @@ from openfe.protocols.openmm_rfe import RelativeHybridTopologyProtocol
 from openfe.protocols.openmm_septop import SepTopProtocol
 from openfe.protocols.openmm_afe import AbsoluteSolvationProtocol
 from openfe.protocols.openmm_utils.system_validation import get_alchemical_components
-from pontibus.protocols.relative import HybridTopProtocol
-from pontibus.protocols.solvation import ASFEProtocol
+
+try:
+    from pontibus.protocols.relative import HybridTopProtocol
+    from pontibus.protocols.solvation import ASFEProtocol
+except ImportError:  # pontibus is an optional dependency
+    HybridTopProtocol = None
+    ASFEProtocol = None
+
 
 from openfe_benchmarks.data import BenchmarkIndex
 from openfe_benchmarks.results import BenchmarkResults
@@ -46,11 +52,13 @@ logger = logging.getLogger(__name__)
 # map the protocol to a calculation type for the purposes of metadata aggregation and summary
 _PROTOCOL_MAPPING = {
     RelativeHybridTopologyProtocol: "rbfe",
-    HybridTopProtocol: "rbfe",
     SepTopProtocol: "septop",
-    ASFEProtocol: "asfe",
     AbsoluteSolvationProtocol: "asfe",
 }
+if HybridTopProtocol is not None:
+    _PROTOCOL_MAPPING[HybridTopProtocol] = "rbfe"
+if ASFEProtocol is not None:
+    _PROTOCOL_MAPPING[ASFEProtocol] = "asfe"
 
 
 @dataclass(frozen=True)
@@ -395,10 +403,14 @@ def _detect_mode(transformations: list[Transformation]) -> str:
     mode_key = _PROTOCOL_MAPPING.get(protocol_cls, None)
 
     if mode_key is None:
+        pontibus_hint = ""
+        if protocol_cls.__module__.startswith("pontibus"):
+            pontibus_hint = " This is a pontibus protocol and pontibus is either not installed or not compatible."
         raise ValueError(
             "Unable to detect calculation from transformation protocol. "
-            f"Observed protocol class: {protocol_cls}. "
-            f"Known classes: {''.join(cls.__name__ for cls in _PROTOCOL_MAPPING.keys())}."
+            f"Observed protocol class: {protocol_cls}."
+            f"{pontibus_hint} "
+            f"Known classes: {', '.join(cls.__name__ for cls in _PROTOCOL_MAPPING.keys())}."
         )
     return mode_key
 
