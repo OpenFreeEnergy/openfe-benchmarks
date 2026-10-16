@@ -7,6 +7,6 @@ By H. Baumann
 * ACE and NME caps added, except for the N terminus in chain A where the Ile was left charged to form a salt bridge with ASP 208.
 * TER removed from terminal NME caps
 * Extracted the cofactor from the PDB and put it into an SDF
-* Used the `charge_offmol.py` script to assign charges to the ligands and cofactor. The script failed parametrizing the bicarbonate cofactor with OpenEye. 
+* Used the `charge_offmol.py` script to assign charges to the ligands and cofactor. The script failed parametrizing the bicarbonate cofactor with OpenEye. Therefore, the partial charges generated with antechamber were used for openeye_am1cc and openeye_am1bccelf10. 
 * Used the `generate_lomap_networks.py` script to generate the networks
 * Use the `generate_ross_ref_data.py` script to generate the experimental reference data json file
