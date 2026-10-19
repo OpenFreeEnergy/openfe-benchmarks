@@ -81,6 +81,7 @@ scaffold_hopping:
   chk1: ["protein", "bfe", "ross"]
   ezh2: ["protein", "bfe", "ross"]
   fxa: ["protein", "bfe", "ross"]
+  tpsb2: ["protein", "cofactor", "bfe", "ross"]
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
   chk1_set2: ["protein", "bfe", "ross"]
@@ -93,7 +94,9 @@ opls_stress_set:
   cr_bace2: ["protein", "bfe", "ross", "cofactor"]
   fxa_set3: ["protein", "bfe", "ross"]
   fxa_set4: ["protein", "bfe", "ross"]
+  fxa_set5: ["protein", "bfe", "ross"]
   fxa_set6: ["protein", "bfe", "ross"]
+  fxa_yoshikawa_set: ["protein", "bfe", "ross"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
