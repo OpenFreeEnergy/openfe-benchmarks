@@ -97,6 +97,7 @@ opls_stress_set:
   fxa_set5: ["protein", "bfe", "ross"]
   fxa_set6: ["protein", "bfe", "ross"]
   fxa_yoshikawa_set: ["protein", "bfe", "ross"]
+  hc_bace1: ["protein", "bfe", "ross"]
 solvation_set:
   freesolv: ["sfe"]
   mnsol_neutral: ["sfe"]
