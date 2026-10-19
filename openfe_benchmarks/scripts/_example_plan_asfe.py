@@ -205,7 +205,8 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
     )
 
     settings.vacuum_forcefield_settings.forcefields = [
-        forcefield,  # as above
+        forcefield,  # this must match the solvent force field for consistency
+        f"{water_model}.offxml",
     ]
 
     # _______________ Default Settings _________________________________
