@@ -1,0 +1,46 @@
+{
+    "20814_6": {
+        "dg": {
+            "magnitude": -10.529999732971191,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([C]([H])([H])[C](=[O])[N]([H])[c]2[c]([H])[c]([H])[c]([N]3[C](=[O])[C]([H])=[C]([H])[C]([H])=[C]3[H])[c]([H])[c]2[F])[N]=[C]([N]([H])[C](=[O])[C]2=[C]([H])[C]([H])=[C]([Cl])[S]2)[S]1",
+        "inchikey": "ZDVWPPSVXOLKIO-SPEPDGBUNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "20539_10": {
+        "dg": {
+            "magnitude": -11.18000030517578,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[N][C]([N]([H])[C](=[O])[C]2=[C]([H])[C]([H])=[C]([Cl])[S]2)=[N][N]1[C]([H])([H])[C](=[O])[N]([H])[c]1[c]([H])[c]([H])[c]([N]2[C](=[O])[C]([H])=[C]([H])[C]([H])=[C]2[H])[c]([H])[c]1[F]",
+        "inchikey": "KAUVVMPQUJSRIS-XBXBPLPCNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "20820_11": {
+        "dg": {
+            "magnitude": -10.829999923706056,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([Cl])[S][C]([C](=[O])[N]([H])[C]2=[N][N]([C]([H])([H])[C](=[O])[N]([H])[c]3[c]([H])[c]([H])[c]([N]4[C](=[O])[C]([H])=[C]([H])[C]([H])=[C]4[H])[c]([H])[c]3[F])[N]=[N]2)=[C]1[H]",
+        "inchikey": "WDQYHPMZCRLJPH-PDJAEHLQNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    },
+    "20819_8": {
+        "dg": {
+            "magnitude": -11.18000030517578,
+            "unit": "kilocalories_per_mole",
+            ":is_custom:": true,
+            "pint_unit_registry": "openff_units"
+        },
+        "canonical_smiles": "[H][C]1=[C]([Cl])[S][C]([C](=[O])[N]([H])[C]2=[N][N]([C]([H])([H])[C](=[O])[N]([H])[c]3[c]([H])[c]([H])[c]([N]4[C](=[O])[C]([H])=[C]([H])[C]([H])=[C]4[H])[c]([H])[c]3[F])[C]([H])=[C]2[H])=[C]1[H]",
+        "inchikey": "POYDZZCFUWXUIM-XBXBPLPCNA-N",
+        "reference": "https://doi.org/10.1038/s42004-023-01019-9"
+    }
+}

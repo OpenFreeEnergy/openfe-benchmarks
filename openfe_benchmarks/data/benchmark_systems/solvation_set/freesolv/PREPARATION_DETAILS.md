@@ -5,7 +5,7 @@ All ligands extracted from the FreeSolv database version https://github.com/Mobl
 ## Partial Charges
 
 The reference data was generated using the [generate_freesolv_exp_data.py](../../../data_generation/generate_freesolv_exp_data.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
-Charges were generated using the [charge_freesolv.py](../../../data_generation/charge_freesolv.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
+Charges were generated using the [charge_offmol.py](../../../data_generation/charge_offmol.py) script using the [conda-lock_linux-64.yml](../../../data_generation/conda-lock_linux-64.yml) environment. 
 Some ligands could not be charged with all methods, the following lists the ligands that could not be charged with each method:
 
 Charging failures:
