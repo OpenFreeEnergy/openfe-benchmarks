@@ -6,6 +6,6 @@ dependencies:
   - openfe >= 1.13 # From alchemiscale stack dependence?
   - pytest
   - pre-commit
-  - pontibus==0.4.0
+  - pontibus
   - pint
 #  - cinnabar >= 0.6.1
