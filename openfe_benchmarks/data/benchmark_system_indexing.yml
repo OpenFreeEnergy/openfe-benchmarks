@@ -81,6 +81,7 @@ scaffold_hopping:
   chk1: ["protein", "bfe", "ross"]
   ezh2: ["protein", "bfe", "ross"]
   fxa: ["protein", "bfe", "ross"]
+  tpsb2: ["protein", "cofactor", "bfe", "ross"]
 opls_stress_set:
   chk1_set1: ["protein", "bfe", "ross"]
   chk1_set2: ["protein", "bfe", "ross"]
