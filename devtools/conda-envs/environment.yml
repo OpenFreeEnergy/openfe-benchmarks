@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - gufe
-  - openfe<1.9 # From alchemiscale stack dependence?
+  - openfe >= 1.13 # From alchemiscale stack dependence?
   - pytest
   - pre-commit
   - pontibus==0.4.0
