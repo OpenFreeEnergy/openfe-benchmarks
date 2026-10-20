@@ -2,13 +2,12 @@
 
 Only one of the system check lists below need be used.
 
-## Release (author)
-See [RELEASE.md](../../RELEASE.md).
-
-Version level:
+## Change level
 - [ ] `major`: changes existing data
 - [ ] `minor`: additive (new system, charge set)
 - [ ] `bug`: fix, script, docs
+
+See [RELEASE.md](../../RELEASE.md) for more details.
 
 ## New System Checklist
 

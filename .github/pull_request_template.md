@@ -3,10 +3,9 @@
 ## Description
 <!-- Systems calculated, single experiment, notable settings. -->
 
-## Release (author)
-See [RELEASE.md](../RELEASE.md).
 
-Version level:
+## Change level:
+See [RELEASE.md](../RELEASE.md).
 - [ ] `major`: changes existing data
 - [ ] `minor`: additive
 - [ ] `bug`: fix, script, docs, new results
