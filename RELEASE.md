@@ -9,7 +9,7 @@ OpenFE-Benchmarks uses **Data-SemVer**: semantic versioning applied to published
 
 | Level | Meaning | Examples |
 |---|---|---|
-| **X** (major) | Changes to existing data; not backward compatible | Editing or removing values in an existing benchmark data system; renaming or removing loader API or `submission.yaml` fields |
+| **X** (major) | Changes to existing data; not backward compatible | Editing or removing values in an existing benchmark data system; renaming or removing `submission.yaml` fields |
 | **Y** (minor) | Independent additions; backward compatible | New datasets or systems; new charge sets; new results submission; new optional fields or script features |
 | **Z** (bug) | Fixes and changes that do not alter published data | Script fixes, docs, CIs |
 
