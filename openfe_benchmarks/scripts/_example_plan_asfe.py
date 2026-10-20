@@ -270,7 +270,7 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         0.0,
     ]
     settings.solvent_simulation_settings.n_replicas = 14
-    settings.vacuum_lambda_settings = [
+    settings.vacuum_lambda_settings.lambda_elec = [
         0.0,
         0.25,
         0.5,
@@ -422,7 +422,7 @@ def get_nonwater_settings(forcefield: str) -> ASFESettings:
         0.0,
     ]
     settings.solvent_simulation_settings.n_replicas = 14
-    settings.vacuum_lambda_settings = [
+    settings.vacuum_lambda_settings.lambda_elec = [
         0.0,
         0.25,
         0.5,
