@@ -218,7 +218,10 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
     # actually set them, but if you want to change things, you can alter them
     # by defining them this way. Note: you have to update n_replica to match
     # the number of lambda windows (and all lambda window lists must be of the same length).
-    settings.lambda_settings.lambda_elec = [
+
+
+    # update: solvent and vacuum lambda settings were split in pontibus-v0.6.0 to remove redundant gas phase windows
+    settings.solvent_lambda_settings.lambda_elec = [
         0.0,
         0.25,
         0.5,
@@ -234,7 +237,7 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         1.0,
         1.0,
     ]
-    settings.lambda_settings.lambda_vdw = [
+    settings.solvent_lambda_settings.lambda_vdw = [
         0.0,
         0.0,
         0.0,
@@ -250,7 +253,7 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         0.85,
         1.0,
     ]
-    settings.lambda_settings.lambda_restraints = [
+    settings.solvent_lambda_settings.lambda_restraints = [
         0.0,
         0.0,
         0.0,
@@ -267,7 +270,28 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         0.0,
     ]
     settings.solvent_simulation_settings.n_replicas = 14
-    settings.vacuum_simulation_settings.n_replicas = 14
+    settings.vacuum_lambda_settings = [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+    ]
+    settings.vacuum_lambda_settings.lambda_vdw = [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+    ]
+    settings.vacuum_lambda_settings.lambda_restraints = [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+    ]
+    settings.vacuum_simulation_settings.n_replicas = 5
 
     ####### Solvent Settings #############
     settings.solvent_engine_settings.compute_platform = "CUDA"
