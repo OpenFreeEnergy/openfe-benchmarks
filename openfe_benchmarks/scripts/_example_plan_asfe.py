@@ -195,6 +195,11 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         forcefield,
         f"{water_model}.offxml",
     ]
+    settings.vacuum_forcefield_settings.forcefields = [
+        forcefield,  # this must match the solvent force field for consistency
+        f"{water_model}.offxml",
+    ]
+
     # For water solvation, use a dodecahedron box with solvent padding.
     # In our tests 1.5 nm padding works for FreeSolv; increase for ligands
     # that can unfold.
@@ -203,11 +208,6 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         assign_solvent_charges=False,
         solvent_padding=1.5 * unit.nanometer,  # nondefault
     )
-
-    settings.vacuum_forcefield_settings.forcefields = [
-        forcefield,  # this must match the solvent force field for consistency
-        f"{water_model}.offxml",
-    ]
 
     # _______________ Default Settings _________________________________
     # This is the pre-alchemical equilibration lengths
@@ -303,8 +303,6 @@ def get_nonwater_settings(forcefield: str) -> ASFESettings:
     ----------
     forcefield : str
         Name of the force field to use.
-    assign_solvent_charges : bool, default=False
-        Whether to assign solvent charges or not. We expect to set them in all cases but water.
 
     Returns
     -------
@@ -329,16 +327,16 @@ def get_nonwater_settings(forcefield: str) -> ASFESettings:
         # just like you would to openff.toolkit.ForceField
         forcefield,
     ]
+    ######## Vacuum Settings ###########
+    settings.vacuum_forcefield_settings.forcefields = [
+        forcefield,  # as above
+    ]
+
     settings.solvation_settings = PackmolSolvationSettings(
         target_density=0.95 * unit.grams / unit.mL,  # current default
         box_shape="cube",
         assign_solvent_charges=False,
     )
-
-    ######## Vacuum Settings ###########
-    settings.vacuum_forcefield_settings.forcefields = [
-        forcefield,  # as above
-    ]
 
     # _______________ Default Settings _________________________________
     # This is the pre-alchemical equilibration lengths

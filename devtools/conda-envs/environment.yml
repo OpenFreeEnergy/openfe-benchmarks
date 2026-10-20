@@ -8,4 +8,3 @@ dependencies:
   - pre-commit
   - pontibus
   - pint
-#  - cinnabar >= 0.6.1
