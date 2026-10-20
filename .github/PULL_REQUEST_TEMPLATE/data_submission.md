@@ -1,11 +1,20 @@
 # Pull Request Template: Benchmark Data Submission
 
-Only one of the following check lists need be used.
+Only one of the system check lists below need be used.
+
+## Change level
+- [ ] `major`: changes existing data
+- [ ] `minor`: additive (new system, charge set)
+- [ ] `bug`: fix, script, docs
+
+See [RELEASE.md](../../RELEASE.md) for more details.
 
 ## New System Checklist
 
 Please ensure the following criteria are met before submitting the PR:
 
+- [ ] Labeled PR with version level `major`, `minor`, or `bug`
+- [ ] [CHANGELOG.md](../../CHANGELOG.md) updated under `Unreleased`
 - [ ] **Data Format**: All files are in the expected format as outlined in `openfe_benchmarks/data/benchmark_systems/README.md`.
 - [ ] A `ligand.sdf` file is present
 - [ ] The `charge_molecules.py` file was run using the `conda-lock_linux-64.yml` env on `ligands.sdf`
