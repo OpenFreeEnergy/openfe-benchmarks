@@ -12,9 +12,9 @@ See [RELEASE.md](../RELEASE.md).
 
 ## Submission (author)
 - [ ] Labeled PR with version level `major`, `minor`, or `bug`
-- [ ] `submission.yaml` made with `prepare_metadata_submission.py`
-- [ ] `computational_results.json.bz2` made with `generate_results_archives.py`
-- [ ] Single experiment; settings differing from OpenFE defaults described in `summary` (and `tags` if useful)
+- [ ] `submission.yaml` made with `openfe_benchmarks/scripts/prepare_metadata_submission.py`
+- [ ] `computational_results.json.bz2` made with `openfe_benchmarks/scripts/generate_results_archives.py`
+- [ ] Single experiment; settings differing from OpenFE defaults described in `summary` of this PR submission
 - [ ] [CHANGELOG.md](../../CHANGELOG.md) updated under `Unreleased`
 
 ## Checked by CI
