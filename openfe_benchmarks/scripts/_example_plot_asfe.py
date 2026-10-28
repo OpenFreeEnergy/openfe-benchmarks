@@ -42,7 +42,8 @@ def main():
     femaps_by_system = results.dg_femaps()
     print(f"Generated {len(femaps_by_system)} FEMaps:")
     for (system_group, system_name), femap in femaps_by_system.items():
-        n_values = len(femap.graph.nodes)
+        # get the number of calculations (ligands) in the FEMap
+        n_values = femap.n_ligands
         print(f"  - {system_group}/{system_name}: {n_values} calculations")
 
     output_dir = pathlib.Path(OUTPUT_DIR)
