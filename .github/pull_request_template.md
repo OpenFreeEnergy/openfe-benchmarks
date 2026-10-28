@@ -10,7 +10,7 @@ See [RELEASE.md](../RELEASE.md).
 - [ ] `minor`: additive
 - [ ] `bug`: fix, script, docs, new results
 
-## Submission (author)
+## Submission
 - [ ] Labeled PR with version level `major`, `minor`, or `bug`
 - [ ] `submission.yaml` made with `openfe_benchmarks/scripts/prepare_metadata_submission.py`
 - [ ] `computational_results.json.bz2` made with `openfe_benchmarks/scripts/generate_results_archives.py`
