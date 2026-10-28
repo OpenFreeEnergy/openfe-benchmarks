@@ -23,9 +23,6 @@ Tie-breaker: if a change fits more than one level, use the highest.
 
 Note: Major changes may be submitted as PRs but are not merged without agreement between the Science Team Leads for both OpenFE and OpenFF.
 
-## Release Cadence
-Releases are made quarterly.
-
 ## Zenodo and citation
 
 Citation and DOI are obtained from Zenodo / GitHub integration for each `vX.Y.Z` tag.
