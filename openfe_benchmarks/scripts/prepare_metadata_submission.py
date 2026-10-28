@@ -608,13 +608,26 @@ def _make_edge_key(
 def _extract_protocol_settings(
     protocol_obj: object | None,
     mode_spec: _ModeSpec,
+    forcefields_override: list[str] | None = None,
+    small_molecule_forcefield_override: str | None = None,
 ) -> dict[str, str | list[str]]:
+    def _with_ff_overrides(
+        payload: dict[str, str | list[str]],
+    ) -> dict[str, str | list[str]]:
+        if small_molecule_forcefield_override:
+            payload["small_molecule_forcefield"] = small_molecule_forcefield_override
+        if forcefields_override:
+            payload["forcefields"] = sorted(set(forcefields_override))
+        return payload
+
     if protocol_obj is None:
-        return {
-            "protocol": "TODO",
-            "protocol_library": "TODO",
-            "notes": "Protocol settings unavailable in archive.",
-        }
+        return _with_ff_overrides(
+            {
+                "protocol": "TODO",
+                "protocol_library": "TODO",
+                "notes": "Protocol settings unavailable in archive.",
+            }
+        )
 
     protocol_name = str(type(protocol_obj)).rstrip("'>").split(".")[-1]
     module_name = type(protocol_obj).__module__
@@ -633,7 +646,7 @@ def _extract_protocol_settings(
         payload["notes"] = (
             "Protocol class found, but detailed settings were unavailable."
         )
-        return payload
+        return _with_ff_overrides(payload)
 
     # Keep a full-settings fingerprint so aggregation does not collapse subtly
     # different protocols into one entry.
@@ -686,7 +699,7 @@ def _extract_protocol_settings(
         if sim.get("production_length") is not None:
             payload[prod_key] = _quantity_to_text(sim["production_length"])
 
-    return payload
+    return _with_ff_overrides(payload)
 
 
 @dataclass
@@ -1191,6 +1204,8 @@ def _update_metadata_from_transformation(
     override_group: str | None,
     override_name: str | None,
     mode_spec: _ModeSpec,
+    forcefields_override: list[str] | None = None,
+    small_molecule_forcefield_override: str | None = None,
 ) -> None:
     system_group, system_name = _infer_system_group_name(
         trans, override_group, override_name
@@ -1235,7 +1250,12 @@ def _update_metadata_from_transformation(
         mapper_value = f"{mapper_name} {mapper_version} ({mapping_algorithm})"
         _add_str_value_with_keys(metadata.mapper, mapper_value, [edge_key])
 
-    protocol_settings = _extract_protocol_settings(trans.protocol, mode_spec)
+    protocol_settings = _extract_protocol_settings(
+        trans.protocol,
+        mode_spec,
+        forcefields_override=forcefields_override,
+        small_molecule_forcefield_override=small_molecule_forcefield_override,
+    )
     _add_protocol_value_with_keys(
         metadata.protocol_settings, protocol_settings, [edge_key]
     )
@@ -1272,6 +1292,8 @@ def _collect_metadata(
     system_overrides: dict[Path, tuple[str | None, str | None]],
     system_group: str | None,
     system_name: str | None,
+    forcefields_override: list[str] | None = None,
+    small_molecule_forcefield_override: str | None = None,
 ) -> tuple[_Metadata, _ModeSpec]:
     metadata: _Metadata | None = None
     selected_mode_spec: _ModeSpec | None = None
@@ -1313,6 +1335,8 @@ def _collect_metadata(
                 override_group,
                 override_name,
                 mode_spec,
+                forcefields_override=forcefields_override,
+                small_molecule_forcefield_override=small_molecule_forcefield_override,
             )
 
     if metadata is None or selected_mode_spec is None:
@@ -1320,25 +1344,25 @@ def _collect_metadata(
     return metadata, selected_mode_spec
 
 
+def _normalize_forcefields_override(
+    forcefields: list[str] | str | None,
+) -> list[str] | None:
+    """Normalize the --forcefields override into a clean list, or None if unset."""
+    if forcefields is None:
+        return None
+    labels = [forcefields] if isinstance(forcefields, str) else list(forcefields)
+    cleaned = [_normalize_forcefield_label(str(label)) for label in labels]
+    cleaned = [label for label in cleaned if label]
+    return cleaned or None
+
+
 def _apply_overrides(
     metadata: _Metadata,
-    forcefields: list[str] | str | None,
-    small_molecule_forcefield: str | None,
     openfe_version: str | None,
     openmm_version: str | None,
     openff_toolkit_version: str | None,
     pontibus_version: str | None,
 ) -> None:
-    if forcefields is not None:
-        labels = [forcefields] if isinstance(forcefields, str) else list(forcefields)
-        cleaned = [_normalize_forcefield_label(str(label)) for label in labels]
-        cleaned = [label for label in cleaned if label]
-        if cleaned:
-            metadata.forcefield = [(tuple(cleaned), ["override"])]
-
-    if small_molecule_forcefield:
-        metadata.small_molecule_forcefield = [(small_molecule_forcefield, ["override"])]
-
     if openfe_version is not None:
         metadata.openfe_version = [(openfe_version, ["override"])]
     if openmm_version is not None:
@@ -1394,12 +1418,16 @@ def process_network(
         system_overrides=system_overrides,
         system_group=system_group,
         system_name=system_name,
+        forcefields_override=_normalize_forcefields_override(forcefields),
+        small_molecule_forcefield_override=(
+            _normalize_forcefield_label(small_molecule_forcefield)
+            if small_molecule_forcefield
+            else None
+        ),
     )
 
     _apply_overrides(
         metadata,
-        forcefields=forcefields,
-        small_molecule_forcefield=small_molecule_forcefield,
         openfe_version=openfe_version,
         openmm_version=openmm_version,
         openff_toolkit_version=openff_toolkit_version,
@@ -1422,18 +1450,18 @@ def process_network(
     final_tags = _make_tags(metadata, user_tags=tags)
 
     mapper_value: str | None = None
-    small_molecule_ff_value: str | None = None
     if mode_spec.rbfe_like:
         mapper_raw = _collapse_value_keys(metadata.mapper, "mapper")
         if isinstance(mapper_raw, str):
             mapper_value = mapper_raw
 
-        small_molecule_ff_raw = _collapse_value_keys(
-            metadata.small_molecule_forcefield,
-            "small_molecule_forcefield",
-        )
-        if isinstance(small_molecule_ff_raw, str):
-            small_molecule_ff_value = small_molecule_ff_raw
+    small_molecule_ff_value: str | None = None
+    small_molecule_ff_raw = _collapse_value_keys(
+        metadata.small_molecule_forcefield,
+        "small_molecule_forcefield",
+    )
+    if isinstance(small_molecule_ff_raw, str):
+        small_molecule_ff_value = small_molecule_ff_raw
 
     forcefield_raw = _collapse_value_keys(metadata.forcefield, "forcefield")
     forcefield_value: list[str] | str | None = None

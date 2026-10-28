@@ -50,9 +50,9 @@ def main():
     print(f"\nGenerating plots in {output_dir}/...")
     for (system_group, system_name), femap in femaps_by_system.items():
         output_file = output_dir / f"{system_group}_{system_name}_DDG.png"
-        legacy_graph = femap.to_legacy_graph()
         plotting.plot_DDGs(
-            graph=legacy_graph,
+            femap,
+            source=results.submission_id,
             title=f"{system_group}-{system_name}",
             figsize=5,
             scatter_kwargs={"s": 20, "marker": "o"},
