@@ -276,17 +276,19 @@ def _extract_results_from_archive(alchemical_archive):
                 f"Transformation {transformation.key} is does not meet minimum number of repeats requirement. Must at least {MIN_ALLOWED_REPEATS}."
             )
         protocol_cls = transformation.protocol.__class__
-        extract_func = extraction_functions.get(protocol_cls)
-        if extract_func is None:
-            if protocol_cls.__module__.startswith("pontibus"):
-                pontibus_hint = " This is a pontibus protocol and pontibus is either not installed or not compatible."
-            else:
-                pontibus_hint = ""
+        if protocol_cls not in extraction_functions:
+            pontibus_hint = (
+                " This is a pontibus protocol and pontibus is either not installed or not compatible."
+                if protocol_cls.__module__.startswith("pontibus")
+                else ""
+            )
             raise ValueError(
                 f"Unsupported protocol {protocol_cls.__name__}; "
                 f"{pontibus_hint} "
                 "pontibus protocols require pontibus to be installed."
             )
+
+        extract_func = extraction_functions[protocol_cls]
         result_data = extract_func(transformation, dag_results_list)
         raw_results[protocol_cls].append(result_data)
 

@@ -400,19 +400,19 @@ def _detect_mode(transformations: list[Transformation]) -> str:
     """
     # grab the first one here we are assuming that all transformations in the archive are of the same type
     protocol_cls = transformations[0].protocol.__class__
-    mode_key = _PROTOCOL_MAPPING.get(protocol_cls, None)
-
-    if mode_key is None:
-        pontibus_hint = ""
-        if protocol_cls.__module__.startswith("pontibus"):
-            pontibus_hint = " This is a pontibus protocol and pontibus is either not installed or not compatible."
+    if protocol_cls not in _PROTOCOL_MAPPING:
+        pontibus_hint = (
+            " This is a pontibus protocol and pontibus is either not installed or not compatible."
+            if protocol_cls.__module__.startswith("pontibus")
+            else ""
+        )
         raise ValueError(
             "Unable to detect calculation from transformation protocol. "
             f"Observed protocol class: {protocol_cls}."
             f"{pontibus_hint} "
             f"Known classes: {', '.join(cls.__name__ for cls in _PROTOCOL_MAPPING.keys())}."
         )
-    return mode_key
+    return _PROTOCOL_MAPPING[protocol_cls]
 
 
 def _get_mapping_annotations(trans: Transformation) -> dict[str, object]:
