@@ -6,6 +6,7 @@ process (120s timeout), and fails if the script raises or times out. The
 test performs no output validation or cleanup.
 """
 
+import importlib.util
 import runpy
 import multiprocessing as mp
 import os
@@ -17,6 +18,11 @@ import pytest
 
 TEST_DEBUG = False  # set to True to avoid leaving outputs behind
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent / "scripts"
+PONTIBUS_AVAILABLE = importlib.util.find_spec("pontibus") is not None
+PONTIBUS_SCRIPTS = [
+    "openfe_benchmarks/scripts/_example_plan_asfe.py",
+    "openfe_benchmarks/scripts/_example_plan_rbfe_pontibus.py",
+]
 
 
 def collect_example_scripts():
@@ -52,6 +58,13 @@ def test_example_scripts_run_as_main(script_path: Path):
     The test runs each example in an isolated process with a 120s timeout and
     fails if the script raises or times out.
     """
+    repo_root = SCRIPTS_DIR.parent.parent
+    if (
+        not PONTIBUS_AVAILABLE
+        and script_path.relative_to(repo_root).as_posix() in PONTIBUS_SCRIPTS
+    ):
+        pytest.skip("pontibus is not installed")
+
     queue: mp.Queue = mp.Queue()
     proc = mp.Process(target=_run_script_as_main, args=(script_path, queue))
     proc.start()
