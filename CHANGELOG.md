@@ -11,6 +11,7 @@ Sections: **Added** (new data or features), **Changed** (changes to existing dat
 
 ### Added
 
+- [minor] Add static comparison dashboard (`dashboard/`) published to GitHub Pages (#TBD)
 - [major] Initial tagged release. No changelog was kept before this version; see `git log v1.0.0`.
 
 ### Changed

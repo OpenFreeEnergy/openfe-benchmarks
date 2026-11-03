@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenFE benchmarks dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+</head>
+<body>
+  <header>
+    <h1>OpenFE benchmarks dashboard</h1>
+    <span class="sub">Compare submissions against experiment · <a href="https://github.com/OpenFreeEnergy/openfe-benchmarks">source</a></span>
+  </header>
+  <div id="layout">
+    <aside id="sidebar">
+      <section>
+        <h3>Filter by tag</h3>
+        <input id="tag-search" type="search" placeholder="search tags…">
+        <div id="tag-list" class="chips"></div>
+        <div class="row"><label><input type="checkbox" id="tag-any"> match any tag</label>
+          <button id="tag-clear" class="link">clear</button></div>
+      </section>
+      <section>
+        <h3>Submissions <button id="sub-all" class="link">all</button> <button id="sub-none" class="link">none</button></h3>
+        <div id="sub-list"></div>
+      </section>
+    </aside>
+    <main>
+      <div id="controls">
+        <label>System <select id="system"></select></label>
+        <label>Quantity
+          <select id="kind"><option value="dg">DG vs experiment</option><option value="ddg">DDG vs experiment</option></select>
+        </label>
+        <label title="Restrict plotted points to ligands/edges present in every selected submission">
+          <input type="checkbox" id="common" checked> common ligands/edges</label>
+        <label>Outlier |error| &gt; <input id="outlier" type="number" min="0" step="0.5" value="2" style="width:4em"> kcal/mol</label>
+        <label>Error bars <input type="checkbox" id="errbars" checked></label>
+        <span id="ddg-opts">
+          <label>Colour by
+            <select id="colorby">
+              <option value="">submission</option>
+              <option value="min_overlap">min MBAR overlap</option>
+              <option value="max_mbar_error">max MBAR error</option>
+              <option value="min_replica_mixing">min replica mixing</option>
+              <option value="abs_error">|error|</option>
+            </select>
+          </label>
+          <label>min overlap ≥ <input id="f-overlap" type="number" min="0" max="1" step="0.01" placeholder="–" style="width:4em"></label>
+          <label>max MBAR err ≤ <input id="f-mbar" type="number" min="0" step="0.1" placeholder="–" style="width:4em"></label>
+        </span>
+      </div>
+      <div id="status"></div>
+      <div id="content">
+        <div id="plot-col">
+          <div id="scatter"></div>
+          <div id="note" class="note"></div>
+        </div>
+        <div id="detail"><p class="hint">Click a point or an outlier row to inspect it.</p></div>
+      </div>
+      <h3>Bootstrapped statistics <span id="stats-src" class="note"></span></h3>
+      <div id="stats-table"></div>
+      <div id="stats-plots"></div>
+      <h3>Largest outliers</h3>
+      <div id="outliers"></div>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -119,6 +119,17 @@ Helpful references:
 - examples/2_benchmark_data_with_openfe.ipynb
 - examples/building_networks.ipynb
 
+## Results dashboard
+
+`dashboard/` contains a static site (published to GitHub Pages by `.github/workflows/pages.yml`) to compare submissions:
+filter by tag, plot DG/DDG against experiment, inspect ligand structures, atom mappings and per-edge QC metrics
+(MBAR overlap, replica mixing, ...), and view cinnabar-bootstrapped statistics.
+
+```bash
+python dashboard/build_data.py              # writes dashboard/site/data (use --nbootstrap 200 for a quick build)
+python -m http.server -d dashboard/site     # then open http://localhost:8000
+```
+
 ## External docs
 
 - OpenFE docs: https://docs.openfree.energy

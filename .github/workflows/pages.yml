@@ -1,0 +1,68 @@
+name: "Dashboard (GitHub Pages)"
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "openfe_benchmarks/results/**"
+      - "openfe_benchmarks/data/**"
+      - "dashboard/**"
+      - ".github/workflows/pages.yml"
+  pull_request:
+    paths:
+      - "dashboard/**"
+      - ".github/workflows/pages.yml"
+
+concurrency:
+  group: "pages-${{ github.ref }}"
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Setup Micromamba"
+        uses: mamba-org/setup-micromamba@v1
+        with:
+          micromamba-binary-path: ~/.local/bin/micromamba
+          environment-file: devtools/conda-envs/environment.yml
+          environment-name: openfe-benchmarks-test
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
+
+      - name: "Install"
+        run: python -m pip install --no-deps -e .
+
+      - name: "Test dashboard build helpers"
+        run: pytest -vv dashboard
+
+      - name: "Build data bundle"
+        run: python dashboard/build_data.py
+
+      - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dashboard/site
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
