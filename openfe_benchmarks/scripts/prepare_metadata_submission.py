@@ -1145,7 +1145,7 @@ def _make_zenodo_description(
             f"- openfe_version: {payload.get('openfe_version', 'TODO')}",
             f"- openmm_version: {payload.get('openmm_version', 'TODO')}",
             f"- openff_toolkit_version: {payload.get('openff_toolkit_version', 'TODO')}",
-            f"- openffe_benchmarks_version: {payload.get('openffe_benchmarks_version', 'TODO # version used to generate networks')}",
+            f"- openfe_benchmarks_version: {payload.get('openfe_benchmarks_version', 'TODO # version used to generate networks')}",
             f"- pontibus_version: {payload.get('pontibus_version', 'TODO')}",
         ]
     )
