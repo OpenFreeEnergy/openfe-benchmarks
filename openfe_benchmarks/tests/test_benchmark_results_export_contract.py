@@ -34,6 +34,7 @@ def _make_minimal_benchmark_results() -> BenchmarkResults:
         license="CC-BY-4.0",
         openfe_version="1.0.0",
         openmm_version="8.0.0",
+        openfe_benchmarks_version="1.0.0",
         openff_toolkit_version="0.10.0",
         partial_charges="am1bcc",
         benchmark_data={"source_repository": "https://example.invalid/repo"},

@@ -51,6 +51,7 @@ _SUBMISSION_EXPORT_FIELDS = [
     "license",
     "openfe_version",
     "openmm_version",
+    "openfe_benchmarks_version",
     "openff_toolkit_version",
     "partial_charges",
     "benchmark_data",
@@ -150,12 +151,15 @@ class BenchmarkResults:
         Archive metadata with doi and archive_provider (required)
     license : str
         License identifier (required)
-    openfe_version : str, optional
-        OpenFE version string
-    openmm_version : str, optional
-        OpenMM version string
-    openff_toolkit_version : str, optional
-        OpenFF Toolkit version string
+    openfe_version : str
+        OpenFE version used to run the results.
+    openmm_version : str
+        OpenMM version used to run the results.
+    openff_toolkit_version : str
+        OpenFF Toolkit version used to run the results.
+    openfe_benchmarks_version: str
+        OpenFE Benchmarks version used to make the results being processed. This may not
+        be the same version being used to process the results.
     pontibus_version : str, optional
         Pontibus version string
     mapper : str, optional
@@ -265,6 +269,7 @@ class BenchmarkResults:
     openfe_version: str
     openmm_version: str
     openff_toolkit_version: str
+    openfe_benchmarks_version: str
     partial_charges: str
     benchmark_data: dict[str, Any]
     protocol_settings: list[dict[str, Any]]
@@ -775,6 +780,7 @@ def _extract_benchmark_fields(yaml_data: dict, submission_id: str) -> BenchmarkR
             license=yaml_fields.pop("license"),
             openfe_version=yaml_fields.pop("openfe_version"),
             openmm_version=yaml_fields.pop("openmm_version"),
+            openfe_benchmarks_version=yaml_fields.pop("openfe_benchmarks_version"),
             openff_toolkit_version=yaml_fields.pop("openff_toolkit_version"),
             partial_charges=yaml_fields.pop("partial_charges"),
             benchmark_data=yaml_fields.pop("benchmark_data"),

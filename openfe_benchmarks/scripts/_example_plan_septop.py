@@ -12,6 +12,7 @@ for more details.
 
 import os
 import logging
+from importlib.metadata import version
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
@@ -45,6 +46,7 @@ FILENAME_ALCHEMICALNETWORK = (
     f"septop_alchemical_network_{SYSTEM_GROUP}_{SYSTEM_NAME}_nacl.json"
 )
 OUTPUT_DIR = "outputs"
+OPENFE_BENCHMARKS_VERSION = version("openfe_benchmarks")
 
 
 def process_components(benchmark_sys):
@@ -115,6 +117,7 @@ def compile_network_transformations(
             **edge.annotations,
             "system_group": SYSTEM_GROUP,
             "system_name": SYSTEM_NAME,
+            "openfe_benchmarks_version": OPENFE_BENCHMARKS_VERSION,
         }
         new_edge = openfe.LigandAtomMapping(
             componentA=ligands_by_name[edge.componentA.name],

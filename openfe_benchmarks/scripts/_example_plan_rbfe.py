@@ -12,6 +12,7 @@ for more details.
 
 import os
 import logging
+from importlib.metadata import version
 
 import openfe
 from openfe import SolventComponent, ProteinComponent
@@ -45,6 +46,7 @@ FILENAME_ALCHEMICALNETWORK = (
     f"alchemical_network_{SYSTEM_GROUP}_{SYSTEM_NAME}_nacl.json"
 )
 OUTPUT_DIR = "outputs"
+OPENFE_BENCHMARKS_VERSION = version("openfe_benchmarks")
 
 
 def process_components(benchmark_sys):
@@ -127,6 +129,7 @@ def compile_network_transformations(
             {
                 "system_group": system_group,
                 "system_name": system_name,
+                "openfe_benchmarks_version": OPENFE_BENCHMARKS_VERSION,
             }
         )
 
