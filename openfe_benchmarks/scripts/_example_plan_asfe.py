@@ -529,6 +529,10 @@ def compile_transformations(
                 mapping=None,
                 protocol=ASFEProtocol(settings=settings[sol_type]),
                 name=sys_name,
+                metadata={
+                    "system_group": SYSTEM_GROUP,
+                    "system_name": SYSTEM_NAME,
+                },
             )
         )
 
