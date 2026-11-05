@@ -207,6 +207,10 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
         box_shape="dodecahedron",  # nondefault
         assign_solvent_charges=False,
         solvent_padding=1.5 * unit.nanometer,  # nondefault
+        target_density=0.95
+        * unit.grams
+        / unit.mL
+        * 0.75,  # 0.75 ~ 1/(1.1)^3 box scaling previously in interchange
     )
 
     # _______________ Default Settings _________________________________
@@ -218,7 +222,6 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
     # actually set them, but if you want to change things, you can alter them
     # by defining them this way. Note: you have to update n_replica to match
     # the number of lambda windows (and all lambda window lists must be of the same length).
-
 
     # update: solvent and vacuum lambda settings were split in pontibus-v0.6.0 to remove redundant gas phase windows
     settings.solvent_lambda_settings.lambda_elec = [
@@ -357,9 +360,14 @@ def get_nonwater_settings(forcefield: str) -> ASFESettings:
     ]
 
     settings.solvation_settings = PackmolSolvationSettings(
-        target_density=0.95 * unit.grams / unit.mL,  # current default
+        target_density=0.95
+        * unit.grams
+        / unit.mL
+        * 0.75,  # 0.75 ~ 1/(1.1)^3 box scaling previously in interchange
+        number_of_solvent_molecules=750,
         box_shape="cube",
         assign_solvent_charges=False,
+        solvent_padding=None,
     )
 
     # _______________ Default Settings _________________________________
