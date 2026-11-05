@@ -734,6 +734,7 @@ class _Metadata:
     systems: dict[tuple[str, str], _SystemRecord] = field(default_factory=dict)
     system_order: list[tuple[str, str]] = field(default_factory=list)
     openfe_version: list[tuple[str, list[str]]] = field(default_factory=list)
+    openfe_benchmarks_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openmm_version: list[tuple[str, list[str]]] = field(default_factory=list)
     openff_toolkit_version: list[tuple[str, list[str]]] = field(default_factory=list)
     pontibus_version: list[tuple[str, list[str]]] = field(default_factory=list)
@@ -1144,6 +1145,7 @@ def _make_zenodo_description(
             f"- openfe_version: {payload.get('openfe_version', 'TODO')}",
             f"- openmm_version: {payload.get('openmm_version', 'TODO')}",
             f"- openff_toolkit_version: {payload.get('openff_toolkit_version', 'TODO')}",
+            f"- openffe_benchmarks_version: {payload.get('openffe_benchmarks_version', 'TODO # version used to generate networks')}",
             f"- pontibus_version: {payload.get('pontibus_version', 'TODO')}",
         ]
     )
@@ -1245,7 +1247,11 @@ def _update_metadata_from_transformation(
 
     for key, value in annotations.items():
         value_str = str(value)
-        if "openfe" in key:
+        if key == "openfe_benchmarks_version":
+            _add_str_value_with_keys(
+                metadata.openfe_benchmarks_version, value_str, [key]
+            )
+        elif "openfe" in key:
             _add_str_value_with_keys(metadata.openfe_version, value_str, [key])
         if "openmm" in key:
             _add_str_value_with_keys(metadata.openmm_version, value_str, [key])
@@ -1515,8 +1521,11 @@ def process_network(
         pontibus_version=str(
             _collapse_value_keys(metadata.pontibus_version, "version")
         ),
+        openfe_benchmarks_version=str(
+            _collapse_value_keys(metadata.openfe_benchmarks_version, "version")
+            or "TODO"
+        ),
     )
-
     submission_yaml_path = out_dir / "submission.yaml"
     zenodo_description_path = out_dir / "zenodo_description.md"
 
