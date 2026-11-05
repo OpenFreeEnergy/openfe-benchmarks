@@ -26,6 +26,7 @@ authors:
 date: 2026-08-06
 openfe_version: "1.8.0"
 openmm_version: "8.2.0"
+openfe_benchmarks_version: 1.0.0
 openff_toolkit_version: "0.18"
 pontibus_version: "0.4.0"
 
