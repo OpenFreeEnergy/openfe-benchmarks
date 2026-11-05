@@ -92,6 +92,7 @@ def mock_submission_yaml():
             "license": "MIT",
             "openfe_version": "1.0.0",
             "openmm_version": "8.0.0",
+            "openfe_benchmarks_version": "1.0.0",
             "openff_toolkit_version": "0.10.0",
             "partial_charges": "am1bcc",
             "benchmark_data": {},
