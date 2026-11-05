@@ -9,6 +9,7 @@ class for the independent transformations needed in ASFEs.
 
 import json
 import logging
+from importlib.metadata import version
 from pathlib import Path
 
 from openff.units import unit
@@ -51,6 +52,7 @@ OUTPUT_DIR = "outputs"
 FILENAME = f"network_{SYSTEM_GROUP}_{SYSTEM_NAME}_asfe.json"
 WATER_MODEL = "tip3p"  # or opc
 SUBSET = "subset_openff_filtered"
+OPENFE_BENCHMARKS_VERSION = version("openfe_benchmarks")
 
 EXPECTED_NETWORKS = []
 EXPECTED_LIGANDS = set()
@@ -218,7 +220,6 @@ def get_water_settings(forcefield: str, water_model: str = "tip3p") -> ASFESetti
     # actually set them, but if you want to change things, you can alter them
     # by defining them this way. Note: you have to update n_replica to match
     # the number of lambda windows (and all lambda window lists must be of the same length).
-
 
     # update: solvent and vacuum lambda settings were split in pontibus-v0.6.0 to remove redundant gas phase windows
     settings.solvent_lambda_settings.lambda_elec = [
@@ -521,6 +522,11 @@ def compile_transformations(
                 mapping=None,
                 protocol=ASFEProtocol(settings=settings[sol_type]),
                 name=sys_name,
+                metadata={
+                    "system_group": SYSTEM_GROUP,
+                    "system_name": SYSTEM_NAME,
+                    "openfe_benchmarks_version": OPENFE_BENCHMARKS_VERSION,
+                },
             )
         )
 
