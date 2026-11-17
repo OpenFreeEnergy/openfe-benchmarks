@@ -4,7 +4,11 @@ from gufe.tokenization import JSON_HANDLER
 import json
 from cinnabar import FEMap
 import bz2
+from pathlib import Path
+from collections import defaultdict
+
 from openfe_benchmarks.data import get_data_by_system_name
+from openfe_benchmarks.results import BenchmarkResults
 
 def main():
     """
@@ -14,6 +18,10 @@ def main():
 
     gathered_results = {"dg": [], "ddg": []}
 
+    # track the system groups and the system names under them
+    benchmark_systems = defaultdict(set)
+
+    # some ligands were renamed in openfe-benchmarks after the industry benchmarking
     name_conversions = {
         "41-flip": "41 flip",
         "38-flip": "38 flip",
@@ -73,7 +81,12 @@ def main():
             # this group was renamed
             if system_group == "scaffold_hopping_set":
                 system_group = "scaffold_hopping"
+            if system_group == "scaffold_hopping" and system_name == "factor_xa":
+                system_name = "fxa"
 
+            benchmark_systems[system_group].add(system_name)
+
+            # load the experimental data for this system to check that the ligands are present
             ref_data = get_data_by_system_name(system_group, system_name)
             experimental_file = ref_data.reference_data["experimental_binding_data"]
             with open(experimental_file) as f:
@@ -83,7 +96,7 @@ def main():
 
                 ligand_a = name_conversions.get(row["ligand_A"], row["ligand_A"])
                 ligand_b = name_conversions.get(row["ligand_B"], row["ligand_B"])
-                # check that both the ligands have experimental data
+                # check that both the ligands have experimental data not one system has intermediate ligands
                 if ligand_a not in experimental_data and "intermediate" not in ligand_a:
                     raise ValueError(f"Ligand {ligand_a} not found in experimental data for {system_group}/{system_name}")
                 if ligand_b not in experimental_data and "intermediate" not in ligand_b:
@@ -104,8 +117,6 @@ def main():
                     "complex_smallest_mbar_overlaps": [row[f"complex_repeat_{i}_smallest_overlap"] for i in range(3)],
                     "solvent_smallest_mbar_overlaps": [row[f"solvent_repeat_{i}_smallest_overlap"] for i in range(3)],
                 }
-
-
                 gathered_results["ddg"].append(result_data)
 
                 system_femap.add_relative_calculation(
@@ -115,10 +126,11 @@ def main():
                     uncertainty=result_data["ddg_uncertainty"],
                 )
 
+            # generate the absolute values for this system
             system_femap.generate_absolute_values()
-
             abs_df = system_femap.get_absolute_dataframe()
 
+            # extract the absolute values and add them to the gathered results
             for _, row in abs_df.iterrows():
                 entry_data = {
                     "ligand": row["label"],
@@ -136,15 +148,52 @@ def main():
     with bz2.open(output_file, "wt") as w:
         json.dump(gathered_results, w, cls=JSON_HANDLER.encoder, indent=4)
 
+    tags = set(["rbfe", "openff-2.2.0", "am1bcc_at", "openfe"] + sorted(benchmark_systems.keys()) + sorted([name for names in benchmark_systems.values() for name in names]))
+
     # write out the data for the yaml file based on the other submission data
-    submission_data = {
-        "submission_id": "2026-05-21-industry-benchmarking",
-        "title": "OpenFE RBFE Industry Benchmarking Results - 2026-05-21-industry-benchmarking",
-        "summary": """|
-        This submission describes the RBFE benchmarking covering ...
-        """,
-        "tags": ["rbfe", "openff-2.2.0", "am1bcc_at", "openfe", ]
-    }
+    submission_data = BenchmarkResults(
+        submission_id="2026-05-21-industry-benchmarking",
+        title="OpenFE RBFE Industry Benchmarking Results - 2026-05-21-industry-benchmarking",
+        summary="RBFE results from the OpenFE industry benchmarking dataset.",
+        tags=list(tags),
+        calculation_type="rbfe",
+        authors=[{"name": "Josh Horton"}],
+        date="2026-05-21",
+        openfe_version="1.0.1",
+        openmm_version="8.1.1",
+        openff_toolkit_version="0.15.2",
+        mapper="KartografAtomMapper 1.0.1 (LSA)",
+        forcefield=["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"],
+        small_molecule_forcefield="openff-2.2.0",
+        partial_charges="am1bcc_at",
+        benchmark_data={
+            "source_repository": "https://github.com/OpenFreeEnergy/IndustryBenchmarks2024",
+        },
+        results=output_file,
+        archive={"doi": "https://zenodo.org/communities/openfreeenergy/records?q=&l=list&p=1&s=10&sort=newest", "archive_provider": "zenodo"},
+        license="CC-BY-4.0",
+        protocol_settings=[
+            {
+                "protocol": "RelativeHybridTopologyProtocol",
+                "timestep": "4.0 fs",
+                "temperature": "298.15 k",
+                "pressure": "1 bar",
+                "forcefields": ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"],
+                "small_molecule_forcefield": "openff-2.2.0",
+                "partial_charges": "am1bcc_at",
+                "equilibration_time": "1 ns",
+                "production_time": "5 ns",
+                "vacuum_equilibration_time": "",
+                "vacuum_production_time": "",
+                "solvent_equilibration_time": "",
+                "solvent_production_time": "",
+                "lambda_functions": "default",
+                "lambda_windows": "11",
+                "lambda_schedule": "",
+            }
+        ],
+    )
+    submission_data.write_submission_yaml(Path("submission.yaml"))
 
 if __name__ == "__main__":
     main()
