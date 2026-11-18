@@ -1,0 +1,110 @@
+submission_id: 2026-05-21-industry-benchmarking
+title: OpenFE RBFE Industry Benchmarking Results - 2026-05-21-industry-benchmarking
+summary: RBFE results from the OpenFE industry benchmarking dataset.
+tags:
+- galectin
+- tnks2
+- egfr
+- am1bcc_at
+- faah
+- hiv1_protease
+- scyt_dehyd
+- miscellaneous_set
+- t4_lysozyme
+- hsp90_woodhead
+- merck
+- ptp1b
+- fragments
+- bace_p3_arg368_in
+- bace
+- openff-2.2.0
+- hsp90_2rings
+- jak2_set2
+- renin
+- p38
+- cmet
+- mcl1
+- openfe
+- scaffold_hopping
+- hsp90_kung
+- hne
+- jak1
+- mup1
+- jacs_set
+- water_set
+- taf12
+- cdk8
+- bace_ciordia_prospective
+- hsp90_single_ring
+- liga
+- pfkfb3
+- dlk
+- ephx2
+- urokinase
+- shp2
+- tyk2
+- janssen_bace
+- rbfe
+- brd4
+- syk
+- bace1
+- fxa
+- eg5
+- hif2a
+- thrombin
+- cdk2
+- chk1
+- irak4_s2
+- ciordia_retro
+- mcs_docking_set
+- irak4_s3
+- jak2_set1
+- jnk1
+- charge_annihilation_set
+- btk
+- itk
+- keranen_p2
+calculation_type: rbfe
+authors:
+- name: Josh Horton
+date: 2026-05-21
+results: computational_results.json.bz2
+archive:
+  doi: https://zenodo.org/communities/openfreeenergy/records?q=&l=list&p=1&s=10&sort=newest
+  archive_provider: zenodo
+license: CC-BY-4.0
+openfe_version: 1.0.1
+openmm_version: 8.1.1
+openff_toolkit_version: 0.15.2
+partial_charges: am1bcc_at
+benchmark_data:
+  source_repository: https://github.com/OpenFreeEnergy/IndustryBenchmarks2024
+protocol_settings:
+- protocol: RelativeHybridTopologyProtocol
+  timestep: 4.0 fs
+  temperature: 298.15 K
+  pressure: 1 bar
+  forcefields:
+  - ff14SB
+  - phosaa10
+  - tip3p_HFE_multivalent
+  - tip3p_standard
+  small_molecule_forcefield: openff-2.2.0
+  partial_charges: am1bcc_at
+  equilibration_time: 1 ns
+  production_time: 5 ns
+  vacuum_equilibration_time: ''
+  vacuum_production_time: ''
+  solvent_equilibration_time: ''
+  solvent_production_time: ''
+  lambda_functions: default
+  lambda_windows: '11'
+  lambda_schedule: ''
+mapper: KartografAtomMapper 1.0.1 (LSA)
+forcefield:
+- ff14SB
+- phosaa10
+- tip3p_HFE_multivalent
+- tip3p_standard
+small_molecule_forcefield: openff-2.2.0
+pontibus_version: null
