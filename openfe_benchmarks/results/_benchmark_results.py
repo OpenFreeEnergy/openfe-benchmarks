@@ -244,7 +244,7 @@ class BenchmarkResults:
     >>> # RBFE submissions before 2026-09
     >>> rbfe_submissions = filter_results(calculation_type='rbfe', date='<2026-09-01')
     >>> len(rbfe_submissions)
-    9
+    10
     >>> # Submissions containing TYK2 results
     >>> tyk2_submissions = filter_results(system_name='tyk2')
     >>> # Recent OpenFE 1.x submissions

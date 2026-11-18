@@ -176,7 +176,7 @@ def main():
             {
                 "protocol": "RelativeHybridTopologyProtocol",
                 "timestep": "4.0 fs",
-                "temperature": "298.15 k",
+                "temperature": "298.15 K",
                 "pressure": "1 bar",
                 "forcefields": ["ff14SB", "phosaa10", "tip3p_HFE_multivalent", "tip3p_standard"],
                 "small_molecule_forcefield": "openff-2.2.0",
